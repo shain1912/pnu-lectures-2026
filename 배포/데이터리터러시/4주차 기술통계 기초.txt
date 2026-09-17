@@ -1,7 +1,7 @@
 4주차 기술통계 기초
-----------------------------------------
-배포 주소   : https://claude.ai/artifact/HBiuum5exWdK6oiWHsUgf5
-원본        : dataliteracy/slides/w04/index.html
-인쇄용 PDF  : dataliteracy/dist/d04-기술통계기초.pdf
-오프라인 zip: dataliteracy/dist/d04-interactive-slides.zip
-공개 범위   : 비공개 · 배포 전 Share 메뉴에서 공유 범위 지정
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w04/
+PDF          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d04-기술통계기초.pdf
+zip          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d04-interactive-slides.zip
+예비 주소    : https://claude.ai/artifact/HBiuum5exWdK6oiWHsUgf5   (claude.ai · 비공개 상태)
+원본         : dataliteracy/slides/w04/index.html

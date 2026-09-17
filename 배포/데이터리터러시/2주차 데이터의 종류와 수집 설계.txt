@@ -1,7 +1,7 @@
 2주차 데이터의 종류와 수집 설계
-----------------------------------------
-배포 주소   : https://claude.ai/artifact/TXchfwFpKRLmCkhuUZ6ERu
-원본        : dataliteracy/slides/w02/index.html
-인쇄용 PDF  : dataliteracy/dist/d02-데이터의종류와수집설계.pdf
-오프라인 zip: dataliteracy/dist/d02-interactive-slides.zip
-공개 범위   : 비공개 · 배포 전 Share 메뉴에서 공유 범위 지정
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w02/
+PDF          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d02-데이터의종류와수집설계.pdf
+zip          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d02-interactive-slides.zip
+예비 주소    : https://claude.ai/artifact/TXchfwFpKRLmCkhuUZ6ERu   (claude.ai · 비공개 상태)
+원본         : dataliteracy/slides/w02/index.html

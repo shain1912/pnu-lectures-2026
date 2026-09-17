@@ -1,7 +1,7 @@
 4주차 렌더링 파이프라인의 이해
-----------------------------------------
-배포 주소   : https://claude.ai/artifact/1umBazGDx4QzSoVEK4oWxz
-원본        : slides/w04/index.html
-인쇄용 PDF  : dist/w04-렌더링파이프라인.pdf
-오프라인 zip: dist/w04-interactive-slides.zip
-공개 범위   : 비공개 · 배포 전 Share 메뉴에서 공유 범위 지정
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/slides/w04/
+PDF          : https://shain1912.github.io/pnu-lectures-2026/dist/w04-렌더링파이프라인.pdf
+zip          : https://shain1912.github.io/pnu-lectures-2026/dist/w04-interactive-slides.zip
+예비 주소    : https://claude.ai/artifact/1umBazGDx4QzSoVEK4oWxz   (claude.ai · 비공개 상태)
+원본         : slides/w04/index.html

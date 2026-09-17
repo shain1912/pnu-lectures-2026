@@ -1,7 +1,7 @@
 3주차 데이터 정제와 전처리
-----------------------------------------
-배포 주소   : https://claude.ai/artifact/N8HTyL8K9Gwe63qBkp7iTJ
-원본        : dataliteracy/slides/w03/index.html
-인쇄용 PDF  : dataliteracy/dist/d03-데이터정제와전처리.pdf
-오프라인 zip: dataliteracy/dist/d03-interactive-slides.zip
-공개 범위   : 비공개 · 배포 전 Share 메뉴에서 공유 범위 지정
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w03/
+PDF          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d03-데이터정제와전처리.pdf
+zip          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d03-interactive-slides.zip
+예비 주소    : https://claude.ai/artifact/N8HTyL8K9Gwe63qBkp7iTJ   (claude.ai · 비공개 상태)
+원본         : dataliteracy/slides/w03/index.html

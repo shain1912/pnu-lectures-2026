@@ -33,8 +33,8 @@
     조작한 쪽은 어느 팀인가?
   </div>
   <aside class="notes">
-    - 답 : 조작한 팀 없음 · 정제 규칙의 차이
-    - 지금 공개하지 않고 PART II 에서 실제 숫자로 제시
+    - 답 : 조작한 팀 없음 → 정제 규칙의 차이
+    - 답은 PART II 에서 실제 숫자로 공개
   </aside>
 </section>
 
@@ -44,15 +44,15 @@
   <div class="cols3" style="margin-top:1.2em">
     <div class="card gfx">
       <h4><span class="step">1</span> 기술</h4>
-      <p>빈칸·중복·깨진 글자·문자가 된 숫자를 <b>식별하고 수정</b></p>
+      <p>빈칸 · 중복 · 깨진 글자<br>문자로 저장된 숫자<br>→ <b>찾아내고 바로잡기</b></p>
     </div>
     <div class="card vr">
       <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 판단</h4>
-      <p>정제 = <b>결론을 바꾸는 결정</b></p>
+      <p>정제 방식에 따라 <b>분석 결론 변화</b><br>→ 처리 기준을 스스로 결정</p>
     </div>
     <div class="card trap">
       <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 함정</h4>
-      <p>요청하지 않아도 AI가 <b>알리지 않고 채우고 삭제</b></p>
+      <p>요청하지 않은 정제를<br>AI가 <b>알리지 않고 수행</b></p>
     </div>
   </div>
 </section>
@@ -61,8 +61,8 @@
   <div class="kicker">Part I · 60분</div>
   <div class="rule"></div>
   <h1>현실 데이터의<br><em>문제 유형</em></h1>
-  <p class="sub">분석 시간의 절반 이상 소요<br>
-  이 단계가 결과의 신뢰도 결정</p>
+  <p class="sub">분석 시간의 절반 이상이 정제 작업<br>
+  정제 품질 = 결과의 신뢰도</p>
 </section>
 
 <section>
@@ -70,8 +70,8 @@
   <h2>다섯 줄에 다섯 가지 문제</h2>
   <img src="../../figures/out/d03-dirty-data.svg" class="fig" alt="지저분한 실제 데이터 예시">
   <aside class="notes">
-    - 지난주 학생들이 직접 내려받은 파일을 함께 열어보면 효과적
-    - "이거 우리 파일에도 있네" 반응이 나오면 성공
+    - 지난주 학생들이 내려받은 파일을 함께 열기
+    - 목표 반응 : "이거 우리 파일에도 있네"
   </aside>
 </section>
 
@@ -80,36 +80,37 @@
   <h2>숫자처럼 보이는 문자</h2>
   <table style="font-size:.72em">
     <tr><th>화면에 보이는 값</th><th>실제 자료형</th><th>발생하는 문제</th></tr>
-    <tr><td><code>9,411,440</code></td><td class="trap-txt">문자</td><td>합계 계산 시 오류 또는 이상한 값</td></tr>
-    <tr><td><code>12%</code></td><td class="trap-txt">문자</td><td>0.12 인지 12 인지 모르는 채로 계산</td></tr>
-    <tr><td><code>2026.01.01</code></td><td class="trap-txt">문자</td><td>날짜가 사전순으로 정렬</td></tr>
-    <tr><td><code>001</code></td><td class="trap-txt">숫자로 읽힐 경우</td><td>앞의 0 이 사라져 <code>1</code> 로 변환 — 우편번호·학번 사고</td></tr>
+    <tr><td><code>9,411,440</code></td><td class="trap-txt">문자</td><td>합계 계산 오류 또는 엉뚱한 값</td></tr>
+    <tr><td><code>12%</code></td><td class="trap-txt">문자</td><td>0.12 인지 12 인지 불분명한 채로 계산</td></tr>
+    <tr><td><code>2026.01.01</code></td><td class="trap-txt">문자</td><td>날짜 대신 글자 순서로 정렬</td></tr>
+    <tr><td><code>001</code></td><td class="trap-txt">숫자로 읽힐 경우</td><td>앞자리 0 이 사라져 <code>1</code> 로 변환<br>우편번호·학번에서 빈번</td></tr>
   </table>
   <div class="key trap" style="margin-top:1em">
     <p><b>엑셀로 CSV 열기 주의</b><br>
-    여는 순간 학번 앞자리 0 삭제, 날짜 형식 임의 변경 → 그 상태로 저장</p>
+    여는 즉시 학번 앞자리 0 삭제 · 날짜 형식 변경<br>
+    → 그대로 저장하면 원본 손상</p>
   </div>
 </section>
 
 <section>
   <div class="tag gfx">정제 · 3</div>
-  <h2>인코딩 — 한국 공공데이터의 단골 문제</h2>
+  <h2>인코딩 — 국내 공공데이터의 흔한 문제</h2>
   <div class="cols">
     <div>
       <div class="eq">부산  →  ë¶€ì‚°
 서울  →  ¼­¿ï</div>
-      <p class="small" style="margin-top:.9em">글자 깨짐의 원인 : 데이터 손상 없음<br>
-      <b>읽는 방식의 오류</b></p>
+      <p class="small" style="margin-top:.9em">파일 내용은 멀쩡한 상태<br>
+      <b>저장 방식과 다른 방식으로 읽은 결과</b></p>
     </div>
     <div>
       <div class="card">
         <h4>발생 원인</h4>
-        <p class="xs">국내 공공기관 파일 : 아직 <b>CP949(EUC-KR)</b> 저장이 많음<br>
-        최신 도구 : 기본값 <b>UTF-8</b> 로 읽기 시도</p>
+        <p class="xs">국내 공공기관 파일 : <b>CP949(EUC-KR)</b> 저장이 여전히 다수<br>
+        최신 분석 도구 : 기본값 <b>UTF-8</b> 로 읽기</p>
       </div>
       <div class="key" style="margin-top:.8em">
-        <p class="small">AI에게 <b>"인코딩을 cp949 로 지정해서 읽어줘"</b> 한 줄이면 해결<br>
-        이 용어를 모르면 30분 소요</p>
+        <p class="small">해결 : AI에게 <b>"인코딩을 cp949 로 지정해서 읽어줘"</b><br>
+        용어를 모르면 원인 찾기에만 30분</p>
       </div>
     </div>
   </div>
@@ -139,37 +140,37 @@
     </div>
   </div>
   <p class="xs muted" style="margin-top:.5em">
-    확인할 점 : 평균은 거의 그대로 · <b>표준편차만</b> 감소
+    확인할 점 : 평균은 거의 그대로, <b>표준편차만</b> 감소
   </p>
   <!--/demo-->
   <aside class="notes">
-    - 0 → 20 → 50 → 70% 로 올리며 표준편차 숫자를 읽어줄 것
+    - 0 → 20 → 50 → 70% 로 올리며 표준편차 수치 읽기
     - "평균이 맞으니까 괜찮은 거 아니에요?" 질문 시
-      → 11주차 p값 내용으로 연결
+      → 11주차 p값과 연결
   </aside>
 </section>
 
 <section>
   <div class="tag gfx">정제 · 6</div>
-  <h2>중복과 이상치 — 삭제 여부 판단</h2>
+  <h2>중복과 이상치 — 지울 것인가</h2>
   <div class="cols">
     <div class="card">
       <h4>중복처럼 보이는 행</h4>
       <p class="xs">같은 사람의 <b>두 번 응답</b> → 삭제<br>
       같은 사람의 <b>두 학기 수강</b> → 삭제 불가</p>
-      <p class="xs muted" style="margin-top:.5em">완전히 같은 행인지, 키만 같은지 먼저 확인</p>
+      <p class="xs muted" style="margin-top:.5em">행 전체가 같은지, 식별 열만 같은지 먼저 확인</p>
     </div>
     <div class="card trap">
       <h4>이상치처럼 보이는 값</h4>
       <p class="xs">통학시간 <b>480분</b><br>
       · 입력 오류?<br>
       · 실제 제주 통학?</p>
-      <p class="xs trap-txt" style="margin-top:.5em">원본 확인 전 삭제 불가</p>
+      <p class="xs trap-txt" style="margin-top:.5em">원본 확인 전에는 삭제 금지</p>
     </div>
   </div>
   <div class="key" style="margin-top:1em">
-    <p>이상치 <b>탐지</b> 방법 : 5주차(z-점수)<br>
-    오늘의 주제 : <b>발견 후 처리 방법</b></p>
+    <p>이상치를 <b>찾는</b> 방법 : 5주차 (z-점수)<br>
+    오늘 다룰 내용 : 찾은 뒤의 <b>처리 기준</b></p>
   </div>
 </section>
 
@@ -177,7 +178,7 @@
   <div class="kicker">Part II · 30분</div>
   <div class="rule"></div>
   <h1>정제 규칙과 <em>판단</em></h1>
-  <p class="sub">정제 = 결정 → 결정 내용 기록 필요</p>
+  <p class="sub">정제 방식은 분석자의 선택 → 선택 근거 기록 필요</p>
 </section>
 
 <section>
@@ -188,7 +189,8 @@
     - 도입 질문의 답
     - A안 100명 중 60명 응답·30명 전환 / B안 100명 중 90명 응답·40명 전환
     - 무응답 제외 시 A 승(50% vs 44%), 무응답을 실패로 간주 시 B 승(30% vs 40%)
-    - "어느 쪽이 맞나요?" → 상황에 따라 다름 · 핵심은 «정하고 밝히는 것»
+    - "어느 쪽이 맞나요?" → 상황에 따라 다름
+    - 중요한 것 : 기준을 미리 정하고 공개
   </aside>
 </section>
 
@@ -196,14 +198,14 @@
   <div class="tag vr">판단 · 2</div>
   <h2>정제 규칙 운영 원칙</h2>
   <div class="key vr" style="font-size:1.12em;padding:1.1em 1.3em">
-    <p><b>정제 규칙은 <span class="vr-txt">분석 전에</span> 결정,<br>
-    <span class="vr-txt">그대로 기록</span></b></p>
+    <p><b>정제 규칙은 <span class="vr-txt">분석 전에</span> 확정<br>
+    정한 규칙은 <span class="vr-txt">그대로 기록</span></b></p>
   </div>
   <p class="small" style="margin-top:1.2em">
-    결과 확인 후 정제 규칙 변경 →
-    <b class="trap-txt">원하는 답 찾기</b></p>
+    결과를 본 뒤 규칙 변경 →
+    <b class="trap-txt">원하는 답에 맞춘 분석</b></p>
   <p class="small muted" style="margin-top:.7em">
-    10~11주차 A/B 테스트에서 더 심각한 형태로 재등장
+    10~11주차 A/B 테스트에서 같은 문제 재등장
   </p>
 </section>
 
@@ -217,12 +219,12 @@
   <div class="kicker">Part III · 50분</div>
   <div class="rule"></div>
   <h1>바이브코딩 실습</h1>
-  <p class="sub">AI에게 정제 요청 · <em>수행한 작업</em> 전체 보고 요구</p>
+  <p class="sub">AI에게 정제를 맡길 때<br><em>수행한 작업</em> 전체 보고 요구</p>
 </section>
 
 <section>
   <div class="tag trap">AI 함정 #2</div>
-  <h2>AI의 무단 정제</h2>
+  <h2>묻지 않고 고치는 AI</h2>
   <div class="vs">
     <div class="bad">
       <h4>이렇게 요청하면</h4>
@@ -251,7 +253,7 @@
       </div>
     </div>
   </div>
-  <div class="note">행 수 감소의 이유를 모르는 분석 → 신뢰 불가</div>
+  <div class="note">행 수가 왜 줄었는지 모르는 분석 → 신뢰 불가</div>
 </section>
 
 <section>
@@ -275,44 +277,44 @@
 - 정제, 그래프, 통계 분석
 </code></pre>
   <div class="key lab">
-    <p class="small">이번 주의 핵심 : [제약]의 첫 줄<br>
-    <b>진단과 처리의 분리</b> = 데이터 분석의 기본기</p>
+    <p class="small">가장 중요한 줄 : [제약]의 첫 줄<br>
+    <b>진단과 처리를 나누기</b> = 데이터 분석의 기본기</p>
   </div>
 </section>
 
 <section>
   <div class="tag lab">실습 · 2</div>
-  <h2>오늘의 실습 — 90분</h2>
+  <h2>오늘의 실습 — 50분</h2>
   <table style="font-size:.72em">
     <tr><th>#</th><th>실습</th><th>확인할 개념</th></tr>
     <tr>
       <td class="lab-txt"><b>1</b></td>
-      <td>위 명세로 <b>진단만</b> 요청 · AI의 무단 수정 여부를 행 수로 확인</td>
+      <td>위 명세로 <b>진단만</b> 요청<br>처리 전후 행 수로 AI의 임의 수정 여부 확인</td>
       <td>AI 함정 #2</td>
     </tr>
     <tr>
       <td class="lab-txt"><b>2</b></td>
-      <td>결측이 있는 열 하나 선택 · <b>비어 있는 이유</b>가 세 가지 중 무엇인지 판단</td>
+      <td>결측이 있는 열 하나 선택<br><b>비어 있는 이유</b>가 세 유형 중 어디인지 판단</td>
       <td>결측의 이유</td>
     </tr>
     <tr>
       <td class="lab-txt"><b>3</b></td>
-      <td>해당 열을 <b>① 행 삭제</b> 와 <b>② 평균 대치</b> 두 방법으로 각각 처리 · 평균과 표준편차 비교</td>
+      <td>같은 열을 <b>① 행 삭제</b>, <b>② 평균 대치</b>로 각각 처리<br>평균과 표준편차 비교</td>
       <td>정제에 따른 수치 변화</td>
     </tr>
     <tr>
       <td class="lab-txt"><b>4</b></td>
-      <td>내린 결정을 <b>정제 로그</b>로 기록 — 삭제하지 않기로 한 결정도 포함</td>
+      <td>결정 내용을 <b>정제 로그</b>에 기록<br>지우지 않기로 한 결정도 포함</td>
       <td>재현 가능성</td>
     </tr>
     <tr>
       <td class="vr-txt"><b>5</b></td>
-      <td class="vr-txt">인코딩이 깨진 파일을 일부러 만든 뒤 <code>cp949</code> 로 복원 (확장)</td>
+      <td class="vr-txt">글자가 깨진 파일을 직접 만든 뒤 <code>cp949</code> 로 복원 (확장)</td>
       <td>인코딩</td>
     </tr>
   </table>
   <p class="xs muted" style="margin-top:.8em">
-    오늘의 핵심 : 3번에서 <b>두 방법의 수치 차이</b> 직접 확인
+    가장 중요한 실습 : 3번 — <b>두 방법의 수치 차이</b> 직접 확인
   </p>
 </section>
 
@@ -321,14 +323,14 @@
   <h2>한 장 요약</h2>
   <table style="font-size:.72em">
     <tr><th>개념</th><th>핵심</th></tr>
-    <tr><td>자료형</td><td>쉼표·%·앞자리 0 — 숫자처럼 보여도 문자 · <b>엑셀로 CSV 열기 주의</b></td></tr>
-    <tr><td>인코딩</td><td>글자 깨짐 = 데이터 손상 대신 읽는 방식의 오류 · <code>cp949</code></td></tr>
-    <tr><td><b class="vr-txt">결측</b></td><td>«비었다»보다 <b>«왜 비었나»</b>가 중요 · 세 경우를 같게 처리하면 결론 왜곡</td></tr>
-    <tr><td><b class="trap-txt">평균 대치</b></td><td>평균은 유지, <b>표준편차만 감소</b> → 없는 차이가 유의하게 나타남</td></tr>
-    <tr><td>중복·이상치</td><td>삭제 전 <b>원본 확인</b> · 480분은 오류 또는 제주 통학</td></tr>
-    <tr><td><b class="vr-txt">정제 규칙</b></td><td>규칙 한 줄에 따라 <b>승자 변경</b> · 결과를 보고 규칙 변경 시 «답 찾기»</td></tr>
-    <tr><td>정제 로그</td><td>기록 없는 분석은 <b>검증 불가</b> · 삭제하지 않기로 한 결정도 기록</td></tr>
-    <tr><td>AI 함정 #2</td><td>요청 없이도 채우고 삭제 → <b>진단과 처리의 분리</b></td></tr>
+    <tr><td>자료형</td><td>쉼표·%·앞자리 0 → 숫자처럼 보여도 문자<br><b>엑셀로 CSV 열기 주의</b></td></tr>
+    <tr><td>인코딩</td><td>글자 깨짐 원인 : 저장·읽기 방식 불일치 → <code>cp949</code> 지정</td></tr>
+    <tr><td><b class="vr-txt">결측</b></td><td>«비었다»보다 <b>«왜 비었나»</b>가 중요<br>세 유형을 같게 처리하면 결론 왜곡</td></tr>
+    <tr><td><b class="trap-txt">평균 대치</b></td><td>평균은 유지, <b>표준편차만 감소</b> → 없는 차이가 유의하게 보임</td></tr>
+    <tr><td>중복·이상치</td><td>삭제 전 <b>원본 확인</b> — 480분은 입력 오류일 수도, 제주 통학일 수도</td></tr>
+    <tr><td><b class="vr-txt">정제 규칙</b></td><td>규칙 한 줄로 <b>승자 변경</b><br>결과를 본 뒤 규칙 변경 = 원하는 답에 맞춘 분석</td></tr>
+    <tr><td>정제 로그</td><td>기록 없는 분석은 <b>검증 불가</b><br>지우지 않기로 한 결정도 기록</td></tr>
+    <tr><td>AI 함정 #2</td><td>요청 없이 채우고 지우는 AI → <b>진단과 처리를 나눠 요청</b></td></tr>
   </table>
 </section>
 
@@ -337,9 +339,8 @@
   <div class="rule"></div>
   <h1>기술통계 <em>기초</em></h1>
   <p class="sub">평균·중앙값·분산·표준편차<br>
-  오늘 확인한 «표준편차 감소» 의<br>
-  정확한 의미</p>
-  <div class="note">평균 하나로 전체를 설명할 때 생기는 문제 사례</div>
+  오늘 본 «표준편차 감소»의 정확한 의미</p>
+  <div class="note">평균 하나로 전체를 설명할 때 생기는 문제</div>
 </section>
 
 </div></div>

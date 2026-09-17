@@ -270,14 +270,14 @@ def fig_variance_steps():
             fontweight="bold", va="top")
     ax.text(110, 18.4,
             "– 부호 제거\n"
-            "– 멀리 있는 값일수록 크게 반영 — 넓이 = 벌점",
+            "– 멀리 떨어진 값일수록 크게 반영",
             color=DIM, fontsize=11, va="top", linespacing=1.9)
     ax.text(110, 9.5, "왜 다시 제곱근을 씌우는가", color=LAB, fontsize=12.5,
             fontweight="bold", va="top")
     ax.text(110, 6.8,
-            "– 분산의 단위 «점²» → 의미 설명 불가\n"
+            "– 분산의 단위 «점²» → 뜻을 말하기 어려움\n"
             "– 제곱근 → 단위가 «점» 으로 복귀\n"
-            "– 비로소 해석 가능한 숫자",
+            "– 평균과 나란히 해석 가능",
             color=DIM, fontsize=11, va="top", linespacing=1.9)
 
     ax.set_xlim(-2, 156); ax.set_ylim(-12.5, 23)
@@ -306,7 +306,7 @@ def fig_distribution_shapes():
 
     panels = [
         (axes[0, 0], sym,   GFX,  "① 대칭 — 성인 남성 키",
-         "평균과 중앙값 일치 → 평균 하나로 설명 가능한 유일한 경우", "cm", 0),
+         "평균과 중앙값 일치 → 평균 하나로 요약해도 되는 경우", "cm", 0),
         (axes[0, 1], right, WARN, "② 오른쪽 꼬리 — 한 달 앱 사용시간",
          "소수 헤비유저가 오른쪽 꼬리 형성 → 평균 > 중앙값", "시간", 1),
         (axes[1, 0], left,  VR,   "③ 왼쪽 꼬리 — 쉬운 시험 점수",
@@ -359,7 +359,7 @@ def fig_distribution_shapes():
              "«40점대 무리와 80점대 무리» 파악 불가",
              color=TRAP, fontsize=13.5, ha="center", fontweight="bold")
     fig.text(0.5, -0.085,
-             "3주차 표준편차도 마찬가지  ·  숫자로 모양 대체 불가 → 그려서 확인",
+             "숫자 몇 개로는 모양을 알 수 없음 → 반드시 그려서 확인",
              color=DIM, fontsize=11.5, ha="center")
     return save(fig, "d04-distribution-shapes", pad=0.4)
 
@@ -502,12 +502,12 @@ def fig_mean_trap():
     ax.set_xlim(0.55, 5.75); ax.set_ylim(-2.05, 2.4)
     ax.set_title("③ 표본이 작을 때", loc="left", color=TRAP,
                  fontsize=13.5, pad=10)
-    ax.text(0.0, -0.11, "한 사람이 평균 전체를 이동",
+    ax.text(0.0, -0.11, "한 사람의 응답으로 평균이 크게 이동",
             transform=ax.transAxes, color=DIM, fontsize=11, va="top")
 
     fig.subplots_adjust(wspace=0.16, top=0.88, bottom=0.28)
     fig.text(0.5, -0.02,
-             "평균 = 요약, 설명으로는 불충분",
+             "평균은 요약일 뿐 · 데이터 설명으로는 부족",
              color=FG, fontsize=15, ha="center", fontweight="bold")
     fig.text(0.5, -0.085,
              "요약을 믿기 전 확인할 세 가지 — "

@@ -195,8 +195,8 @@
         (diff >= 0 ? "+" : "") + diff.toFixed(1) + "</b>　" +
         '표준편차 <b>' + s2.toFixed(1) + "</b>" +
         (alarm
-          ? '<br><span class="trap-txt">평균만 보고 시 이만큼 왜곡 — 절반이 ' +
-            md.toFixed(1) + " 아래인데 대표값은 " + m.toFixed(1) + "</span>"
+          ? '<br><span class="trap-txt">평균만 보면 이만큼 왜곡 — 절반이 ' +
+            md.toFixed(1) + " 아래인데 평균은 " + m.toFixed(1) + "</span>"
           : '<br><span class="muted">평균과 중앙값이 거의 일치 → 이 경우에만 평균이 대표값으로 적합</span>');
     }
 

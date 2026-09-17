@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-09-14T15:50:11.848808</dc:date>
+    <dc:date>2026-09-17T22:05:28.120567</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -50,7 +50,7 @@ Q 29.088 94.006687 29.088 99.891856
 L 29.088 213.671795 
 Q 29.088 219.556964 35.390118 219.556964 
 z
-" clip-path="url(#pc152e02a07)" style="fill: #12151d; stroke: #a8e05f; stroke-width: 1.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf48e2efc83)" style="fill: #12151d; stroke: #a8e05f; stroke-width: 1.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_4">
     <path d="M 253.338353 219.556964 
@@ -63,7 +63,7 @@ Q 247.036235 94.006687 247.036235 99.891856
 L 247.036235 213.671795 
 Q 247.036235 219.556964 253.338353 219.556964 
 z
-" clip-path="url(#pc152e02a07)" style="fill: #12151d; stroke: #ffc44d; stroke-width: 1.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf48e2efc83)" style="fill: #12151d; stroke: #ffc44d; stroke-width: 1.9; stroke-linejoin: miter"/>
    </g>
    <g id="patch_5">
     <path d="M 471.286588 219.556964 
@@ -76,7 +76,7 @@ Q 464.984471 94.006687 464.984471 99.891856
 L 464.984471 213.671795 
 Q 464.984471 219.556964 471.286588 219.556964 
 z
-" clip-path="url(#pc152e02a07)" style="fill: #12151d; stroke: #ff5a4d; stroke-width: 1.9; stroke-linejoin: miter"/>
+" clip-path="url(#pf48e2efc83)" style="fill: #12151d; stroke: #ff5a4d; stroke-width: 1.9; stroke-linejoin: miter"/>
    </g>
    <g id="text_1">
     <!-- 결측 여부보다 «왜 비었나» 가 중요 -->
@@ -507,8 +507,8 @@ z
     </g>
    </g>
    <g id="text_2">
-    <!-- «결측치 처리해줘» 만 요청 시 AI는 세 경우를 구분 없이 동일하게 처리 -->
-    <g style="fill: #ff5a4d" transform="translate(30.663529 262.923719) scale(0.12 -0.12)">
+    <!-- «결측치 처리해줘» 만 요청하면 AI는 세 경우를 똑같이 처리 -->
+    <g style="fill: #ff5a4d" transform="translate(30.663529 262.905907) scale(0.12 -0.12)">
      <defs>
       <path id="Pretendard-Medium-2858" d="M 4844 5069 
 L 4250 5069 
@@ -734,22 +734,72 @@ C 2181 -63 1694 156 1694 519
 C 1694 881 2181 1088 3000 1088 
 z
 " transform="scale(0.015625)"/>
-      <path id="Pretendard-Medium-1cdc" d="M 2263 3644 
-L 2263 4600 
-L 1663 4600 
-L 1663 3644 
-C 1663 2575 1044 1506 163 1113 
-L 525 613 
-C 1197 941 1713 1619 1975 2438 
-C 2234 1672 2744 1044 3388 738 
-L 3744 1206 
-C 2875 1594 2256 2619 2263 3644 
+      <path id="Pretendard-Medium-2f58" d="M 4569 5069 
+L 3981 5069 
+L 3981 -531 
+L 4569 -531 
+L 4569 2306 
+L 5469 2306 
+L 5469 2800 
+L 4569 2800 
+L 4569 5069 
 z
-M 4844 5069 
-L 4250 5069 
-L 4250 -544 
-L 4844 -544 
-L 4844 5069 
+M 3494 4194 
+L 2150 4194 
+L 2150 4994 
+L 1556 4994 
+L 1556 4194 
+L 175 4194 
+L 175 3706 
+L 3494 3706 
+L 3494 4194 
+z
+M 1856 3294 
+C 1050 3294 463 2756 463 1994 
+C 463 1225 1050 694 1856 688 
+C 2656 694 3244 1225 3250 1994 
+C 3244 2756 2656 3294 1856 3294 
+z
+M 1856 2806 
+C 2331 2806 2681 2475 2681 1994 
+C 2681 1506 2331 1181 1856 1188 
+C 1381 1181 1025 1506 1031 1994 
+C 1025 2475 1381 2806 1856 2806 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1474" d="M 3063 4594 
+L 463 4594 
+L 463 1944 
+L 3063 1944 
+L 3063 2431 
+L 4281 2431 
+L 4281 981 
+L 4875 981 
+L 4875 5063 
+L 4281 5063 
+L 4281 4119 
+L 3063 4119 
+L 3063 4594 
+z
+M 1050 4113 
+L 2481 4113 
+L 2481 2413 
+L 1050 2413 
+L 1050 4113 
+z
+M 5000 69 
+L 1819 69 
+L 1819 1356 
+L 1219 1356 
+L 1219 -413 
+L 5000 -413 
+L 5000 69 
+z
+M 3063 2919 
+L 3063 3631 
+L 4281 3631 
+L 4281 2919 
+L 3063 2919 
 z
 " transform="scale(0.015625)"/>
       <path id="Pretendard-Medium-3" d="M 850 0 
@@ -918,105 +968,74 @@ L 4681 3713
 L 4681 4925 
 z
 " transform="scale(0.015625)"/>
-      <path id="Pretendard-Medium-76c" d="M 4663 4719 
-L 831 4719 
-L 831 4231 
-L 4075 4231 
-L 4075 4225 
-C 4075 3703 4075 3116 3906 2319 
-L 206 2319 
-L 206 1831 
-L 2444 1831 
-L 2444 -538 
-L 3044 -538 
-L 3044 1831 
-L 5313 1831 
-L 5313 2319 
-L 4506 2319 
-C 4663 3119 4663 3694 4663 4225 
-L 4663 4719 
+      <path id="Pretendard-Medium-1011" d="M 5313 2269 
+L 3063 2269 
+L 3063 2969 
+L 4856 2969 
+L 4856 3444 
+L 3519 3444 
+L 3519 4369 
+L 4825 4369 
+L 4825 4844 
+L 2925 4844 
+L 2925 3075 
+L 2525 3075 
+L 2725 3113 
+L 2663 3581 
+C 2175 3481 1741 3447 1275 3444 
+L 1275 4369 
+L 2594 4369 
+L 2594 4844 
+L 675 4844 
+L 675 2969 
+L 1000 2969 
+C 1509 2969 1963 2981 2469 3069 
+L 2469 2269 
+L 206 2269 
+L 206 1788 
+L 5313 1788 
+L 5313 2269 
+z
+M 4663 1231 
+L 763 1231 
+L 763 750 
+L 4069 750 
+L 4069 -563 
+L 4663 -563 
+L 4663 1231 
 z
 " transform="scale(0.015625)"/>
-      <path id="Pretendard-Medium-1784" d="M 5325 2138 
-L 200 2138 
-L 200 1663 
-L 2513 1663 
-L 2513 631 
-L 3100 631 
-L 3100 1663 
-L 5325 1663 
-L 5325 2138 
+      <path id="Pretendard-Medium-619" d="M 4606 5069 
+L 4013 5069 
+L 4013 2094 
+L 4606 2094 
+L 4606 3325 
+L 5419 3325 
+L 5419 3806 
+L 4606 3806 
+L 4606 5069 
 z
-M 4756 69 
-L 1425 69 
-L 1425 1119 
-L 838 1119 
-L 838 -413 
-L 4756 -413 
-L 4756 69 
+M 3094 4681 
+L 463 4681 
+L 463 4206 
+L 2438 4206 
+C 2356 3413 1625 2753 213 2469 
+L 463 1988 
+C 2125 2344 3094 3250 3094 4681 
 z
-M 1463 4894 
-L 875 4894 
-L 875 2631 
-L 4650 2631 
-L 4650 4894 
-L 4056 4894 
-L 4056 4213 
-L 1463 4213 
-L 1463 4894 
-z
-M 1463 3106 
-L 1463 3769 
-L 4056 3769 
-L 4056 3106 
-L 1463 3106 
-z
-" transform="scale(0.015625)"/>
-      <path id="Pretendard-Medium-1fc6" d="M 1400 1788 
-L 844 1788 
-L 844 -463 
-L 2825 -463 
-L 2825 1788 
-L 2275 1788 
-L 2275 1138 
-L 1400 1138 
-L 1400 1788 
-z
-M 1400 0 
-L 1400 688 
-L 2275 688 
-L 2275 0 
-L 1400 0 
-z
-M 4450 1369 
-L 4450 1825 
-L 3863 1825 
-L 3863 1369 
-C 3863 813 3531 219 2856 -56 
-L 3156 -506 
-C 3638 -306 3969 63 4156 500 
-C 4328 53 4656 -313 5163 -506 
-L 5469 -56 
-C 4775 188 4450 781 4450 1369 
-z
-M 1756 4831 
-C 900 4831 288 4300 288 3538 
-C 288 2763 900 2238 1756 2238 
-C 2500 2238 3072 2656 3194 3300 
-L 4281 3300 
-L 4281 2100 
-L 4875 2100 
-L 4875 5069 
-L 4281 5069 
-L 4281 3788 
-L 3188 3788 
-C 3063 4413 2494 4831 1756 4831 
-z
-M 1756 4338 
-C 2275 4338 2644 4013 2644 3538 
-C 2644 3056 2275 2725 1756 2719 
-C 1225 2725 856 3056 856 3538 
-C 856 4013 1225 4338 1756 4338 
+M 4631 1856 
+L 1013 1856 
+L 1013 -463 
+L 4756 -463 
+L 4756 -13 
+L 1606 -13 
+L 1606 494 
+L 4569 494 
+L 4569 925 
+L 1606 925 
+L 1606 1406 
+L 4631 1406 
+L 4631 1856 
 z
 " transform="scale(0.015625)"/>
       <path id="Pretendard-Medium-2174" d="M 4844 5069 
@@ -1038,126 +1057,6 @@ C 1331 1250 975 1800 975 2688
 C 975 3569 1331 4119 1850 4119 
 z
 " transform="scale(0.015625)"/>
-      <path id="Pretendard-Medium-dd9" d="M 5319 2344 
-L 3050 2344 
-L 3050 2938 
-L 4725 2938 
-L 4725 3413 
-L 1431 3413 
-L 1431 4344 
-L 4688 4344 
-L 4688 4813 
-L 844 4813 
-L 844 2938 
-L 2475 2938 
-L 2475 2344 
-L 206 2344 
-L 206 1869 
-L 5319 1869 
-L 5319 2344 
-z
-M 2756 1506 
-C 1544 1506 813 1138 813 488 
-C 813 -163 1544 -525 2756 -531 
-C 3963 -525 4688 -163 4688 488 
-C 4688 1138 3963 1506 2756 1506 
-z
-M 2756 1044 
-C 3600 1044 4094 844 4094 488 
-C 4094 131 3600 -69 2756 -63 
-C 1900 -69 1413 131 1413 488 
-C 1413 844 1900 1044 2756 1044 
-z
-" transform="scale(0.015625)"/>
-      <path id="Pretendard-Medium-217c" d="M 1794 4881 
-C 944 4875 319 4356 319 3625 
-C 319 2888 944 2375 1794 2375 
-C 2638 2375 3256 2888 3263 3625 
-C 3256 4356 2638 4875 1794 4881 
-z
-M 1794 4381 
-C 2306 4388 2688 4081 2688 3625 
-C 2688 3163 2306 2856 1794 2856 
-C 1275 2856 894 3163 900 3625 
-C 894 4081 1275 4388 1794 4381 
-z
-M 4850 5069 
-L 4256 5069 
-L 4256 2219 
-L 4850 2219 
-L 4850 5069 
-z
-M 4850 1963 
-L 1169 1963 
-L 1169 1488 
-L 4263 1488 
-L 4263 994 
-L 1188 994 
-L 1188 -463 
-L 5038 -463 
-L 5038 13 
-L 1763 13 
-L 1763 550 
-L 4850 550 
-L 4850 1963 
-z
-" transform="scale(0.015625)"/>
-      <path id="Pretendard-Medium-2f58" d="M 4569 5069 
-L 3981 5069 
-L 3981 -531 
-L 4569 -531 
-L 4569 2306 
-L 5469 2306 
-L 5469 2800 
-L 4569 2800 
-L 4569 5069 
-z
-M 3494 4194 
-L 2150 4194 
-L 2150 4994 
-L 1556 4994 
-L 1556 4194 
-L 175 4194 
-L 175 3706 
-L 3494 3706 
-L 3494 4194 
-z
-M 1856 3294 
-C 1050 3294 463 2756 463 1994 
-C 463 1225 1050 694 1856 688 
-C 2656 694 3244 1225 3250 1994 
-C 3244 2756 2656 3294 1856 3294 
-z
-M 1856 2806 
-C 2331 2806 2681 2475 2681 1994 
-C 2681 1506 2331 1181 1856 1188 
-C 1381 1181 1025 1506 1031 1994 
-C 1025 2475 1381 2806 1856 2806 
-z
-" transform="scale(0.015625)"/>
-      <path id="Pretendard-Medium-68c" d="M 5019 5069 
-L 4456 5069 
-L 4456 -531 
-L 5019 -531 
-L 5019 5069 
-z
-M 3838 4925 
-L 3275 4925 
-L 3275 2819 
-L 2388 2819 
-C 2559 3306 2634 3828 2638 4375 
-L 450 4375 
-L 450 3888 
-L 2050 3888 
-C 1947 2734 1375 1794 188 1088 
-L 525 663 
-C 1316 1125 1847 1694 2181 2344 
-L 3275 2344 
-L 3275 -256 
-L 3838 -256 
-L 3838 4925 
-z
-" transform="scale(0.015625)"/>
      </defs>
      <use xlink:href="#Pretendard-Medium-343d"/>
      <use xlink:href="#Pretendard-Medium-6b0" transform="translate(54.203125 0)"/>
@@ -1174,34 +1073,27 @@ z
      <use xlink:href="#Pretendard-Medium-2" transform="translate(848.8125 0)"/>
      <use xlink:href="#Pretendard-Medium-2094" transform="translate(873.234375 0)"/>
      <use xlink:href="#Pretendard-Medium-26ad" transform="translate(959.65625 0)"/>
-     <use xlink:href="#Pretendard-Medium-2" transform="translate(1046.078125 0)"/>
-     <use xlink:href="#Pretendard-Medium-1cdc" transform="translate(1070.5 0)"/>
-     <use xlink:href="#Pretendard-Medium-2" transform="translate(1156.921875 0)"/>
-     <use xlink:href="#Pretendard-Medium-3" transform="translate(1181.34375 0)"/>
-     <use xlink:href="#Pretendard-Medium-76" transform="translate(1248.234375 0)"/>
-     <use xlink:href="#Pretendard-Medium-c94" transform="translate(1273.328125 0)"/>
-     <use xlink:href="#Pretendard-Medium-2" transform="translate(1359.75 0)"/>
-     <use xlink:href="#Pretendard-Medium-1b38" transform="translate(1384.171875 0)"/>
-     <use xlink:href="#Pretendard-Medium-2" transform="translate(1470.59375 0)"/>
-     <use xlink:href="#Pretendard-Medium-6bd" transform="translate(1495.015625 0)"/>
-     <use xlink:href="#Pretendard-Medium-20b0" transform="translate(1581.4375 0)"/>
-     <use xlink:href="#Pretendard-Medium-137c" transform="translate(1667.859375 0)"/>
-     <use xlink:href="#Pretendard-Medium-2" transform="translate(1754.28125 0)"/>
-     <use xlink:href="#Pretendard-Medium-76c" transform="translate(1778.703125 0)"/>
-     <use xlink:href="#Pretendard-Medium-1784" transform="translate(1865.125 0)"/>
-     <use xlink:href="#Pretendard-Medium-2" transform="translate(1951.546875 0)"/>
-     <use xlink:href="#Pretendard-Medium-1fc6" transform="translate(1975.96875 0)"/>
-     <use xlink:href="#Pretendard-Medium-2174" transform="translate(2062.390625 0)"/>
-     <use xlink:href="#Pretendard-Medium-2" transform="translate(2148.8125 0)"/>
-     <use xlink:href="#Pretendard-Medium-dd9" transform="translate(2173.234375 0)"/>
-     <use xlink:href="#Pretendard-Medium-217c" transform="translate(2259.65625 0)"/>
-     <use xlink:href="#Pretendard-Medium-2f58" transform="translate(2346.078125 0)"/>
-     <use xlink:href="#Pretendard-Medium-68c" transform="translate(2432.5 0)"/>
-     <use xlink:href="#Pretendard-Medium-2" transform="translate(2518.921875 0)"/>
-     <use xlink:href="#Pretendard-Medium-2698" transform="translate(2543.34375 0)"/>
-     <use xlink:href="#Pretendard-Medium-13ac" transform="translate(2629.765625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2f58" transform="translate(1046.078125 0)"/>
+     <use xlink:href="#Pretendard-Medium-1474" transform="translate(1132.5 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1218.921875 0)"/>
+     <use xlink:href="#Pretendard-Medium-3" transform="translate(1243.34375 0)"/>
+     <use xlink:href="#Pretendard-Medium-76" transform="translate(1310.234375 0)"/>
+     <use xlink:href="#Pretendard-Medium-c94" transform="translate(1335.328125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1421.75 0)"/>
+     <use xlink:href="#Pretendard-Medium-1b38" transform="translate(1446.171875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1532.59375 0)"/>
+     <use xlink:href="#Pretendard-Medium-6bd" transform="translate(1557.015625 0)"/>
+     <use xlink:href="#Pretendard-Medium-20b0" transform="translate(1643.4375 0)"/>
+     <use xlink:href="#Pretendard-Medium-137c" transform="translate(1729.859375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1816.28125 0)"/>
+     <use xlink:href="#Pretendard-Medium-1011" transform="translate(1840.703125 0)"/>
+     <use xlink:href="#Pretendard-Medium-619" transform="translate(1927.125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2174" transform="translate(2013.546875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(2099.96875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2698" transform="translate(2124.390625 0)"/>
+     <use xlink:href="#Pretendard-Medium-13ac" transform="translate(2210.8125 0)"/>
     </g>
-    <!-- 세 번째를 두 번째처럼 처리 → 코드는 정상 실행, 결론만 틀림 -->
+    <!-- 세 번째를 두 번째처럼 다룸 → 코드는 정상 실행, 결론만 틀림 -->
     <g style="fill: #ff5a4d" transform="translate(30.663529 289.400243) scale(0.12 -0.12)">
      <defs>
       <path id="Pretendard-Medium-1688" d="M 4875 5063 
@@ -1335,6 +1227,41 @@ C 2588 2500 1922 2466 1025 2469
 L 1025 3188 
 L 2938 3188 
 L 2938 4794 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-12f8" d="M 5325 2238 
+L 200 2238 
+L 200 1763 
+L 2469 1763 
+L 2469 1244 
+L 881 1244 
+L 881 -463 
+L 4688 -463 
+L 4688 1244 
+L 3056 1244 
+L 3056 1763 
+L 5325 1763 
+L 5325 2238 
+z
+M 1469 775 
+L 4100 775 
+L 4100 19 
+L 1469 19 
+L 1469 775 
+z
+M 4681 4944 
+L 844 4944 
+L 844 4488 
+L 4088 4488 
+L 4088 4006 
+L 856 4006 
+L 856 2625 
+L 4794 2625 
+L 4794 3100 
+L 1444 3100 
+L 1444 3575 
+L 4681 3575 
+L 4681 4944 
 z
 " transform="scale(0.015625)"/>
       <path id="Pretendard-Medium-3686" d="M 3219 194 
@@ -1665,8 +1592,8 @@ z
      <use xlink:href="#Pretendard-Medium-2698" transform="translate(678.21875 0)"/>
      <use xlink:href="#Pretendard-Medium-11fc" transform="translate(764.640625 0)"/>
      <use xlink:href="#Pretendard-Medium-2" transform="translate(851.0625 0)"/>
-     <use xlink:href="#Pretendard-Medium-2698" transform="translate(875.484375 0)"/>
-     <use xlink:href="#Pretendard-Medium-13ac" transform="translate(961.90625 0)"/>
+     <use xlink:href="#Pretendard-Medium-ce4" transform="translate(875.484375 0)"/>
+     <use xlink:href="#Pretendard-Medium-12f8" transform="translate(961.90625 0)"/>
      <use xlink:href="#Pretendard-Medium-2" transform="translate(1048.328125 0)"/>
      <use xlink:href="#Pretendard-Medium-3686" transform="translate(1072.75 0)"/>
      <use xlink:href="#Pretendard-Medium-2" transform="translate(1164.359375 0)"/>
@@ -2611,6 +2538,39 @@ C 2575 2272 1869 2225 1125 2225
 L 1125 4675 
 z
 " transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-217c" d="M 1794 4881 
+C 944 4875 319 4356 319 3625 
+C 319 2888 944 2375 1794 2375 
+C 2638 2375 3256 2888 3263 3625 
+C 3256 4356 2638 4875 1794 4881 
+z
+M 1794 4381 
+C 2306 4388 2688 4081 2688 3625 
+C 2688 3163 2306 2856 1794 2856 
+C 1275 2856 894 3163 900 3625 
+C 894 4081 1275 4388 1794 4381 
+z
+M 4850 5069 
+L 4256 5069 
+L 4256 2219 
+L 4850 2219 
+L 4850 5069 
+z
+M 4850 1963 
+L 1169 1963 
+L 1169 1488 
+L 4263 1488 
+L 4263 994 
+L 1188 994 
+L 1188 -463 
+L 5038 -463 
+L 5038 13 
+L 1763 13 
+L 1763 550 
+L 4850 550 
+L 4850 1963 
+z
+" transform="scale(0.015625)"/>
       <path id="Pretendard-Medium-125d" d="M 5325 2013 
 L 3056 2013 
 L 3056 2544 
@@ -3179,6 +3139,24 @@ z
     <!-- 삭제 시 결론 전체 왜곡 -->
     <g style="fill: #ff5a4d" transform="translate(520.817771 191.111979) scale(0.11 -0.11)">
      <defs>
+      <path id="Pretendard-Medium-1cdc" d="M 2263 3644 
+L 2263 4600 
+L 1663 4600 
+L 1663 3644 
+C 1663 2575 1044 1506 163 1113 
+L 525 613 
+C 1197 941 1713 1619 1975 2438 
+C 2234 1672 2744 1044 3388 738 
+L 3744 1206 
+C 2875 1594 2256 2619 2263 3644 
+z
+M 4844 5069 
+L 4250 5069 
+L 4250 -544 
+L 4844 -544 
+L 4844 5069 
+z
+" transform="scale(0.015625)"/>
       <path id="Pretendard-Medium-6e1" d="M 5306 2438 
 L 2838 2438 
 L 2838 3544 
@@ -3226,7 +3204,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="pc152e02a07">
+  <clipPath id="pf48e2efc83">
    <rect x="20.16" y="46.434902" width="669.6" height="255.024"/>
   </clipPath>
  </defs>

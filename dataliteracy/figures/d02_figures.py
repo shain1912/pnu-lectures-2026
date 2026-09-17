@@ -62,8 +62,8 @@ def fig_table_grammar():
             "관측 단위 (unit of observation) : «학생 한 명»",
             color=FG, fontsize=13, fontweight="bold")
     ax.text(X0, Y0 - 1.35,
-            "관측 단위 설정 = 수집 설계의 첫 결정\n"
-            "학생 · 수업 · 학기 중 무엇인가 → 여기서 어긋나면 이후 분석 전체 불일치",
+            "관측 단위 = 수집 설계에서 가장 먼저 정할 항목\n"
+            "학생 · 수업 · 학기 중 무엇이 한 줄인가 → 어긋나면 이후 분석 전체 흔들림",
             color=DIM, fontsize=11.5, linespacing=1.9, va="top")
 
     ax.set_xlim(-1.3, X0 + TW + 1.6); ax.set_ylim(-0.5, Y0 + len(rows) * H + H + 2.1)
@@ -106,7 +106,7 @@ def fig_scales():
             "«학과의 평균» 계산은 가능하나 의미 없음",
             color=TRAP, fontsize=13, fontweight="bold")
     ax.text(0, -1.0,
-            "AI : 척도 확인 없이 계산  →  척도 판단은 사람의 몫",
+            "AI는 척도를 따지지 않고 계산  →  척도 판단은 사람의 몫",
             color=FG, fontsize=12.5)
 
     ax.set_xlim(-0.3, 4 * (W + 0.18) + 0.2); ax.set_ylim(-1.5, 4.2)
@@ -133,8 +133,8 @@ def fig_tidy():
             _cell(ax, X0 + j * W, Y0 + (len(body) - 1 - i) * H, W, H, v)
     ax.text(X0, Y0 - 0.6, "연도가 «열 이름» 으로 들어간 구조", color=TRAP, fontsize=12,
             fontweight="bold")
-    ax.text(X0, Y0 - 1.15, "연도별 그래프마다 코드 수정 필요\n"
-                           "2027년 자료 추가 시 구조 변경",
+    ax.text(X0, Y0 - 1.15, "그래프마다 코드 수정 필요\n"
+                           "2027년 자료 추가 시 열 구조 변경",
             color=DIM, fontsize=10.5, linespacing=1.8, va="top")
     ax.set_xlim(0, 4 * W + 0.4); ax.set_ylim(-0.6, Y0 + len(body) * H + H + 0.9)
     ax.set_title("정리 전", loc="left", color=TRAP, fontsize=13.5, pad=10)
@@ -195,8 +195,8 @@ def fig_survivorship():
             "돌아온 비행기의 구멍 자리를 보강해야 하는가?", color=FG, fontsize=13.5,
             fontweight="bold")
     ax.text(0.2, -0.5,
-            "구멍 없는 부위에 맞은 비행기 = «돌아오지 못한» 비행기\n"
-            "보유 데이터 = 살아남은 비행기만의 기록",
+            "구멍 없는 부위에 맞은 비행기 → «돌아오지 못한» 비행기\n"
+            "손에 쥔 데이터 = 살아남은 비행기의 기록뿐",
             color=TRAP, fontsize=12.5, linespacing=1.9, va="top")
     ax.text(0.2, -2.25,
             "이 데이터에 누가 빠져 있는가?  —  분석 전 필수 질문",
@@ -244,7 +244,7 @@ def fig_sampling_bias():
 
     fig.text(0.5, -0.04,
              f"모집단 평균은 둘 다 {pop.mean():.1f}  ·  "
-             "표본을 300 → 3만으로 늘려도 오른쪽은 틀린 값 그대로 정밀도만 증가",
+             "표본을 300 → 3만으로 늘려도 오른쪽은 틀린 값 · 정밀해질 뿐 정확해지지 않음",
              color=FG, fontsize=13, ha="center", fontweight="bold")
     return save(fig, "d02-sampling-bias", pad=0.36)
 
@@ -258,7 +258,7 @@ def fig_collection_design():
     steps = [
         ("① 질문", "무엇을 알고 싶은가", GFX,
          "«우리 학과 학생은\n통학에 얼마나 쓰나»"),
-        ("② 조작적 정의", "그것을 어떻게 잰다는 말인가", VR,
+        ("② 조작적 정의", "무엇으로 어떻게 잴 것인가", VR,
          "«통학시간» =\n집 출발~강의실 도착 분"),
         ("③ 관측 단위·변수", "무엇을 한 줄로 볼 것인가", LAB,
          "행 = 학생 1명\n열 = 학과·학년·분"),
@@ -285,14 +285,14 @@ def fig_collection_design():
     total = 4 * W + 3 * gap
     ax.annotate("", xy=(0.1, 1.05), xytext=(total - 0.1, 1.05),
                 arrowprops=dict(arrowstyle="-|>", color=TRAP, lw=2.2))
-    ax.text(total / 2, 0.72, "흔한 출발점 — 데이터부터 탐색 (역방향)",
+    ax.text(total / 2, 0.72, "흔한 실수 — 데이터부터 뒤지기 (역방향)",
             color=TRAP, fontsize=12, ha="center")
 
-    ax.text(0, 3.85, "데이터 탐색 전 질문 고정",
+    ax.text(0, 3.85, "데이터를 찾기 전에 질문부터 확정",
             color=FG, fontsize=14, fontweight="bold")
     ax.text(0, 0.05,
-            "질문 없이 모은 데이터 → «분석» 대신 «해석»  ·  "
-            "숫자를 본 뒤 이야기를 끼워 맞추는 구조",
+            "질문 없이 모은 데이터 → "
+            "숫자를 본 뒤 이야기를 끼워 맞추기 쉬움",
             color=DIM, fontsize=12)
 
     ax.set_xlim(-0.3, total + 0.3); ax.set_ylim(-0.4, 4.4)

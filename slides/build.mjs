@@ -81,20 +81,14 @@ for (const w of weeks) {
   console.log(`  ✓ slides/w${wk}/_print.html  (데모 ${demoBlocks}개 치환)`);
 
   const out = path.join(ROOT, "dist", `w${wk}-${title}.pdf`);
-  execFileSync(
-    CHROME,
-    [
-      "--headless=new",
-      "--disable-gpu",
-      "--no-pdf-header-footer",
-      "--run-all-compositor-stages-before-draw",
-      "--virtual-time-budget=30000",
-      `--print-to-pdf=${out}`,
-      `http://localhost:${PORT}/slides/w${wk}/_print.html?print-pdf`,
-    ],
-    { stdio: ["ignore", "ignore", "ignore"] }
-  );
-  console.log(`  ✓ dist/w${wk}-${title}.pdf`);
+  // Chrome 153 헤드리스 --print-to-pdf 는 reveal 인쇄 레이아웃 전에 출력 → 빈 1쪽
+  // Playwright 로 .pdf-page 생성까지 대기 후 출력
+  const pages = execFileSync(
+    "py",
+    [path.join(ROOT, "tools", "print_pdf.py"), `http://localhost:${PORT}/slides/w${wk}/_print.html?print-pdf`, out],
+    { encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] }
+  ).trim();
+  console.log(`  ✓ dist/w${wk}-${title}.pdf  (${pages}쪽)`);
 
   // ---------------------------------------------------------------- 배포 묶음
   // 원본 HTML(치환 전)이 참조하는 에셋만 골라 상대 경로 그대로 담는다.

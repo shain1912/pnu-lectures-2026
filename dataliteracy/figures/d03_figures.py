@@ -100,8 +100,8 @@ def fig_missing_why():
     ax.text(0, 3.75, "결측 여부보다 «왜 비었나» 가 중요",
             color=FG, fontsize=14, fontweight="bold")
     ax.text(0, 0.15,
-            "«결측치 처리해줘» 만 요청 시 AI는 세 경우를 구분 없이 동일하게 처리\n"
-            "세 번째를 두 번째처럼 처리 → 코드는 정상 실행, 결론만 틀림",
+            "«결측치 처리해줘» 만 요청하면 AI는 세 경우를 똑같이 처리\n"
+            "세 번째를 두 번째처럼 다룸 → 코드는 정상 실행, 결론만 틀림",
             color=TRAP, fontsize=12, linespacing=1.9, va="top")
 
     ax.set_xlim(-0.2, 3 * (W + 0.25) + 0.1); ax.set_ylim(-1.0, 4.2)
@@ -143,8 +143,8 @@ def fig_mean_imputation():
                 arrowprops=dict(arrowstyle="-|>", color=TRAP, lw=1.7))
 
     fig.text(0.5, -0.03,
-             "평균은 유지, «흩어진 정도» 는 감소  ·  "
-             "이 데이터로 검정 시 없는 차이가 유의하게 나옴",
+             "평균은 그대로, «흩어진 정도» 만 감소  ·  "
+             "이 데이터로 검정하면 없는 차이도 유의하게 나옴",
              color=FG, fontsize=13, ha="center", fontweight="bold")
     fig.text(0.5, -0.115,
              "AI가 가장 자주 선택하는 기본 처리 — 11주차 p값과 직결",
@@ -185,7 +185,7 @@ def fig_same_data_diff_conclusion():
              "숫자 조작 없음  ·  정제 규칙 한 줄로 승자 역전",
              color=FG, fontsize=13.5, ha="center", fontweight="bold")
     fig.text(0.5, -0.115,
-             "«어떻게 정제했는가» 기록이 없는 분석 → 검증 불가",
+             "정제 방법을 기록하지 않은 분석 → 검증 불가",
              color=TRAP, fontsize=12, ha="center")
     return save(fig, "d03-same-data-diff-conclusion", pad=0.4)
 

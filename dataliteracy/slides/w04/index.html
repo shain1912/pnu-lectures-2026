@@ -31,7 +31,7 @@
     두 회사의 평균 연봉 동일<br><br>
     A사 : <span class="hl">20명 중 17명</span>이 평균 이하<br>
     B사 : <span class="hl">거의 전원</span>이 평균 근처<br><br>
-    같은 숫자, 다른 현실 · 차이의 원인은?
+    평균은 같은데 두 회사 사정이 다른 이유는?
   </div>
   <aside class="notes">
     - 답 : «평균 외의 숫자를 보지 않았기 때문»
@@ -46,18 +46,18 @@
   <div class="cols3" style="margin-top:1.2em">
     <div class="card gfx">
       <h4><span class="step">1</span> 기술</h4>
-      <p>평균·중앙값·분산·표준편차 <b>각각이 측정하는 대상</b> 이해</p>
+      <p>평균·중앙값·분산·표준편차가 <b>각각 무엇을 재는지</b> 구분</p>
     </div>
     <div class="card vr">
       <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 판단</h4>
-      <p>상황별 <b>보고할 대푯값</b> 선택과 근거 제시</p>
+      <p>상황에 맞는 <b>대푯값 선택</b>과 근거 제시</p>
     </div>
     <div class="card trap">
       <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 함정</h4>
-      <p>AI에게 요약 요청 시 <b>평균 위주의 답변</b></p>
+      <p>«요약해줘» 요청 시 AI가 <b>평균만 보고</b>하는 문제</p>
     </div>
   </div>
-  <div class="note">오늘의 네 숫자 → 5주차 z-점수, 7주차 상관, 11주차 p값의 재료</div>
+  <div class="note">오늘 다룰 네 숫자 = 5주차 z-점수, 7주차 상관, 11주차 p값의 기초</div>
 </section>
 
 <section class="divider part-i">
@@ -65,17 +65,17 @@
   <div class="rule"></div>
   <h1>숫자 몇 개로<br><em>수천 개를</em> 요약</h1>
   <p class="sub">기술통계(descriptive statistics) = 요약<br>
-  요약에는 반드시 <b>버려지는 정보</b> 존재 · 무엇이 버려지는지 파악이 오늘의 목표</p>
+  요약하면 반드시 <b>빠지는 정보</b> 발생<br>무엇이 빠지는지 확인하는 것이 오늘의 핵심</p>
 </section>
 
 <section>
   <div class="tag trap">대푯값 · 1 ★</div>
   <h2>도입 질문의 답</h2>
-  <img src="../../figures/out/d04-mean-vs-median.svg" class="fig" alt="평균 4,900만원 회사에서 20명 중 17명이 평균 이하다">
+  <img src="../../figures/out/d04-mean-vs-median.svg" class="fig" alt="평균 4,900만원 회사에서 20명 중 17명이 평균 이하">
   <aside class="notes">
     - 사장 한 명의 3억 → 평균 1,500만원 상승
     - "이 회사 채용공고에 «평균 연봉 4,900만원» 이라고 쓰면 거짓말입니까?" 질문
-    - 답 : 거짓은 아님 · 그래서 더 위험
+    - 답 : 거짓은 아님 → 그래서 더 위험
   </aside>
 </section>
 
@@ -87,18 +87,20 @@
       <h4>평균의 장점</h4>
       <p class="xs">모든 값을 <b>빠짐없이</b> 반영<br>
       전체 합을 개수로 나눈 값 → <b>총량</b>과 직결<br>
-      계산이 쉬움 · 이후 대부분의 통계가 평균 기반</p>
+      계산이 쉬움<br>
+      이후 배울 통계 대부분이 평균에서 출발</p>
     </div>
     <div class="card trap">
       <h4>평균의 한계</h4>
       <p class="xs">모든 값을 반영 → <b>극단값 하나에 크게 이동</b><br>
-      «가운데» 대신 <b>무게중심</b><br>
+      평균의 위치 = 가운데보다 <b>무게중심</b><br>
       평균 위치에 실제 사람이 있는지는 알 수 없음</p>
     </div>
   </div>
   <div class="key" style="margin-top:1em">
     <p>평균 = <b>시소의 받침점</b><br>
-    끝에 앉은 한 사람이 무거우면 받침점이 그쪽으로 이동 · 나머지 인원수와 무관</p>
+    끝에 앉은 한 사람이 무거우면 받침점이 그쪽으로 이동<br>
+    나머지 사람이 몇 명이든 마찬가지</p>
   </div>
 </section>
 
@@ -145,7 +147,7 @@
   </div>
   <!--/demo-->
   <aside class="notes">
-    - 진행 순서 준수
+    - 아래 순서대로 진행
     - ① 둘 다 0 — 평균과 중앙값 일치 · "이럴 때만 평균이 대푯값 역할" 설명
     - ② 치우침만 0→60→100 · 흰 선(평균)만 오른쪽 이동, 라임 선(중앙값)은 제자리
     - ③ 치우침 0 복귀 후 이상치만 증가 · 점 «단 하나»가 평균을 크게 이동시키는 장면 확인
@@ -169,24 +171,25 @@
   <div class="tag trap">흩어짐 · 2 ★</div>
   <h2>3주차 «표준편차 감소» 의 의미</h2>
   <div class="key trap" style="font-size:1.05em">
-    <p>3주차 내용 —<br>
+    <p>3주차에서 확인한 사실<br>
     <b>«평균으로 빈칸을 채우면 평균은 그대로인데 <span class="trap-txt">표준편차만 줄어든다</span>»</b></p>
   </div>
   <div class="cols" style="margin-top:1em">
     <div class="card">
       <h4>당시의 인상</h4>
-      <p class="xs">숫자 하나가 조금 작아지는 정도 · 평균 변화가 없으니 큰 문제 아님</p>
+      <p class="xs">숫자 하나가 조금 작아진 정도<br>
+      평균이 그대로라 문제없어 보임</p>
     </div>
     <div class="card trap">
       <h4>실제 의미</h4>
-      <p class="xs">빈칸 전부를 <b>평균 자리</b>에 배치<br>
-      = 편차가 <b>정확히 0</b>인 가짜 데이터 대량 삽입<br>
-      <b class="trap-txt">C반이 A반처럼 보이는 결과</b></p>
+      <p class="xs">빈칸을 모두 <b>평균값</b>으로 채움<br>
+      = 편차가 <b>정확히 0</b>인 가짜 값을 대량으로 추가<br>
+      → <b class="trap-txt">C반이 A반처럼 보임</b></p>
     </div>
   </div>
   <p class="small" style="margin-top:.9em">
-    데이터가 실제보다 <b>고르다</b>는 주장과 동일 · 없는 안정성 생성<br>
-    11주차 : <b class="trap-txt">없는 차이를 «유의하다»</b>고 판정하는 원인</p>
+    결과 : 데이터가 실제보다 <b>고르게</b> 보임<br>
+    11주차 : <b class="trap-txt">없는 차이를 «유의하다»</b>고 잘못 판정하는 원인</p>
 </section>
 
 <section>
@@ -194,11 +197,11 @@
   <h2>흩어진 정도의 측정</h2>
   <img src="../../figures/out/d04-variance-steps.svg" class="fig" alt="편차에서 분산과 표준편차를 구하는 네 단계">
   <aside class="notes">
-    - 수식 먼저 제시 금지 · 그림의 ①②③④ 순서대로 말로 설명
+    - 수식은 나중에 · 그림의 ①②③④ 순서대로 말로 설명
     - 핵심 질문 두 개만 제시
     - "왜 그냥 더하면 안 됩니까" → 합이 0
     - "왜 제곱했다가 다시 제곱근을 씌웁니까" → 단위를 «점» 으로 되돌려야 해석 가능
-    - 계산기 사용 지양 · 학생 부담 증가
+    - 손계산 생략 · 개념 이해에 집중
   </aside>
 </section>
 
@@ -212,15 +215,15 @@
    →  «거의 다 73~77점에 몰려 있다»</div>
   <div class="cols" style="margin-top:1em">
     <div class="card">
-      <h4>단위의 중요성</h4>
-      <p class="xs">표준편차 : 원래 단위 유지 — <b>점, 원, 분</b><br>
+      <h4>단위 차이</h4>
+      <p class="xs">표준편차 : 원래 단위(<b>점, 원, 분</b>) 그대로<br>
       → 평균과 나란히 놓고 해석 가능<br>
-      분산 : 단위가 <b>점²</b> → 해석 불가, 계산 과정에서만 활용</p>
+      분산 : 단위가 <b>점²</b> → 계산 중간 단계로만 사용</p>
     </div>
     <div class="card gfx">
-      <h4>보고 시 한 쌍으로 제시</h4>
+      <h4>평균과 짝으로 보고</h4>
       <p class="xs"><b>평균만 적은 보고서 = 미완성</b><br>
-      평균 옆에 흩어짐 지표 필수<br>
+      평균 옆에 흩어진 정도 필수<br>
       <span class="mono xs">평균 75점 (표준편차 10점, n=32)</span></p>
     </div>
   </div>
@@ -233,26 +236,26 @@
   <img src="../../figures/out/d04-distribution-shapes.svg" class="fig" alt="대칭·오른쪽 꼬리·왼쪽 꼬리·이봉 분포와 평균 중앙값의 위치">
   <aside class="notes">
     - ①에서만 평균과 중앙값이 일치한다는 점 먼저 강조
-    - ②③은 어느 쪽이 큰지 학생이 맞히게 할 것 — 꼬리 방향으로 평균 이동
+    - ②③ : 평균과 중앙값 중 어느 쪽이 큰지 학생에게 질문 → 답 : 꼬리 쪽으로 평균 이동
     - ④에 가장 많은 시간 배분 · 다음 슬라이드로 연결
   </aside>
 </section>
 
 <section>
   <div class="tag trap">분포 · 2</div>
-  <h2>이봉 분포 — 빈자리를 가리키는 평균</h2>
+  <h2>이봉 분포와 평균의 위치</h2>
   <div class="cols">
     <div>
       <div class="card trap">
         <h4>봉우리가 두 개인 경우</h4>
         <p class="xs">40점대 무리와 80점대 무리의 혼합<br>
-        평균 <b>63점</b> · 63점 근처 인원이 <b>가장 적음</b><br>
-        평균이 <b class="trap-txt">아무도 없는 자리</b>를 가리킴</p>
+        평균 <b>63점</b><br>
+        63점 근처 인원이 <b>가장 적음</b> → 평균이 <b class="trap-txt">아무도 없는 자리</b>를 가리킴</p>
       </div>
       <div class="key trap" style="margin-top:.8em">
-        <p class="small">봉우리 두 개 = 대개
-        <b>서로 다른 두 집단이 한 표에 섞인</b> 신호<br>
-        요약 대신 <b>분리</b> 필요</p>
+        <p class="small">봉우리 두 개 → 대개
+        <b>서로 다른 두 집단</b>이 섞인 경우<br>
+        평균으로 요약하기 전에 <b>집단 분리</b> 필요</p>
       </div>
     </div>
     <div>
@@ -287,13 +290,13 @@
   <div class="kicker">Part II · 30분</div>
   <div class="rule"></div>
   <h1>보고할 숫자의<br><em>선택</em></h1>
-  <p class="sub">평균과 중앙값의 선택 = 계산 문제와 무관<br>
-  <b>전달하려는 내용</b>에 따른 판단</p>
+  <p class="sub">평균과 중앙값 중 무엇을 쓸지<br>
+  계산보다 <b>전달할 내용</b>에 따라 결정</p>
 </section>
 
 <section>
   <div class="tag vr">판단 · 1</div>
-  <h2>결정표</h2>
+  <h2>상황별 대푯값 선택</h2>
   <table style="font-size:.68em">
     <tr><th>상황</th><th>보고할 값</th><th>이유</th></tr>
     <tr>
@@ -314,7 +317,7 @@
     <tr>
       <td>두 반의 성적 비교</td>
       <td class="vr-txt"><b>평균 + 표준편차</b></td>
-      <td>가운데 값이 같아도 다른 반일 가능성</td>
+      <td>평균이 같아도 흩어진 정도가 다를 수 있음</td>
     </tr>
     <tr>
       <td>설문 만족도 요약</td>
@@ -323,14 +326,14 @@
     </tr>
   </table>
   <div class="key vr" style="margin-top:.9em">
-    <p class="small"><b>핵심 규칙 하나 :</b> 평균과 중앙값 <b>모두 계산</b> ·
-    차이가 크면 그 차이 자체가 보고 내용</p>
+    <p class="small"><b>기본 규칙 :</b> 평균과 중앙값을 <b>함께 계산</b><br>
+    두 값의 차이가 크면 그 차이도 보고</p>
   </div>
 </section>
 
 <section>
   <div class="tag trap">판단 · 2 ★</div>
-  <h2>평균의 함정 — 실제 사례</h2>
+  <h2>평균이 판단을 흐리는 사례</h2>
   <img src="../../figures/out/d04-mean-trap.svg" class="fig" alt="평균 수심 1m 강, 만족도 평균 3.0점, 표본이 작을 때의 평균 이동">
   <aside class="notes">
     - ① 평균 수심 1m 인 강 — "다들 이 강 건너시겠습니까" 로 시작
@@ -342,7 +345,7 @@
 
 <section>
   <div class="tag vr">판단 · 3</div>
-  <h2>평균 확인 시 점검할 세 가지</h2>
+  <h2>평균을 볼 때 확인할 세 가지</h2>
   <div class="cols3" style="margin-top:1em">
     <div class="card vr">
       <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">1</span> 흩어진 정도</h4>
@@ -358,8 +361,8 @@
     </div>
   </div>
   <p class="small" style="margin-top:1.1em">
-    <b>남의 보고서를 읽을 때</b>, <b>내 보고서를 쓸 때</b> 모두 적용<br>
-    하나라도 답이 없는 평균 → 아직 해석 불가</p>
+    <b>보고서를 읽을 때</b>와 <b>쓸 때</b> 모두 적용<br>
+    셋 중 하나라도 빠진 평균 → 해석 보류</p>
 </section>
 
 <section>
@@ -371,7 +374,7 @@
   </div>
   <p class="small" style="margin-top:1.3em">
     앤스컴의 네 데이터 : 평균·분산·상관계수·회귀직선 모두 동일<br>
-    실제로는 전혀 다른 데이터 → <b>그림 한 장</b>으로 1초 만에 확인</p>
+    실제로는 전혀 다른 데이터 → <b>그림 한 장</b>이면 바로 구분</p>
   <p class="small muted" style="margin-top:.7em">
     실습 검증 조건에 «그려서 보여줄 것»이 항상 포함되는 이유
   </p>
@@ -381,12 +384,12 @@
   <div class="kicker">Part III · 50분</div>
   <div class="rule"></div>
   <h1>바이브코딩 실습</h1>
-  <p class="sub">AI에게 요약 요청 · <em>평균 하나로 끝나지 않도록</em> 명세 작성</p>
+  <p class="sub">AI 요약이 <em>평균 하나로 끝나지 않게</em> 명세 작성</p>
 </section>
 
 <section>
   <div class="tag trap">AI 함정 #3</div>
-  <h2>평균 위주의 AI 요약</h2>
+  <h2>평균만 보고하는 AI 요약</h2>
   <div class="vs">
     <div class="bad">
       <h4>이렇게 요청하면</h4>
@@ -399,8 +402,8 @@
         · "전반적으로 중간 수준입니다"
       </div>
       <div style="margin-top:.8em;color:#ff5a4d">
-        치우침 · 이봉 분포<br>
-        이상치 여부와 무관하게 <b>같은 형태의 답</b>
+        치우침·이봉 분포·이상치가 있어도<br>
+        <b>같은 형태의 답</b>
       </div>
     </div>
     <div class="good">
@@ -417,11 +420,11 @@
       </div>
     </div>
   </div>
-  <div class="note">AI의 오류라기보다 요청 범위만큼의 응답 · 질문 설계가 곧 실력</div>
+  <div class="note">AI는 요청받은 만큼만 답함 → 무엇을 물을지 설계하는 능력이 핵심</div>
   <aside class="notes">
     - 수업 중 직접 시연 · 이봉 데이터에 "요약해줘" 입력 시 거의 항상 평균만 출력
     - 같은 데이터에 오른쪽 명세 입력 시 그림과 두 봉우리 확인
-    - 이 대비를 학생이 직접 확인하는 것이 오늘 실습의 핵심
+    - 두 결과의 차이를 학생이 직접 확인하게 할 것
   </aside>
 </section>
 
@@ -450,8 +453,8 @@
 - 예쁜 그래프 꾸미기
 </code></pre>
   <div class="key lab">
-    <p class="small">오늘의 핵심 : [검증 조건]의 셋째 줄<br>
-    <b>그리기를 요청하지 않으면 AI는 그래프 생략</b> → 분포 문제를 아무도 발견하지 못함</p>
+    <p class="small">핵심 : [검증 조건] 셋째 줄<br>
+    <b>그래프를 요청하지 않으면 AI가 그리지 않음</b> → 분포 문제 발견 불가</p>
   </div>
 </section>
 
@@ -462,22 +465,22 @@
     <tr><th>#</th><th>실습</th><th>확인할 개념</th></tr>
     <tr>
       <td class="lab-txt"><b>1</b></td>
-      <td>먼저 <b>"이 데이터 요약해줘"</b> 한 줄만 입력 · 결과를 그대로 저장</td>
+      <td><b>"이 데이터 요약해줘"</b> 한 줄만 입력 → 결과 저장</td>
       <td>AI 함정 #3</td>
     </tr>
     <tr>
       <td class="lab-txt"><b>2</b></td>
-      <td>위 명세로 다시 요청 · <b>1번 결과와 나란히</b> 놓고 추가된 내용 기록</td>
+      <td>위 명세로 다시 요청 → <b>1번 결과와 비교</b>해 늘어난 내용 기록</td>
       <td>질문에 따른 답변 변화</td>
     </tr>
     <tr>
       <td class="lab-txt"><b>3</b></td>
-      <td>평균과 중앙값의 차이가 가장 큰 열 탐색 · <b>차이의 원인</b>을 그림으로 설명</td>
+      <td>평균과 중앙값 차이가 가장 큰 열 찾기 → <b>차이의 원인</b>을 그림으로 설명</td>
       <td>치우침</td>
     </tr>
     <tr>
       <td class="lab-txt"><b>4</b></td>
-      <td>두 집단으로 나눌 기준 열 하나 선택 · <b>집단별</b> 평균·표준편차 계산</td>
+      <td>두 집단으로 나눌 기준 열 선택 → <b>집단별</b> 평균·표준편차 계산</td>
       <td>이봉 분포</td>
     </tr>
     <tr>
@@ -500,16 +503,16 @@
   <h2>한 장 요약</h2>
   <table style="font-size:.66em">
     <tr><th>개념</th><th>핵심</th></tr>
-    <tr><td>평균</td><td>한가운데 대신 무게중심 · <b>극단값 하나에 크게 이동</b></td></tr>
-    <tr><td><b class="lab-txt">중앙값</b></td><td>순서만 반영 → <b>극단값에 강함</b> · 연봉·집값·대기시간은 중앙값으로 해석</td></tr>
-    <tr><td>분산</td><td>편차 제곱의 평균 · 부호 제거 목적의 제곱 · 단위가 <code>점²</code>이라 해석 불가</td></tr>
-    <tr><td><b class="gfx-txt">표준편차</b></td><td>√분산 · <b>«평균에서 대체로 떨어진 거리»</b> · 원래 단위로 복원</td></tr>
-    <tr><td><b class="trap-txt">3주차 연결</b></td><td>평균 대치 = <b>편차 0인 가짜 값</b> 대량 투입 · 데이터가 실제보다 고르게 보임</td></tr>
-    <tr><td>분포의 모양</td><td>대칭일 때만 평균≈중앙값 · 꼬리 방향으로 평균 이동</td></tr>
-    <tr><td><b class="trap-txt">이봉</b></td><td>봉우리 두 개 = <b>두 집단의 혼합</b> · 요약 대신 분리</td></tr>
-    <tr><td><b class="vr-txt">앤스컴</b></td><td>여섯 숫자가 같아도 전혀 다른 데이터 · <b>시각화 전에는 판단 불가</b></td></tr>
-    <tr><td>보고 규칙</td><td>평균 옆에 <b>표준편차와 n</b> · 평균과 중앙값의 차이 자체가 보고 내용</td></tr>
-    <tr><td>AI 함정 #3</td><td>«요약해줘» → 평균 위주 응답 · <b>중앙값 병기, 분포 시각화</b> 명시</td></tr>
+    <tr><td>평균</td><td>가운데보다 무게중심 → <b>극단값 하나에도 크게 이동</b></td></tr>
+    <tr><td><b class="lab-txt">중앙값</b></td><td>순서만 반영 → <b>극단값에 강함</b><br>연봉·집값·대기시간에 적합</td></tr>
+    <tr><td>분산</td><td>편차 제곱의 평균 · 단위가 <code>점²</code> → 직접 해석 곤란</td></tr>
+    <tr><td><b class="gfx-txt">표준편차</b></td><td>√분산 → <b>«평균에서 대체로 떨어진 거리»</b>, 원래 단위</td></tr>
+    <tr><td><b class="trap-txt">3주차 연결</b></td><td>평균 대치 = <b>편차 0인 가짜 값</b> 추가 → 데이터가 실제보다 고르게 보임</td></tr>
+    <tr><td>분포의 모양</td><td>대칭일 때만 평균≈중앙값 · 치우치면 꼬리 쪽으로 평균 이동</td></tr>
+    <tr><td><b class="trap-txt">이봉</b></td><td>봉우리 두 개 → <b>두 집단이 섞였을 가능성</b> · 요약 전에 분리</td></tr>
+    <tr><td><b class="vr-txt">앤스컴</b></td><td>요약 수치 여섯 개가 같아도 전혀 다른 데이터 → <b>그려 보기 전 판단 불가</b></td></tr>
+    <tr><td>보고 규칙</td><td>평균 옆에 <b>표준편차와 n</b> · 평균과 중앙값 차이도 함께 보고</td></tr>
+    <tr><td>AI 함정 #3</td><td>«요약해줘» → 평균만 보고 · 명세에 <b>중앙값과 분포 그래프</b> 포함</td></tr>
   </table>
 </section>
 
@@ -518,9 +521,9 @@
   <div class="rule"></div>
   <h1>z-점수와 <em>표준화</em></h1>
   <p class="sub">국어 80점과 수학 80점, 더 잘한 과목은?<br>
-  오늘 배운 <b>평균과 표준편차</b> 두 값으로<br>
-  단위가 다른 숫자들을 같은 기준에서 비교</p>
-  <div class="note">«이상치»를 감이 아닌 기준으로 찾는 방법</div>
+  오늘 배운 <b>평균과 표준편차</b>로<br>
+  기준이 다른 점수를 같은 잣대로 비교</p>
+  <div class="note">이상치를 감 대신 기준으로 찾는 방법</div>
 </section>
 
 </div></div>

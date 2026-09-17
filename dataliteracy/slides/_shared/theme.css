@@ -1,0 +1,352 @@
+/* ============================================================
+   컴퓨터그래픽스 (VF3500076) · 조성호
+   reveal.js 공통 테마
+   색 체계가 곧 교육 장치:
+     시안   = 그래픽스 이론 (PART I)
+     마젠타 = 지각 / HMD    (PART II)
+     레드   = AI 함정
+     라임   = 프롬프트 실습
+   ============================================================ */
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/index.min.css");
+
+:root {
+  --bg:        #0b0d12;
+  --bg-soft:   #12151d;
+  --bg-card:   #171b25;
+  --line:      #2a3040;
+  --fg:        #e8ecf4;
+  --fg-dim:    #9aa4b8;
+  --fg-faint:  #5f6980;
+
+  --gfx:       #35d6e6;   /* PART I  그래픽스 */
+  --gfx-soft:  #0e3a42;
+  --vr:        #ff5fa2;   /* PART II 지각/HMD */
+  --vr-soft:   #421229;
+  --trap:      #ff5a4d;   /* AI 함정 */
+  --trap-soft: #431612;
+  --lab:       #a8e05f;   /* 실습 */
+  --lab-soft:  #21330f;
+  --warn:      #ffc44d;
+
+  --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", "Malgun Gothic", sans-serif;
+  --mono: "JetBrains Mono", "D2Coding", Consolas, monospace;
+}
+
+.reveal-viewport { background: var(--bg); }
+
+.reveal {
+  font-family: var(--sans);
+  font-size: 30px;
+  color: var(--fg);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.reveal .slides { text-align: left; }
+.reveal .slides section { height: 100%; }
+
+/* ---------- 제목 ---------- */
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  font-family: var(--sans);
+  color: var(--fg);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  margin: 0 0 0.5em;
+  text-transform: none;
+  text-shadow: none;
+}
+.reveal h1 { font-size: 2.1em; }
+.reveal h2 { font-size: 1.5em; }
+.reveal h3 { font-size: 1.15em; }
+.reveal h4 { font-size: 0.95em; color: var(--fg-dim); font-weight: 600; }
+
+.reveal p  { line-height: 1.6; margin: 0 0 0.7em; }
+.reveal strong { color: #fff; font-weight: 700; }
+.reveal em { color: var(--gfx); font-style: normal; font-weight: 600; }
+
+/* ---------- 목록 ---------- */
+.reveal ul, .reveal ol { display: block; margin-left: 1.1em; }
+.reveal li { line-height: 1.55; margin-bottom: 0.42em; }
+.reveal ul li::marker { color: var(--fg-faint); }
+.reveal ol li::marker { color: var(--fg-faint); font-variant-numeric: tabular-nums; }
+.reveal li ul, .reveal li ol { margin-top: 0.3em; }
+.reveal li li { font-size: 0.88em; color: var(--fg-dim); }
+
+/* ---------- 코드 ---------- */
+.reveal code { font-family: var(--mono); font-size: 0.85em; }
+.reveal :not(pre) > code {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 0.1em 0.38em;
+  color: var(--gfx);
+}
+.reveal pre {
+  width: 100%;
+  box-shadow: none;
+  font-size: 0.5em;
+  margin: 0.5em 0;
+}
+.reveal pre code {
+  background: #090b10;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1em 1.2em;
+  max-height: none;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+/* ---------- 진행 / 컨트롤 ---------- */
+.reveal .progress { color: var(--gfx); height: 3px; }
+.reveal .controls { color: var(--fg-faint); }
+.reveal .slide-number {
+  background: transparent;
+  color: var(--fg-faint);
+  font-family: var(--mono);
+  font-size: 15px;
+  right: 18px; bottom: 12px;
+}
+
+/* ============================================================
+   레이아웃 유틸
+   ============================================================ */
+
+/* 파트 구분 표지 */
+.reveal section.divider { text-align: left; }
+.reveal .divider .kicker {
+  font-family: var(--mono);
+  font-size: 0.6em;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 0.9em;
+}
+.reveal .divider h1 { font-size: 2.4em; margin-bottom: 0.25em; }
+.reveal .divider .sub { color: var(--fg-dim); font-size: 0.85em; max-width: 22em; }
+.reveal .divider .rule { width: 90px; height: 5px; border-radius: 3px; margin-bottom: 1.4em; }
+
+.divider.part-i   .kicker, .divider.part-i   h1 em { color: var(--gfx); }
+.divider.part-i   .rule { background: var(--gfx); }
+.divider.part-ii  .kicker, .divider.part-ii  h1 em { color: var(--vr); }
+.divider.part-ii  .rule { background: var(--vr); }
+.divider.part-iii .kicker { color: var(--lab); }
+.divider.part-iii .rule { background: var(--lab); }
+.divider.trap     .kicker { color: var(--trap); }
+.divider.trap     .rule { background: var(--trap); }
+
+/* 상단 섹션 라벨 */
+.reveal .tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.46em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.32em 0.8em;
+  border-radius: 100px;
+  margin-bottom: 1.1em;
+  font-weight: 500;
+}
+.tag.gfx  { background: var(--gfx-soft);  color: var(--gfx);  border: 1px solid #1d5a66; }
+.tag.vr   { background: var(--vr-soft);   color: var(--vr);   border: 1px solid #6e2545; }
+.tag.trap { background: var(--trap-soft); color: var(--trap); border: 1px solid #6e2a24; }
+.tag.lab  { background: var(--lab-soft);  color: var(--lab);  border: 1px solid #3c5220; }
+
+/* 2단 */
+.reveal .cols  { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5em; align-items: start; }
+.reveal .cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1em; align-items: start; }
+.reveal .cols.wide-left  { grid-template-columns: 1.5fr 1fr; }
+.reveal .cols.wide-right { grid-template-columns: 1fr 1.5fr; }
+
+/* 카드 */
+.reveal .card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.95em 1.15em;
+  font-size: 0.8em;
+}
+.reveal .card h4 { margin: 0 0 0.45em; font-size: 1em; color: var(--fg); font-weight: 700; }
+.reveal .card p:last-child, .reveal .card ul:last-child { margin-bottom: 0; }
+.card.gfx  { border-color: #1d5a66; }
+.card.vr   { border-color: #6e2545; }
+.card.trap { border-color: #6e2a24; background: #1a1113; }
+.card.lab  { border-color: #3c5220; }
+
+/* 핵심 강조 박스 */
+.reveal .key {
+  border-left: 5px solid var(--gfx);
+  background: linear-gradient(90deg, rgba(53,214,230,0.10), transparent 70%);
+  padding: 0.75em 1.1em;
+  border-radius: 0 12px 12px 0;
+  margin: 0.7em 0;
+}
+.reveal .key.vr   { border-left-color: var(--vr);
+  background: linear-gradient(90deg, rgba(255,95,162,0.10), transparent 70%); }
+.reveal .key.trap { border-left-color: var(--trap);
+  background: linear-gradient(90deg, rgba(255,90,77,0.10), transparent 70%); }
+.reveal .key.lab  { border-left-color: var(--lab);
+  background: linear-gradient(90deg, rgba(168,224,95,0.10), transparent 70%); }
+.reveal .key p:last-child { margin-bottom: 0; }
+
+/* 질문 슬라이드 */
+.reveal .ask {
+  font-size: 1.5em;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.035em;
+  max-width: 20em;
+}
+.reveal .ask .hl { color: var(--gfx); }
+.reveal .ask.vr .hl { color: var(--vr); }
+
+/* 표 */
+.reveal table { font-size: 0.66em; border-collapse: collapse; width: 100%; margin: 0.5em 0; }
+.reveal table th {
+  text-align: left;
+  color: var(--fg-dim);
+  font-weight: 600;
+  border-bottom: 2px solid var(--line);
+  padding: 0.5em 0.7em;
+  font-size: 0.92em;
+}
+.reveal table td { border-bottom: 1px solid #1e2431; padding: 0.5em 0.7em; vertical-align: top; }
+.reveal table tr:last-child td { border-bottom: none; }
+
+/* 수식 */
+.reveal .eq {
+  font-family: var(--mono);
+  background: #090b10;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.8em 1em;
+  font-size: 0.72em;
+  line-height: 1.8;
+  color: var(--gfx);
+  overflow-x: auto;
+  white-space: pre;
+}
+.reveal .eq .cm { color: var(--fg-faint); }
+
+/* 도해 이미지 — 슬라이드(1280×720) 안에 반드시 들어오도록 높이로 제한한다.
+   너비로만 잡으면 세로로 긴 도해가 아래로 넘쳐 하단 캡션이 잘린다. */
+.reveal section img.fig {
+  display: block;
+  margin: 0.15em auto 0;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 478px;
+  border-radius: 12px;
+}
+/* 제목이 h3 한 줄뿐인 슬라이드는 더 크게 쓸 수 있다 */
+.reveal section:has(> h3) img.fig { max-height: 520px; }
+
+/* 각주 / 출처 */
+.reveal .note {
+  position: absolute;
+  bottom: 0.2em; left: 0;
+  font-size: 0.42em;
+  color: var(--fg-faint);
+  font-family: var(--mono);
+}
+
+/* 데모 컨테이너 — .demo(캔버스) 와 .demo-ui(조작부) 를 감싼다.
+   demos/*.js 는 컨트롤을 host.parentNode 에서 찾으므로 반드시 형제로 둔다. */
+.reveal .demo-wrap {
+  background: #06070a;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+.reveal .demo { position: relative; line-height: 0; }
+.reveal .demo canvas { display: block; width: 100%; }
+.reveal .demo-ui {
+  display: flex; flex-wrap: wrap; gap: 0.55em 1.1em;
+  padding: 0.7em 0.9em;
+  border-top: 1px solid var(--line);
+  background: var(--bg-soft);
+  font-size: 0.5em;
+  font-family: var(--mono);
+  align-items: center;
+}
+.reveal .demo-ui label { display: flex; align-items: center; gap: 0.5em; color: var(--fg-dim); }
+.reveal .demo-ui input[type=range] { width: 110px; accent-color: var(--gfx); }
+.reveal .demo-ui .val { color: var(--gfx); min-width: 3.4em; display: inline-block; text-align: right; }
+.reveal .demo-ui button {
+  font-family: var(--mono); font-size: 1em;
+  background: var(--bg-card); color: var(--fg);
+  border: 1px solid var(--line); border-radius: 7px;
+  padding: 0.32em 0.75em; cursor: pointer;
+}
+.reveal .demo-ui button:hover { border-color: var(--gfx); color: var(--gfx); }
+.reveal .demo-badge {
+  position: absolute; top: 10px; left: 12px;
+  font-family: var(--mono); font-size: 0.42em;
+  color: var(--fg-faint); letter-spacing: 0.1em; text-transform: uppercase;
+  pointer-events: none;
+}
+.reveal .demo-alert {
+  position: absolute; top: 12px; right: 14px;
+  font-family: var(--mono); font-size: 0.5em; font-weight: 700;
+  color: #0b0d12; background: var(--warn);
+  padding: 0.34em 0.8em; border-radius: 7px;
+  letter-spacing: 0.03em; white-space: nowrap;
+  opacity: 0; transition: opacity 0.18s;
+  pointer-events: none;
+}
+.reveal .demo-alert.on { opacity: 1; }
+
+/* 좋은/나쁜 프롬프트 대조 */
+.reveal .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1em; }
+.reveal .vs .bad, .reveal .vs .good {
+  border-radius: 12px; padding: 0.85em 1em; font-size: 0.62em; line-height: 1.55;
+  font-family: var(--mono);
+}
+.reveal .vs .bad  { background: #1a1113; border: 1px solid #6e2a24; }
+.reveal .vs .good { background: #101a10; border: 1px solid #3c5220; }
+.reveal .vs h4 { font-family: var(--sans); font-size: 1.15em; margin-bottom: 0.5em; }
+.reveal .vs .bad h4  { color: var(--trap); }
+.reveal .vs .good h4 { color: var(--lab); }
+
+/* 타이틀 슬라이드 */
+.reveal .cover .week {
+  font-family: var(--mono); color: var(--gfx);
+  letter-spacing: 0.3em; font-size: 0.55em; text-transform: uppercase;
+  margin-bottom: 1.2em;
+}
+.reveal .cover h1 { font-size: 2.5em; line-height: 1.15; margin-bottom: 0.35em; }
+.reveal .cover .meta {
+  color: var(--fg-faint); font-size: 0.6em; font-family: var(--mono);
+  margin-top: 2.2em; line-height: 1.9;
+}
+
+/* 순서 배지 */
+.reveal .step {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.7em; height: 1.7em; border-radius: 50%;
+  background: var(--gfx-soft); color: var(--gfx);
+  border: 1px solid #1d5a66;
+  font-family: var(--mono); font-size: 0.8em; font-weight: 700;
+  margin-right: 0.5em; flex: none;
+}
+
+.reveal .muted { color: var(--fg-dim); }
+.reveal .small { font-size: 0.72em; }
+.reveal .xs    { font-size: 0.58em; }
+.reveal .center { text-align: center; }
+.reveal .mono  { font-family: var(--mono); }
+.reveal .trap-txt { color: var(--trap); }
+.reveal .vr-txt   { color: var(--vr); }
+.reveal .lab-txt  { color: var(--lab); }
+.reveal .gfx-txt  { color: var(--gfx); }
+
+/* 인쇄(PDF) */
+@media print {
+  :root { --bg: #0b0d12; }
+  .reveal .demo-ui { display: none; }
+}

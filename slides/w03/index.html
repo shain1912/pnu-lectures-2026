@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3주차 · Unity 기초와 게임 루프 — 컴퓨터그래픽스</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ========================================================= 표지 -->
+<section class="cover">
+  <div class="week">Week 03</div>
+  <h1>Unity 기초와<br>게임 루프</h1>
+  <p class="muted" style="font-size:.8em;max-width:26em">
+    씬 · 게임오브젝트 · 컴포넌트 구조, C# 스크립팅 입문
+  </p>
+  <div class="meta">
+    컴퓨터그래픽스 VF3500076 · 디자인앤테크놀로지전공<br>
+    조성호 · 2026학년도 2학기
+  </div>
+</section>
+
+<!-- ========================================================= 도입 질문 -->
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask">
+    똑같은 스크립트, 한 글자도 같은 코드<br><br>
+    <span class="hl">내 노트북에서는 천천히</span> 걷고<br>
+    <span class="hl">옆자리 데스크톱에서는 뛰어감</span><br><br>
+    이유는?
+  </div>
+  <aside class="notes">
+    - 두 대의 PC에서 같은 씬 실행 시연이 가장 효과적
+    - 불가능하면 오늘의 프레임률 데모로 대체
+    - 답은 공개하지 않음
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>학습 목표</h2>
+  <div class="cols3" style="margin-top:1.2em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 구조</h4>
+      <p>Unity에서의 제작 = <b>부품(컴포넌트) 조합</b></p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정</h4>
+      <p>AI가 빠뜨리는 <b>단어 하나</b> → 게임 속도가 PC 성능에 종속</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> VR</h4>
+      <p>프레임 드랍 : 일반 게임은 <b>불편</b>, VR은 <b>구역질</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= PART I -->
+<section class="divider part-i">
+  <div class="kicker">Part I · 60분</div>
+  <div class="rule"></div>
+  <h1>Unity의<br><em>기본 구조</em></h1>
+  <p class="sub">게임오브젝트, 컴포넌트, 초당 60번 반복되는 게임 루프</p>
+</section>
+
+<!-- ---------------------------------------------------- 구조 -->
+<section>
+  <div class="tag gfx">구조 · 1</div>
+  <h2>게임오브젝트 = 빈 상자</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Unity의 <code>GameObject</code> : <b>자체 기능 없음</b><br>
+      이름과 위치만 가진 빈 상자</p>
+      <p class="small">화면에 표시 → <code>MeshRenderer</code> 추가<br>
+      낙하 → <code>Rigidbody</code> 추가</p>
+    </div>
+    <div>
+      <div class="key">
+        <p>Unity에서의 제작 = <b>필요한 부품을 골라 붙이는 과정</b></p>
+      </div>
+      <p class="xs muted" style="margin-top:.8em">
+        디자인 툴에서 레이어에 효과를 얹는 방식과 유사
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">구조 · 2</div>
+  <h2>씬 그래프 — 2주차 행렬 곱의 연쇄</h2>
+  <img src="../../figures/out/w03-scene-graph.svg" class="fig" alt="씬 그래프와 변환 연쇄">
+</section>
+
+<section>
+  <div class="tag gfx">구조 · 3 ★</div>
+  <h2>상속 대신 조합</h2>
+  <img src="../../figures/out/w03-component.svg" class="fig" alt="상속 트리 vs 컴포넌트 조합">
+  <aside class="notes">
+    - 디자인 전공 학생에게는 «포토샵 레이어 스타일», «피그마 컴포넌트» 비유가 효과적
+    - 상속의 조합 폭발을 먼저 보여준 뒤 컴포넌트 제시
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">구조 · 4</div>
+  <h2>내 코드도 부품</h2>
+  <pre><code class="language-csharp" data-trim>using UnityEngine;
+
+public class Spinner : MonoBehaviour   // ← 이 상속이 "부품 자격증"이다
+{
+    public float speed = 45f;
+
+    void Start()   { }   // 씬에 등장할 때 한 번
+    void Update()  { }   // 매 프레임
+}
+</code></pre>
+  <div class="key">
+    <p><code>MonoBehaviour</code> 상속 → <b>인스펙터에 붙일 수 있는 부품</b><br>
+    <code>public</code> 변수 → 인스펙터에 <b>입력칸으로 노출</b></p>
+  </div>
+  <div class="note">Update() 호출 주체 : Unity (직접 호출하지 않음)</div>
+</section>
+
+<!-- ---------------------------------------------------- 게임 루프 -->
+<section>
+  <div class="tag gfx">루프 · 1</div>
+  <h2>게임 = 무한 루프</h2>
+  <div class="eq">while (게임 실행 중) {
+    입력 읽기
+    세상 상태 갱신
+    <span class="cm">한 장</span> 그리기
+}</div>
+  <p class="small" style="margin-top:1em">
+    루프가 초당 60번 반복 · 한 바퀴 = <b>한 프레임</b></p>
+  <div class="key" style="margin-top:.8em">
+    <p><code>Update()</code> = <b>루프 한 바퀴에 끼워 넣는 내 코드</b><br>
+    무거운 코드 → 게임 전체 속도 저하</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">루프 · 2</div>
+  <h2>한 프레임의 실행 순서</h2>
+  <img src="../../figures/out/w03-frame-anatomy.svg" class="fig" alt="한 프레임 안의 실행 순서">
+</section>
+
+<section>
+  <div class="tag gfx">루프 · 3</div>
+  <h2>함수별 역할</h2>
+  <table style="font-size:.7em">
+    <tr><th>함수</th><th>호출 시점</th><th>용도</th></tr>
+    <tr><td class="gfx-txt"><code>Awake</code></td><td>객체 생성 직후 1회</td><td>자기 자신 초기화, 컴포넌트 캐싱</td></tr>
+    <tr><td class="gfx-txt"><code>Start</code></td><td>첫 Update 직전 1회</td><td>다른 객체를 참조하는 초기화</td></tr>
+    <tr><td class="lab-txt"><code>FixedUpdate</code></td><td>0.02초마다 고정</td><td><b>Rigidbody 를 미는 모든 코드</b></td></tr>
+    <tr><td class="gfx-txt"><code>Update</code></td><td>매 프레임</td><td>입력 처리, 게임 규칙, 타이머</td></tr>
+    <tr><td class="gfx-txt"><code>LateUpdate</code></td><td>모든 Update 후</td><td><b>카메라 추적</b>, 다른 대상을 따라가는 코드</td></tr>
+  </table>
+  <div class="key trap" style="margin-top:1em">
+    <p class="small">카메라 추적을 <code>Update</code> 에 넣으면 <b>화면이 미세하게 떨림</b><br>
+    원인 : 추적 대상이 아직 이동 전일 가능성 → 실행 순서를 알아야 해결 가능</p>
+  </div>
+</section>
+
+<!-- ---------------------------------------------------- 시간 -->
+<section>
+  <div class="tag trap">시간 · 1</div>
+  <h2>일정하지 않은 프레임 시간</h2>
+  <div class="cols">
+    <div>
+      <p class="small">한 프레임에 걸리는 시간은 매번 다름</p>
+      <ul class="small">
+        <li>PC 성능</li>
+        <li>화면에 그릴 대상의 양</li>
+        <li>다른 프로그램의 작업량</li>
+      </ul>
+    </div>
+    <div>
+      <div class="key trap">
+        <p><b>"매 프레임 1cm 이동"</b> 방식 →
+        속도가 <b>프레임률에 종속</b></p>
+      </div>
+      <p class="small" style="margin-top:.7em">
+        좋은 PC = 빠른 캐릭터 → 도입 질문의 답</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">시간 · 2</div>
+  <h2>Time.deltaTime — 지난 프레임이 걸린 시간</h2>
+  <img src="../../figures/out/w03-deltatime.svg" class="fig" alt="deltaTime 유무에 따른 이동 거리">
+</section>
+
+<section>
+  <div class="tag trap">시간 · 3 ★</div>
+  <h3 style="margin-bottom:.45em">프레임률 조절</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="deltatime">
+      <div class="demo-badge">같은 코드, 다른 PC</div>
+    </div>
+    <div class="demo-ui">
+      <label>프레임률 <input type="range" data-fps min="15" max="144" step="1" value="60"><span class="val" data-fps-v></span></label>
+      <button data-reset>다시 출발</button>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <p class="xs muted" style="margin-top:.5em">
+    빨강 = <span class="mono">position += v</span> · 초록 = <span class="mono">position += v * Time.deltaTime</span>
+    · 60fps 에서만 두 줄이 동시에 도착
+  </p>
+  <!--/demo-->
+  <aside class="notes">
+    - 30fps 와 120fps 를 각각 시연
+    - "그럼 프레임률을 고정하면 되지 않나요?" 질문 시
+      → VR 기기마다 72/90/120Hz 로 다름을 설명하고 PART II 로 연결
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">AI 함정 #2</div>
+  <h2>AI가 빠뜨리는 단어 하나</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>AI가 자주 작성하는 코드</h4>
+      void Update() {<br>
+      &nbsp;&nbsp;transform.Translate(<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Vector3.forward * speed);<br>
+      }<br><br>
+      <span style="color:#5f6980">// 프레임마다 speed 만큼</span><br>
+      <span style="color:#5f6980">// = PC 성능이 곧 속도</span>
+    </div>
+    <div class="good">
+      <h4>필요한 코드</h4>
+      void Update() {<br>
+      &nbsp;&nbsp;transform.Translate(<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Vector3.forward * speed<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;* <b>Time.deltaTime</b>);<br>
+      }<br><br>
+      <span style="color:#a8e05f">// 초당 speed 만큼</span>
+    </div>
+  </div>
+  <div class="key trap" style="margin-top:.9em">
+    <p class="small">이 함정은 <b>화면에서 잘 드러나지 않음</b> — 개발자 PC에서는 정상 동작<br>
+    <b>프레임률을 바꿔 측정해야</b> 확인 가능 → 오늘 배울 검증법</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">시간 · 4</div>
+  <h2>물리 계산의 별도 시계</h2>
+  <img src="../../figures/out/w03-fixed-timestep.svg" class="fig" alt="Update 와 FixedUpdate 의 타임라인">
+</section>
+
+<section>
+  <div class="tag lab">시간 · 5</div>
+  <h2>세 가지 시간 속성</h2>
+  <table style="font-size:.72em">
+    <tr><th>속성</th><th>의미</th><th>용도</th></tr>
+    <tr><td><code>Time.deltaTime</code></td><td>지난 <b>프레임</b>이 걸린 시간</td><td><code>Update</code> 안의 모든 이동·회전</td></tr>
+    <tr><td><code>Time.fixedDeltaTime</code></td><td>항상 0.02초 (고정)</td><td><code>FixedUpdate</code> 안</td></tr>
+    <tr><td><code>Time.time</code></td><td>게임 시작 후 흐른 총 시간</td><td>주기적 동작, 애니메이션 위상</td></tr>
+  </table>
+  <div class="key" style="margin-top:1em">
+    <p><code>FixedUpdate</code> 안에서 <code>Time.deltaTime</code> 사용 시
+    Unity가 자동으로 <code>fixedDeltaTime</code> 값 반환<br>
+    헷갈리면 <b><code>deltaTime</code> 사용</b> — 두 경우 모두 정상</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">성능 · 1</div>
+  <h2>Update 안에서 피할 코드</h2>
+  <pre><code class="language-csharp" data-trim>// 나쁨 — 매 프레임 컴포넌트를 새로 찾는다
+void Update() {
+    GetComponent&lt;Rigidbody&gt;().AddForce(Vector3.up);
+    GameObject.Find("Player").transform.position = p;   // 더 나쁨
+}
+
+// 좋음 — 한 번 찾아서 들고 있는다
+Rigidbody rb;
+void Awake() { rb = GetComponent&lt;Rigidbody&gt;(); }
+void FixedUpdate() { rb.AddForce(Vector3.up); }
+</code></pre>
+  <div class="key trap">
+    <p class="small"><code>Find</code> : 씬 전체 탐색 → 오브젝트 1,000개면
+    <b>매 프레임 1,000번</b> 비교<br>60fps 기준 초당 6만 번</p>
+  </div>
+  <div class="note">12주차 VR 최적화에서 프로파일러로 재확인</div>
+</section>
+
+<!-- ========================================================= PART II -->
+<section class="divider part-ii">
+  <div class="kicker">Part II · 30분</div>
+  <div class="rule"></div>
+  <h1>VR 에서의 <em>시간</em></h1>
+  <p class="sub">프레임 드랍 : 일반 게임은 불편, VR은 멀미 증상</p>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 1</div>
+  <div class="ask vr">
+    프레임 끊김<br><br>
+    일반 게임 → <span class="hl">짜증</span><br>
+    VR → <span class="hl">구토</span><br><br>
+    차이의 원인은?
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 2</div>
+  <h2>화면에 표시되는 과거의 장면</h2>
+  <p class="small">고개를 돌린 <b>그 순간</b>의 장면은 아직 렌더링 전<br>
+  센서 읽기 → 계산 → 렌더링 → 화면 점등까지 시간 소요</p>
+  <div class="key vr" style="margin-top:.9em">
+    <p>모니터 게임 : 지연을 <b>손</b>이 감지 — 입력 반응 지연<br>
+    VR : 지연을 <b>전정계</b>가 감지 — 세상이 미끄러짐</p>
+  </div>
+  <p class="small trap-txt" style="margin-top:.8em">
+    2주차 감각 충돌과 같은 원리 · 이번 원인은 <b>시간</b></p>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 3 ★</div>
+  <h2>motion-to-photon</h2>
+  <img src="../../figures/out/w03-motion-to-photon.svg" class="fig" alt="motion-to-photon 지연 분해">
+</section>
+
+<section>
+  <div class="tag vr">지각 · 4 ★</div>
+  <h3 style="margin-bottom:.45em">지연 시각화</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="latency">
+      <div class="demo-badge">위에서 내려다본 머리</div>
+    </div>
+    <div class="demo-ui">
+      <label>지연 <input type="range" data-lat min="0" max="80" step="1" value="20"><span class="val" data-lat-v></span></label>
+      <label>고개 회전 폭 <input type="range" data-spd min="10" max="70" step="1" value="40"><span class="val" data-spd-v></span></label>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <p class="xs muted" style="margin-top:.5em">
+    청록 = 실제 머리 방향 · 분홍 = 화면에 표시되는 방향 · 빨강 = 두 방향의 차이
+  </p>
+  <!--/demo-->
+  <aside class="notes">
+    - 지연을 0 → 20 → 50 → 80ms 로 올리며 시연
+    - "이 빨간 부채꼴이 여러분 뇌가 감지하는 오차입니다" 로 설명
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 5</div>
+  <h2>VR의 엄격한 프레임 예산</h2>
+  <img src="../../figures/out/w03-frame-budget.svg" class="fig" alt="60Hz 와 90Hz 프레임 예산 비교">
+</section>
+
+<section>
+  <div class="tag vr">지각 · 6</div>
+  <h2>프레임을 놓쳤을 때</h2>
+  <div class="cols">
+    <div class="card gfx">
+      <h4>일반 게임</h4>
+      <p class="xs">프레임 지연 → <b>늦게 표시</b><br>
+      화면이 잠깐 끊김 — 불편한 수준</p>
+    </div>
+    <div class="card trap">
+      <h4>VR</h4>
+      <p class="xs">헤드셋은 대기하지 않음<br>
+      직전 프레임을 <b>비틀어</b> 대신 표시 (재투영)<br>
+      그 순간 세상이 미끄러짐</p>
+    </div>
+  </div>
+  <div class="key vr" style="margin-top:1em">
+    <p>재투영 = <b>구조를 지키는 안전장치</b>, 성능 보완 수단으로 부적합<br>
+    자주 발생 시 사용자는 원인을 모른 채 <b>"이 게임 하면 어지럽다"</b> 는 반응</p>
+  </div>
+  <div class="note">11주차 예측(prediction) · 12주차 프로파일링으로 연결</div>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 7</div>
+  <h2>설계 원칙</h2>
+  <div class="key vr" style="font-size:1.12em;padding:1.1em 1.3em">
+    <p><b>VR의 <span class="vr-txt">Update()</span> :<br>
+    11.1ms 예산 안에서 실행</b></p>
+  </div>
+  <p class="small" style="margin-top:1.2em">
+    11.1ms 안에 게임 로직 · 물리 · <b>두 번의</b> 렌더링 전부 포함<br>
+    <code>Find</code> 하나, 정렬 한 번 → 프레임 지연 유발</p>
+  <p class="small muted" style="margin-top:.7em">
+    «일단 동작하게 만들고 나중에 최적화» 방식이 VR에서 통하기 어려운 이유
+  </p>
+</section>
+
+<!-- ========================================================= PART III -->
+<section class="divider part-iii">
+  <div class="kicker">Part III · 50분</div>
+  <div class="rule"></div>
+  <h1>프롬프트 실습</h1>
+  <p class="sub">이번 주 핵심 : <em>검증 조건</em> 작성법</p>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1</div>
+  <h2>명세의 네 칸</h2>
+  <div class="cols">
+    <div>
+      <div class="eq">[목표]
+무엇을 만드는가
+
+[제약]
+무엇을 하지 말아야 하는가
+
+[검증 조건]
+<span class="cm">어떻게 확인할 것인가</span>
+
+[비목표]
+무엇은 만들지 않는가</div>
+    </div>
+    <div>
+      <div class="key lab">
+        <p>이번 주 집중 : <b>세 번째 칸</b></p>
+      </div>
+      <p class="small" style="margin-top:.8em">
+        지난주 함정(짐벌락) : <b>화면에서 확인 가능</b><br>
+        이번 주 함정(deltaTime) : <b>화면에서 확인 불가</b></p>
+      <p class="small trap-txt" style="margin-top:.6em">
+        보이지 않는 결함 → <b>측정 방법을 미리 정하지 않으면</b> 발견 불가</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 2</div>
+  <h2>보이지 않는 결함의 측정</h2>
+  <pre><code class="language-csharp" data-trim>// 프레임률을 강제로 낮춰서 같은 코드를 두 번 돌린다
+void Awake() {
+    QualitySettings.vSyncCount = 0;          // vsync 를 꺼야 먹힌다
+    Application.targetFrameRate = 30;        // 그 다음 30 / 120 으로 바꿔가며
+}
+
+// 10초 뒤 위치를 찍어서 비교한다
+void Start() { Invoke(nameof(Report), 10f); }
+void Report() { Debug.Log($"{Application.targetFrameRate}fps → {transform.position}"); }
+</code></pre>
+  <div class="key lab">
+    <p class="small"><b>30fps 와 120fps 에서 10초 뒤 위치 비교</b><br>
+    같으면 통과, 다르면 <code>deltaTime</code> 누락 → 이것이 검증 조건</p>
+  </div>
+  <div class="note">vSyncCount 를 0으로 설정하지 않으면 targetFrameRate 무시 — 자주 발생하는 실수</div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 3</div>
+  <h2>오늘의 실습 — 50분</h2>
+  <table style="font-size:.72em">
+    <tr><th>#</th><th>실습</th><th>확인할 개념</th></tr>
+    <tr>
+      <td class="lab-txt"><b>1</b></td>
+      <td>AI에게 <b>검증 조건 없이</b> 회전·이동 스크립트 요청 · 첫 응답의 <code>deltaTime</code> 포함 여부 확인</td>
+      <td>명세의 빈틈</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>2</b></td>
+      <td>위 측정 코드로 <b>30fps / 120fps 비교</b>, 결함 확인</td>
+      <td>보이지 않는 결함의 측정</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>3</b></td>
+      <td>검증 조건을 넣어 <b>다시 요청</b>, 응답 차이 비교</td>
+      <td>명세에 따른 결과 변화</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>4</b></td>
+      <td>공을 <code>Update</code> 와 <code>FixedUpdate</code> 에서 각각 밀어 차이 비교</td>
+      <td>고정 타임스텝</td>
+    </tr>
+    <tr>
+      <td class="vr-txt"><b>5</b></td>
+      <td class="vr-txt">카메라 추적을 <code>Update</code> 와 <code>LateUpdate</code> 양쪽에 넣어 <b>떨림 재현</b> (확장)</td>
+      <td>실행 순서</td>
+    </tr>
+  </table>
+  <p class="xs muted" style="margin-top:.8em">
+    1~4 필수, 5 확장 · 제출물 없음, 수업 안에서 완료
+  </p>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 4</div>
+  <h2>이번 주 명세 예시</h2>
+  <pre><code data-trim>[목표]
+큐브를 월드 Z축 방향으로 초당 3m 등속 이동시킨다.
+
+[제약]
+- 프레임률과 무관하게 같은 속도일 것
+- Rigidbody 는 쓰지 않는다 (Transform 직접 이동)
+
+[검증 조건]
+- vSyncCount=0 으로 두고 targetFrameRate 를 30 과 120 으로 바꿔
+  각각 10초 뒤 position.z 를 로그로 찍었을 때
+  두 값의 차이가 0.1m 이내일 것
+
+[비목표]
+- 입력 처리, 충돌, UI 는 만들지 말 것
+</code></pre>
+  <div class="key lab">
+    <p class="small">[검증 조건]에 <b>숫자와 방법</b> 포함<br>
+    «잘 동작할 것» 은 검증 조건으로 부적합</p>
+  </div>
+</section>
+
+<!-- ========================================================= 정리 -->
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table style="font-size:.7em">
+    <tr><th>개념</th><th>핵심</th></tr>
+    <tr><td>게임오브젝트</td><td>빈 상자 · 부품을 붙여야 기능 발생</td></tr>
+    <tr><td><b class="gfx-txt">컴포넌트</b></td><td><b>상속 대신 조합</b>. 조합이 늘어도 부품 수는 그대로</td></tr>
+    <tr><td>씬 그래프</td><td>계층 = 행렬 곱의 연쇄 · 부모 이동 시 자식 전체 이동</td></tr>
+    <tr><td>게임 루프</td><td>Update = 초당 60번 반복되는 루프에 끼워 넣는 내 코드</td></tr>
+    <tr><td>실행 순서</td><td>물리는 FixedUpdate, 추적은 LateUpdate</td></tr>
+    <tr><td><b class="trap-txt">deltaTime</b></td><td><b>누락 시 PC 성능이 곧 게임 속도</b>. AI가 가장 자주 빠뜨림</td></tr>
+    <tr><td>검증 조건</td><td>보이지 않는 결함 → <b>측정 방법을 미리 정해야</b> 발견</td></tr>
+    <tr><td><b class="vr-txt">motion-to-photon</b></td><td><b>높은 프레임률과 짧은 지연은 별개</b>. 20ms가 경계</td></tr>
+    <tr><td><b class="vr-txt">VR 예산</b></td><td>90Hz = 11.1ms. 그 안에 두 눈 모두 렌더링</td></tr>
+  </table>
+</section>
+
+<section class="divider part-i">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>렌더링 <em>파이프라인</em></h1>
+  <p class="sub">정점 하나가 화면의 픽셀이 되는 과정<br>
+  HMD 렌즈를 위해 그림을 <b>미리 일그러뜨리는</b> 이유</p>
+  <div class="note">AI 함정 #3 — 카메라 near/far 오설정으로 생기는 z-fighting</div>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="../_shared/demos/_stage.js"></script>
+<script src="../_shared/demos/w03.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

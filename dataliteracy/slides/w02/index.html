@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2주차 · 데이터의 종류와 수집 설계 — 데이터리터러시</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<section class="cover">
+  <div class="week">Week 02</div>
+  <h1>데이터의 종류와<br>수집 설계</h1>
+  <p class="muted" style="font-size:.8em;max-width:26em">
+    정형·비정형 데이터, 설문·공공데이터·웹 수집
+  </p>
+  <div class="meta">
+    데이터리터러시의이해 SF1101084 · AI융합교육원<br>
+    조성호 · 2026학년도 2학기
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask">
+    <span class="hl">우리 학과 학생들의<br>통학 시간은 얼마나 되는가?</span><br><br>
+    이 질문에 답하기 위한<br>
+    첫 단계는?
+  </div>
+  <aside class="notes">
+    - 학생 대부분의 답 : "설문 돌리기" 또는 "데이터 찾기"
+    - 둘 다 틀린 답은 아님 · 한 단계를 건너뛴 답
+    - "통학시간이 정확히 뭔데요?" 를 오늘 수업의 축으로 활용
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>학습 목표</h2>
+  <div class="cols3" style="margin-top:1.2em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 구조</h4>
+      <p>표의 문법 이해 · <b>행의 단위</b> 결정 = 모든 분석의 출발점</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 설계</h4>
+      <p>데이터 탐색 전 <b>질문 고정</b> · 순서가 바뀌면 분석 대신 끼워 맞춘 해석</p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 함정</h4>
+      <p>가진 데이터보다 <b>빠진 데이터</b>에 담긴 정보가 더 많음</p>
+    </div>
+  </div>
+</section>
+
+<section class="divider part-i">
+  <div class="kicker">Part I · 60분</div>
+  <div class="rule"></div>
+  <h1>데이터와<br><em>측정</em>의 한계</h1>
+  <p class="sub">측정되지 않은 대상 = 분석에서 존재하지 않는 대상</p>
+</section>
+
+<section>
+  <div class="tag gfx">종류 · 1</div>
+  <h2>데이터의 세 가지 형태</h2>
+  <div class="cols3">
+    <div class="card gfx">
+      <h4>정형 (Structured)</h4>
+      <p class="xs">행과 열이 정해진 표<br>엑셀, CSV, 데이터베이스</p>
+      <p class="xs muted" style="margin-top:.5em">바로 계산 가능</p>
+    </div>
+    <div class="card">
+      <h4>반정형 (Semi-structured)</h4>
+      <p class="xs">구조는 있으나 표 형태는 아님<br>JSON, XML, 로그 파일</p>
+      <p class="xs muted" style="margin-top:.5em">표로 펼친 뒤 계산 가능</p>
+    </div>
+    <div class="card vr">
+      <h4>비정형 (Unstructured)</h4>
+      <p class="xs">텍스트, 이미지, 음성, 영상<br>리뷰 글, 사진, 통화 녹음</p>
+      <p class="xs muted" style="margin-top:.5em">숫자로 변환 후 계산 가능</p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:1.1em">
+    <p>세상 데이터의 <b>대부분은 비정형</b> · 이 수업의 분석 기법은 거의 <b>정형</b> 전제<br>
+    → <b>"표로 만드는 일"</b> 자체가 분석의 절반</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">구조 · 1 ★</div>
+  <h2>표의 문법</h2>
+  <img src="../../figures/out/d02-table-grammar.svg" class="fig" alt="행은 관측, 열은 변수">
+  <aside class="notes">
+    - "관측 단위"를 학생이 직접 말로 설명하게 할 것
+    - 같은 주제라도 행을 학생으로 잡는지, 수업으로 잡는지에 따라 전혀 다른 표
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">구조 · 2</div>
+  <h2>평균을 낼 수 있는 값, 없는 값</h2>
+  <img src="../../figures/out/d02-scales.svg" class="fig" alt="명목·순서·구간·비율 척도">
+</section>
+
+<section>
+  <div class="tag gfx">구조 · 3</div>
+  <h2>기계가 읽을 수 있는 표</h2>
+  <img src="../../figures/out/d02-tidy.svg" class="fig" alt="지저분한 표와 깔끔한 표">
+</section>
+
+<section class="divider part-ii">
+  <div class="kicker">Part II · 30분</div>
+  <div class="rule"></div>
+  <h1>수집 <em>설계</em></h1>
+  <p class="sub">좋은 질문 → 좋은 데이터 → 좋은 분석</p>
+</section>
+
+<section>
+  <div class="tag vr">설계 · 1 ★</div>
+  <h2>수집 설계의 올바른 순서</h2>
+  <img src="../../figures/out/d02-collection-design.svg" class="fig" alt="질문에서 출처로 이어지는 수집 설계">
+</section>
+
+<section>
+  <div class="tag vr">설계 · 2</div>
+  <h2>조작적 정의 — 말을 숫자로 바꾸기</h2>
+  <p class="small">"통학시간이 길다" 는 분석 불가 → <b>측정 방법</b> 결정이 먼저</p>
+  <table style="font-size:.72em;margin-top:.7em">
+    <tr><th>말</th><th>조작적 정의 (예시)</th><th>이 정의가 빠뜨리는 것</th></tr>
+    <tr><td>통학시간</td><td>집 문을 나서서 강의실 도착까지의 분</td><td>환승 대기, 도보 구간</td></tr>
+    <tr><td>인기 있는 강의</td><td>수강신청 마감까지 걸린 초</td><td>재수강, 필수과목 여부</td></tr>
+    <tr><td>위험한 교차로</td><td>연간 인명사고 건수</td><td>많은 통행량의 영향 가능성</td></tr>
+  </table>
+  <div class="key vr" style="margin-top:1em">
+    <p><b>완벽한 정의는 없음</b><br>
+    핵심 : 정의를 <b>먼저 기록</b> · 빠지는 부분을 <b>인지</b></p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">설계 · 3</div>
+  <h2>데이터 출처</h2>
+  <div class="cols3">
+    <div class="card gfx">
+      <h4>설문</h4>
+      <p class="xs">원하는 변수를 정확히 설계 가능<br>
+      <b class="trap-txt">질문 설계에 따라 답 변화</b> — 유도질문, 척도 설계가 결과 좌우</p>
+    </div>
+    <div class="card lab">
+      <h4>공공데이터</h4>
+      <p class="xs">data.go.kr · KOSIS<br>
+      큰 규모, 높은 신뢰도<br>
+      <b class="trap-txt">내 질문에 딱 맞는 데이터는 드묾</b></p>
+    </div>
+    <div class="card">
+      <h4>웹 수집</h4>
+      <p class="xs">없는 데이터를 직접 생성 가능<br>
+      <b class="trap-txt">이용약관·저작권·개인정보</b><br>
+      기술보다 판단이 우선</p>
+    </div>
+  </div>
+  <div class="key trap" style="margin-top:1em">
+    <p class="small">이번 학기 실습 데이터 : <b>공공데이터</b><br>
+    이유 : 실제로 지저분함 · 실제로 활용됨 · <b>임의로 만들 수 없는 데이터</b></p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 1 ★</div>
+  <h2>누구에게 물었는가</h2>
+  <img src="../../figures/out/d02-sampling-bias.svg" class="fig" alt="공정한 표본과 편향된 표본">
+</section>
+
+<section>
+  <div class="tag trap">함정 · 2 ★</div>
+  <h2>생존자 편향</h2>
+  <img src="../../figures/out/d02-survivorship.svg" class="fig" alt="생존자 편향">
+  <aside class="notes">
+    - 2차대전 통계학자 아브라함 발드의 일화
+    - "성공한 사람들의 공통점" 류 기사를 예로 들면 이해가 빠름
+    - 실패한 사람들도 같은 습관을 가졌을 가능성
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">설계 · 4</div>
+  <h2>분석 전 필수 점검 질문</h2>
+  <div class="key vr" style="font-size:1.15em;padding:1.1em 1.3em">
+    <p><b>이 데이터에서 <span class="vr-txt">빠진 사람은 누구인가?</span></b></p>
+  </div>
+  <div class="cols" style="margin-top:1.2em">
+    <div class="card">
+      <h4>배달앱 리뷰 데이터</h4>
+      <p class="xs">아주 좋았거나 아주 나빴던 사람만 작성<br>
+      → <b>보통이었던 사람</b> 전체 누락</p>
+    </div>
+    <div class="card">
+      <h4>수업 만족도 설문</h4>
+      <p class="xs">중도 포기 학생은 응답 없음<br>
+      → <b>가장 불만족한 집단</b> 누락</p>
+    </div>
+  </div>
+  <p class="small muted" style="margin-top:.9em">
+    표본 크기를 늘려도 해결 불가 → <b>틀린 결과가 더 정밀해질 뿐</b>
+  </p>
+</section>
+
+<section class="divider part-iii">
+  <div class="kicker">Part III · 50분</div>
+  <div class="rule"></div>
+  <h1>바이브코딩 실습</h1>
+  <p class="sub">코드 작성은 AI · <em>요구 사항 결정</em>과
+  <em>오류 판별</em>은 학생</p>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1</div>
+  <h2>실습의 3단 루프</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 질문</h4>
+      <p class="xs">알고 싶은 것을 한 문장으로 기록</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">2</span> 명세</h4>
+      <p class="xs">AI에게 <b>정확한 용어</b>로 요구</p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 검증</h4>
+      <p class="xs">결과의 <b>사실 여부</b>를 원본으로 재확인</p>
+    </div>
+  </div>
+  <div class="key lab" style="margin-top:1.2em">
+    <p><b>프로그래밍 지식 불필요</b><br>
+    필요한 역량 : <b>이상한 결과를 알아보는 능력</b> — 이 수업의 목표</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">AI 함정 #1</div>
+  <h2>AI가 지어내는 데이터</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>이렇게 요청하면</h4>
+      "부산 지역 대학생 통학시간<br>
+      공공데이터 링크 좀 줘"
+      <div style="margin-top:.9em;color:#5f6980">↓ AI의 응답</div>
+      <div style="margin-top:.5em">
+        data.go.kr/dataset/3082...<br>
+        「부산광역시 대학생<br>
+        통학실태조사」 (2024)
+      </div>
+      <div style="margin-top:.8em;color:#ff5a4d">그럴듯하지만 존재하지 않는 데이터</div>
+    </div>
+    <div class="good">
+      <h4>필수 확인 사항</h4>
+      · 링크 <b>직접 열기</b><br>
+      · 파일 <b>실제로 내려받기</b><br>
+      · 행 수와 열 이름 <b>직접 확인</b><br>
+      · 조사 기관·연도·조사 대상 확인<br><br>
+      <span style="color:#a8e05f">"AI가 알려줬다" 는 출처로 인정 불가</span>
+    </div>
+  </div>
+  <div class="note">이 수업 전체에서 가장 자주, 가장 눈에 띄지 않게 발생하는 함정</div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 2</div>
+  <h2>명세의 네 칸</h2>
+  <pre><code data-trim>[목표]
+내려받은 CSV 파일의 구조를 파악한다.
+
+[제약]
+- 파일을 임의로 수정하지 말 것
+- 결측치를 채우거나 행을 지우지 말 것 (이번 주는 «보기»만)
+
+[검증 조건]
+- 출력된 행 수가 원본 파일의 줄 수와 일치할 것
+- 각 열의 자료형과 결측 개수를 표로 보여줄 것
+
+[비목표]
+- 그래프, 통계 분석은 하지 말 것
+</code></pre>
+  <div class="key lab">
+    <p class="small">[제약]에 <b>"하지 말 것"</b>을 적는 이유 : 요청하지 않아도
+    AI가 임의로 정제하는 경향<br>→ 다음 주 주제</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 3</div>
+  <h2>오늘의 실습 — 90분</h2>
+  <table style="font-size:.72em">
+    <tr><th>#</th><th>실습</th><th>확인할 개념</th></tr>
+    <tr>
+      <td class="lab-txt"><b>1</b></td>
+      <td>관심 주제 선정 · <b>질문 한 문장</b>과 <b>조작적 정의</b> 작성</td>
+      <td>수집 설계</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>2</b></td>
+      <td>AI에게 관련 공공데이터 질문 · <b>링크를 하나씩 직접 열어</b> 실제 존재 여부 확인</td>
+      <td>AI 함정 #1</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>3</b></td>
+      <td><a href="https://www.data.go.kr" target="_blank">data.go.kr</a> 에서 실제 CSV 내려받기</td>
+      <td>실물 확보</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>4</b></td>
+      <td>위 명세로 AI에게 <b>구조만</b> 파악 요청 — 행 수, 열 이름, 자료형, 결측 개수</td>
+      <td>표의 문법</td>
+    </tr>
+    <tr>
+      <td class="vr-txt"><b>5</b></td>
+      <td class="vr-txt">해당 데이터로 내 질문에 <b>답할 수 있는지</b> 판단 · 불가능하면 부족한 부분 기록</td>
+      <td>설계 검증</td>
+    </tr>
+  </table>
+  <p class="xs muted" style="margin-top:.8em">
+    5번의 결론이 "답할 수 없음" 이어도 무방 · <b>이 사실을 지금 파악하는 것이 실습의 목적</b>
+  </p>
+</section>
+
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table style="font-size:.72em">
+    <tr><th>개념</th><th>핵심</th></tr>
+    <tr><td>정형·비정형</td><td>세상은 비정형, 분석은 정형 요구 → 표로 만드는 작업이 절반</td></tr>
+    <tr><td><b class="gfx-txt">관측 단위</b></td><td><b>한 행의 단위</b> 결정이 첫 단계 · 여기서 틀리면 전체 오류</td></tr>
+    <tr><td>척도</td><td>«학과의 평균» 계산은 가능하나 의미 없음 · 판단은 사람의 몫</td></tr>
+    <tr><td>tidy</td><td>한 행 = 한 관측, 한 열 = 한 변수</td></tr>
+    <tr><td><b class="vr-txt">수집 설계</b></td><td><b>질문 → 조작적 정의 → 변수 → 출처</b> · 역순이면 끼워 맞춘 해석</td></tr>
+    <tr><td><b class="trap-txt">편향</b></td><td><b>이 데이터에서 빠진 사람은 누구인가</b> · 표본 확대로 해결 불가</td></tr>
+    <tr><td>AI 함정 #1</td><td>존재하지 않는 데이터셋을 그럴듯하게 생성 → <b>직접 열어 확인 필수</b></td></tr>
+  </table>
+</section>
+
+<section class="divider part-i">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>데이터 <em>정제</em></h1>
+  <p class="sub">오늘 내려받은 파일 열어보기<br>
+  빈칸, 중복, 깨진 글자, "미상" — 처리 방식에 따라
+  <b>결론이 달라지는</b> 사례</p>
+  <div class="note">AI 함정 #2 — AI의 무단 결측치 대치</div>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2주차 · 그래픽스 수학 기초 — 컴퓨터그래픽스</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ========================================================= 표지 -->
+<section class="cover">
+  <div class="week">Week 02</div>
+  <h1>그래픽스 수학 기초</h1>
+  <p class="muted" style="font-size:.8em;max-width:24em">
+    벡터 · 행렬 · 좌표계 변환의 이해와 Unity Transform 실습
+  </p>
+  <div class="meta">
+    컴퓨터그래픽스 VF3500076 · 디자인앤테크놀로지전공<br>
+    조성호 · 2026학년도 2학기
+  </div>
+</section>
+
+<!-- ========================================================= 도입 질문 -->
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask">
+    인스펙터에 <span class="hl">Rotation (90, 90, 0)</span> 입력<br>
+    옆 사람도 같은 값 입력<br><br>
+    결과 : <span class="hl">두 물체가 서로 다른 방향</span><br>
+    이유는?
+  </div>
+  <aside class="notes">
+    - 학생 2명에게 Unity 실행 후 서로 다른 순서로 회전 적용
+      (한 명은 인스펙터 직접 입력, 한 명은 Rotate 두 번 호출)
+    - 답은 공개하지 않고 수업 마지막까지 유지
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>학습 목표</h2>
+  <div class="cols3" style="margin-top:1.2em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 원리</h4>
+      <p><b>기저 벡터</b>의 이동 위치로 행렬 직접 유도 — 암기 불필요</p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정</h4>
+      <p>AI 회전 코드의 <b>짐벌락</b> 증상 확인 → 원인 지목</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> VR</h4>
+      <p>VR의 <b>통제 불가 변환</b> : 사용자의 머리 → 직접 조작 시 멀미 유발</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= PART I -->
+<section class="divider part-i">
+  <div class="kicker">Part I · 60분</div>
+  <div class="rule"></div>
+  <h1>벡터, 행렬,<br>그리고 <em>변환</em></h1>
+  <p class="sub">화면 속 모든 움직임 = 4×4 행렬 곱셈</p>
+</section>
+
+<!-- ---------------------------------------------------- 벡터 -->
+<section>
+  <div class="tag gfx">벡터 · 1</div>
+  <h2>점과 벡터의 차이</h2>
+  <div class="cols" style="margin-top:.8em">
+    <div class="card">
+      <h4>점 (Point)</h4>
+      <p><b>위치</b> — 어디에 있는가</p>
+      <p class="xs muted">원점 이동 시 값 변경</p>
+    </div>
+    <div class="card gfx">
+      <h4>벡터 (Vector)</h4>
+      <p><b>방향과 크기</b> — 어느 쪽으로 얼마나</p>
+      <p class="xs muted">원점 이동과 무관</p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:1em">
+    <p>Unity에서는 둘 다 <code>Vector3</code> 타입 → 구분이 흐려짐<br>
+    <b>이동 변환 적용 시 동작 차이 발생</b> (뒷부분에서 다시 다룸)</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">벡터 · 2</div>
+  <h2>Unity의 좌표계</h2>
+  <div class="cols wide-left">
+    <div>
+      <div class="eq">Y  ↑  위<span class="cm">        (up)</span>
+Z  →  앞<span class="cm">        (forward)</span>
+X  →  오른쪽<span class="cm">    (right)</span>
+
+<span class="cm">왼손 좌표계 (left-handed)</span></div>
+      <p class="small muted" style="margin-top:.7em">
+        <b>왼손</b>의 엄지=X, 검지=Y, 중지=Z 방향 = Unity의 축
+      </p>
+    </div>
+    <div>
+      <table>
+        <tr><th>도구</th><th>위</th><th>좌표계</th></tr>
+        <tr><td>Unity</td><td>Y</td><td class="gfx-txt">왼손</td></tr>
+        <tr><td>Unreal</td><td>Z</td><td class="gfx-txt">왼손</td></tr>
+        <tr><td>Blender</td><td>Z</td><td class="trap-txt">오른손</td></tr>
+        <tr><td>Maya</td><td>Y</td><td class="trap-txt">오른손</td></tr>
+        <tr><td>OpenGL</td><td>Y</td><td class="trap-txt">오른손</td></tr>
+      </table>
+      <p class="xs trap-txt" style="margin-top:.6em">
+        Blender 모델을 Unity로 가져올 때 축이 눕는 원인
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">벡터 · 3</div>
+  <h2>내적 — 두 방향이 같은 쪽을 보는 정도</h2>
+  <img src="../../figures/out/w02-dot-product.svg" alt="내적의 기하학적 의미" class="fig">
+  <aside class="notes">
+    - 공식보다 "b를 a 위에 눕히면 얼마나 되나" 그림을 먼저 제시
+    - cos θ 는 정의보다 결과로 설명
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">벡터 · 3</div>
+  <h3 style="margin-bottom:.5em">내적·외적 직접 조작</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="dot-cross">
+      <div class="demo-badge">drag to orbit</div>
+    </div>
+    <div class="demo-ui">
+      <label>방위각 <input type="range" data-az min="0" max="360" value="52"></label>
+      <label>고도각 <input type="range" data-el min="-80" max="80" value="12"></label>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <!--/demo-->
+  <p class="xs muted" style="margin-top:.5em">
+    청록 = 내 시선 <span class="mono">a</span> · 분홍 = 대상 방향 <span class="mono">b</span> ·
+    노랑 = 외적 <span class="mono">a × b</span>
+  </p>
+</section>
+
+<section>
+  <div class="tag gfx">벡터 · 4</div>
+  <h2>내적의 활용</h2>
+  <pre><code class="language-csharp" data-trim>// 적이 내 시야각(60°) 안에 있는가?
+Vector3 toEnemy = (enemy.position - transform.position).normalized;
+float d = Vector3.Dot(transform.forward, toEnemy);
+
+if (d > Mathf.Cos(60f * 0.5f * Mathf.Deg2Rad))   // = 0.866
+    Debug.Log("보인다");
+</code></pre>
+  <div class="key">
+    <p><b>각도 계산 없이 비교</b> — <code>Acos</code> 는 느리고 불필요<br>
+    코사인 값끼리 비교로 충분 → 그래픽스에서 내적을 활용하는 이유</p>
+  </div>
+  <div class="note">11주차 : "사용자가 어디를 보고 있는가" 판정에 같은 코드 활용</div>
+</section>
+
+<section>
+  <div class="tag gfx">벡터 · 5</div>
+  <h2>외적 — 두 벡터가 만드는 면</h2>
+  <img src="../../figures/out/w02-cross-product.svg" alt="외적: 면적과 법선" class="fig">
+</section>
+
+<section>
+  <div class="tag gfx">벡터 · 6</div>
+  <h2>외적의 활용</h2>
+  <div class="cols3">
+    <div class="card gfx">
+      <h4>면의 법선</h4>
+      <p class="xs">삼각형 세 점 → 면의 방향 계산 → <b>조명 계산의 출발점</b>(5주차)</p>
+    </div>
+    <div class="card gfx">
+      <h4>회전축</h4>
+      <p class="xs">"a 를 b 로 돌리려면 어느 축으로?" → <code>a × b</code>. 쿼터니언의 방식</p>
+    </div>
+    <div class="card gfx">
+      <h4>좌우 판정</h4>
+      <p class="xs">대상이 내 <b>왼쪽</b>인지 오른쪽인지 판정 (내적으로는 불가)</p>
+    </div>
+  </div>
+  <div class="key trap" style="margin-top:1em">
+    <p><b>내적만으로는 좌우 구분 불가</b> — 왼쪽 30°와 오른쪽 30°의 내적 값 동일<br>
+    방향까지 필요할 때 외적 활용</p>
+  </div>
+</section>
+
+<!-- ---------------------------------------------------- 행렬 -->
+<section>
+  <div class="tag gfx">변환 · 1</div>
+  <h2>변환의 세 가지 종류</h2>
+  <table style="font-size:.75em;margin-top:.6em">
+    <tr><th>변환</th><th>역할</th><th>원점</th><th>Unity</th></tr>
+    <tr><td class="gfx-txt"><b>Scale</b></td><td>크기</td><td>고정</td><td><code>localScale</code></td></tr>
+    <tr><td class="gfx-txt"><b>Rotate</b></td><td>방향</td><td>고정</td><td><code>rotation</code></td></tr>
+    <tr><td class="gfx-txt"><b>Translate</b></td><td>위치</td><td class="trap-txt"><b>이동</b></td><td><code>position</code></td></tr>
+  </table>
+  <div class="key" style="margin-top:1.1em">
+    <p>Transform 컴포넌트의 세 줄이 전부 → 나머지는 이 셋의 조합</p>
+  </div>
+  <p class="small trap-txt" style="margin-top:.8em">
+    마지막 줄의 «원점 이동» → 이후 문제의 원인
+  </p>
+</section>
+
+<section>
+  <div class="tag gfx">변환 · 2 ★</div>
+  <h2>행렬의 구성 원리</h2>
+  <img src="../../figures/out/w02-basis-rotation.svg" alt="행렬의 열은 기저 벡터가 도착한 자리" class="fig">
+  <aside class="notes">
+    - 오늘 수업의 핵심 슬라이드
+    - "행렬 = 기저 벡터의 행선지표" 관점 → 4주차 투영행렬 이해로 연결
+    - 보조 자료 : 3Blue1Brown Essence of Linear Algebra 3장
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">변환 · 3</div>
+  <h2>회전행렬 유도</h2>
+  <div class="cols">
+    <div>
+      <p class="small">i = (1,0) 을 θ 만큼 회전하면?</p>
+      <div class="eq">i → (cos θ,  sin θ)</div>
+      <p class="small" style="margin-top:.8em">j = (0,1) 을 θ 만큼 회전하면?</p>
+      <div class="eq">j → (−sin θ, cos θ)</div>
+    </div>
+    <div>
+      <p class="small">두 결과를 <b>열로 세운 것</b> = 행렬</p>
+      <div class="eq">R = [ cos θ   −sin θ ]
+    [ sin θ    cos θ ]</div>
+      <div class="key" style="margin-top:.8em">
+        <p class="small">공식 암기 없이 <b>언제든 다시 유도 가능</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">변환 · 4</div>
+  <h2>문제 — 선형변환으로 표현할 수 없는 이동</h2>
+  <img src="../../figures/out/w02-homogeneous.svg" alt="동차좌표: 한 차원 올려서 이동을 흡수한다" class="fig">
+  <aside class="notes">
+    - 선형변환 : 원점 고정
+    - 이동 : 원점 이동
+    - 따라서 2×2(또는 3×3) 행렬로 이동 표현 불가 → 한 차원 추가
+  </aside>
+</section>
+
+<section data-autoplay>
+  <div class="tag gfx">변환 · 5</div>
+  <h3 style="margin-bottom:.45em">한 차원 추가로 이동 흡수</h3>
+  <video src="../../figures/out/w02-homogeneous.mp4"
+         style="width:100%;border-radius:14px;border:1px solid var(--line)"
+         controls muted playsinline data-autoplay></video>
+  <aside class="notes">
+    - 길이 40초
+    - 3D로 들어올리는 장면(약 21초)에서 한 번 정지
+    - "2D의 이동 = 3D의 전단" 을 말로 다시 설명
+    - 마지막 4×4 행렬 등장 후 다음 슬라이드로
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">변환 · 5</div>
+  <h2>동차좌표 — 4×4 행렬을 활용하는 이유</h2>
+  <div class="eq">┌                 ┐ ┌   ┐   ┌       ┐
+│ 1  0  0   tx │ │ x │   │ x+tx │
+│ 0  1  0   ty │ │ y │ = │ y+ty │
+│ 0  0  1   tz │ │ z │   │ z+tz │
+│ 0  0  0   1  │ │ <span class="cm">1</span> │   │  <span class="cm">1</span>   │
+└                 ┘ └   ┘   └       ┘</div>
+  <div class="key" style="margin-top:.9em">
+    <p>마지막 성분 <b>w = 1</b> → 4번째 열(tx, ty, tz) 활성화<br>
+    이동·회전·스케일·투영을 <b>모두 같은 4×4 곱셈</b>으로 통일</p>
+  </div>
+  <div class="note">4주차 원근투영 행렬도 같은 틀 — 이때 w 는 1 이외의 값</div>
+</section>
+
+<section>
+  <div class="tag gfx">변환 · 6</div>
+  <h2>w = 1 은 점, w = 0 은 방향</h2>
+  <div class="cols">
+    <div class="card gfx">
+      <h4>점 (x, y, z, <b>1</b>)</h4>
+      <p class="xs">이동 <b>적용</b><br>물체의 위치, 정점 좌표</p>
+    </div>
+    <div class="card vr">
+      <h4>방향 (x, y, z, <b>0</b>)</h4>
+      <p class="xs">이동 <b>무시</b><br>법선, forward, 빛의 방향</p>
+    </div>
+  </div>
+  <pre style="margin-top:.9em"><code class="language-csharp" data-trim>Matrix4x4 m = transform.localToWorldMatrix;
+
+m.MultiplyPoint(v);      // w=1 로 취급 — 이동 포함
+m.MultiplyVector(v);     // w=0 로 취급 — 이동 무시
+</code></pre>
+  <div class="key trap">
+    <p class="small"><b>법선에 MultiplyPoint 적용 시</b> 원점에서 멀어질수록 조명 이상<br>
+    5주차 실습에서 재현</p>
+  </div>
+</section>
+
+<!-- ---------------------------------------------------- 순서 -->
+<section>
+  <div class="tag trap">순서 · 1</div>
+  <h2>같은 R, 같은 T, 다른 순서</h2>
+  <img src="../../figures/out/w02-order-matters.svg" alt="R·T 와 T·R 은 다르다" class="fig">
+</section>
+
+<section>
+  <div class="tag trap">순서 · 2</div>
+  <h3 style="margin-bottom:.5em">슬라이더 조작으로 확인</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="transform-order">
+      <div class="demo-badge">drag to orbit</div>
+    </div>
+    <div class="demo-ui">
+      <label>이동 d <input type="range" data-d min="0" max="4" step="0.1" value="2.6"></label>
+      <label>회전 θ <input type="range" data-th min="0" max="180" value="55"></label>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <!--/demo-->
+  <p class="xs muted" style="margin-top:.5em">
+    청록 = <span class="mono">R·T</span> (이동 먼저) · 분홍 = <span class="mono">T·R</span> (회전 먼저)
+  </p>
+</section>
+
+<section>
+  <div class="tag trap">순서 · 3</div>
+  <h2>행렬 곱의 <span class="trap-txt">교환법칙 불성립</span></h2>
+  <div class="eq">R · T  ≠  T · R</div>
+  <p class="small" style="margin-top:1em">읽는 방향 주의 :</p>
+  <div class="eq">M = R · T   →   <span class="cm">점에 T 를 먼저, 그 다음 R 을 적용</span>
+                <span class="cm">(오른쪽 행렬부터 적용)</span></div>
+  <div class="key" style="margin-top:1em">
+    <p>Unity의 TRS 순서 : <b>Scale → Rotate → Translate</b><br>
+    행렬로는 <code>M = T · R · S</code> → 스케일이 가장 먼저 적용</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">순서 · 4</div>
+  <h2>코드에서의 차이</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>제자리 회전</h4>
+      transform.Rotate(<br>
+      &nbsp;&nbsp;Vector3.up, 55f);<br><br>
+      <span style="color:#5f6980">// 위치 그대로, 방향만</span><br>
+      <span style="color:#5f6980">// = T · R</span>
+    </div>
+    <div class="good">
+      <h4>원점 기준 회전</h4>
+      transform.RotateAround(<br>
+      &nbsp;&nbsp;Vector3.zero,<br>
+      &nbsp;&nbsp;Vector3.up, 55f);<br><br>
+      <span style="color:#5f6980">// 위치까지 변경</span><br>
+      <span style="color:#5f6980">// = R · T</span>
+    </div>
+  </div>
+  <div class="key trap" style="margin-top:.9em">
+    <p class="small">AI에게 "물체를 회전시켜줘" 만 요청 → 둘 중 어느 쪽을 고를지 알 수 없음<br>
+    <b>회전 중심 명시 = 프롬프트의 역할</b></p>
+  </div>
+</section>
+
+<!-- ---------------------------------------------------- 회전의 함정 -->
+<section class="divider trap">
+  <div class="kicker">AI 함정 #1</div>
+  <div class="rule"></div>
+  <h1>짐벌락</h1>
+  <p class="sub">"부드럽게 회전시켜줘" 요청 시 AI가 반복하는 실수</p>
+</section>
+
+<section>
+  <div class="tag gfx">회전 · 1</div>
+  <h2>오일러각 — 인스펙터의 세 숫자</h2>
+  <p class="small">세 축을 차례로 회전 · 직관적이고 읽기 쉬움</p>
+  <div class="eq" style="margin-top:.6em">Rotation  X: 30   Y: 45   Z: 0
+          <span class="cm">피치     요     롤</span></div>
+  <div class="key trap" style="margin-top:1.1em">
+    <p><b>문제는 «차례»</b> — 순서를 정하지 않으면 같은 숫자에서 다른 결과<br>
+    Unity의 적용 순서 : <b>Z → X → Y</b></p>
+  </div>
+  <p class="small muted" style="margin-top:.8em">
+    도입 질문 «같은 (90, 90, 0)인데 왜 다른가» 의 절반에 대한 답
+  </p>
+</section>
+
+<section>
+  <div class="tag gfx">회전 · 2</div>
+  <h2>회전 순서에 따른 결과 차이</h2>
+  <img src="../../figures/out/w02-euler-order.svg" alt="오일러 회전 순서에 따른 차이" class="fig">
+</section>
+
+<section>
+  <div class="tag trap">회전 · 3</div>
+  <h2>짐벌락 — 회전축 하나의 상실</h2>
+  <div class="cols wide-left">
+    <div>
+      <p>세 개의 링이 중첩된 장치 : 바깥부터 <b class="lab-txt">Y</b> → <b class="trap-txt">X</b> → <b style="color:#4d9cff">Z</b></p>
+      <p>가운데 링(<b class="trap-txt">X</b>, 피치)을 <b>90°</b> 로 세우는 순간</p>
+      <div class="key trap">
+        <p>바깥 링(<b class="lab-txt">Y</b>)과 안쪽 링(<b style="color:#4d9cff">Z</b>)이
+        <b>같은 축으로 회전</b></p>
+      </div>
+      <p class="small">회전 손잡이는 세 개, 실제 가능한 회전은 2차원 →
+      <b class="trap-txt">자유도 3 → 2</b></p>
+    </div>
+    <div>
+      <p class="xs muted">오일러각 표현 방식 자체의 구조적 한계<br>
+      어떤 순서를 선택해도 반드시 발생하는 지점 존재</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">회전 · 4 ★</div>
+  <h3 style="margin-bottom:.45em">피치 90° 조작</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="gimbal">
+      <div class="demo-badge">drag to orbit</div>
+    </div>
+    <div class="demo-alert" data-alert></div>
+    <div class="demo-ui">
+      <label>요 Y <input type="range" data-yaw min="-180" max="180" value="0"><span class="val" data-yaw-v></span></label>
+      <label>피치 X <input type="range" data-pitch min="-90" max="90" value="25"><span class="val" data-pitch-v></span></label>
+      <label>롤 Z <input type="range" data-roll min="-180" max="180" value="0"><span class="val" data-roll-v></span></label>
+      <button data-lock>짐벌락으로</button>
+      <button data-reset>되돌리기</button>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <!--/demo-->
+  <aside class="notes">
+    - 학생이 직접 조작 : 피치 90°에서 요와 롤 슬라이더를 각각 조작
+    - 목표 : 두 슬라이더가 같은 회전을 만드는 현상 확인
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">회전 · 5</div>
+  <h2>짐벌락 = 구조적 결함</h2>
+  <img src="../../figures/out/w02-gimbal-dof.svg" alt="피치에 따른 축 정렬도" class="fig">
+</section>
+
+<section>
+  <div class="tag gfx">회전 · 6</div>
+  <h2>쿼터니언 — 네 개의 숫자로 표현하는 회전</h2>
+  <div class="cols">
+    <div>
+      <div class="eq">q = (x, y, z, w)
+
+<span class="cm">축 (x,y,z) 둘레로
+각도 θ 만큼 한 번에 회전</span></div>
+      <p class="small" style="margin-top:.8em">«세 축을 차례로» 대신 <b>«임의의 축 하나를 중심으로 한 번에»</b><br>
+      차례 없음 → 순서 문제와 짐벌락 없음</p>
+    </div>
+    <div>
+      <table>
+        <tr><th></th><th>오일러</th><th>쿼터니언</th></tr>
+        <tr><td>짐벌락</td><td class="trap-txt">있음</td><td class="lab-txt">없음</td></tr>
+        <tr><td>보간</td><td class="trap-txt">덜컹거림</td><td class="lab-txt">매끄러움</td></tr>
+        <tr><td>누적 오차</td><td class="trap-txt">쌓임</td><td class="lab-txt">정규화로 해결</td></tr>
+        <tr><td>사람이 읽기</td><td class="lab-txt">쉬움</td><td class="trap-txt">불가능</td></tr>
+      </table>
+      <p class="xs muted" style="margin-top:.7em">
+        Unity : <b>내부는 쿼터니언</b>, <b>인스펙터 표시만 오일러각</b>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">회전 · 7</div>
+  <h2>Unity 실무 규칙 네 줄</h2>
+  <pre><code class="language-csharp" data-trim>// 만들 때 — 사람이 읽는 각도로
+transform.rotation = Quaternion.Euler(0, 45, 0);
+
+// 겨냥할 때 — 방향 벡터에서 바로
+transform.rotation = Quaternion.LookRotation(target - transform.position);
+
+// 부드럽게 — 반드시 Slerp
+transform.rotation = Quaternion.Slerp(a, b, t);
+
+// 절대 하지 말 것
+transform.eulerAngles += new Vector3(0, speed * Time.deltaTime, 0);
+</code></pre>
+  <div class="key trap">
+    <p class="small">마지막 줄 = <b>AI가 가장 자주 작성하는 코드</b><br>
+    <code>eulerAngles</code> 는 읽을 때마다 쿼터니언에서 다시 계산 → 누적 시 값이 튀고 짐벌락 발생</p>
+  </div>
+</section>
+
+<!-- ---------------------------------------------------- 계층 -->
+<section>
+  <div class="tag gfx">계층 · 1</div>
+  <h2>부모-자식 = 행렬 곱의 연쇄</h2>
+  <div class="eq">M<span class="cm">world</span> = M<span class="cm">부모</span> · M<span class="cm">자식</span> · M<span class="cm">손자</span> · ...</div>
+  <div class="cols" style="margin-top:1em">
+    <div class="card">
+      <h4>localPosition</h4>
+      <p class="xs">부모 기준 · 부모 이동 시 함께 이동</p>
+    </div>
+    <div class="card gfx">
+      <h4>position</h4>
+      <p class="xs">월드 기준 · 체인 전체를 곱한 결과</p>
+    </div>
+  </div>
+  <pre style="margin-top:.8em"><code class="language-csharp" data-trim>transform.TransformPoint(localPos);         // 로컬 → 월드
+transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
+</code></pre>
+</section>
+
+<section>
+  <div class="tag trap">계층 · 2</div>
+  <h2>비균등 스케일 + 회전 = 찌그러짐</h2>
+  <div class="cols wide-left">
+    <div>
+      <p class="small">부모에 <code>Scale (1, 3, 1)</code> 적용 후 자식 회전 →
+      자식이 <b class="trap-txt">전단(shear)</b> 되어 기울어짐</p>
+      <div class="eq">S · R  ≠  R · S</div>
+      <p class="small" style="margin-top:.8em">스케일과 회전도 순서 교환 불가<br>
+      Unity 콘솔 경고 없음 → 결과만 이상해짐</p>
+    </div>
+    <div>
+      <div class="card trap">
+        <h4>해결</h4>
+        <p class="xs">스케일이 필요하면 <b>빈 부모</b> 추가 → 부모에서 회전, 자식에서 스케일<br>
+        또는 균등 스케일만 사용</p>
+      </div>
+      <p class="xs muted" style="margin-top:.8em">
+        VR의 손 모델·UI 스케일 조정 시 자주 발생
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= PART II -->
+<section class="divider part-ii">
+  <div class="kicker">Part II · 30분</div>
+  <div class="rule"></div>
+  <h1>그리고 <em>VR</em> 에서는</h1>
+  <p class="sub">변환 체인에 끼어드는 통제 불가 요소 — 사용자의 목</p>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 1</div>
+  <div class="ask vr">
+    VR에서 <span class="hl">카메라를 움직이는 주체</span>는?
+  </div>
+  <p class="small muted" style="margin-top:2em">
+    일반 게임은 개발자. VR은?
+  </p>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 2 ★</div>
+  <h2>VR의 좌표계 체인</h2>
+  <img src="../../figures/out/w02-vr-chain.svg" alt="VR 좌표계 체인" class="fig">
+  <aside class="notes">
+    - 11주차 XR Origin 실습의 이론적 토대
+    - «개발자 구역» 과 «사용자 구역» 의 경계 강조
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 3</div>
+  <h2>원점 위치 선택</h2>
+  <table style="font-size:.72em">
+    <tr><th>트래킹 모드</th><th>원점</th><th>용도</th></tr>
+    <tr><td class="gfx-txt"><b>Floor</b> (Stage)</td><td>바닥 중앙</td><td>서서 움직이는 콘텐츠 · 키 자동 반영</td></tr>
+    <tr><td class="gfx-txt"><b>Device</b> (Eye Level)</td><td>부팅 시 머리 위치</td><td>앉아서 하는 콘텐츠 · 리센터 필요</td></tr>
+  </table>
+  <div class="key vr" style="margin-top:1.1em">
+    <p>모드 선택 오류 → <b>키 180cm인 사람이 바닥에 파묻히거나 공중에 뜸</b><br>
+    코드보다 <b>설정 한 줄</b>이 만드는 사고</p>
+  </div>
+  <div class="note">12주차 컴포트 설계에서 다시 다룸</div>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 4</div>
+  <h2>전정계 — 몸에 달린 IMU</h2>
+  <img src="../../figures/out/w02-vestibular-imu.png" class="fig" alt="내이의 전정기관과 MEMS IMU의 대응">
+  <div class="cols" style="margin-top:.35em">
+    <p class="xs" style="margin:0;color:#5ee7f0">
+      <b>왼쪽 · 사람의 내이</b><br>
+      서로 직각인 <b>반고리관 3개</b> = 회전 감지 · <b>이석기관</b> = 중력과 직선 가속 감지
+    </p>
+    <p class="xs" style="margin:0;text-align:right;color:#ff7ab3">
+      <b>오른쪽 · MEMS IMU 칩</b><br>
+      <b>자이로스코프</b> + <b>가속도계</b> — 11주차 HMD 트래킹에 활용되는 부품
+    </p>
+  </div>
+  <aside class="notes">
+    - 질문 : "누가 누구를 베꼈을까요?"
+    - 답 : 같은 물리 문제를 풀면 같은 구조가 나옴
+    - 왼쪽 아래 나선은 달팽이관(청각) — 전정계와 별개
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 4</div>
+  <h2>멀미의 원인</h2>
+  <div class="cols">
+    <div>
+      <p>뇌 : <b>전정계가 감지한 움직임</b>과 <b>눈이 보는 움직임</b>을
+      매 순간 대조</p>
+      <div class="key vr" style="margin-top:.9em">
+        <p>둘이 어긋나면 뇌는 <b>독극물 중독</b>으로 해석 → 구토 반응</p>
+      </div>
+      <p class="small trap-txt" style="margin-top:.8em">
+        사이버 멀미의 원인 : <b>몸과 눈이 감지한 움직임의 불일치</b></p>
+    </div>
+    <div>
+      <table style="font-size:.78em">
+        <tr><th></th><th>전정계</th><th>눈</th></tr>
+        <tr><td>실제로 걷기</td><td class="lab-txt">움직임</td><td class="lab-txt">움직임</td></tr>
+        <tr><td>영화 관람</td><td class="lab-txt">정지</td><td class="lab-txt">정지</td></tr>
+        <tr><td class="trap-txt"><b>VR 조이스틱 이동</b></td><td class="trap-txt"><b>정지</b></td><td class="trap-txt"><b>움직임</b></td></tr>
+      </table>
+      <p class="xs muted" style="margin-top:.7em">
+        마지막 줄이 문제 → VR의 표준 이동 방식이 <b>텔레포트</b>가 된 이유
+        (이동 과정을 보여주지 않음)
+      </p>
+    </div>
+  </div>
+  <div class="note">LaValle, <i>Virtual Reality</i>, Ch.8 · Ch.12 · 7·12주차 심화</div>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 5 ★</div>
+  <h2>회전 중심과 눈의 위치</h2>
+  <img src="../../figures/out/w02-neck-model.svg" alt="목 모델: 회전 중심과 눈의 오프셋" class="fig">
+</section>
+
+<section>
+  <div class="tag vr">지각 · 6</div>
+  <h2>고개 회전과 오늘 배운 변환</h2>
+  <p class="small">고개를 돌릴 때 눈의 움직임 = <b>회전 + 이동</b></p>
+  <div class="eq" style="margin-top:.7em">눈의 새 위치 = T<span class="cm">(목→눈 오프셋)</span> · R<span class="cm">(고개 회전)</span> · 목 위치
+
+              <span class="cm">← 오늘 배운 R · T</span></div>
+  <div class="key vr" style="margin-top:1em">
+    <p>오프셋(약 <b>10 cm</b>) 누락 시 고개를 돌릴 때마다 세상이 미끄러짐<br>
+    전정계가 그 어긋남을 <b>정확히</b> 감지</p>
+  </div>
+  <p class="small muted" style="margin-top:.7em">
+    Quest : 목 모델을 하드웨어에서 처리 — <b>카메라를 직접 건드리지 않는 한</b>
+  </p>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 7</div>
+  <h2>설계 원칙</h2>
+  <div class="key vr" style="font-size:1.15em;padding:1.1em 1.3em">
+    <p><b>VR에서 움직이는 대상은 언제나 <span class="vr-txt">리그(Rig)</span><br>
+    카메라 직접 이동 금지</b></p>
+  </div>
+  <div class="cols" style="margin-top:1.2em">
+    <div class="card trap">
+      <h4>멀미를 유발하는 코드</h4>
+      <pre style="margin:0"><code class="language-csharp" data-trim>Camera.main.transform.position += v;</code></pre>
+    </div>
+    <div class="card lab">
+      <h4>올바른 코드</h4>
+      <pre style="margin:0"><code class="language-csharp" data-trim>xrOrigin.transform.position += v;</code></pre>
+    </div>
+  </div>
+  <div class="note">11주차 AI 함정 #8 — AI가 대부분 왼쪽 코드를 작성</div>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 8</div>
+  <h2>다음 주 예고</h2>
+  <p class="small">눈이 <b>두 개</b> → 변환 체인의 끝이 <b>두 갈래로 분기</b></p>
+  <div class="eq" style="margin-top:.8em">Camera ─┬─ T(−IPD/2) → 왼쪽 눈  → 왼쪽 화면
+        └─ T(+IPD/2) → 오른쪽 눈 → 오른쪽 화면
+
+<span class="cm">IPD (동공 간 거리) ≈ 58 ~ 72 mm, 사람마다 다름</span></div>
+  <p class="small" style="margin-top:1em">
+    같은 씬을 <b>두 번</b> 렌더링 → 비용 두 배 → <b>프레임 예산 절반</b>
+  </p>
+  <div class="note">4주차 렌더링 파이프라인과 HMD 광학으로 연결</div>
+</section>
+
+<!-- ========================================================= PART III -->
+<section class="divider part-iii">
+  <div class="kicker">Part III · 50분</div>
+  <div class="rule"></div>
+  <h1>프롬프트 실습</h1>
+  <p class="sub">개념 이해 → 정확한 요구 → 오류 판별</p>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1</div>
+  <h2>실습의 3단 루프</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 개념</h4>
+      <p class="xs">무엇을 만들어야 하는지 이론으로 이해</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">2</span> 명세</h4>
+      <p class="xs">정확한 <b>용어</b>로 AI에게 요구<br>용어를 모르면 요구 불가</p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 검증</h4>
+      <p class="xs">결과가 이론적으로 맞는지 확인<br>틀렸다면 <b>어디가</b> 틀렸는지</p>
+    </div>
+  </div>
+  <div class="key lab" style="margin-top:1.2em">
+    <p><b>실습의 핵심 : ②와 ③</b><br>
+    코드 작성은 AI, 요구와 판별은 학생</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">실습 · 2</div>
+  <h2>AI 함정 #1 직접 재현</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>이렇게 요청하면</h4>
+      "큐브가 부드럽게 회전하게<br>스크립트를 만들어줘"
+      <div style="margin-top:.9em;color:#5f6980">↓ AI의 응답</div>
+      <div style="margin-top:.5em">
+        transform.eulerAngles +=<br>
+        &nbsp;&nbsp;new Vector3(0, spd * dt, 0);
+      </div>
+    </div>
+    <div class="good">
+      <h4>문제점</h4>
+      · eulerAngles <b>누적</b><br>
+      · 매 프레임 쿼터니언 → 오일러 변환<br>
+      · 값이 튀고 특정 각도에서 잠김<br>
+      · 회전 <b>중심</b> 미지정<br><br>
+      <span style="color:#a8e05f">→ 학생이 지적해야 할 항목</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 3</div>
+  <h2>명세 작성 예시</h2>
+  <pre><code data-trim>[목표]
+큐브를 월드 Y축 기준으로 초당 45° 등속 회전시킨다.
+
+[제약]
+- 회전 누적에 eulerAngles 를 쓰지 말 것 (짐벌락·값 튐)
+- Quaternion 을 유지한 채 누적할 것
+- 프레임률과 무관하게 같은 속도 (Time.deltaTime)
+- 회전 중심은 물체 자신의 원점
+
+[검증 조건]
+- 60fps 와 30fps 에서 10초 뒤 각도가 같을 것
+- 어떤 각도에서도 축이 잠기지 않을 것
+
+[비목표]
+- 입력 처리, UI 는 만들지 말 것
+</code></pre>
+  <div class="key lab">
+    <p class="small">네 칸 = 수업의 표준 명세 양식<br>
+    <b>[제약]과 [검증 조건]에 개념 이해도가 드러남</b></p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 4</div>
+  <h2>오늘의 실습 — 50분</h2>
+  <table style="font-size:.72em">
+    <tr><th>#</th><th>실습</th><th>확인할 개념</th></tr>
+    <tr>
+      <td class="lab-txt"><b>1</b></td>
+      <td>위 명세로 회전 스크립트 생성, AI의 첫 응답을 <b>그대로 기록</b></td>
+      <td>프롬프트 → 결과 대응</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>2</b></td>
+      <td>일부러 <code>eulerAngles</code> 버전을 만들어 <b>짐벌락 재현</b>, 영상 캡처</td>
+      <td>짐벌락 진단</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>3</b></td>
+      <td>부모-자식 3단 체인 구성, 부모에 <code>Scale(1,3,1)</code> 적용 후 자식의 찌그러짐 관찰</td>
+      <td>계층 변환 · 전단</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>4</b></td>
+      <td class="vr-txt">Main Camera 직접 이동 코드와 부모 리그 이동 코드를 <b>모두</b> 작성해 비교</td>
+      <td>11주차 예비</td>
+    </tr>
+  </table>
+  <p class="xs muted" style="margin-top:.8em">
+    1~3 필수(Core), 4 확장(Stretch) · 제출물 없음, 수업 안에서 완료
+  </p>
+</section>
+
+<!-- ========================================================= 과제 -->
+<section>
+  <div class="tag lab">과제</div>
+  <h2>이번 주 과제 — Meta 개발자 계정</h2>
+  <div class="card vr" style="max-width:34em;margin-top:.8em">
+    <h4>Meta 개발자 계정 만들기</h4>
+    <p class="xs">Quest 3 개발에 필요한 <b>개발자 인증</b> — 승인까지 시간 소요<br>
+    11주차 실습 전 필수<br><br>
+    <span class="muted">제출 : 개발자 대시보드 캡처 · PLATO</span></p>
+  </div>
+  <div class="key trap" style="margin-top:1em">
+    <p class="small"><b>미루면 11주차 실습 불가</b><br>
+    결제 수단 등록·본인 확인 포함 → 승인까지 며칠 소요 가능, 가급적 오늘 안에 신청</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table style="font-size:.7em">
+    <tr><th>개념</th><th>핵심</th></tr>
+    <tr><td>내적</td><td>두 방향이 같은 쪽을 보는 정도 · 각도 비교는 코사인끼리</td></tr>
+    <tr><td>외적</td><td>두 벡터가 만드는 면의 법선 · 좌우 판정에도 활용</td></tr>
+    <tr><td><b class="gfx-txt">행렬</b></td><td><b>열 = 기저 벡터가 도착한 자리</b>. 암기 대신 유도</td></tr>
+    <tr><td>동차좌표</td><td>한 차원 추가로 이동까지 흡수. w=1 은 점, w=0 은 방향</td></tr>
+    <tr><td><b class="trap-txt">순서</b></td><td><b>R·T ≠ T·R</b>. 회전 중심 미지정 시 AI가 임의로 선택</td></tr>
+    <tr><td>짐벌락</td><td>오일러각의 구조적 결함 · 축이 겹치면 자유도 상실</td></tr>
+    <tr><td>쿼터니언</td><td>축 하나 + 각도 하나 · 순서가 없어 잠김 없음</td></tr>
+    <tr><td><b class="vr-txt">VR 체인</b></td><td><b>카메라 대신 리그를 이동</b>. 머리의 움직임은 사용자의 영역</td></tr>
+  </table>
+</section>
+
+<section class="divider part-i">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>Unity 기초와<br>첫 <em>바이브코딩</em></h1>
+  <p class="sub">씬 그래프 · 컴포넌트 구조 · 게임 루프<br>
+  AI 함정 #2 — 프레임률에 따라 달라지는 속도</p>
+  <div class="note">예습 : Unity Learn "Roll-a-Ball" 1~2단계 · 과제 Meta 개발자 계정 신청</div>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="../_shared/demos/w02.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

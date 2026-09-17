@@ -1,0 +1,7 @@
+2주차 그래픽스 수학 기초
+----------------------------------------
+배포 주소   : https://claude.ai/artifact/3nSJ2NeJ3TUMrNW15LrFR4
+원본        : slides/w02/index.html
+인쇄용 PDF  : dist/w02-그래픽스수학기초.pdf
+오프라인 zip: dist/w02-interactive-slides.zip
+공개 범위   : 비공개 · 배포 전 Share 메뉴에서 공유 범위 지정

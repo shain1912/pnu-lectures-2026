@@ -1,0 +1,3412 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="709.92pt" height="321.618902pt" viewBox="0 0 709.92 321.618902" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-14T15:48:43.793495</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 321.618902 
+L 709.92 321.618902 
+L 709.92 0 
+L 0 0 
+z
+" style="fill: #0b0d12"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 20.16 301.458902 
+L 689.76 301.458902 
+L 689.76 46.434902 
+L 20.16 46.434902 
+z
+" style="fill: #0b0d12"/>
+   </g>
+   <g id="matplotlib.axis_1"/>
+   <g id="matplotlib.axis_2"/>
+   <g id="patch_3">
+    <path d="M 39.063162 207.563702 
+Q 351.896302 207.563702 664.729442 207.563702 
+" style="fill: none; stroke: #9aa4b8; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 44.263162 210.163702 
+L 39.063162 207.563702 
+L 44.263162 204.963702 
+" style="fill: none; stroke: #9aa4b8; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 659.529442 204.963702 
+L 664.729442 207.563702 
+L 659.529442 210.163702 
+" style="fill: none; stroke: #9aa4b8; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <!-- 한 프레임  —  60fps 라면 16.7ms,  VR 90Hz 라면 11.1ms -->
+    <g style="fill: #9aa4b8" transform="translate(213.64125 224.951702) scale(0.12 -0.12)">
+     <defs>
+      <path id="Pretendard-Medium-2f5c" d="M 4606 5063 
+L 4013 5063 
+L 4013 875 
+L 4606 875 
+L 4606 2769 
+L 5419 2769 
+L 5419 3263 
+L 4606 3263 
+L 4606 5063 
+z
+M 3550 4413 
+L 2181 4413 
+L 2181 5069 
+L 1588 5069 
+L 1588 4413 
+L 213 4413 
+L 213 3931 
+L 3550 3931 
+L 3550 4413 
+z
+M 1881 3663 
+C 1069 3663 519 3244 519 2606 
+C 519 1969 1069 1556 1881 1556 
+C 2688 1556 3238 1969 3238 2606 
+C 3238 3244 2688 3663 1881 3663 
+z
+M 1881 3206 
+C 2356 3206 2675 2975 2681 2606 
+C 2675 2244 2356 2019 1881 2019 
+C 1406 2019 1088 2244 1094 2606 
+C 1088 2975 1406 3206 1881 3206 
+z
+M 4844 69 
+L 1650 69 
+L 1650 1206 
+L 1056 1206 
+L 1056 -413 
+L 4844 -413 
+L 4844 69 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2f04" d="M 5331 669 
+L 206 669 
+L 206 169 
+L 5331 169 
+L 5331 669 
+z
+M 4863 4531 
+L 644 4531 
+L 644 4044 
+L 1494 4044 
+L 1494 2175 
+L 656 2175 
+L 656 1700 
+L 4844 1700 
+L 4844 2175 
+L 4006 2175 
+L 4006 4044 
+L 4863 4044 
+L 4863 4531 
+z
+M 2081 2175 
+L 2081 4044 
+L 3425 4044 
+L 3425 2175 
+L 2081 2175 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1208" d="M 2375 4469 
+L 375 4469 
+L 375 3988 
+L 1806 3988 
+L 1806 2950 
+L 381 2950 
+L 381 825 
+L 769 825 
+C 1475 831 2113 850 2888 988 
+L 2838 1475 
+C 2147 1350 1566 1328 956 1325 
+L 956 2475 
+L 2375 2475 
+L 2375 4469 
+z
+M 5013 5069 
+L 4444 5069 
+L 4444 -531 
+L 5013 -531 
+L 5013 5069 
+z
+M 3863 4944 
+L 3300 4944 
+L 3300 3088 
+L 2638 3088 
+L 2638 2606 
+L 3300 2606 
+L 3300 -244 
+L 3863 -244 
+L 3863 4944 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2184" d="M 4850 5063 
+L 4256 5063 
+L 4256 1875 
+L 4850 1875 
+L 4850 5063 
+z
+M 4850 1594 
+L 1169 1594 
+L 1169 -463 
+L 4850 -463 
+L 4850 1594 
+z
+M 1756 1119 
+L 4269 1119 
+L 4269 19 
+L 1756 19 
+L 1756 1119 
+z
+M 1813 4781 
+C 956 4781 319 4244 319 3456 
+C 319 2688 956 2144 1813 2144 
+C 2669 2144 3300 2688 3300 3456 
+C 3300 4244 2669 4781 1813 4781 
+z
+M 1813 4281 
+C 2338 4281 2719 3956 2719 3456 
+C 2719 2975 2338 2644 1813 2644 
+C 1281 2644 900 2975 900 3456 
+C 900 3956 1281 4281 1813 4281 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-33c6" d="M 6181 2550 
+L -38 2550 
+L -38 1975 
+L 6181 1975 
+L 6181 2550 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-32cf" d="M 2038 -63 
+C 3013 -69 3656 606 3656 1481 
+C 3656 2350 3006 2969 2200 2969 
+C 1706 2969 1281 2738 1038 2356 
+L 988 2356 
+C 988 3375 1394 3988 2094 3988 
+C 2550 3988 2844 3719 2931 3350 
+L 3613 3350 
+C 3506 4069 2925 4588 2094 4588 
+C 1006 4588 325 3688 325 2113 
+C 325 438 1200 -56 2038 -63 
+z
+M 2031 513 
+C 1475 513 1075 963 1069 1463 
+C 1075 1969 1494 2406 2050 2406 
+C 2594 2406 2988 1988 2988 1469 
+C 2988 938 2581 513 2031 513 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-32c9" d="M 1975 -63 
+C 3019 -63 3638 781 3638 2263 
+C 3638 3731 3013 4588 1975 4588 
+C 938 4588 313 3731 313 2263 
+C 313 781 925 -63 1975 -63 
+z
+M 1975 531 
+C 1363 531 1000 1131 1000 2263 
+C 1000 3388 1369 4006 1975 4006 
+C 2581 4006 2950 3388 2950 2263 
+C 2950 1131 2588 531 1975 531 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-214" d="M 2025 3394 
+L 1294 3394 
+L 1294 3688 
+C 1294 4019 1456 4163 1813 4163 
+C 1875 4163 1969 4156 2094 4138 
+L 2094 4694 
+C 1963 4719 1800 4738 1638 4738 
+C 1013 4738 625 4394 625 3788 
+L 625 3394 
+L 100 3394 
+L 100 2863 
+L 625 2863 
+L 625 0 
+L 1294 0 
+L 1294 2863 
+L 2025 2863 
+L 2025 3394 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2ab" d="M 406 -1275 
+L 1075 -1275 
+L 1075 531 
+L 1113 531 
+C 1231 306 1475 -69 2094 -69 
+C 2919 -69 3513 594 3513 1688 
+C 3513 2794 2906 3438 2088 3438 
+C 1463 3438 1231 3056 1113 2844 
+L 1056 2844 
+L 1056 3394 
+L 406 3394 
+L 406 -1275 
+z
+M 1063 1700 
+C 1063 2406 1369 2869 1944 2869 
+C 2538 2869 2838 2369 2838 1700 
+C 2838 1019 2531 500 1944 500 
+C 1375 500 1063 988 1063 1700 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2c3" d="M 2313 2469 
+L 2956 2469 
+C 2888 3050 2419 3438 1663 3438 
+C 875 3438 350 3025 350 2419 
+C 350 1950 669 1625 1281 1488 
+L 1813 1375 
+C 2169 1294 2331 1150 2338 931 
+C 2331 644 2056 469 1625 469 
+C 1225 469 988 619 931 925 
+L 250 925 
+C 331 294 819 -69 1631 -69 
+C 2500 -69 3013 369 3019 981 
+C 3013 1463 2713 1763 2088 1900 
+L 1550 2025 
+C 1175 2113 1013 2256 1019 2456 
+C 1013 2713 1288 2913 1669 2913 
+C 2038 2913 2250 2738 2313 2469 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-117c" d="M 4569 5069 
+L 3981 5069 
+L 3981 -544 
+L 4569 -544 
+L 4569 2381 
+L 5469 2381 
+L 5469 2881 
+L 4569 2881 
+L 4569 5069 
+z
+M 2988 4563 
+L 425 4563 
+L 425 4081 
+L 2400 4081 
+L 2400 2988 
+L 438 2988 
+L 438 794 
+L 894 794 
+C 1944 800 2700 838 3575 1000 
+L 3519 1481 
+C 2700 1331 1988 1297 1025 1294 
+L 1025 2506 
+L 2988 2506 
+L 2988 4563 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1474" d="M 3063 4594 
+L 463 4594 
+L 463 1944 
+L 3063 1944 
+L 3063 2431 
+L 4281 2431 
+L 4281 981 
+L 4875 981 
+L 4875 5063 
+L 4281 5063 
+L 4281 4119 
+L 3063 4119 
+L 3063 4594 
+z
+M 1050 4113 
+L 2481 4113 
+L 2481 2413 
+L 1050 2413 
+L 1050 4113 
+z
+M 5000 69 
+L 1819 69 
+L 1819 1356 
+L 1219 1356 
+L 1219 -413 
+L 5000 -413 
+L 5000 69 
+z
+M 3063 2919 
+L 3063 3631 
+L 4281 3631 
+L 4281 2919 
+L 3063 2919 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-32ca" d="M 2119 4525 
+L 1444 4525 
+L 319 3788 
+L 319 3131 
+L 1400 3838 
+L 1425 3838 
+L 1425 0 
+L 2119 0 
+L 2119 4525 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-3359" d="M 844 -44 
+C 1081 -44 1288 156 1288 400 
+C 1288 644 1081 844 844 844 
+C 600 844 394 644 400 400 
+C 394 156 600 -44 844 -44 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-32d0" d="M 556 0 
+L 1275 0 
+L 3288 3913 
+L 3288 4525 
+L 244 4525 
+L 244 3938 
+L 2575 3938 
+L 2575 3900 
+L 556 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-26f" d="M 406 0 
+L 1075 0 
+L 1075 2094 
+C 1075 2550 1394 2863 1769 2863 
+C 2131 2863 2388 2619 2388 2250 
+L 2388 0 
+L 3050 0 
+L 3050 2163 
+C 3050 2569 3294 2863 3725 2863 
+C 4075 2863 4363 2669 4363 2213 
+L 4363 0 
+L 5031 0 
+L 5031 2275 
+C 5031 3050 4594 3438 3981 3438 
+C 3488 3438 3125 3206 2963 2838 
+L 2925 2838 
+C 2781 3213 2463 3438 2013 3438 
+C 1563 3438 1231 3219 1088 2838 
+L 1050 2838 
+L 1050 3394 
+L 406 3394 
+L 406 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-335a" d="M 1213 431 
+L 513 431 
+L 181 -1294 
+L 713 -1294 
+L 1213 431 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-120" d="M 863 4525 
+L 119 4525 
+L 1744 0 
+L 2538 0 
+L 4169 4525 
+L 3425 4525 
+L 2169 844 
+L 2119 844 
+L 863 4525 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-dd" d="M 463 0 
+L 1150 0 
+L 1150 1706 
+L 2075 1706 
+L 2119 1706 
+L 3038 0 
+L 3819 0 
+L 2819 1831 
+C 3369 2034 3644 2497 3644 3106 
+C 3644 3938 3125 4525 2075 4525 
+L 463 4525 
+L 463 0 
+z
+M 1150 2300 
+L 1150 3938 
+L 2006 3938 
+C 2675 3938 2950 3619 2950 3106 
+C 2950 2594 2675 2300 2006 2300 
+L 1150 2300 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-32d2" d="M 1956 4588 
+C 975 4594 331 3919 331 3056 
+C 331 2188 981 1569 1794 1569 
+C 2281 1569 2706 1800 2950 2181 
+L 3006 2181 
+C 3000 1150 2594 538 1894 538 
+C 1438 538 1144 806 1050 1188 
+L 369 1188 
+C 475 450 1063 -63 1894 -63 
+C 2981 -63 3663 838 3663 2425 
+C 3663 4081 2788 4581 1956 4588 
+z
+M 1956 4013 
+C 2513 4013 2913 3563 2913 3075 
+C 2913 2575 2488 2131 1944 2131 
+C 1394 2131 1000 2544 1000 3069 
+C 1000 3588 1406 4013 1956 4013 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-6e" d="M 463 0 
+L 1150 0 
+L 1150 1975 
+L 3400 1975 
+L 3400 0 
+L 4088 0 
+L 4088 4525 
+L 3400 4525 
+L 3400 2563 
+L 1150 2563 
+L 1150 4525 
+L 463 4525 
+L 463 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-346" d="M 331 0 
+L 3063 0 
+L 3063 575 
+L 1238 575 
+L 1238 606 
+L 3000 2913 
+L 3000 3394 
+L 394 3394 
+L 394 2819 
+L 2169 2819 
+L 2169 2788 
+L 331 456 
+L 331 0 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-2f5c"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2f04" transform="translate(110.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-1208" transform="translate(197.265625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2184" transform="translate(283.6875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(370.109375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(394.53125 0)"/>
+     <use xlink:href="#Pretendard-Medium-33c6" transform="translate(418.953125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(514.953125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(539.375 0)"/>
+     <use xlink:href="#Pretendard-Medium-32cf" transform="translate(563.796875 0)"/>
+     <use xlink:href="#Pretendard-Medium-32c9" transform="translate(626.109375 0)"/>
+     <use xlink:href="#Pretendard-Medium-214" transform="translate(687.828125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2ab" transform="translate(722.59375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2c3" transform="translate(781.484375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(832.46875 0)"/>
+     <use xlink:href="#Pretendard-Medium-117c" transform="translate(856.890625 0)"/>
+     <use xlink:href="#Pretendard-Medium-1474" transform="translate(943.3125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1029.734375 0)"/>
+     <use xlink:href="#Pretendard-Medium-32ca" transform="translate(1054.15625 0)"/>
+     <use xlink:href="#Pretendard-Medium-32cf" transform="translate(1098.984375 0)"/>
+     <use xlink:href="#Pretendard-Medium-3359" transform="translate(1158.125 0)"/>
+     <use xlink:href="#Pretendard-Medium-32d0" transform="translate(1182.6875 0)"/>
+     <use xlink:href="#Pretendard-Medium-26f" transform="translate(1238.640625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2c3" transform="translate(1323.5 0)"/>
+     <use xlink:href="#Pretendard-Medium-335a" transform="translate(1374.484375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1400.125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1424.546875 0)"/>
+     <use xlink:href="#Pretendard-Medium-120" transform="translate(1448.96875 0)"/>
+     <use xlink:href="#Pretendard-Medium-dd" transform="translate(1515.859375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1577.484375 0)"/>
+     <use xlink:href="#Pretendard-Medium-32d2" transform="translate(1601.90625 0)"/>
+     <use xlink:href="#Pretendard-Medium-32c9" transform="translate(1664.21875 0)"/>
+     <use xlink:href="#Pretendard-Medium-6e" transform="translate(1725.9375 0)"/>
+     <use xlink:href="#Pretendard-Medium-346" transform="translate(1797.03125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1849.46875 0)"/>
+     <use xlink:href="#Pretendard-Medium-117c" transform="translate(1873.890625 0)"/>
+     <use xlink:href="#Pretendard-Medium-1474" transform="translate(1960.3125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(2046.734375 0)"/>
+     <use xlink:href="#Pretendard-Medium-32ca" transform="translate(2071.15625 0)"/>
+     <use xlink:href="#Pretendard-Medium-32ca" transform="translate(2115.984375 0)"/>
+     <use xlink:href="#Pretendard-Medium-3359" transform="translate(2156.8125 0)"/>
+     <use xlink:href="#Pretendard-Medium-32ca" transform="translate(2174.640625 0)"/>
+     <use xlink:href="#Pretendard-Medium-26f" transform="translate(2219.46875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2c3" transform="translate(2304.328125 0)"/>
+    </g>
+   </g>
+   <g id="text_2">
+    <!-- 각 단계에 넣을 코드의 선택 = 초보와 숙련자의 차이 -->
+    <g style="fill: #e8ecf4" transform="translate(35.494351 75.414902) scale(0.13 -0.13)">
+     <defs>
+      <path id="Pretendard-Medium-601" d="M 4606 5069 
+L 4013 5069 
+L 4013 1794 
+L 4606 1794 
+L 4606 3188 
+L 5419 3188 
+L 5419 3688 
+L 4606 3688 
+L 4606 5069 
+z
+M 3056 4725 
+L 444 4725 
+L 444 4244 
+L 2419 4244 
+C 2316 3359 1519 2650 175 2300 
+L 419 1844 
+C 2081 2275 3056 3281 3056 4725 
+z
+M 4606 1550 
+L 906 1550 
+L 906 1069 
+L 4013 1069 
+L 4013 -531 
+L 4606 -531 
+L 4606 1550 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-ce8" d="M 4606 5075 
+L 4013 5075 
+L 4013 1019 
+L 4606 1019 
+L 4606 2956 
+L 5425 2956 
+L 5425 3450 
+L 4606 3450 
+L 4606 5075 
+z
+M 2956 4594 
+L 456 4594 
+L 456 1988 
+L 900 1988 
+C 2100 1988 2763 2025 3519 2175 
+L 3450 2656 
+C 2750 2513 2134 2478 1044 2481 
+L 1044 4113 
+L 2956 4113 
+L 2956 4594 
+z
+M 4844 69 
+L 1650 69 
+L 1650 1438 
+L 1056 1438 
+L 1056 -413 
+L 4844 -413 
+L 4844 69 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-6c4" d="M 5019 5069 
+L 4456 5069 
+L 4456 -531 
+L 5019 -531 
+L 5019 5069 
+z
+M 3875 4925 
+L 3313 4925 
+L 3313 3538 
+L 2556 3538 
+C 2603 3809 2625 4088 2625 4375 
+L 450 4375 
+L 450 3888 
+L 2038 3888 
+C 1934 2734 1363 1794 175 1088 
+L 525 663 
+C 1581 1294 2178 2109 2450 3050 
+L 3313 3050 
+L 3313 2138 
+L 2356 2138 
+L 2356 1650 
+L 3313 1650 
+L 3313 -256 
+L 3875 -256 
+L 3875 4925 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1fd0" d="M 5025 5069 
+L 4456 5069 
+L 4456 -531 
+L 5025 -531 
+L 5025 5069 
+z
+M 3888 4963 
+L 3319 4963 
+L 3319 2925 
+L 2688 2925 
+C 2619 3978 2156 4625 1475 4619 
+C 744 4625 269 3863 269 2650 
+C 269 1438 744 669 1475 675 
+C 2169 669 2638 1350 2688 2444 
+L 3319 2444 
+L 3319 -256 
+L 3888 -256 
+L 3888 4963 
+z
+M 1475 4063 
+C 1888 4063 2144 3544 2144 2650 
+C 2144 1756 1888 1238 1475 1238 
+C 1069 1238 819 1756 819 2650 
+C 819 3544 1069 4063 1475 4063 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-b23" d="M 1125 4800 
+L 525 4800 
+L 525 2538 
+L 975 2538 
+C 1863 2538 2650 2588 3544 2763 
+L 3469 3244 
+C 2663 3091 1928 3044 1125 3038 
+L 1125 4800 
+z
+M 4875 5069 
+L 4281 5069 
+L 4281 4256 
+L 2725 4256 
+L 2725 3781 
+L 4281 3781 
+L 4281 2106 
+L 4875 2106 
+L 4875 5069 
+z
+M 4994 1806 
+L 3294 1806 
+L 3294 2338 
+L 2700 2338 
+L 2700 1806 
+L 994 1806 
+L 994 1344 
+L 4994 1344 
+L 4994 1806 
+z
+M 2988 1138 
+C 2013 1131 1400 838 1400 306 
+C 1400 -225 2013 -525 2988 -519 
+C 3981 -525 4581 -225 4588 306 
+C 4581 838 3981 1131 2988 1138 
+z
+M 2988 700 
+C 3619 706 3988 563 3988 306 
+C 3988 50 3619 -100 2988 -94 
+C 2363 -100 1988 50 1988 306 
+C 1988 563 2363 706 2988 700 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2144" d="M 2756 4975 
+C 1494 4975 756 4638 756 4013 
+C 756 3388 1494 3044 2756 3044 
+C 4019 3044 4756 3388 4756 4013 
+C 4756 4638 4019 4975 2756 4975 
+z
+M 2756 4538 
+C 3650 4538 4144 4344 4144 4013 
+C 4144 3669 3650 3488 2756 3488 
+C 1863 3488 1369 3669 1375 4013 
+C 1369 4344 1863 4538 2756 4538 
+z
+M 5313 2700 
+L 206 2700 
+L 206 2225 
+L 5313 2225 
+L 5313 2700 
+z
+M 4669 1794 
+L 819 1794 
+L 819 1350 
+L 4081 1350 
+L 4081 913 
+L 825 913 
+L 825 -475 
+L 4825 -475 
+L 4825 -19 
+L 1406 -19 
+L 1406 481 
+L 4669 481 
+L 4669 1794 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2954" d="M 4725 4550 
+L 813 4550 
+L 813 4063 
+L 4144 4063 
+L 4144 4025 
+C 4144 3772 4144 3500 4131 3200 
+L 644 3063 
+L 731 2550 
+L 4100 2750 
+C 4069 2369 4009 1947 3906 1469 
+L 4488 1406 
+C 4725 2569 4719 3344 4725 4025 
+L 4725 4550 
+z
+M 5313 688 
+L 2738 688 
+L 2738 2106 
+L 2150 2106 
+L 2150 688 
+L 206 688 
+L 206 194 
+L 5313 194 
+L 5313 688 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-edc" d="M 4744 2413 
+L 1431 2413 
+L 1431 4081 
+L 4694 4081 
+L 4694 4569 
+L 844 4569 
+L 844 1925 
+L 4744 1925 
+L 4744 2413 
+z
+M 5331 700 
+L 206 700 
+L 206 206 
+L 5331 206 
+L 5331 700 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2158" d="M 2031 4669 
+C 1150 4675 500 4125 506 3338 
+C 500 2550 1150 2000 2031 2000 
+C 2919 2000 3550 2550 3556 3338 
+C 3550 4125 2919 4675 2031 4669 
+z
+M 2031 4156 
+C 2575 4156 2975 3831 2975 3338 
+C 2975 2844 2575 2519 2031 2519 
+C 1488 2519 1088 2844 1094 3338 
+C 1088 3831 1488 4156 2031 4156 
+z
+M 4838 5069 
+L 4244 5069 
+L 4244 -544 
+L 4838 -544 
+L 4838 5069 
+z
+M 238 1156 
+L 313 663 
+C 1313 663 2669 669 3938 913 
+L 3894 1344 
+C 2669 1169 1256 1156 238 1156 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1b20" d="M 2181 4044 
+L 2181 4725 
+L 1594 4725 
+L 1594 4063 
+C 1588 3219 1069 2444 200 2131 
+L 519 1663 
+C 1178 1913 1656 2425 1900 3075 
+C 2138 2491 2594 2028 3206 1794 
+L 3531 2256 
+C 2688 2550 2181 3288 2181 4044 
+z
+M 4875 5063 
+L 4281 5063 
+L 4281 3788 
+L 3100 3788 
+L 3100 3300 
+L 4281 3300 
+L 4281 888 
+L 4875 888 
+L 4875 5063 
+z
+M 5000 69 
+L 1819 69 
+L 1819 1356 
+L 1219 1356 
+L 1219 -413 
+L 5000 -413 
+L 5000 69 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2add" d="M 2625 4669 
+L 438 4669 
+L 438 1938 
+L 800 1938 
+C 1694 1931 2225 1956 2881 2081 
+L 2825 2569 
+C 2250 2459 1756 2431 1006 2425 
+L 1006 3106 
+L 2563 3106 
+L 2563 3563 
+L 1006 3563 
+L 1006 4188 
+L 2625 4188 
+L 2625 4669 
+z
+M 4981 5063 
+L 4419 5063 
+L 4419 3638 
+L 3731 3638 
+L 3731 4963 
+L 3175 4963 
+L 3175 1706 
+L 3731 1706 
+L 3731 3156 
+L 4419 3156 
+L 4419 1663 
+L 4981 1663 
+L 4981 5063 
+z
+M 4981 1394 
+L 1175 1394 
+L 1175 913 
+L 4394 913 
+L 4394 -531 
+L 4981 -531 
+L 4981 1394 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-362f" d="M 619 2656 
+L 3456 2656 
+L 3456 3238 
+L 619 3238 
+L 619 2656 
+z
+M 619 1288 
+L 3456 1288 
+L 3456 1875 
+L 619 1875 
+L 619 1288 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2708" d="M 5331 644 
+L 3056 644 
+L 3056 1863 
+L 2469 1863 
+L 2469 644 
+L 206 644 
+L 206 156 
+L 5331 156 
+L 5331 644 
+z
+M 4856 4219 
+L 3056 4219 
+L 3056 4969 
+L 2469 4969 
+L 2469 4219 
+L 669 4219 
+L 669 3738 
+L 2463 3738 
+C 2431 2953 1606 2303 456 2131 
+L 681 1669 
+C 1619 1816 2397 2259 2763 2913 
+C 3128 2259 3909 1816 4844 1669 
+L 5069 2131 
+C 3919 2303 3088 2953 3063 3738 
+L 4856 3738 
+L 4856 4219 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-16f4" d="M 5331 656 
+L 3050 656 
+L 3050 1806 
+L 4725 1806 
+L 4725 4688 
+L 4138 4688 
+L 4138 3725 
+L 1388 3725 
+L 1388 4688 
+L 794 4688 
+L 794 1806 
+L 2463 1806 
+L 2463 656 
+L 206 656 
+L 206 163 
+L 5331 163 
+L 5331 656 
+z
+M 1388 2288 
+L 1388 3244 
+L 4138 3244 
+L 4138 2288 
+L 1388 2288 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2040" d="M 1888 4713 
+C 1006 4713 375 4169 381 3381 
+C 375 2684 869 2178 1594 2075 
+L 1594 1163 
+C 1072 1150 572 1147 138 1144 
+L 231 656 
+C 1200 650 2506 656 3688 863 
+L 3644 1306 
+C 3181 1247 2684 1209 2188 1188 
+L 2188 2075 
+C 2894 2184 3394 2688 3394 3381 
+C 3394 4169 2750 4713 1888 4713 
+z
+M 1888 4213 
+C 2419 4206 2806 3881 2813 3381 
+C 2806 2881 2419 2550 1888 2556 
+C 1350 2550 956 2881 956 3381 
+C 956 3881 1350 4206 1888 4213 
+z
+M 4575 5069 
+L 3981 5069 
+L 3981 -531 
+L 4575 -531 
+L 4575 2294 
+L 5438 2294 
+L 5438 2794 
+L 4575 2794 
+L 4575 5069 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1c19" d="M 3063 4756 
+L 3063 4994 
+L 2456 4994 
+L 2456 4756 
+C 2456 4081 1563 3456 488 3306 
+L 713 2844 
+C 1609 2981 2400 3416 2763 4025 
+C 3122 3419 3913 2981 4806 2844 
+L 5038 3306 
+C 3963 3456 3063 4088 3063 4756 
+z
+M 5313 2450 
+L 206 2450 
+L 206 1969 
+L 2463 1969 
+L 2463 1306 
+L 775 1306 
+L 775 831 
+L 4088 831 
+L 4088 -531 
+L 4688 -531 
+L 4688 1306 
+L 3050 1306 
+L 3050 1969 
+L 5313 1969 
+L 5313 2450 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1228" d="M 2875 4675 
+L 419 4675 
+L 419 4200 
+L 2275 4200 
+L 2275 3444 
+L 431 3444 
+L 431 1675 
+L 844 1675 
+C 1906 1675 2506 1694 3231 1819 
+L 3169 2300 
+C 2509 2188 1956 2159 1025 2156 
+L 1025 2988 
+L 2875 2988 
+L 2875 4675 
+z
+M 4875 5063 
+L 4281 5063 
+L 4281 4150 
+L 3238 4150 
+L 3238 3675 
+L 4281 3675 
+L 4281 2900 
+L 3238 2900 
+L 3238 2413 
+L 4281 2413 
+L 4281 944 
+L 4875 944 
+L 4875 5063 
+z
+M 5038 94 
+L 1788 94 
+L 1788 1250 
+L 1194 1250 
+L 1194 -394 
+L 5038 -394 
+L 5038 94 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2190" d="M 2156 3419 
+L 2156 4013 
+L 3375 4013 
+L 3375 4506 
+L 306 4506 
+L 306 4013 
+L 1569 4013 
+L 1569 3419 
+C 1569 2469 950 1413 100 1006 
+L 450 538 
+C 1091 856 1616 1547 1875 2350 
+C 2125 1616 2622 984 3250 681 
+L 3588 1144 
+C 2738 1544 2156 2531 2156 3419 
+z
+M 4569 5069 
+L 3975 5069 
+L 3975 -531 
+L 4569 -531 
+L 4569 2350 
+L 5469 2350 
+L 5469 2850 
+L 4569 2850 
+L 4569 5069 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2628" d="M 2125 3269 
+L 2125 3638 
+L 3356 3638 
+L 3356 4113 
+L 2138 4113 
+L 2138 4956 
+L 1538 4956 
+L 1538 4113 
+L 306 4113 
+L 306 3638 
+L 1544 3638 
+L 1544 3269 
+C 1544 2344 988 1388 138 1000 
+L 469 544 
+C 1109 841 1597 1459 1844 2200 
+C 2081 1516 2541 931 3150 644 
+L 3488 1094 
+C 2650 1494 2125 2406 2125 3269 
+z
+M 4569 5069 
+L 3975 5069 
+L 3975 -531 
+L 4569 -531 
+L 4569 2313 
+L 5469 2313 
+L 5469 2813 
+L 4569 2813 
+L 4569 5069 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2174" d="M 4844 5069 
+L 4250 5069 
+L 4250 -544 
+L 4844 -544 
+L 4844 5069 
+z
+M 1850 4650 
+C 1006 4650 400 3888 400 2688 
+C 400 1481 1006 719 1850 719 
+C 2681 719 3294 1481 3294 2688 
+C 3294 3888 2681 4650 1850 4650 
+z
+M 1850 4119 
+C 2363 4119 2719 3569 2719 2688 
+C 2719 1800 2363 1250 1850 1250 
+C 1331 1250 975 1800 975 2688 
+C 975 3569 1331 4119 1850 4119 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-601"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-ce8" transform="translate(110.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-6c4" transform="translate(197.265625 0)"/>
+     <use xlink:href="#Pretendard-Medium-1fd0" transform="translate(283.6875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(370.109375 0)"/>
+     <use xlink:href="#Pretendard-Medium-b23" transform="translate(394.53125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2144" transform="translate(480.953125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(567.375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2954" transform="translate(591.796875 0)"/>
+     <use xlink:href="#Pretendard-Medium-edc" transform="translate(678.21875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2158" transform="translate(764.640625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(851.0625 0)"/>
+     <use xlink:href="#Pretendard-Medium-1b20" transform="translate(875.484375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2add" transform="translate(961.90625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1048.328125 0)"/>
+     <use xlink:href="#Pretendard-Medium-362f" transform="translate(1072.75 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1136.328125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2708" transform="translate(1160.75 0)"/>
+     <use xlink:href="#Pretendard-Medium-16f4" transform="translate(1247.171875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2040" transform="translate(1333.59375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1420.015625 0)"/>
+     <use xlink:href="#Pretendard-Medium-1c19" transform="translate(1444.4375 0)"/>
+     <use xlink:href="#Pretendard-Medium-1228" transform="translate(1530.859375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2190" transform="translate(1617.28125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2158" transform="translate(1703.703125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1790.125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2628" transform="translate(1814.546875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2174" transform="translate(1900.96875 0)"/>
+    </g>
+   </g>
+   <g id="patch_4">
+    <path d="M 168.392061 244.400636 
+Q 168.392061 214.521575 168.392061 184.642515 
+" style="fill: none; stroke-dasharray: 3.6,3.6; stroke-dashoffset: 0; stroke: #a8e05f; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_3">
+    <!-- Rigidbody 를 미는 코드 — 반드시 여기 -->
+    <g style="fill: #a8e05f" transform="translate(86.268116 266.242534) scale(0.105 -0.105)">
+     <defs>
+      <path id="Pretendard-Medium-23a" d="M 406 0 
+L 1075 0 
+L 1075 3394 
+L 406 3394 
+L 406 0 
+z
+M 744 3919 
+C 969 3919 1163 4094 1163 4313 
+C 1163 4531 969 4706 744 4706 
+C 513 4706 319 4531 319 4313 
+C 319 4094 513 3919 744 3919 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-219" d="M 1831 -1344 
+C 2706 -1344 3363 -944 3363 -75 
+L 3363 3394 
+L 2713 3394 
+L 2713 2844 
+L 2669 2844 
+C 2544 3056 2313 3438 1681 3438 
+C 863 3438 256 2813 256 1731 
+C 256 650 875 50 1675 50 
+C 2300 50 2544 400 2663 619 
+L 2706 619 
+L 2706 -50 
+C 2706 -581 2369 -806 1838 -806 
+C 1394 -806 1094 -650 1031 -331 
+L 350 -331 
+C 413 -963 975 -1344 1831 -1344 
+z
+M 1825 600 
+C 1244 600 938 1056 938 1719 
+C 938 2369 1231 2869 1825 2869 
+C 2400 2869 2713 2406 2713 1719 
+C 2713 1019 2394 600 1825 600 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1d7" d="M 1675 -69 
+C 2294 -69 2538 306 2663 531 
+L 2713 531 
+L 2713 0 
+L 3363 0 
+L 3363 4525 
+L 2694 4525 
+L 2694 2844 
+L 2663 2844 
+C 2544 3056 2313 3438 1681 3438 
+C 863 3438 256 2794 256 1688 
+C 256 594 856 -69 1675 -69 
+z
+M 1825 500 
+C 1244 500 938 1019 938 1700 
+C 938 2369 1231 2869 1825 2869 
+C 2400 2869 2713 2406 2713 1700 
+C 2713 988 2394 500 1825 500 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1c4" d="M 463 0 
+L 1113 0 
+L 1113 531 
+L 1163 531 
+C 1288 306 1525 -69 2144 -69 
+C 2969 -69 3569 594 3569 1688 
+C 3569 2794 2956 3438 2138 3438 
+C 1513 3438 1288 3056 1163 2844 
+L 1125 2844 
+L 1125 4525 
+L 463 4525 
+L 463 0 
+z
+M 1113 1700 
+C 1113 2406 1425 2869 1994 2869 
+C 2588 2869 2888 2369 2888 1700 
+C 2888 1019 2581 500 1994 500 
+C 1431 500 1113 988 1113 1700 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-285" d="M 1844 -69 
+C 2800 -69 3425 631 3425 1681 
+C 3425 2738 2800 3438 1844 3438 
+C 881 3438 256 2738 256 1681 
+C 256 631 881 -69 1844 -69 
+z
+M 1844 488 
+C 1219 488 925 1031 925 1681 
+C 925 2331 1219 2888 1844 2888 
+C 2456 2888 2750 2331 2750 1681 
+C 2750 1031 2456 488 1844 488 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-33a" d="M 819 -1275 
+C 1375 -1275 1725 -988 1919 -450 
+L 3319 3394 
+L 2600 3394 
+L 1744 763 
+L 1706 763 
+L 850 3394 
+L 138 3394 
+L 1381 -44 
+L 1300 -269 
+C 1144 -694 969 -713 763 -713 
+C 669 -713 538 -706 463 -700 
+L 463 -1256 
+C 550 -1269 681 -1275 819 -1275 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-137c" d="M 5325 2500 
+L 200 2500 
+L 200 2044 
+L 5325 2044 
+L 5325 2500 
+z
+M 4694 1650 
+L 806 1650 
+L 806 1225 
+L 4106 1225 
+L 4106 813 
+L 813 813 
+L 813 -463 
+L 4869 -463 
+L 4869 -44 
+L 1406 -44 
+L 1406 419 
+L 4694 419 
+L 4694 1650 
+z
+M 4681 4925 
+L 844 4925 
+L 844 4506 
+L 4088 4506 
+L 4088 4106 
+L 856 4106 
+L 856 2869 
+L 4775 2869 
+L 4775 3288 
+L 1444 3288 
+L 1444 3713 
+L 4681 3713 
+L 4681 4925 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-15f8" d="M 3144 4531 
+L 519 4531 
+L 519 850 
+L 3144 850 
+L 3144 4531 
+z
+M 1106 4063 
+L 2569 4063 
+L 2569 1331 
+L 1106 1331 
+L 1106 4063 
+z
+M 4844 5069 
+L 4250 5069 
+L 4250 -544 
+L 4844 -544 
+L 4844 5069 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-c94" d="M 4738 3431 
+L 1469 3431 
+L 1469 4869 
+L 881 4869 
+L 881 2956 
+L 4738 2956 
+L 4738 3431 
+z
+M 5325 2250 
+L 200 2250 
+L 200 1775 
+L 5325 1775 
+L 5325 2250 
+z
+M 4775 88 
+L 1431 88 
+L 1431 1244 
+L 838 1244 
+L 838 -400 
+L 4775 -400 
+L 4775 88 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1618" d="M 4606 5063 
+L 4013 5063 
+L 4013 950 
+L 4606 950 
+L 4606 2913 
+L 5419 2913 
+L 5419 3413 
+L 4606 3413 
+L 4606 5063 
+z
+M 4844 69 
+L 1650 69 
+L 1650 1356 
+L 1056 1356 
+L 1056 -413 
+L 4844 -413 
+L 4844 69 
+z
+M 1006 4663 
+L 425 4663 
+L 425 1875 
+L 3063 1875 
+L 3063 4663 
+L 2475 4663 
+L 2475 3769 
+L 1006 3769 
+L 1006 4663 
+z
+M 1006 2350 
+L 1006 3300 
+L 2475 3300 
+L 2475 2350 
+L 1006 2350 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1cdc" d="M 2263 3644 
+L 2263 4600 
+L 1663 4600 
+L 1663 3644 
+C 1663 2575 1044 1506 163 1113 
+L 525 613 
+C 1197 941 1713 1619 1975 2438 
+C 2234 1672 2744 1044 3388 738 
+L 3744 1206 
+C 2875 1594 2256 2619 2263 3644 
+z
+M 4844 5069 
+L 4250 5069 
+L 4250 -544 
+L 4844 -544 
+L 4844 5069 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1fec" d="M 1725 4650 
+C 888 4650 300 3888 306 2688 
+C 300 1481 888 719 1725 719 
+C 2263 719 2703 1044 2944 1606 
+L 4288 1606 
+L 4288 -544 
+L 4875 -544 
+L 4875 5069 
+L 4288 5069 
+L 4288 3850 
+L 2906 3850 
+C 2656 4356 2234 4650 1725 4650 
+z
+M 1725 4119 
+C 2231 4119 2581 3569 2581 2688 
+C 2581 1800 2231 1250 1725 1250 
+C 1219 1250 869 1800 869 2688 
+C 869 3569 1219 4119 1725 4119 
+z
+M 3075 3363 
+L 4288 3363 
+L 4288 2094 
+L 3088 2094 
+C 3125 2278 3144 2475 3144 2688 
+C 3144 2931 3116 3156 3075 3363 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-830" d="M 4863 5069 
+L 4263 5069 
+L 4263 -531 
+L 4863 -531 
+L 4863 5069 
+z
+M 3194 4469 
+L 531 4469 
+L 531 3994 
+L 2594 3994 
+C 2478 2688 1753 1678 263 969 
+L 575 488 
+C 2494 1406 3194 2831 3194 4469 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-dd"/>
+     <use xlink:href="#Pretendard-Medium-23a" transform="translate(61.625 0)"/>
+     <use xlink:href="#Pretendard-Medium-219" transform="translate(84.765625 0)"/>
+     <use xlink:href="#Pretendard-Medium-23a" transform="translate(143.65625 0)"/>
+     <use xlink:href="#Pretendard-Medium-1d7" transform="translate(166.796875 0)"/>
+     <use xlink:href="#Pretendard-Medium-1c4" transform="translate(226.5625 0)"/>
+     <use xlink:href="#Pretendard-Medium-285" transform="translate(286.328125 0)"/>
+     <use xlink:href="#Pretendard-Medium-1d7" transform="translate(343.75 0)"/>
+     <use xlink:href="#Pretendard-Medium-33a" transform="translate(403.515625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(457.515625 0)"/>
+     <use xlink:href="#Pretendard-Medium-137c" transform="translate(481.9375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(568.359375 0)"/>
+     <use xlink:href="#Pretendard-Medium-15f8" transform="translate(592.78125 0)"/>
+     <use xlink:href="#Pretendard-Medium-c94" transform="translate(679.203125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(765.625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2954" transform="translate(790.046875 0)"/>
+     <use xlink:href="#Pretendard-Medium-edc" transform="translate(876.46875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(962.890625 0)"/>
+     <use xlink:href="#Pretendard-Medium-33c6" transform="translate(987.3125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1083.3125 0)"/>
+     <use xlink:href="#Pretendard-Medium-1618" transform="translate(1107.734375 0)"/>
+     <use xlink:href="#Pretendard-Medium-edc" transform="translate(1194.15625 0)"/>
+     <use xlink:href="#Pretendard-Medium-1cdc" transform="translate(1280.578125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1367 0)"/>
+     <use xlink:href="#Pretendard-Medium-1fec" transform="translate(1391.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-830" transform="translate(1477.84375 0)"/>
+    </g>
+   </g>
+   <g id="patch_5">
+    <path d="M 291.06687 244.400636 
+Q 291.06687 214.521575 291.06687 184.642515 
+" style="fill: none; stroke-dasharray: 3.6,3.6; stroke-dashoffset: 0; stroke: #35d6e6; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_4">
+    <!-- 입력 처리·게임 규칙 — 여기 -->
+    <g style="fill: #35d6e6" transform="translate(234.142105 266.242534) scale(0.105 -0.105)">
+     <defs>
+      <path id="Pretendard-Medium-2185" d="M 4850 5069 
+L 4256 5069 
+L 4256 2063 
+L 4850 2063 
+L 4850 5069 
+z
+M 1769 1794 
+L 1188 1794 
+L 1188 -463 
+L 4850 -463 
+L 4850 1794 
+L 4263 1794 
+L 4263 1163 
+L 1769 1163 
+L 1769 1794 
+z
+M 1769 25 
+L 1769 694 
+L 4263 694 
+L 4263 25 
+L 1769 25 
+z
+M 1813 4813 
+C 956 4813 319 4281 319 3513 
+C 319 2744 956 2213 1813 2219 
+C 2669 2213 3300 2744 3300 3513 
+C 3300 4281 2669 4813 1813 4813 
+z
+M 1813 4313 
+C 2338 4319 2719 3988 2719 3513 
+C 2719 3031 2338 2706 1813 2706 
+C 1281 2706 900 3031 900 3513 
+C 900 3988 1281 4319 1813 4313 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1225" d="M 2875 4731 
+L 431 4731 
+L 431 4256 
+L 2281 4256 
+L 2281 3550 
+L 438 3550 
+L 438 1844 
+L 844 1844 
+C 1963 1844 2538 1863 3219 1981 
+L 3163 2463 
+C 2531 2344 2000 2322 1025 2325 
+L 1025 3100 
+L 2875 3100 
+L 2875 4731 
+z
+M 4875 5063 
+L 4281 5063 
+L 4281 4250 
+L 3231 4250 
+L 3231 3775 
+L 4281 3775 
+L 4281 3081 
+L 3231 3081 
+L 3231 2606 
+L 4281 2606 
+L 4281 1619 
+L 4875 1619 
+L 4875 5063 
+z
+M 4875 1338 
+L 1075 1338 
+L 1075 856 
+L 4281 856 
+L 4281 -538 
+L 4875 -538 
+L 4875 1338 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2698" d="M 4881 5069 
+L 4288 5069 
+L 4288 2850 
+L 3131 2850 
+L 3131 2369 
+L 4288 2369 
+L 4288 -544 
+L 4881 -544 
+L 4881 5069 
+z
+M 2194 3269 
+L 2194 3638 
+L 3419 3638 
+L 3419 4113 
+L 2206 4113 
+L 2206 4956 
+L 1613 4956 
+L 1613 4113 
+L 363 4113 
+L 363 3638 
+L 1606 3638 
+L 1606 3269 
+C 1606 2344 1056 1388 206 1000 
+L 531 544 
+C 1175 841 1666 1466 1913 2213 
+C 2159 1506 2653 922 3294 638 
+L 3625 1094 
+C 2763 1475 2194 2381 2194 3269 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-13ac" d="M 4856 5069 
+L 4263 5069 
+L 4263 -544 
+L 4856 -544 
+L 4856 5069 
+z
+M 3144 4563 
+L 519 4563 
+L 519 4081 
+L 2538 4081 
+L 2538 2994 
+L 525 2994 
+L 525 800 
+L 1000 800 
+C 1988 800 2831 838 3825 1006 
+L 3769 1494 
+C 2831 1338 2038 1297 1131 1294 
+L 1131 2519 
+L 3144 2519 
+L 3144 4563 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-3362" d="M 844 1538 
+C 1081 1538 1288 1738 1288 1981 
+C 1288 2225 1081 2425 844 2425 
+C 600 2425 394 2225 400 1981 
+C 394 1738 600 1538 844 1538 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-68c" d="M 5019 5069 
+L 4456 5069 
+L 4456 -531 
+L 5019 -531 
+L 5019 5069 
+z
+M 3838 4925 
+L 3275 4925 
+L 3275 2819 
+L 2388 2819 
+C 2559 3306 2634 3828 2638 4375 
+L 450 4375 
+L 450 3888 
+L 2050 3888 
+C 1947 2734 1375 1794 188 1088 
+L 525 663 
+C 1316 1125 1847 1694 2181 2344 
+L 3275 2344 
+L 3275 -256 
+L 3838 -256 
+L 3838 4925 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-7dc" d="M 4619 4725 
+L 844 4725 
+L 844 4238 
+L 4044 4238 
+C 4044 3759 4034 3138 3869 2294 
+L 206 2294 
+L 206 1806 
+L 1481 1806 
+L 1481 -525 
+L 2075 -525 
+L 2075 1806 
+L 3419 1806 
+L 3419 -525 
+L 4006 -525 
+L 4006 1806 
+L 5313 1806 
+L 5313 2294 
+L 4469 2294 
+C 4619 3188 4619 3822 4619 4319 
+L 4619 4725 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2859" d="M 2288 3838 
+L 2288 3938 
+L 3525 3938 
+L 3525 4419 
+L 2294 4419 
+L 2294 5094 
+L 1694 5094 
+L 1694 4419 
+L 450 4419 
+L 450 3938 
+L 1694 3938 
+L 1694 3838 
+C 1694 3113 1169 2444 294 2169 
+L 588 1700 
+C 1259 1913 1753 2366 2006 2950 
+C 2263 2416 2756 2000 3419 1806 
+L 3700 2269 
+C 2844 2519 2288 3156 2288 3838 
+z
+M 4850 5069 
+L 4256 5069 
+L 4256 1631 
+L 4850 1631 
+L 4850 5069 
+z
+M 4850 1356 
+L 1056 1356 
+L 1056 875 
+L 4256 875 
+L 4256 -531 
+L 4850 -531 
+L 4850 1356 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-2185"/>
+     <use xlink:href="#Pretendard-Medium-1225" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(172.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2698" transform="translate(197.265625 0)"/>
+     <use xlink:href="#Pretendard-Medium-13ac" transform="translate(283.6875 0)"/>
+     <use xlink:href="#Pretendard-Medium-3362" transform="translate(370.109375 0)"/>
+     <use xlink:href="#Pretendard-Medium-68c" transform="translate(396.484375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2184" transform="translate(482.90625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(569.328125 0)"/>
+     <use xlink:href="#Pretendard-Medium-7dc" transform="translate(593.75 0)"/>
+     <use xlink:href="#Pretendard-Medium-2859" transform="translate(680.171875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(766.59375 0)"/>
+     <use xlink:href="#Pretendard-Medium-33c6" transform="translate(791.015625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(887.015625 0)"/>
+     <use xlink:href="#Pretendard-Medium-1fec" transform="translate(911.4375 0)"/>
+     <use xlink:href="#Pretendard-Medium-830" transform="translate(997.859375 0)"/>
+    </g>
+   </g>
+   <g id="patch_6">
+    <path d="M 413.741679 244.400636 
+Q 413.741679 214.521575 413.741679 184.642515 
+" style="fill: none; stroke-dasharray: 3.6,3.6; stroke-dashoffset: 0; stroke: #35d6e6; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_5">
+    <!-- 다른 오브젝트를 '따라가는' 코드 — 여기 -->
+    <g style="fill: #35d6e6" transform="translate(332.13207 266.242534) scale(0.105 -0.105)">
+     <defs>
+      <path id="Pretendard-Medium-ce4" d="M 4569 5069 
+L 3975 5069 
+L 3975 -544 
+L 4569 -544 
+L 4569 2413 
+L 5469 2413 
+L 5469 2900 
+L 4569 2900 
+L 4569 5069 
+z
+M 3063 4531 
+L 444 4531 
+L 444 850 
+L 894 850 
+C 1938 844 2681 875 3556 1031 
+L 3481 1531 
+C 2684 1388 1978 1347 1038 1344 
+L 1038 4050 
+L 3063 4050 
+L 3063 4531 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1378" d="M 5325 1994 
+L 200 1994 
+L 200 1513 
+L 5325 1513 
+L 5325 1994 
+z
+M 4800 69 
+L 1463 69 
+L 1463 1113 
+L 869 1113 
+L 869 -413 
+L 4800 -413 
+L 4800 69 
+z
+M 4681 4900 
+L 844 4900 
+L 844 4431 
+L 4088 4431 
+L 4088 3894 
+L 856 3894 
+L 856 2456 
+L 4794 2456 
+L 4794 2913 
+L 1444 2913 
+L 1444 3463 
+L 4681 3463 
+L 4681 4900 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2024" d="M 2756 4731 
+C 1563 4725 694 4138 694 3244 
+C 694 2403 1422 1850 2463 1763 
+L 2463 663 
+L 206 663 
+L 206 169 
+L 5331 169 
+L 5331 663 
+L 3050 663 
+L 3050 1763 
+C 4097 1850 4825 2403 4825 3244 
+C 4825 4138 3956 4725 2756 4731 
+z
+M 2756 4244 
+C 3625 4250 4250 3850 4250 3244 
+C 4250 2613 3625 2225 2756 2219 
+C 1894 2225 1269 2613 1269 3244 
+C 1269 3850 1894 4250 2756 4244 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-180c" d="M 5331 681 
+L 206 681 
+L 206 194 
+L 5331 194 
+L 5331 681 
+z
+M 1388 4681 
+L 794 4681 
+L 794 1744 
+L 4725 1744 
+L 4725 4681 
+L 4138 4681 
+L 4138 3675 
+L 1388 3675 
+L 1388 4681 
+z
+M 1388 2213 
+L 1388 3206 
+L 4138 3206 
+L 4138 2213 
+L 1388 2213 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-221d" d="M 3881 4950 
+L 3319 4950 
+L 3319 3644 
+L 2538 3644 
+L 2538 3163 
+L 3319 3163 
+L 3319 1694 
+L 3881 1694 
+L 3881 4950 
+z
+M 1900 3869 
+L 1900 4144 
+L 2838 4144 
+L 2838 4625 
+L 331 4625 
+L 331 4144 
+L 1325 4144 
+L 1325 3869 
+C 1325 3219 938 2525 194 2225 
+L 513 1756 
+C 1056 1988 1425 2422 1625 2938 
+C 1822 2478 2172 2091 2681 1881 
+L 2981 2338 
+C 2269 2631 1900 3263 1900 3869 
+z
+M 4981 5069 
+L 4419 5069 
+L 4419 1650 
+L 4981 1650 
+L 4981 5069 
+z
+M 4981 1419 
+L 1175 1419 
+L 1175 938 
+L 4394 938 
+L 4394 -531 
+L 4981 -531 
+L 4981 1419 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2cb8" d="M 4750 2088 
+L 1450 2088 
+L 1450 2900 
+L 4575 2900 
+L 4575 3369 
+L 1450 3369 
+L 1450 4125 
+L 4694 4125 
+L 4694 4606 
+L 850 4606 
+L 850 1613 
+L 4750 1613 
+L 4750 2088 
+z
+M 5331 663 
+L 206 663 
+L 206 175 
+L 5331 175 
+L 5331 663 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-343c" d="M 913 4525 
+L 363 4525 
+L 363 2913 
+L 913 2913 
+L 913 4525 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-f30" d="M 4669 5081 
+L 4075 5081 
+L 4075 -531 
+L 4669 -531 
+L 4669 2406 
+L 5438 2406 
+L 5438 2906 
+L 4669 2906 
+L 4669 5081 
+z
+M 1794 4494 
+L 356 4494 
+L 356 906 
+L 613 906 
+C 988 906 1388 919 1894 1019 
+L 1844 1513 
+C 1516 1444 1219 1416 950 1406 
+L 950 4006 
+L 1794 4006 
+L 1794 4494 
+z
+M 3600 4494 
+L 2106 4494 
+L 2106 906 
+L 2381 906 
+C 2981 906 3350 919 3800 1031 
+L 3750 1525 
+C 3406 1438 3097 1409 2688 1406 
+L 2688 4006 
+L 3600 4006 
+L 3600 4494 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-600" d="M 4569 5069 
+L 3975 5069 
+L 3975 -525 
+L 4569 -525 
+L 4569 2344 
+L 5438 2344 
+L 5438 2838 
+L 4569 2838 
+L 4569 5069 
+z
+M 3106 4481 
+L 494 4481 
+L 494 3988 
+L 2500 3988 
+C 2378 2681 1616 1669 213 969 
+L 544 506 
+C 2388 1419 3100 2863 3106 4481 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-ce4"/>
+     <use xlink:href="#Pretendard-Medium-1378" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(172.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2024" transform="translate(197.265625 0)"/>
+     <use xlink:href="#Pretendard-Medium-180c" transform="translate(283.6875 0)"/>
+     <use xlink:href="#Pretendard-Medium-221d" transform="translate(370.109375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2cb8" transform="translate(456.53125 0)"/>
+     <use xlink:href="#Pretendard-Medium-137c" transform="translate(542.953125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(629.375 0)"/>
+     <use xlink:href="#Pretendard-Medium-343c" transform="translate(653.796875 0)"/>
+     <use xlink:href="#Pretendard-Medium-f30" transform="translate(673.8125 0)"/>
+     <use xlink:href="#Pretendard-Medium-117c" transform="translate(760.234375 0)"/>
+     <use xlink:href="#Pretendard-Medium-600" transform="translate(846.65625 0)"/>
+     <use xlink:href="#Pretendard-Medium-c94" transform="translate(933.078125 0)"/>
+     <use xlink:href="#Pretendard-Medium-343c" transform="translate(1019.5 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1039.515625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2954" transform="translate(1063.9375 0)"/>
+     <use xlink:href="#Pretendard-Medium-edc" transform="translate(1150.359375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1236.78125 0)"/>
+     <use xlink:href="#Pretendard-Medium-33c6" transform="translate(1261.203125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(1357.203125 0)"/>
+     <use xlink:href="#Pretendard-Medium-1fec" transform="translate(1381.625 0)"/>
+     <use xlink:href="#Pretendard-Medium-830" transform="translate(1468.046875 0)"/>
+    </g>
+   </g>
+   <g id="text_6">
+    <!-- 한 프레임의 실행 순서 -->
+    <g style="fill: #e8ecf4" transform="translate(20.16 34.434902) scale(0.15 -0.15)">
+     <defs>
+      <path id="Pretendard-Medium-1ce4" d="M 4844 5069 
+L 4256 5069 
+L 4256 2188 
+L 4844 2188 
+L 4844 5069 
+z
+M 4850 1919 
+L 1169 1919 
+L 1169 1450 
+L 4263 1450 
+L 4263 969 
+L 1188 969 
+L 1188 -475 
+L 5038 -475 
+L 5038 0 
+L 1763 0 
+L 1763 519 
+L 4850 519 
+L 4850 1919 
+z
+M 2244 4488 
+L 2244 4919 
+L 1638 4919 
+L 1638 4488 
+C 1638 3713 1100 2981 225 2688 
+L 525 2219 
+C 1194 2450 1694 2938 1950 3550 
+C 2200 2981 2691 2538 3344 2325 
+L 3638 2788 
+C 2781 3056 2238 3738 2244 4488 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2f89" d="M 4981 5069 
+L 4419 5069 
+L 4419 3588 
+L 3769 3588 
+L 3769 4963 
+L 3213 4963 
+L 3213 1731 
+L 3769 1731 
+L 3769 3100 
+L 4419 3100 
+L 4419 1538 
+L 4981 1538 
+L 4981 5069 
+z
+M 3006 4431 
+L 1894 4431 
+L 1894 5025 
+L 1306 5025 
+L 1306 4431 
+L 175 4431 
+L 175 3963 
+L 3006 3963 
+L 3006 4431 
+z
+M 1594 3700 
+C 894 3700 394 3319 394 2738 
+C 394 2156 894 1775 1594 1775 
+C 2306 1775 2806 2156 2806 2738 
+C 2806 3319 2306 3700 1594 3700 
+z
+M 1594 3263 
+C 2000 3263 2269 3056 2269 2738 
+C 2269 2419 2000 2206 1594 2206 
+C 1200 2206 925 2419 925 2738 
+C 925 3056 1200 3263 1594 3263 
+z
+M 3106 1456 
+C 1919 1456 1206 1100 1213 463 
+C 1206 -163 1919 -525 3106 -519 
+C 4294 -525 5006 -163 5013 463 
+C 5006 1100 4294 1456 3106 1456 
+z
+M 3106 1000 
+C 3944 1000 4413 813 4419 463 
+C 4413 125 3944 -69 3106 -63 
+C 2275 -69 1794 125 1800 463 
+C 1794 813 2275 1000 3106 1000 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1c1c" d="M 3063 4681 
+L 3063 4925 
+L 2456 4925 
+L 2456 4681 
+C 2456 3956 1563 3300 500 3138 
+L 725 2669 
+C 1616 2816 2406 3275 2763 3919 
+C 3122 3288 3906 2828 4794 2681 
+L 5025 3150 
+C 3963 3306 3063 3981 3063 4681 
+z
+M 5325 2250 
+L 200 2250 
+L 200 1769 
+L 2513 1769 
+L 2513 688 
+L 3100 688 
+L 3100 1769 
+L 5325 1769 
+L 5325 2250 
+z
+M 4756 69 
+L 1431 69 
+L 1431 1213 
+L 838 1213 
+L 838 -413 
+L 4756 -413 
+L 4756 69 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1b1c" d="M 2225 3644 
+L 2225 4600 
+L 1625 4600 
+L 1625 3644 
+C 1625 2606 1044 1525 175 1113 
+L 550 631 
+C 1194 969 1684 1650 1931 2456 
+C 2178 1691 2656 1056 3294 738 
+L 3656 1213 
+C 2800 1600 2225 2619 2225 3644 
+z
+M 4875 5069 
+L 4288 5069 
+L 4288 3206 
+L 3038 3206 
+L 3038 2725 
+L 4288 2725 
+L 4288 -544 
+L 4875 -544 
+L 4875 5069 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-2f5c"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2f04" transform="translate(110.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-1208" transform="translate(197.265625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2184" transform="translate(283.6875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2158" transform="translate(370.109375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(456.53125 0)"/>
+     <use xlink:href="#Pretendard-Medium-1ce4" transform="translate(480.953125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2f89" transform="translate(567.375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(653.796875 0)"/>
+     <use xlink:href="#Pretendard-Medium-1c1c" transform="translate(678.21875 0)"/>
+     <use xlink:href="#Pretendard-Medium-1b1c" transform="translate(764.640625 0)"/>
+    </g>
+   </g>
+   <g id="patch_7">
+    <path d="M 38.561221 180.902102 
+L 92.742595 180.902102 
+Q 96.831756 180.902102 96.831756 176.265302 
+L 96.831756 116.566502 
+Q 96.831756 111.929702 92.742595 111.929702 
+L 38.561221 111.929702 
+Q 34.472061 111.929702 34.472061 116.566502 
+L 34.472061 176.265302 
+Q 34.472061 180.902102 38.561221 180.902102 
+z
+" clip-path="url(#pf6addf3f8b)" style="fill: #12151d; stroke: #5f6980; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 105.010076 180.902102 
+L 225.640305 180.902102 
+Q 229.729466 180.902102 229.729466 176.265302 
+L 229.729466 116.566502 
+Q 229.729466 111.929702 225.640305 111.929702 
+L 105.010076 111.929702 
+Q 100.920916 111.929702 100.920916 116.566502 
+L 100.920916 176.265302 
+Q 100.920916 180.902102 105.010076 180.902102 
+z
+" clip-path="url(#pf6addf3f8b)" style="fill: #12151d; stroke: #a8e05f; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 237.907786 180.902102 
+L 348.315115 180.902102 
+Q 352.404275 180.902102 352.404275 176.265302 
+L 352.404275 116.566502 
+Q 352.404275 111.929702 348.315115 111.929702 
+L 237.907786 111.929702 
+Q 233.818626 111.929702 233.818626 116.566502 
+L 233.818626 176.265302 
+Q 233.818626 180.902102 237.907786 180.902102 
+z
+" clip-path="url(#pf6addf3f8b)" style="fill: #12151d; stroke: #35d6e6; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 360.582595 180.902102 
+L 450.544122 180.902102 
+Q 454.633282 180.902102 454.633282 176.265302 
+L 454.633282 116.566502 
+Q 454.633282 111.929702 450.544122 111.929702 
+L 360.582595 111.929702 
+Q 356.493435 111.929702 356.493435 116.566502 
+L 356.493435 176.265302 
+Q 356.493435 180.902102 360.582595 180.902102 
+z
+" clip-path="url(#pf6addf3f8b)" style="fill: #12151d; stroke: #35d6e6; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 462.811603 180.902102 
+L 583.441832 180.902102 
+Q 587.530992 180.902102 587.530992 176.265302 
+L 587.530992 116.566502 
+Q 587.530992 111.929702 583.441832 111.929702 
+L 462.811603 111.929702 
+Q 458.722443 111.929702 458.722443 116.566502 
+L 458.722443 176.265302 
+Q 458.722443 180.902102 462.811603 180.902102 
+z
+" clip-path="url(#pf6addf3f8b)" style="fill: #12151d; stroke: #ff5fa2; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 595.709313 180.902102 
+L 665.225038 180.902102 
+Q 669.314198 180.902102 669.314198 176.265302 
+L 669.314198 116.566502 
+Q 669.314198 111.929702 665.225038 111.929702 
+L 595.709313 111.929702 
+Q 591.620153 111.929702 591.620153 116.566502 
+L 591.620153 176.265302 
+Q 591.620153 180.902102 595.709313 180.902102 
+z
+" clip-path="url(#pf6addf3f8b)" style="fill: #12151d; stroke: #ffc44d; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_7">
+    <!-- 입력 수집 -->
+    <g style="fill: #5f6980" transform="translate(41.611596 139.481145) scale(0.12 -0.12)">
+     <defs>
+      <path id="Consolas-Bold-3" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1c18" d="M 3075 4575 
+L 3075 4881 
+L 2456 4881 
+L 2456 4575 
+C 2450 3825 1550 3131 450 2988 
+L 688 2500 
+C 1597 2647 2400 3119 2769 3781 
+C 3128 3122 3934 2647 4850 2500 
+L 5081 2988 
+C 3981 3131 3069 3831 3075 4575 
+z
+M 5313 1950 
+L 206 1950 
+L 206 1463 
+L 2456 1463 
+L 2456 -531 
+L 3038 -531 
+L 3038 1463 
+L 5313 1463 
+L 5313 1950 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-23d1" d="M 2281 4175 
+L 2281 4238 
+L 3513 4238 
+L 3513 4719 
+L 425 4719 
+L 425 4238 
+L 1681 4238 
+L 1681 4175 
+C 1675 3438 1131 2756 263 2488 
+L 563 2019 
+C 1234 2241 1734 2706 1988 3294 
+C 2241 2744 2734 2316 3388 2119 
+L 3688 2581 
+C 2825 2831 2281 3481 2281 4175 
+z
+M 4850 5069 
+L 4256 5069 
+L 4256 2038 
+L 4850 2038 
+L 4850 5069 
+z
+M 1769 1775 
+L 1188 1775 
+L 1188 -463 
+L 4850 -463 
+L 4850 1775 
+L 4263 1775 
+L 4263 1150 
+L 1769 1150 
+L 1769 1775 
+z
+M 1769 19 
+L 1769 681 
+L 4263 681 
+L 4263 19 
+L 1769 19 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-2185"/>
+     <use xlink:href="#Pretendard-Medium-1225" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Consolas-Bold-3" transform="translate(172.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-1c18" transform="translate(227.828125 0)"/>
+     <use xlink:href="#Pretendard-Medium-23d1" transform="translate(314.25 0)"/>
+    </g>
+   </g>
+   <g id="text_8">
+    <!-- Input -->
+    <g style="fill: #9aa4b8" transform="translate(54.015971 164.747948) scale(0.1 -0.1)">
+     <defs>
+      <path id="Pretendard-Medium-76" d="M 1150 4525 
+L 463 4525 
+L 463 0 
+L 1150 0 
+L 1150 4525 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-276" d="M 1075 2013 
+C 1075 2556 1406 2863 1863 2863 
+C 2313 2863 2581 2569 2581 2075 
+L 2581 0 
+L 3244 0 
+L 3244 2156 
+C 3244 3000 2788 3438 2088 3438 
+C 1581 3438 1250 3200 1088 2838 
+L 1050 2838 
+L 1050 3394 
+L 406 3394 
+L 406 0 
+L 1075 0 
+L 1075 2013 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2e8" d="M 2563 1413 
+C 2563 831 2131 563 1763 563 
+C 1356 563 1075 856 1075 1319 
+L 1075 3394 
+L 406 3394 
+L 406 1238 
+C 406 394 869 -44 1525 -44 
+C 2031 -44 2381 225 2538 588 
+L 2575 588 
+L 2575 0 
+L 3225 0 
+L 3225 3394 
+L 2563 3394 
+L 2563 1413 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2d3" d="M 1994 3394 
+L 1300 3394 
+L 1300 4206 
+L 638 4206 
+L 638 3394 
+L 138 3394 
+L 138 2863 
+L 638 2863 
+L 638 863 
+C 631 244 1100 -44 1625 -44 
+C 1806 -44 1950 -31 2044 -19 
+L 2044 563 
+C 1950 556 1800 544 1706 544 
+C 1494 550 1300 619 1300 1000 
+L 1300 2863 
+L 1994 2863 
+L 1994 3394 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-76"/>
+     <use xlink:href="#Pretendard-Medium-276" transform="translate(25.09375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2ab" transform="translate(82.125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2e8" transform="translate(141.015625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2d3" transform="translate(197.75 0)"/>
+    </g>
+   </g>
+   <g id="text_9">
+    <!-- FixedUpdate -->
+    <g style="fill: #a8e05f" transform="translate(129.035503 139.185012) scale(0.12 -0.12)">
+     <defs>
+      <path id="Consolas-Bold-9" d="M 1356 3434 
+L 1356 2303 
+L 2900 2303 
+L 2900 1672 
+L 1356 1672 
+L 1356 0 
+L 575 0 
+L 575 4084 
+L 2988 4084 
+L 2988 3434 
+L 1356 3434 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-8b" d="M 2303 4044 
+Q 2303 3941 2265 3850 
+Q 2228 3759 2161 3692 
+Q 2094 3625 2003 3586 
+Q 1913 3547 1806 3547 
+Q 1700 3547 1608 3586 
+Q 1516 3625 1448 3692 
+Q 1381 3759 1343 3850 
+Q 1306 3941 1306 4044 
+Q 1306 4147 1343 4237 
+Q 1381 4328 1448 4397 
+Q 1516 4466 1608 4505 
+Q 1700 4544 1806 4544 
+Q 1913 4544 2003 4505 
+Q 2094 4466 2161 4397 
+Q 2228 4328 2265 4237 
+Q 2303 4147 2303 4044 
+z
+M 1459 2581 
+L 563 2581 
+L 563 3175 
+L 2241 3175 
+L 2241 594 
+L 3156 594 
+L 3156 0 
+L 453 0 
+L 453 594 
+L 1459 594 
+L 1459 2581 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-9a" d="M 2478 0 
+L 1753 1069 
+L 1025 0 
+L 103 0 
+L 1294 1600 
+L 166 3175 
+L 1094 3175 
+L 1806 2131 
+L 2509 3175 
+L 3366 3175 
+L 2272 1606 
+L 3425 0 
+L 2478 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-87" d="M 3200 1831 
+Q 3200 1753 3195 1628 
+Q 3191 1503 3181 1394 
+L 1094 1394 
+Q 1094 1184 1158 1025 
+Q 1222 866 1339 758 
+Q 1456 650 1620 594 
+Q 1784 538 1984 538 
+Q 2216 538 2480 573 
+Q 2744 609 3028 691 
+L 3028 84 
+Q 2906 50 2762 22 
+Q 2619 -6 2469 -28 
+Q 2319 -50 2166 -61 
+Q 2013 -72 1869 -72 
+Q 1506 -72 1218 31 
+Q 931 134 731 336 
+Q 531 538 425 834 
+Q 319 1131 319 1522 
+Q 319 1909 425 2226 
+Q 531 2544 725 2770 
+Q 919 2997 1195 3120 
+Q 1472 3244 1813 3244 
+Q 2150 3244 2409 3139 
+Q 2669 3034 2844 2846 
+Q 3019 2659 3109 2400 
+Q 3200 2141 3200 1831 
+z
+M 2425 1941 
+Q 2428 2128 2378 2267 
+Q 2328 2406 2242 2497 
+Q 2156 2588 2042 2631 
+Q 1928 2675 1797 2675 
+Q 1509 2675 1325 2483 
+Q 1141 2291 1106 1941 
+L 2425 1941 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-86" d="M 2431 0 
+L 2413 469 
+Q 2313 347 2206 247 
+Q 2100 147 1978 76 
+Q 1856 6 1717 -33 
+Q 1578 -72 1409 -72 
+Q 1128 -72 909 40 
+Q 691 153 542 361 
+Q 394 569 316 866 
+Q 238 1163 238 1528 
+Q 238 1966 361 2286 
+Q 484 2606 703 2817 
+Q 922 3028 1222 3129 
+Q 1522 3231 1875 3231 
+Q 1994 3231 2114 3215 
+Q 2234 3200 2328 3175 
+L 2328 4416 
+L 3091 4416 
+L 3091 0 
+L 2431 0 
+z
+M 1038 1563 
+Q 1038 1300 1073 1114 
+Q 1109 928 1179 809 
+Q 1250 691 1353 636 
+Q 1456 581 1588 581 
+Q 1781 581 1956 737 
+Q 2131 894 2328 1166 
+L 2328 2553 
+Q 2238 2588 2105 2609 
+Q 1972 2631 1838 2631 
+Q 1653 2631 1506 2556 
+Q 1359 2481 1254 2343 
+Q 1150 2206 1094 2007 
+Q 1038 1809 1038 1563 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-18" d="M 3247 1503 
+Q 3247 1113 3142 817 
+Q 3038 522 2842 325 
+Q 2647 128 2365 28 
+Q 2084 -72 1734 -72 
+Q 1341 -72 1059 28 
+Q 778 128 603 315 
+Q 428 503 350 772 
+Q 272 1041 272 1375 
+L 272 4084 
+L 1041 4084 
+L 1041 1422 
+Q 1041 1216 1077 1056 
+Q 1113 897 1202 786 
+Q 1291 675 1425 619 
+Q 1559 563 1763 563 
+Q 1953 563 2084 611 
+Q 2216 659 2303 767 
+Q 2391 875 2434 1044 
+Q 2478 1213 2478 1453 
+L 2478 4084 
+L 3247 4084 
+L 3247 1503 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-92" d="M 3291 1644 
+Q 3291 1206 3167 887 
+Q 3044 569 2823 358 
+Q 2603 147 2303 45 
+Q 2003 -56 1650 -56 
+Q 1531 -56 1412 -40 
+Q 1294 -25 1197 0 
+L 1197 -1241 
+L 434 -1241 
+L 434 3175 
+L 1094 3175 
+L 1113 2706 
+Q 1209 2828 1314 2928 
+Q 1419 3028 1541 3098 
+Q 1663 3169 1803 3206 
+Q 1944 3244 2119 3244 
+Q 2400 3244 2619 3131 
+Q 2838 3019 2986 2811 
+Q 3134 2603 3212 2308 
+Q 3291 2013 3291 1644 
+z
+M 2491 1613 
+Q 2491 1875 2453 2059 
+Q 2416 2244 2345 2362 
+Q 2275 2481 2173 2536 
+Q 2072 2591 1941 2591 
+Q 1747 2591 1570 2434 
+Q 1394 2278 1197 2009 
+L 1197 622 
+Q 1288 588 1420 566 
+Q 1553 544 1691 544 
+Q 1872 544 2020 619 
+Q 2169 694 2273 831 
+Q 2378 969 2434 1167 
+Q 2491 1366 2491 1613 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-83" d="M 2425 0 
+L 2406 416 
+Q 2306 309 2197 220 
+Q 2088 131 1956 65 
+Q 1825 0 1670 -36 
+Q 1516 -72 1331 -72 
+Q 1088 -72 903 0 
+Q 719 72 594 200 
+Q 469 328 405 509 
+Q 341 691 341 909 
+Q 341 1134 436 1325 
+Q 531 1516 726 1653 
+Q 922 1791 1214 1869 
+Q 1506 1947 1900 1947 
+L 2316 1947 
+L 2316 2138 
+Q 2316 2259 2281 2357 
+Q 2247 2456 2170 2525 
+Q 2094 2594 1972 2631 
+Q 1850 2669 1672 2669 
+Q 1391 2669 1117 2605 
+Q 844 2541 588 2425 
+L 588 3034 
+Q 816 3125 1114 3184 
+Q 1413 3244 1734 3244 
+Q 2088 3244 2341 3176 
+Q 2594 3109 2758 2975 
+Q 2922 2841 3000 2639 
+Q 3078 2438 3078 2169 
+L 3078 0 
+L 2425 0 
+z
+M 2316 1403 
+L 1850 1403 
+Q 1656 1403 1522 1365 
+Q 1388 1328 1303 1262 
+Q 1219 1197 1180 1111 
+Q 1141 1025 1141 928 
+Q 1141 734 1266 632 
+Q 1391 531 1606 531 
+Q 1766 531 1937 647 
+Q 2109 763 2316 978 
+L 2316 1403 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-96" d="M 3053 31 
+Q 2847 -16 2637 -44 
+Q 2428 -72 2241 -72 
+Q 1928 -72 1701 -6 
+Q 1475 59 1326 193 
+Q 1178 328 1108 536 
+Q 1038 744 1038 1031 
+L 1038 2581 
+L 184 2581 
+L 184 3175 
+L 1038 3175 
+L 1038 3988 
+L 1819 4191 
+L 1819 3175 
+L 3053 3175 
+L 3053 2581 
+L 1819 2581 
+L 1819 1088 
+Q 1819 816 1944 677 
+Q 2069 538 2363 538 
+Q 2550 538 2728 569 
+Q 2906 600 3053 641 
+L 3053 31 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Consolas-Bold-9"/>
+     <use xlink:href="#Consolas-Bold-8b" transform="translate(54.984375 0)"/>
+     <use xlink:href="#Consolas-Bold-9a" transform="translate(109.96875 0)"/>
+     <use xlink:href="#Consolas-Bold-87" transform="translate(164.953125 0)"/>
+     <use xlink:href="#Consolas-Bold-86" transform="translate(219.9375 0)"/>
+     <use xlink:href="#Consolas-Bold-18" transform="translate(274.921875 0)"/>
+     <use xlink:href="#Consolas-Bold-92" transform="translate(329.90625 0)"/>
+     <use xlink:href="#Consolas-Bold-86" transform="translate(384.890625 0)"/>
+     <use xlink:href="#Consolas-Bold-83" transform="translate(439.875 0)"/>
+     <use xlink:href="#Consolas-Bold-96" transform="translate(494.859375 0)"/>
+     <use xlink:href="#Consolas-Bold-87" transform="translate(549.84375 0)"/>
+    </g>
+   </g>
+   <g id="text_10">
+    <!-- 물리 · 0~n회 -->
+    <g style="fill: #9aa4b8" transform="translate(139.484566 164.747948) scale(0.1 -0.1)">
+     <defs>
+      <path id="Pretendard-Medium-153c" d="M 5313 2750 
+L 206 2750 
+L 206 2275 
+L 2456 2275 
+L 2456 1788 
+L 819 1788 
+L 819 1331 
+L 4081 1331 
+L 4081 906 
+L 825 906 
+L 825 -475 
+L 4825 -475 
+L 4825 -19 
+L 1406 -19 
+L 1406 475 
+L 4669 475 
+L 4669 1788 
+L 3050 1788 
+L 3050 2275 
+L 5313 2275 
+L 5313 2750 
+z
+M 4656 4888 
+L 863 4888 
+L 863 3163 
+L 4656 3163 
+L 4656 4888 
+z
+M 1444 4419 
+L 4063 4419 
+L 4063 3631 
+L 1444 3631 
+L 1444 4419 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-3637" d="M 600 2381 
+L 600 1781 
+C 800 2031 1044 2156 1325 2156 
+C 1800 2156 2238 1800 2725 1800 
+C 3006 1800 3256 1919 3469 2150 
+L 3469 2750 
+C 3275 2500 3025 2375 2738 2375 
+C 2263 2375 1831 2731 1344 2731 
+C 1063 2731 806 2613 600 2381 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-308c" d="M 4838 5069 
+L 4244 5069 
+L 4244 -531 
+L 4838 -531 
+L 4838 5069 
+z
+M 238 994 
+L 319 500 
+C 1344 500 2700 513 3944 719 
+L 3900 1163 
+C 3406 1100 2881 1059 2363 1038 
+L 2363 1581 
+C 3013 1669 3438 2050 3438 2594 
+C 3438 3225 2875 3644 2056 3644 
+C 1244 3644 694 3225 700 2594 
+C 694 2044 1119 1659 1775 1575 
+L 1775 1019 
+C 1225 1000 697 997 238 994 
+z
+M 3775 4400 
+L 2369 4400 
+L 2369 5056 
+L 1775 5056 
+L 1775 4400 
+L 356 4400 
+L 356 3925 
+L 3775 3925 
+L 3775 4400 
+z
+M 2056 3181 
+C 2538 3181 2869 2950 2869 2594 
+C 2869 2238 2538 2019 2056 2019 
+C 1588 2019 1256 2238 1263 2594 
+C 1256 2950 1588 3181 2056 3181 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-153c"/>
+     <use xlink:href="#Pretendard-Medium-13ac" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(172.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-3362" transform="translate(197.265625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(223.640625 0)"/>
+     <use xlink:href="#Pretendard-Medium-32c9" transform="translate(248.0625 0)"/>
+     <use xlink:href="#Pretendard-Medium-3637" transform="translate(309.78125 0)"/>
+     <use xlink:href="#Pretendard-Medium-276" transform="translate(373.359375 0)"/>
+     <use xlink:href="#Pretendard-Medium-308c" transform="translate(430.390625 0)"/>
+    </g>
+   </g>
+   <g id="text_11">
+    <!-- Update -->
+    <g style="fill: #35d6e6" transform="translate(273.317075 139.185012) scale(0.12 -0.12)">
+     <use xlink:href="#Consolas-Bold-18"/>
+     <use xlink:href="#Consolas-Bold-92" transform="translate(54.984375 0)"/>
+     <use xlink:href="#Consolas-Bold-86" transform="translate(109.96875 0)"/>
+     <use xlink:href="#Consolas-Bold-83" transform="translate(164.953125 0)"/>
+     <use xlink:href="#Consolas-Bold-96" transform="translate(219.9375 0)"/>
+     <use xlink:href="#Consolas-Bold-87" transform="translate(274.921875 0)"/>
+    </g>
+   </g>
+   <g id="text_12">
+    <!-- 게임 로직 · 1회 -->
+    <g style="fill: #9aa4b8" transform="translate(264.282544 164.747948) scale(0.1 -0.1)">
+     <defs>
+      <path id="Pretendard-Medium-125c" d="M 5331 638 
+L 3050 638 
+L 3050 1619 
+L 4838 1619 
+L 4838 2106 
+L 1419 2106 
+L 1419 2925 
+L 4706 2925 
+L 4706 4675 
+L 819 4675 
+L 819 4188 
+L 4119 4188 
+L 4119 3400 
+L 831 3400 
+L 831 1619 
+L 2463 1619 
+L 2463 638 
+L 206 638 
+L 206 138 
+L 5331 138 
+L 5331 638 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-23c1" d="M 2281 4063 
+L 2281 4219 
+L 3513 4219 
+L 3513 4700 
+L 425 4700 
+L 425 4219 
+L 1681 4219 
+L 1681 4063 
+C 1675 3300 1138 2569 269 2269 
+L 575 1813 
+C 1244 2047 1741 2528 1994 3138 
+C 2244 2575 2731 2131 3375 1919 
+L 3681 2381 
+C 2819 2656 2281 3344 2281 4063 
+z
+M 4850 5069 
+L 4256 5069 
+L 4256 1688 
+L 4850 1688 
+L 4850 5069 
+z
+M 4850 1406 
+L 1056 1406 
+L 1056 925 
+L 4256 925 
+L 4256 -531 
+L 4850 -531 
+L 4850 1406 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-68c"/>
+     <use xlink:href="#Pretendard-Medium-2184" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(172.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-125c" transform="translate(197.265625 0)"/>
+     <use xlink:href="#Pretendard-Medium-23c1" transform="translate(283.6875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(370.109375 0)"/>
+     <use xlink:href="#Pretendard-Medium-3362" transform="translate(394.53125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(420.90625 0)"/>
+     <use xlink:href="#Pretendard-Medium-32ca" transform="translate(445.328125 0)"/>
+     <use xlink:href="#Pretendard-Medium-308c" transform="translate(490.15625 0)"/>
+    </g>
+   </g>
+   <g id="text_13">
+    <!-- LateUpdate -->
+    <g style="fill: #35d6e6" transform="translate(372.572734 139.185012) scale(0.12 -0.12)">
+     <defs>
+      <path id="Consolas-Bold-f" d="M 616 0 
+L 616 4084 
+L 1397 4084 
+L 1397 659 
+L 3122 659 
+L 3122 0 
+L 616 0 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Consolas-Bold-f"/>
+     <use xlink:href="#Consolas-Bold-83" transform="translate(54.984375 0)"/>
+     <use xlink:href="#Consolas-Bold-96" transform="translate(109.96875 0)"/>
+     <use xlink:href="#Consolas-Bold-87" transform="translate(164.953125 0)"/>
+     <use xlink:href="#Consolas-Bold-18" transform="translate(219.9375 0)"/>
+     <use xlink:href="#Consolas-Bold-92" transform="translate(274.921875 0)"/>
+     <use xlink:href="#Consolas-Bold-86" transform="translate(329.90625 0)"/>
+     <use xlink:href="#Consolas-Bold-83" transform="translate(384.890625 0)"/>
+     <use xlink:href="#Consolas-Bold-96" transform="translate(439.875 0)"/>
+     <use xlink:href="#Consolas-Bold-87" transform="translate(494.859375 0)"/>
+    </g>
+   </g>
+   <g id="text_14">
+    <!-- 카메라 추적 · 1회 -->
+    <g style="fill: #9aa4b8" transform="translate(372.413359 164.747948) scale(0.1 -0.1)">
+     <defs>
+      <path id="Pretendard-Medium-2874" d="M 3119 4500 
+L 563 4500 
+L 563 4019 
+L 2525 4019 
+C 2503 3700 2453 3397 2369 3113 
+L 269 2969 
+L 356 2456 
+L 2188 2631 
+C 1853 1919 1250 1316 238 819 
+L 563 375 
+C 2606 1381 3113 2850 3119 4500 
+z
+M 4569 5069 
+L 3975 5069 
+L 3975 -525 
+L 4569 -525 
+L 4569 2344 
+L 5438 2344 
+L 5438 2831 
+L 4569 2831 
+L 4569 5069 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-1454" d="M 2569 4438 
+L 394 4438 
+L 394 944 
+L 2569 944 
+L 2569 2494 
+L 3319 2494 
+L 3319 -256 
+L 3888 -256 
+L 3888 4963 
+L 3319 4963 
+L 3319 2981 
+L 2569 2981 
+L 2569 4438 
+z
+M 956 3969 
+L 2013 3969 
+L 2013 1419 
+L 956 1419 
+L 956 3969 
+z
+M 5025 5069 
+L 4456 5069 
+L 4456 -531 
+L 5025 -531 
+L 5025 5069 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2794" d="M 5313 1694 
+L 206 1694 
+L 206 1206 
+L 2463 1206 
+L 2463 -538 
+L 3050 -538 
+L 3050 1206 
+L 5313 1206 
+L 5313 1694 
+z
+M 4825 4394 
+L 3050 4394 
+L 3050 5069 
+L 2463 5069 
+L 2463 4394 
+L 688 4394 
+L 688 3913 
+L 2463 3913 
+C 2422 3281 1572 2691 506 2556 
+L 725 2081 
+C 1625 2206 2397 2622 2763 3200 
+C 3122 2628 3888 2206 4788 2081 
+L 5000 2556 
+C 3934 2691 3091 3294 3056 3913 
+L 4825 3913 
+L 4825 4394 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-2201" d="M 2213 4075 
+L 2213 4225 
+L 3413 4225 
+L 3413 4706 
+L 394 4706 
+L 394 4225 
+L 1606 4225 
+L 1606 4069 
+C 1606 3313 1075 2563 213 2269 
+L 519 1800 
+C 1184 2034 1675 2528 1919 3144 
+C 2163 2591 2628 2144 3256 1925 
+L 3563 2388 
+C 2719 2675 2213 3369 2213 4075 
+z
+M 4875 1438 
+L 1081 1438 
+L 1081 956 
+L 4281 956 
+L 4281 -531 
+L 4875 -531 
+L 4875 1438 
+z
+M 4875 5069 
+L 4281 5069 
+L 4281 3644 
+L 3244 3644 
+L 3244 3156 
+L 4281 3156 
+L 4281 1719 
+L 4875 1719 
+L 4875 5069 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-2874"/>
+     <use xlink:href="#Pretendard-Medium-1454" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-117c" transform="translate(172.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(259.265625 0)"/>
+     <use xlink:href="#Pretendard-Medium-2794" transform="translate(283.6875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2201" transform="translate(370.109375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(456.53125 0)"/>
+     <use xlink:href="#Pretendard-Medium-3362" transform="translate(480.953125 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(507.328125 0)"/>
+     <use xlink:href="#Pretendard-Medium-32ca" transform="translate(531.75 0)"/>
+     <use xlink:href="#Pretendard-Medium-308c" transform="translate(576.578125 0)"/>
+    </g>
+   </g>
+   <g id="text_15">
+    <!-- 렌더링 -->
+    <g style="fill: #ff5fa2" transform="translate(507.57078 139.481145) scale(0.12 -0.12)">
+     <defs>
+      <path id="Pretendard-Medium-120c" d="M 2438 4625 
+L 444 4625 
+L 444 4156 
+L 1863 4156 
+L 1863 3406 
+L 456 3406 
+L 456 1694 
+L 825 1694 
+C 1644 1700 2219 1719 2913 1850 
+L 2850 2325 
+C 2238 2213 1722 2181 1038 2175 
+L 1038 2963 
+L 2438 2963 
+L 2438 4625 
+z
+M 4981 5063 
+L 4419 5063 
+L 4419 856 
+L 4981 856 
+L 4981 5063 
+z
+M 3863 4963 
+L 3294 4963 
+L 3294 3563 
+L 2656 3563 
+L 2656 3069 
+L 3294 3069 
+L 3294 1000 
+L 3863 1000 
+L 3863 4963 
+z
+M 5144 69 
+L 1856 69 
+L 1856 1281 
+L 1269 1281 
+L 1269 -413 
+L 5144 -413 
+L 5144 69 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-d54" d="M 3050 4550 
+L 481 4550 
+L 481 831 
+L 925 831 
+C 1981 831 2663 869 3469 1019 
+L 3400 1506 
+C 2666 1363 2019 1328 1081 1325 
+L 1081 4056 
+L 3050 4056 
+L 3050 4550 
+z
+M 4881 5069 
+L 4288 5069 
+L 4288 3069 
+L 2731 3069 
+L 2731 2575 
+L 4288 2575 
+L 4288 -544 
+L 4881 -544 
+L 4881 5069 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-13c1" d="M 4850 5063 
+L 4256 5063 
+L 4256 1631 
+L 4850 1631 
+L 4850 5063 
+z
+M 3063 4719 
+L 488 4719 
+L 488 4231 
+L 2475 4231 
+L 2475 3588 
+L 500 3588 
+L 500 1944 
+L 969 1944 
+C 2025 1944 2794 1969 3706 2119 
+L 3631 2600 
+C 2781 2469 2059 2441 1081 2431 
+L 1081 3131 
+L 3063 3131 
+L 3063 4719 
+z
+M 2981 1525 
+C 1794 1525 1075 1156 1075 500 
+C 1075 -144 1794 -525 2981 -519 
+C 4163 -525 4888 -144 4888 500 
+C 4888 1156 4163 1525 2981 1525 
+z
+M 2981 1056 
+C 3813 1056 4294 856 4294 500 
+C 4294 144 3813 -50 2981 -50 
+C 2150 -50 1663 144 1663 500 
+C 1663 856 2150 1056 2981 1056 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-120c"/>
+     <use xlink:href="#Pretendard-Medium-d54" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-13c1" transform="translate(172.84375 0)"/>
+    </g>
+   </g>
+   <g id="text_16">
+    <!-- 화면에 그림 -->
+    <g style="fill: #9aa4b8" transform="translate(500.300155 164.747948) scale(0.1 -0.1)">
+     <defs>
+      <path id="Pretendard-Medium-3054" d="M 4594 5069 
+L 4000 5069 
+L 4000 -531 
+L 4594 -531 
+L 4594 2225 
+L 5438 2225 
+L 5438 2725 
+L 4594 2725 
+L 4594 5069 
+z
+M 138 994 
+L 231 500 
+C 1194 500 2506 506 3719 725 
+L 3681 1163 
+C 3216 1097 2716 1056 2219 1038 
+L 2219 1575 
+C 2850 1666 3269 2050 3275 2594 
+C 3269 3225 2719 3644 1925 3644 
+C 1125 3644 581 3225 588 2594 
+C 581 2050 994 1669 1625 1581 
+L 1625 1013 
+C 1091 994 578 994 138 994 
+z
+M 3600 4406 
+L 2219 4406 
+L 2219 5056 
+L 1625 5056 
+L 1625 4406 
+L 244 4406 
+L 244 3931 
+L 3600 3931 
+L 3600 4406 
+z
+M 1925 3181 
+C 2394 3181 2706 2950 2706 2594 
+C 2706 2238 2394 2019 1925 2019 
+C 1456 2019 1144 2238 1144 2594 
+C 1144 2950 1456 3181 1925 3181 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-7f8" d="M 4644 4500 
+L 756 4500 
+L 756 4013 
+L 4056 4013 
+L 4056 3900 
+C 4056 3194 4056 2369 3831 1250 
+L 4438 1194 
+C 4644 2388 4644 3175 4644 3900 
+L 4644 4500 
+z
+M 5313 756 
+L 206 756 
+L 206 263 
+L 5313 263 
+L 5313 756 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-13bc" d="M 4850 5063 
+L 4256 5063 
+L 4256 1744 
+L 4850 1744 
+L 4850 5063 
+z
+M 3063 4731 
+L 488 4731 
+L 488 4256 
+L 2475 4256 
+L 2475 3619 
+L 500 3619 
+L 500 1994 
+L 969 1994 
+C 2025 1988 2794 2019 3706 2163 
+L 3631 2650 
+C 2781 2513 2059 2478 1081 2481 
+L 1081 3156 
+L 3063 3156 
+L 3063 4731 
+z
+M 4850 1463 
+L 1169 1463 
+L 1169 -463 
+L 4850 -463 
+L 4850 1463 
+z
+M 1756 988 
+L 4269 988 
+L 4269 19 
+L 1756 19 
+L 1756 988 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-3054"/>
+     <use xlink:href="#Pretendard-Medium-1474" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-1fd0" transform="translate(172.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(259.265625 0)"/>
+     <use xlink:href="#Pretendard-Medium-7f8" transform="translate(283.6875 0)"/>
+     <use xlink:href="#Pretendard-Medium-13bc" transform="translate(370.109375 0)"/>
+    </g>
+   </g>
+   <g id="text_17">
+    <!-- vsync 대기 -->
+    <g style="fill: #ffc44d" transform="translate(600.302176 139.481145) scale(0.12 -0.12)">
+     <defs>
+      <path id="Consolas-Bold-98" d="M 2209 0 
+L 1331 0 
+L 72 3175 
+L 922 3175 
+L 1581 1375 
+L 1778 794 
+L 1972 1350 
+L 2638 3175 
+L 3456 3175 
+L 2209 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-95" d="M 3053 934 
+Q 3053 663 2933 470 
+Q 2813 278 2614 158 
+Q 2416 38 2164 -17 
+Q 1913 -72 1650 -72 
+Q 1300 -72 1019 -39 
+Q 738 -6 488 56 
+L 488 744 
+Q 781 622 1073 567 
+Q 1366 513 1625 513 
+Q 1925 513 2073 608 
+Q 2222 703 2222 856 
+Q 2222 928 2190 987 
+Q 2159 1047 2073 1101 
+Q 1988 1156 1831 1214 
+Q 1675 1272 1422 1344 
+Q 1188 1409 1011 1492 
+Q 834 1575 718 1687 
+Q 603 1800 545 1948 
+Q 488 2097 488 2297 
+Q 488 2491 575 2662 
+Q 663 2834 836 2964 
+Q 1009 3094 1268 3169 
+Q 1528 3244 1875 3244 
+Q 2175 3244 2406 3212 
+Q 2638 3181 2816 3144 
+L 2816 2522 
+Q 2544 2609 2305 2645 
+Q 2066 2681 1831 2681 
+Q 1597 2681 1455 2597 
+Q 1313 2513 1313 2363 
+Q 1313 2291 1341 2234 
+Q 1369 2178 1451 2125 
+Q 1534 2072 1682 2014 
+Q 1831 1956 2075 1888 
+Q 2350 1809 2537 1720 
+Q 2725 1631 2839 1518 
+Q 2953 1406 3003 1262 
+Q 3053 1119 3053 934 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-9b" d="M 2344 347 
+Q 2178 -66 1998 -377 
+Q 1819 -688 1603 -895 
+Q 1388 -1103 1123 -1208 
+Q 859 -1313 531 -1313 
+Q 453 -1313 361 -1305 
+Q 269 -1297 172 -1281 
+L 172 -634 
+Q 209 -641 257 -648 
+Q 306 -656 359 -661 
+Q 413 -666 467 -669 
+Q 522 -672 569 -672 
+Q 700 -672 812 -622 
+Q 925 -572 1020 -483 
+Q 1116 -394 1194 -270 
+Q 1272 -147 1331 0 
+L 72 3175 
+L 922 3175 
+L 1581 1375 
+L 1778 794 
+L 1972 1350 
+L 2638 3175 
+L 3456 3175 
+L 2344 347 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-90" d="M 2328 0 
+L 2328 2069 
+Q 2328 2591 1941 2591 
+Q 1747 2591 1570 2434 
+Q 1394 2278 1197 2009 
+L 1197 0 
+L 434 0 
+L 434 3175 
+L 1094 3175 
+L 1113 2706 
+Q 1209 2828 1314 2928 
+Q 1419 3028 1541 3098 
+Q 1663 3169 1803 3206 
+Q 1944 3244 2119 3244 
+Q 2363 3244 2544 3164 
+Q 2725 3084 2847 2939 
+Q 2969 2794 3030 2589 
+Q 3091 2384 3091 2131 
+L 3091 0 
+L 2328 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="Consolas-Bold-85" d="M 3003 122 
+Q 2778 31 2537 -12 
+Q 2297 -56 2034 -56 
+Q 1656 -56 1356 47 
+Q 1056 150 847 353 
+Q 638 556 527 856 
+Q 416 1156 416 1550 
+Q 416 1931 536 2240 
+Q 656 2550 875 2769 
+Q 1094 2988 1401 3106 
+Q 1709 3225 2088 3225 
+Q 2397 3225 2608 3192 
+Q 2819 3159 2988 3109 
+L 2988 2369 
+Q 2794 2466 2567 2519 
+Q 2341 2572 2138 2572 
+Q 1925 2572 1756 2500 
+Q 1588 2428 1472 2300 
+Q 1356 2172 1295 1989 
+Q 1234 1806 1234 1588 
+Q 1234 1359 1300 1178 
+Q 1366 997 1486 870 
+Q 1606 744 1775 676 
+Q 1944 609 2150 609 
+Q 2250 609 2361 623 
+Q 2472 638 2583 664 
+Q 2694 691 2801 725 
+Q 2909 759 3003 800 
+L 3003 122 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-d00" d="M 5013 5069 
+L 4444 5069 
+L 4444 2850 
+L 3719 2850 
+L 3719 4956 
+L 3175 4956 
+L 3175 -244 
+L 3719 -244 
+L 3719 2363 
+L 4444 2363 
+L 4444 -531 
+L 5013 -531 
+L 5013 5069 
+z
+M 2494 4394 
+L 394 4394 
+L 394 813 
+L 769 813 
+C 1588 819 2163 844 2838 981 
+L 2794 1469 
+C 2194 1356 1675 1325 988 1319 
+L 988 3913 
+L 2494 3913 
+L 2494 4394 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Consolas-Bold-98"/>
+     <use xlink:href="#Consolas-Bold-95" transform="translate(54.984375 0)"/>
+     <use xlink:href="#Consolas-Bold-9b" transform="translate(109.96875 0)"/>
+     <use xlink:href="#Consolas-Bold-90" transform="translate(164.953125 0)"/>
+     <use xlink:href="#Consolas-Bold-85" transform="translate(219.9375 0)"/>
+     <use xlink:href="#Consolas-Bold-3" transform="translate(274.921875 0)"/>
+     <use xlink:href="#Pretendard-Medium-d00" transform="translate(329.90625 0)"/>
+     <use xlink:href="#Pretendard-Medium-830" transform="translate(416.328125 0)"/>
+    </g>
+   </g>
+   <g id="text_18">
+    <!-- 다음 프레임까지 -->
+    <g style="fill: #9aa4b8" transform="translate(598.998426 164.747948) scale(0.1 -0.1)">
+     <defs>
+      <path id="Pretendard-Medium-214c" d="M 2756 4950 
+C 1531 4950 756 4550 756 3875 
+C 756 3213 1531 2819 2756 2819 
+C 3988 2819 4756 3213 4756 3875 
+C 4756 4550 3988 4950 2756 4950 
+z
+M 2756 4481 
+C 3613 4481 4144 4263 4144 3875 
+C 4144 3500 3613 3288 2756 3281 
+C 1894 3288 1363 3500 1369 3875 
+C 1363 4263 1894 4481 2756 4481 
+z
+M 4688 1406 
+L 819 1406 
+L 819 -463 
+L 4688 -463 
+L 4688 1406 
+z
+M 1406 931 
+L 4113 931 
+L 4113 19 
+L 1406 19 
+L 1406 931 
+z
+M 5313 2388 
+L 206 2388 
+L 206 1906 
+L 5313 1906 
+L 5313 2388 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-84c" d="M 4656 5069 
+L 4063 5069 
+L 4063 -531 
+L 4656 -531 
+L 4656 2306 
+L 5469 2306 
+L 5469 2794 
+L 4656 2794 
+L 4656 5069 
+z
+M 1894 4469 
+L 356 4469 
+L 356 3981 
+L 1331 3981 
+C 1272 2859 975 1894 156 1044 
+L 625 713 
+C 1638 1794 1894 3069 1894 4469 
+z
+M 3438 4469 
+L 2075 4469 
+L 2075 3981 
+L 2881 3981 
+C 2838 2784 2588 1641 1756 669 
+L 2231 344 
+C 3263 1563 3438 3050 3438 4469 
+z
+" transform="scale(0.015625)"/>
+      <path id="Pretendard-Medium-23c0" d="M 2269 3419 
+L 2269 4013 
+L 3544 4013 
+L 3544 4506 
+L 388 4506 
+L 388 4013 
+L 1669 4013 
+L 1669 3419 
+C 1663 2456 1038 1400 194 1006 
+L 538 538 
+C 1188 856 1716 1538 1975 2338 
+C 2234 1588 2759 972 3419 681 
+L 3744 1144 
+C 2881 1513 2269 2481 2269 3419 
+z
+M 4844 5069 
+L 4250 5069 
+L 4250 -531 
+L 4844 -531 
+L 4844 5069 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Pretendard-Medium-ce4"/>
+     <use xlink:href="#Pretendard-Medium-214c" transform="translate(86.421875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2" transform="translate(172.84375 0)"/>
+     <use xlink:href="#Pretendard-Medium-2f04" transform="translate(197.265625 0)"/>
+     <use xlink:href="#Pretendard-Medium-1208" transform="translate(283.6875 0)"/>
+     <use xlink:href="#Pretendard-Medium-2184" transform="translate(370.109375 0)"/>
+     <use xlink:href="#Pretendard-Medium-84c" transform="translate(456.53125 0)"/>
+     <use xlink:href="#Pretendard-Medium-23c0" transform="translate(542.953125 0)"/>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pf6addf3f8b">
+   <rect x="20.16" y="46.434902" width="669.6" height="255.024"/>
+  </clipPath>
+ </defs>
+</svg>

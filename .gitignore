@@ -1,0 +1,17 @@
+# 파이썬 가상환경 · 캐시
+.venv/
+__pycache__/
+*.pyc
+
+# manim 중간 산출물 (최종본은 figures/out 에 있음)
+figures/anim/media/
+dataliteracy/figures/anim/media/
+
+# 빌드 중간 파일
+slides/*/_print.html
+dataliteracy/slides/*/_print.html
+
+# 저작권 자료 (타 교수 강의안·교재 PDF) — 배포 금지
+graphics.pdf
+vr.pdf
+graphics 참조.pdf

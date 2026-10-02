@@ -1,0 +1,6 @@
+6주차 차트 선택과 시각화의 함정
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w06/
+PDF          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d06-차트선택과시각화의함정.pdf
+zip          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d06-interactive-slides.zip
+원본         : dataliteracy/slides/w06/index.html

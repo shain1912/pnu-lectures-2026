@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6주차 · 차트 선택과 시각화의 함정 — 데이터리터러시</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<section class="cover">
+  <div class="week">Week 06</div>
+  <h1>차트 선택과<br>시각화의 함정</h1>
+  <p class="muted" style="font-size:.8em;max-width:26em">
+    목적별 차트의 강점, 왜곡 기법, 머신러닝 맛보기
+  </p>
+  <div class="meta">
+    데이터리터러시의이해 SF1101084 · AI융합교육원<br>
+    조성호 · 2026학년도 2학기
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask" style="font-size:1.3em;max-width:24em">
+    같은 분기 매출표로 그린 <span class="hl">두 그래프</span><br><br>
+    왼쪽 : 네 막대가 <span class="hl">거의 같은 높이</span><br>
+    오른쪽 : 마지막 막대가 <span class="hl">5배 높이</span><br><br>
+    숫자를 고친 쪽은 어느 그래프인가?
+  </div>
+  <aside class="notes">
+    - 답 : 숫자를 고친 그래프 없음 · y축 시작값만 차이
+    - 지금 공개하지 않음 · Part I 축 자르기 블록에서 데모로 확인
+    - "둘 중 어느 쪽이 보고서에 실릴까요" 질문으로 시작
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>학습 목표</h2>
+  <div class="cols3" style="margin-top:1.2em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 선택</h4>
+      <p>목적별로 <b>어느 차트가 강한지</b> 구분</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 판단</h4>
+      <p>차트 <b>점검 4문</b>으로 왜곡 여부 확인</p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 함정</h4>
+      <p>«그려줘» 요청에 AI가 내놓는 <b>기본값 차트</b></p>
+    </div>
+  </div>
+  <div class="note">수업 후반 15분 : 머신러닝 맛보기 — 지도·비지도 학습과 과적합</div>
+</section>
+
+<section class="divider part-i">
+  <div class="kicker">Part I · 60분</div>
+  <div class="rule"></div>
+  <h1>목적에 맞는<br><em>차트 선택</em></h1>
+  <p class="sub">차트는 데이터 종류보다 <b>묻는 질문</b>에 따라 결정<br>
+  같은 숫자라도 표현 방식에 따라 결론 변화</p>
+</section>
+
+<section>
+  <div class="tag gfx">선택 · 1</div>
+  <h2>목적에서 차트로</h2>
+  <img src="../../figures/out/d06-chart-decision.svg" class="fig" alt="목적별 차트 선택 흐름과 주의 사항">
+  <aside class="notes">
+    - 학생에게 먼저 질문 : "지난주 내 데이터로 무엇을 묻고 싶습니까"
+    - 질문 문장을 먼저 적고 그다음 차트 선택하는 순서 강조
+    - 차트를 먼저 고르고 데이터를 맞추는 순서에서 왜곡 발생
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">선택 · 2 ★</div>
+  <h2>차트별 강점과 약점</h2>
+  <img src="../../figures/out/d06-chart-strengths.svg" class="fig" alt="아홉 가지 차트의 강점 약점 금지 상황 비교">
+  <aside class="notes">
+    - 오늘 수업의 기준표 · 실습 중 계속 참조
+    - 한 장씩 설명하지 않음 · 세 줄 구조(강점·약점·금지)만 짚고 다음 슬라이드로
+    - 학생 질문 : "내 데이터에는 어느 쪽" → 질문 문장부터 확인
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">선택 · 3</div>
+  <h2>비교와 추세</h2>
+  <table style="font-size:.66em">
+    <tr><th>차트</th><th>강점</th><th>약점</th><th>금지</th></tr>
+    <tr>
+      <td><b class="gfx-txt">막대</b></td>
+      <td>항목 5~10개의 <b>값 비교</b> · 길이 비교의 정확도 높음</td>
+      <td>항목 이름이 길면 겹침</td>
+      <td class="trap-txt">y축 0 외 시작 · 항목 20개 초과</td>
+    </tr>
+    <tr>
+      <td><b class="gfx-txt">가로막대</b></td>
+      <td>긴 항목 이름 · 항목 10개 이상 <b>순위 비교</b></td>
+      <td>시간 흐름 표현 곤란</td>
+      <td class="trap-txt">시계열 표현</td>
+    </tr>
+    <tr>
+      <td><b class="gfx-txt">선</b></td>
+      <td>시간에 따른 <b>변화 방향과 속도</b></td>
+      <td>시간 간격이 불규칙하면 기울기 왜곡</td>
+      <td class="trap-txt">순서 없는 범주 연결</td>
+    </tr>
+  </table>
+  <div class="key" style="margin-top:1em">
+    <p class="small">정렬 기준 표기 필수<br>
+    값 순 정렬 → 순위 파악에 유리 · 시간 순서 소멸<br>
+    시간 순 정렬 → 추세 파악에 유리 · 순위 파악에 불리</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">선택 · 4</div>
+  <h2>분포 · 관계 · 구성</h2>
+  <table style="font-size:.62em">
+    <tr><th>차트</th><th>강점</th><th>약점</th><th>금지</th></tr>
+    <tr>
+      <td><b class="vr-txt">히스토그램</b></td>
+      <td>한 변수의 <b>분포 모양 · 봉우리 개수</b></td>
+      <td>구간 폭에 따라 인상 변화</td>
+      <td class="trap-txt">항목별 값 비교</td>
+    </tr>
+    <tr>
+      <td><b class="vr-txt">상자그림</b></td>
+      <td>여러 집단의 <b>중앙값·흩어짐·이상치</b> 동시 비교</td>
+      <td>봉우리 개수 표현 불가</td>
+      <td class="trap-txt">이봉 분포 요약 · 표본 10개 미만</td>
+    </tr>
+    <tr>
+      <td><b class="vr-txt">산점도</b></td>
+      <td>두 변수 <b>관계 · 군집 · 이상치</b> 동시 확인</td>
+      <td>점 수천 개면 겹쳐서 밀도 파악 곤란</td>
+      <td class="trap-txt">한 변수만 보여줄 때</td>
+    </tr>
+    <tr>
+      <td><b>누적 막대</b></td>
+      <td><b>전체 합과 구성</b> 동시 표현</td>
+      <td>맨 아래 조각 외에는 기준선이 달라 비교 곤란</td>
+      <td class="trap-txt">가운데 조각끼리 정밀 비교</td>
+    </tr>
+    <tr>
+      <td><b>파이</b></td>
+      <td>전체 대비 <b>비중 1~2개 강조</b></td>
+      <td>각도·면적 비교의 정확도 낮음</td>
+      <td class="trap-txt">항목 6개 이상 · 순위 비교</td>
+    </tr>
+    <tr>
+      <td><b>히트맵</b></td>
+      <td>두 범주의 <b>교차 밀도</b> · 넓은 표의 패턴</td>
+      <td>색 단계 선택에 따라 인상 변화</td>
+      <td class="trap-txt">정확한 값 비교</td>
+    </tr>
+  </table>
+  <div class="note">7주차 상관계수 : 산점도와 한 쌍으로 사용</div>
+</section>
+
+<section>
+  <div class="tag trap">선택 · 5</div>
+  <h2>자주 나오는 잘못된 선택</h2>
+  <div class="cols">
+    <div class="card trap">
+      <h4>파이에 항목 12개</h4>
+      <p class="xs">작은 조각끼리 순위 구분 불가<br>
+      → <b>가로막대</b>로 교체</p>
+    </div>
+    <div class="card trap">
+      <h4>학과별 점수를 선으로 연결</h4>
+      <p class="xs">순서 없는 범주 사이에 추세 암시<br>
+      → <b>막대</b>로 교체</p>
+    </div>
+  </div>
+  <div class="cols" style="margin-top:.9em">
+    <div class="card trap">
+      <h4>이봉 분포를 상자그림 하나로 요약</h4>
+      <p class="xs">두 집단이 중앙값 하나에 묻힘<br>
+      → <b>히스토그램</b> 병행</p>
+    </div>
+    <div class="card trap">
+      <h4>발표용 3D 효과</h4>
+      <p class="xs">값 위치 모호 · 앞뒤 조각 크기 왜곡<br>
+      → <b>평면 차트</b> 유지</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">왜곡 · 1 ★</div>
+  <h2>축 자르기</h2>
+  <img src="../../figures/out/d06-axis-truncation.svg" class="fig" alt="y축 시작값만 바꿔 4퍼센트 증가를 5배 급증으로 보이게 한 비교">
+  <aside class="notes">
+    - 도입 질문의 답 공개 지점
+    - 숫자는 네 개 모두 동일 · y축 시작값만 0에서 99로 변경
+    - 뉴스 그래픽에서 가장 흔한 기법
+    - 축 자르기는 표기 의무 사항 · 금지 항목과 구분해 설명
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">왜곡 · 2 ★</div>
+  <h3 style="margin-bottom:.45em">조작 결과 직접 확인</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="chart-trick"></div>
+    <div class="demo-ui">
+      <label>y축 시작값 <input type="range" data-base min="0" max="99" step="1" value="0"><span class="val" data-base-v></span></label>
+      <label>구간 개수 <input type="range" data-bin min="3" max="60" step="1" value="24"><span class="val" data-bin-v></span></label>
+      <button data-sort>값 순 정렬</button>
+      <button data-3d>3D 효과</button>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <!--/demo-->
+  <aside class="notes">
+    - ① y축 시작값 0 → 99 · 읽기값의 «막대 길이 비» 숫자와 함께 설명
+    - ② 정렬 버튼 · 시간 순서가 사라지는 장면 확인
+    - ③ 3D 버튼 · 꼭대기 위치가 눈금과 어긋나는 장면 확인
+    - ④ 구간 개수 3 → 24 → 60 · 봉우리 개수 변화 확인
+    - 학생이 직접 조작할 시간 3분 배정
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">왜곡 · 3</div>
+  <h2>이중 축</h2>
+  <img src="../../figures/out/d06-dual-axis.svg" class="fig" alt="오른쪽 축 범위만 바꿔 교차 시점을 이동시킨 두 그래프">
+  <aside class="notes">
+    - 매출과 방문자처럼 단위가 다른 두 선의 교차에는 의미 없음
+    - "9월에 매출이 방문자를 추월했다" 식 해석이 나오면 축 범위부터 확인
+    - 대안 : 1월을 100으로 둔 지수로 환산 후 한 축 사용
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">왜곡 · 4</div>
+  <h2>구간 폭</h2>
+  <img src="../../figures/out/d06-bin-width.svg" class="fig" alt="같은 데이터를 구간 3개 24개 90개로 그린 히스토그램 비교">
+  <aside class="notes">
+    - 4주차 이봉 분포 데이터 재사용
+    - 구간 3개 : 두 집단이 하나로 병합 · 보고서에 그대로 실리면 집단 분리 기회 상실
+    - 구간 90개 : 표본 변동까지 봉우리로 표시
+    - 권장 : 두세 가지 구간으로 그려 보고 공통으로 남는 모양 채택
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">왜곡 · 5</div>
+  <h2>면적과 3D 효과</h2>
+  <img src="../../figures/out/d06-area-illusion.svg" class="fig" alt="반지름 2배 원의 면적 4배 착시와 3D 막대의 값 위치 모호">
+  <aside class="notes">
+    - 사람은 길이 비교에 정확, 면적·각도·부피 비교에 부정확
+    - 인포그래픽의 아이콘 크기 조정에서 자주 발생
+    - 3D 막대 : 꼭대기 위치가 눈금과 어긋남 · 앞뒤 조각 크기 차이까지 추가
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">요건 · 1</div>
+  <h2>색 사용과 필수 요소</h2>
+  <div class="cols">
+    <div class="card gfx">
+      <h4>색 사용 규칙</h4>
+      <p class="xs">강조색 <b>1개</b> · 나머지는 회색 계열<br>
+      순서 없는 범주에 연속 컬러맵 사용 금지<br>
+      색만으로 구분하는 표현 지양 → 모양·위치 병행<br>
+      빨강·초록 조합 주의 (색각 이상 비율 남성 약 8%)</p>
+    </div>
+    <div class="card">
+      <h4>차트의 필수 요소</h4>
+      <p class="xs">제목 — 그래프가 답하는 질문<br>
+      축 이름과 <b>단위</b><br>
+      <b>n</b> (사용한 행 수)<br>
+      출처와 기준일<br>
+      축을 자른 경우 그 사실 표기</p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:.9em">
+    <p class="small">필수 요소 누락 차트 = 검증 불가 자료<br>
+    발표 자료와 보고서 모두 같은 기준 적용</p>
+  </div>
+</section>
+
+<section class="divider part-ii">
+  <div class="kicker">Part II · 30분</div>
+  <div class="rule"></div>
+  <h1>정직한 차트의<br><em>조건</em></h1>
+  <p class="sub">왜곡 판정 기준 : 같은 데이터에서 <b>결론 문장</b>이 바뀌는가</p>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 1 ★</div>
+  <h2>차트 점검 4문</h2>
+  <div class="cols">
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">1</span> 축 시작값</h4>
+      <p class="xs">y축이 0에서 시작하는가<br>
+      다르면 그 사실이 표기됐는가</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 단위</h4>
+      <p class="xs">축 이름과 단위가 있는가<br>
+      비율과 절대값 중 무엇인가</p>
+    </div>
+  </div>
+  <div class="cols" style="margin-top:.8em">
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> 정렬 기준</h4>
+      <p class="xs">값 순인가 시간 순인가<br>
+      기준 변경 시 순위 인상 변화</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">4</span> n</h4>
+      <p class="xs">몇 개의 값으로 그린 그림인가<br>
+      결측 제외 행 수 표기 여부</p>
+    </div>
+  </div>
+  <p class="small" style="margin-top:.9em">
+    남의 차트를 읽을 때와 내 차트를 올리기 전 <b>동일하게</b> 적용</p>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 2</div>
+  <h2>왜곡 판정 기준</h2>
+  <div class="key vr" style="font-size:1.08em">
+    <p>같은 데이터 · 같은 값<br>
+    표현만 바꿨는데 <b>결론 문장이 달라지면</b> 왜곡</p>
+  </div>
+  <table style="font-size:.66em;margin-top:.9em">
+    <tr><th>기법</th><th>정직한 차트의 결론</th><th>왜곡 차트의 결론</th></tr>
+    <tr>
+      <td>축 자르기</td>
+      <td>4분기 매출 4% 증가</td>
+      <td class="trap-txt">4분기 매출 급증</td>
+    </tr>
+    <tr>
+      <td>이중 축</td>
+      <td>매출 상승 · 방문자 감소</td>
+      <td class="trap-txt">9월에 매출이 방문자를 추월</td>
+    </tr>
+    <tr>
+      <td>구간 폭</td>
+      <td>통학 시간 두 집단으로 분리</td>
+      <td class="trap-txt">통학 시간 대체로 비슷</td>
+    </tr>
+    <tr>
+      <td>면적 조정</td>
+      <td>값 2배</td>
+      <td class="trap-txt">압도적 격차</td>
+    </tr>
+  </table>
+</section>
+
+<section>
+  <div class="tag trap">AI 함정 #5</div>
+  <h2>기본값 차트</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>이렇게 요청하면</h4>
+      "이 데이터 그려줘"
+      <div style="margin-top:.9em;color:#5f6980">↓ 돌아오는 그림</div>
+      <div style="margin-top:.5em">
+        · 축 범위 자동 설정<br>
+        · 제목 없음 · 단위 없음<br>
+        · 정렬 기준 없음<br>
+        · 색 임의 배정<br>
+        · n 표기 없음
+      </div>
+      <div style="margin-top:.8em;color:#ff5a4d">
+        자동 축 범위 → <b>축 자르기와 같은 결과</b>
+      </div>
+    </div>
+    <div class="good">
+      <h4>올바른 요청</h4>
+      "막대그래프로 그리고 <b>y축은 0부터</b>,<br>
+      <b>값 순으로 정렬</b>, 제목과 축 단위,<br>
+      <b>n</b>을 그림 안에 넣어줘.<br>
+      강조색은 1개만 써줘."
+      <div style="margin-top:.9em;color:#5f6980">↓ 확인 가능한 항목</div>
+      <div style="margin-top:.5em">
+        · 축 시작값<br>
+        · 정렬 기준<br>
+        · 표본 크기<br>
+        · 강조 대상
+      </div>
+    </div>
+  </div>
+  <div class="note">라이브러리 기본값 : 보기 편한 설정일 뿐 · 정직성과 무관</div>
+  <aside class="notes">
+    - 수업 중 시연 · 같은 데이터에 두 요청을 차례로 입력
+    - 기본값 그림에서 점검 4문을 적용해 누락 항목 세어 보기
+    - 학생이 직접 누락 항목을 찾아내는 시간 2분
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 3</div>
+  <h2>정직한 표현의 조건</h2>
+  <div class="cols">
+    <div class="card lab">
+      <h4>조작 내역 공개</h4>
+      <p class="xs">축을 자른 사실과 범위<br>
+      제외한 행 수와 기준<br>
+      구간 폭 선택 근거</p>
+    </div>
+    <div class="card lab">
+      <h4>비교 대상의 기준 통일</h4>
+      <p class="xs">같은 기간 · 같은 단위 · 같은 집단<br>
+      기준이 다르면 그림 분리</p>
+    </div>
+  </div>
+  <div class="key lab" style="margin-top:1em">
+    <p>강조 자체는 허용 · <b>근거 없는 인상 조작</b>이 문제<br>
+    판단 기준 : 같은 그림을 <b>상대편이 봐도</b> 같은 결론에 도달하는가</p>
+  </div>
+</section>
+
+<section class="divider part-i">
+  <div class="kicker">보너스 · 15분</div>
+  <div class="rule"></div>
+  <h1>머신러닝 <em>맛보기</em></h1>
+  <p class="sub">13~15주 팀 프로젝트에서 선택 사용<br>
+  오늘은 <b>용어와 한계</b>까지만</p>
+</section>
+
+<section>
+  <div class="tag gfx">머신러닝 · 1</div>
+  <h2>규칙 작성과 규칙 추정</h2>
+  <div class="cols">
+    <div class="card">
+      <h4>기존 방식</h4>
+      <p class="xs">사람이 <b>규칙</b> 작성<br>
+      <span class="mono xs">제목에 «무료» 포함 → 스팸</span><br><br>
+      입력 : 규칙 + 데이터<br>
+      출력 : 판정 결과</p>
+    </div>
+    <div class="card gfx">
+      <h4>머신러닝</h4>
+      <p class="xs">컴퓨터가 데이터에서 <b>규칙 추정</b><br>
+      <span class="mono xs">스팸 1만 건 + 정상 1만 건 → 판정 기준 생성</span><br><br>
+      입력 : 데이터 + 정답<br>
+      출력 : 규칙</p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:1em">
+    <p class="small">규칙을 사람이 말로 적기 어려운 문제에 유리<br>
+    대신 <b>왜 그렇게 판정했는지</b> 설명이 어려워짐</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">머신러닝 · 2</div>
+  <h2>지도학습 — 정답이 있는 데이터</h2>
+  <table style="font-size:.7em">
+    <tr><th>종류</th><th>예측 대상</th><th>예</th><th>관련 수업</th></tr>
+    <tr>
+      <td><b class="gfx-txt">회귀</b></td>
+      <td>숫자</td>
+      <td>다음 달 전기요금 · 중고차 가격 · 통학 시간</td>
+      <td>7주 상관</td>
+    </tr>
+    <tr>
+      <td><b class="gfx-txt">분류</b></td>
+      <td>범주</td>
+      <td>스팸 여부 · 수강 포기 여부 · 불량 여부</td>
+      <td>11주 판정 기준</td>
+    </tr>
+  </table>
+  <div class="key" style="margin-top:1em">
+    <p class="small">공통 조건 : <b>정답이 붙은 과거 데이터</b> 필요<br>
+    정답 수집이 가장 비싼 단계 · 정답 품질이 성능 상한 결정</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">머신러닝 · 3</div>
+  <h2>비지도학습 — 정답 없는 묶기</h2>
+  <div class="cols">
+    <div>
+      <div class="card vr">
+        <h4>군집</h4>
+        <p class="xs">비슷한 행끼리 묶기<br>
+        예 : 고객 유형 3~4개 · 학습 패턴 분류<br>
+        4주차 <b>이봉 분포</b>에서 두 집단 분리와 같은 작업</p>
+      </div>
+      <div class="key vr" style="margin-top:.8em">
+        <p class="small">묶음의 <b>이름은 사람이 부여</b><br>
+        «2번 군집» 의 의미 해석은 분석자의 몫</p>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h4>주의</h4>
+        <p class="xs">군집 개수를 바꾸면 결과도 변화<br>
+        단위가 다른 열을 함께 쓰면 큰 숫자 열이 지배<br>
+        → <b>5주차 표준화</b> 선행 필요</p>
+      </div>
+      <p class="small muted" style="margin-top:.8em">
+        비지도학습 결과에는 정답이 없음 → 해석과 검증이 전적으로 분석자 책임
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">머신러닝 · 4</div>
+  <h2>학습 데이터와 검증 데이터</h2>
+  <div class="eq">전체 데이터
+   ├─ 학습용 70~80%  <span class="cm">규칙을 만드는 데 사용</span>
+   └─ 검증용 20~30%  <span class="cm">성능 측정에만 사용</span></div>
+  <div class="key trap" style="margin-top:1em">
+    <p>검증용 데이터로 학습하면 성능 수치의 의미 소멸<br>
+    시험 범위를 미리 외운 상태의 점수와 동일</p>
+  </div>
+  <p class="small" style="margin-top:.8em">
+    시계열 데이터 : <b>시간 순서대로 분리</b><br>
+    미래 데이터로 학습한 뒤 과거를 맞히는 구성은 평가 불가</p>
+</section>
+
+<section>
+  <div class="tag trap">머신러닝 · 5 ★</div>
+  <h2>과적합</h2>
+  <img src="../../figures/out/d06-ml-overfitting.svg" class="fig" alt="학습 데이터를 모두 통과하는 복잡한 모델과 단순한 모델의 새 데이터 오차 비교">
+  <aside class="notes">
+    - 왼쪽 그림만 먼저 보여주고 "어느 선이 좋은 모델입니까" 질문
+    - 대부분 붉은 선 선택 · 그다음 오른쪽 공개
+    - 과적합 : 학습 데이터의 변동까지 외운 상태
+    - 대응 : 검증 데이터 분리 · 모델 단순화 · 데이터 추가
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">머신러닝 · 6</div>
+  <h2>데이터 품질이 정하는 상한</h2>
+  <table style="font-size:.68em">
+    <tr><th>주차</th><th>그때의 결정</th><th>모델에 남는 결과</th></tr>
+    <tr>
+      <td>2주</td>
+      <td>표본 수집 설계</td>
+      <td class="trap-txt">치우친 표본 → 치우친 예측</td>
+    </tr>
+    <tr>
+      <td>3주</td>
+      <td>결측 처리 방식</td>
+      <td class="trap-txt">평균 대치 → 흩어짐 축소 · 과신</td>
+    </tr>
+    <tr>
+      <td>5주</td>
+      <td>이상치 제거 기준</td>
+      <td class="trap-txt">임의 제거 → 극단 상황 예측 실패</td>
+    </tr>
+  </table>
+  <div class="key trap" style="margin-top:1em">
+    <p><b>모델 교체보다 데이터 품질 개선의 효과가 큰 구간 존재</b><br>
+    2~5주 내용이 머신러닝의 전제 조건</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">머신러닝 · 7</div>
+  <h2>정확도 95%의 함정</h2>
+  <div class="cols">
+    <div>
+      <div class="card trap">
+        <h4>상황</h4>
+        <p class="xs">검사 대상 1,000명 중 환자 <b>50명</b> (5%)<br>
+        모델이 전원을 «정상» 으로 판정<br>
+        → 정확도 <b>95%</b></p>
+      </div>
+      <p class="small trap-txt" style="margin-top:.8em">
+        환자 50명을 전부 놓친 모델의 성적표</p>
+    </div>
+    <div>
+      <div class="card">
+        <h4>함께 봐야 할 지표</h4>
+        <p class="xs"><b>재현율</b> — 실제 환자 중 찾아낸 비율<br>
+        <b>정밀도</b> — 환자라고 한 것 중 실제 비율<br>
+        둘은 대개 한쪽을 올리면 다른 쪽이 하락</p>
+      </div>
+      <p class="small muted" style="margin-top:.8em">
+        불균형 데이터에서 정확도 단독 보고 금지
+      </p>
+    </div>
+  </div>
+  <div class="note">11주차 : 같은 구조의 질문 — 어떤 오류를 더 피할 것인가</div>
+</section>
+
+<section>
+  <div class="tag vr">머신러닝 · 8</div>
+  <h2>이 수업에서의 위치</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card vr">
+      <h4>우선순위</h4>
+      <p class="xs">설명 &gt; 예측<br>
+      상관(7주)·인과(9주) 확인이 먼저</p>
+    </div>
+    <div class="card vr">
+      <h4>사용 시점</h4>
+      <p class="xs">13~15주 팀 프로젝트<br>
+      필요한 팀만 선택 사용</p>
+    </div>
+    <div class="card vr">
+      <h4>보고 의무</h4>
+      <p class="xs">학습·검증 분리 방식<br>
+      사용 지표 · 데이터 한계</p>
+    </div>
+  </div>
+  <div class="key vr" style="margin-top:1.1em">
+    <p class="small">예측 수치보다 <b>«왜 그런 결과인가»</b> 설명이 평가 대상<br>
+    모델 없이 기술통계와 시각화만으로 끝나는 분석도 완결 가능</p>
+  </div>
+</section>
+
+<section class="divider part-iii">
+  <div class="kicker">Part III · 50분</div>
+  <div class="rule"></div>
+  <h1>바이브코딩 실습</h1>
+  <p class="sub">같은 데이터로 <em>정직한 차트</em>와 <em>왜곡 차트</em> 제작</p>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1</div>
+  <h2>이번 주 명세</h2>
+  <pre><code data-trim>[목표]
+같은 데이터로 정직한 차트 1장, 왜곡 차트 1장을 만든다.
+
+[제약]
+- 두 차트의 원본 데이터 동일. 값 수정, 행 삭제 금지
+- 왜곡 차트에 사용한 기법을 파일 이름에 표기
+- 차트 종류는 목적에 맞게 선택하고 그 이유를 한 줄로 적을 것
+
+[검증 조건]
+- 정직한 차트 : y축 0 시작, 축 이름과 단위, n, 출처, 정렬 기준 표기
+- 왜곡 차트 : 사용한 기법과 그로 인한 인상 차이를 한 줄로 기록
+- 두 차트에서 각각 나오는 결론 문장을 나란히 적을 것
+- 두 결론이 같으면 왜곡 차트 재작업
+
+[비목표]
+- 데이터 수정, 추가 수집, 예측 모델
+</code></pre>
+  <div class="key lab">
+    <p class="small">핵심 : [검증 조건] 셋째 줄<br>
+    <b>결론 문장 비교</b>가 왜곡 판정의 기준</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 2</div>
+  <h2>오늘의 실습 — 50분</h2>
+  <table style="font-size:.7em">
+    <tr><th>#</th><th>실습</th><th>확인할 개념</th></tr>
+    <tr>
+      <td class="lab-txt"><b>1</b></td>
+      <td><b>"이 데이터 그려줘"</b> 한 줄만 입력 → 결과 저장</td>
+      <td>AI 함정 #5</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>2</b></td>
+      <td>점검 4문 적용 → <b>누락 항목 목록화</b></td>
+      <td>차트 요건</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>3</b></td>
+      <td>위 명세로 <b>정직한 차트</b> 제작</td>
+      <td>기준 준수</td>
+    </tr>
+    <tr>
+      <td class="lab-txt"><b>4</b></td>
+      <td><b>왜곡 차트</b> 제작 · 사용 기법 명시</td>
+      <td>왜곡 원리</td>
+    </tr>
+    <tr>
+      <td class="vr-txt"><b>5</b></td>
+      <td class="vr-txt">짝과 교환 → 상대 차트의 왜곡 기법 3개 찾기 (확장)</td>
+      <td>판별력</td>
+    </tr>
+  </table>
+  <p class="xs muted" style="margin-top:.8em">
+    공식 과제 : 정직한 차트와 왜곡된 차트 · 3번과 4번 결과 활용
+  </p>
+  <aside class="notes">
+    - 4번에서 축 자르기 외의 기법(면적·구간 폭·이중 축)을 쓴 팀 우선 발표
+    - 5번에서 서로 못 찾은 기법이 나오면 전체 공유
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table style="font-size:.63em">
+    <tr><th>개념</th><th>핵심</th></tr>
+    <tr><td>차트 선택</td><td>데이터 종류보다 <b>질문</b>이 먼저 · 비교/추세/분포/관계/구성</td></tr>
+    <tr><td><b class="gfx-txt">막대 · 선</b></td><td>막대 = 항목 값 비교 · 선 = 시간 추세 · 범주 연결 금지</td></tr>
+    <tr><td><b class="vr-txt">히스토그램 · 상자그림</b></td><td>분포 모양 확인 · 상자그림은 <b>봉우리 개수 표현 불가</b></td></tr>
+    <tr><td>산점도</td><td>두 변수 관계·군집·이상치 동시 확인 · 7주 상관과 한 쌍</td></tr>
+    <tr><td>파이 · 누적막대</td><td>구성 비율용 · 파이는 항목 5개 이하 · 순위 비교 금지</td></tr>
+    <tr><td><b class="trap-txt">축 자르기</b></td><td>4% 증가 → 5배 급증 인상 · 자른 사실 표기 의무</td></tr>
+    <tr><td><b class="trap-txt">이중 축 · 면적</b></td><td>교차 시점은 축 범위의 산물 · 반지름 2배 = 면적 4배</td></tr>
+    <tr><td>구간 폭</td><td>같은 데이터에서 봉우리 1개 ↔ 2개 ↔ 다수</td></tr>
+    <tr><td><b class="vr-txt">점검 4문</b></td><td>축 시작값 · 단위 · 정렬 기준 · n</td></tr>
+    <tr><td>AI 함정 #5</td><td>«그려줘» → 기본값 차트 · 축·정렬·단위·n을 명세에 포함</td></tr>
+    <tr><td><b class="gfx-txt">머신러닝</b></td><td>데이터에서 규칙 추정 · 지도(회귀·분류)와 비지도(군집)</td></tr>
+    <tr><td><b class="trap-txt">과적합 · 정확도</b></td><td>검증 데이터 분리 필수 · 불균형 데이터에서 정확도 단독 보고 금지</td></tr>
+  </table>
+</section>
+
+<section class="divider part-i">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>상관계수와 <em>산점도</em></h1>
+  <p class="sub">두 변수가 함께 움직이는 정도를 숫자 하나로<br>
+  오늘 배운 <b>산점도</b>와 한 쌍으로 사용</p>
+  <div class="note">상관계수만 보고 판단할 때 생기는 문제 — 앤스컴 4중주 재등장</div>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="../_shared/demos/d06.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

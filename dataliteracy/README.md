@@ -15,8 +15,10 @@
 | 2 | 데이터의 종류와 수집 설계 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w02/ | [PDF](dist/d02-데이터의종류와수집설계.pdf) | [zip](dist/d02-interactive-slides.zip) |
 | 3 | 데이터 정제와 전처리 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w03/ | [PDF](dist/d03-데이터정제와전처리.pdf) | [zip](dist/d03-interactive-slides.zip) |
 | 4 | 기술통계 기초 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w04/ | [PDF](dist/d04-기술통계기초.pdf) | [zip](dist/d04-interactive-slides.zip) |
+| 5 | z-점수와 표준화 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w05/ | [PDF](dist/d05-z점수와표준화.pdf) | [zip](dist/d05-interactive-slides.zip) |
+| 6 | 차트 선택과 시각화의 함정 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w06/ | [PDF](dist/d06-차트선택과시각화의함정.pdf) | [zip](dist/d06-interactive-slides.zip) |
 
-5주차 이후 계획 → [plans/데이터리터러시-5-16주-계획.md](../plans/데이터리터러시-5-16주-계획.md)
+7주차 이후 계획 → [plans/데이터리터러시-5-16주-계획.md](../plans/데이터리터러시-5-16주-계획.md)
 
 ## 조작
 
@@ -32,7 +34,7 @@
 | 경로 | 내용 |
 |---|---|
 | `slides/wNN/index.html` | 주차별 슬라이드 원본 |
-| `slides/_shared/` | 테마 CSS · reveal 초기화 · 데모 (`d03.js` 결측 대치, `d04.js` 대표값) |
+| `slides/_shared/` | 테마 CSS · reveal 초기화 · 데모 (`d03.js` 결측 대치, `d04.js` 대표값, `d05.js` 표준화, `d06.js` 차트 조작) |
 | `figures/dNN_figures.py` | matplotlib 도해 생성 스크립트 |
 | `figures/out/` | 도해 결과 (SVG · PNG) |
 | `dist/` | 인쇄용 PDF · 오프라인 zip |
@@ -55,5 +57,7 @@ SLIDE_PORT=8766 node slides/build.mjs 02 03 04
 | 2 | #1 | 존재하지 않는 데이터 제시 (데이터 환각) |
 | 3 | #2 | 알리지 않은 결측 채우기·삭제 |
 | 4 | #3 | 평균 하나로 끝낸 요약 |
+| 5 | #4 | 분포 확인 없는 이상치 제거 |
+| 6 | #5 | 기본값 그대로의 차트 |
 
 문의 : `seongho.cho@kodekorea.kr`

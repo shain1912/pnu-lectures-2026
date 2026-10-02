@@ -20,6 +20,8 @@ GitHub Pages 로 배포 · 링크만 열면 브라우저에서 바로 실행 · 
 | 2주차 | 데이터의 종류와 수집 설계 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w02/ |
 | 3주차 | 데이터 정제와 전처리 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w03/ |
 | 4주차 | 기술통계 기초 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w04/ |
+| 5주차 | z-점수와 표준화 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w05/ |
+| 6주차 | 차트 선택과 시각화의 함정 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w06/ |
 
 ## 같은 내용의 다른 형식
 

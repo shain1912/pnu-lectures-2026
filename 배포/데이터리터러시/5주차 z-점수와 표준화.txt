@@ -1,0 +1,6 @@
+5주차 z-점수와 표준화
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w05/
+PDF          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d05-z점수와표준화.pdf
+zip          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d05-interactive-slides.zip
+원본         : dataliteracy/slides/w05/index.html

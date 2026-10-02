@@ -24,6 +24,8 @@
 | 2 | 데이터의 종류와 수집 설계 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w02/ | [dist](dataliteracy/dist/d02-데이터의종류와수집설계.pdf) |
 | 3 | 데이터 정제와 전처리 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w03/ | [dist](dataliteracy/dist/d03-데이터정제와전처리.pdf) |
 | 4 | 기술통계 기초 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w04/ | [dist](dataliteracy/dist/d04-기술통계기초.pdf) |
+| 5 | z-점수와 표준화 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w05/ | [dist](dataliteracy/dist/d05-z점수와표준화.pdf) |
+| 6 | 차트 선택과 시각화의 함정 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w06/ | [dist](dataliteracy/dist/d06-차트선택과시각화의함정.pdf) |
 
 ## 폴더 구성
 

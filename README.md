@@ -16,6 +16,7 @@
 | 2 | 그래픽스 수학 기초 | https://shain1912.github.io/pnu-lectures-2026/slides/w02/ | [dist](dist/w02-그래픽스수학기초.pdf) |
 | 3 | Unity 기초와 게임 루프 | https://shain1912.github.io/pnu-lectures-2026/slides/w03/ | [dist](dist/w03-Unity기초와게임루프.pdf) |
 | 4 | 렌더링 파이프라인의 이해 | https://shain1912.github.io/pnu-lectures-2026/slides/w04/ | [dist](dist/w04-렌더링파이프라인.pdf) |
+| 5 | 조명과 재질 | https://shain1912.github.io/pnu-lectures-2026/slides/w05/ | [dist](dist/w05-조명과재질.pdf) |
 
 ### 데이터리터러시의이해
 
@@ -41,7 +42,7 @@
 | `assignments/` | 과제 안내문 |
 | `배포/` | 주차별 주소 메모와 바로가기 |
 | `PLAN.md` | 16주 강의 설계 |
-| `plans/` | 5~16주 상세 계획 (컴퓨터그래픽스 · 데이터리터러시) |
+| `plans/` | 5~16주 상세 계획 · VR 심리·지각 연구 근거 |
 
 ## 다시 만드는 법
 

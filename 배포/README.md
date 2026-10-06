@@ -12,6 +12,7 @@ GitHub Pages 로 배포 · 링크만 열면 브라우저에서 바로 실행 · 
 | 2주차 | 그래픽스 수학 기초 | https://shain1912.github.io/pnu-lectures-2026/slides/w02/ |
 | 3주차 | Unity 기초와 게임 루프 | https://shain1912.github.io/pnu-lectures-2026/slides/w03/ |
 | 4주차 | 렌더링 파이프라인의 이해 | https://shain1912.github.io/pnu-lectures-2026/slides/w04/ |
+| 5주차 | 조명과 재질 | https://shain1912.github.io/pnu-lectures-2026/slides/w05/ |
 
 ## 데이터리터러시의이해 (SF1101084)
 

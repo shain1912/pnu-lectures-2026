@@ -1,0 +1,6 @@
+5주차 조명과 재질
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/slides/w05/
+PDF          : https://shain1912.github.io/pnu-lectures-2026/dist/w05-조명과재질.pdf
+zip          : https://shain1912.github.io/pnu-lectures-2026/dist/w05-interactive-slides.zip
+원본         : slides/w05/index.html

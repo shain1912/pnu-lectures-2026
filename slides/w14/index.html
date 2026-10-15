@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>14주차 · 팀 프로젝트 구현 및 플레이테스트 — 컴퓨터그래픽스</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+<style>
+  .reveal svg.fig-svg { display:block; margin:.2em auto 0; width:100%; height:auto; max-height:460px; }
+  .reveal svg.fig-svg text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ========================================================= 표지 -->
+<section class="cover">
+  <div class="week">Week 14</div>
+  <h1>팀 프로젝트 구현과<br>플레이테스트</h1>
+  <p class="muted" style="font-size:.8em;max-width:28em">
+    성능 프로파일링과 품질 개선
+  </p>
+  <div class="meta">
+    컴퓨터그래픽스 VF3500076 · 디자인앤테크놀로지전공<br>
+    조성호 · 2026학년도 2학기
+  </div>
+</section>
+
+<!-- ========================================================= 도입 질문 -->
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask">
+    만든 사람은 <span class="hl">1분</span> 만에 끝내는 체험<br><br>
+    처음 해 본 사람은 왜<br>
+    <span class="hl">5분째 같은 자리</span>에 서 있는가?
+  </div>
+  <aside class="notes">
+    - 학생들에게 자기 팀 체험을 처음 보는 사람이 몇 분 걸릴지 예상하게 함 → 숫자를 기록해 두고 플레이테스트 후 비교
+    - 답은 Part I 끝이 아니라 덱 끝 «도입 질문의 답» 에서 회수 (지식의 저주 + 관찰 결과)
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>이 수업 후 할 수 있는 것</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">1</span> 플레이테스트 진행</h4>
+      <p class="small">진행자·관찰자·체험자 역할로 <b>개입 없이 관찰</b> · 생각 말하기 유도 · 막힌 지점을 시각과 함께 기록</p>
+    </div>
+    <div class="card gfx">
+      <h4><span class="step">2</span> 숫자로 판정</h4>
+      <p class="small">SSQ 전후 점수 계산 · 헤드셋 실측 fps · 드로우콜로 <b>«좋아졌다» 대신 «몇에서 몇으로»</b></p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 함정 #10 진단</h4>
+      <p class="small">에디터 fps 를 믿지 않고 <b>온디바이스 프로파일</b>로 CPU·GPU 병목을 가려 개선 기록표 작성</p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:1.1em">
+    <p>오늘의 큰 그림 : 11주 = 내 몸으로 내 씬 · 14주 = <b>남의 몸으로 내 씬</b> 검증</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">운영</div>
+  <h2>오늘 3시간 — 45 / 60 / 45</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 250" role="img" aria-label="브리핑 15분, 구현 45분, 교차 플레이테스트 60분, 휴식 10분, 개선 45분, 마감 5분 타임라인">
+    <g font-size="19">
+      <rect x="20"  y="40" width="83"  height="90" rx="8" fill="#171b25" stroke="#9aa4b8"/>
+      <rect x="103" y="40" width="248" height="90" rx="8" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+      <rect x="351" y="40" width="330" height="90" rx="8" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
+      <rect x="681" y="40" width="55"  height="90" rx="8" fill="#171b25" stroke="#2a3040"/>
+      <rect x="736" y="40" width="248" height="90" rx="8" fill="#21330f" stroke="#a8e05f" stroke-width="2"/>
+      <rect x="984" y="40" width="96"  height="90" rx="8" fill="#171b25" stroke="#9aa4b8"/>
+      <text x="61"  y="80" fill="#e8ecf4" text-anchor="middle">브리핑</text>
+      <text x="61"  y="108" fill="#9aa4b8" text-anchor="middle">15</text>
+      <text x="227" y="80" fill="#35d6e6" text-anchor="middle" font-weight="700">구현</text>
+      <text x="227" y="108" fill="#e8ecf4" text-anchor="middle">45분</text>
+      <text x="516" y="80" fill="#ff5fa2" text-anchor="middle" font-weight="700">교차 플레이테스트</text>
+      <text x="516" y="108" fill="#e8ecf4" text-anchor="middle">60분</text>
+      <text x="708" y="94" fill="#9aa4b8" text-anchor="middle">휴식</text>
+      <text x="860" y="80" fill="#a8e05f" text-anchor="middle" font-weight="700">개선</text>
+      <text x="860" y="108" fill="#e8ecf4" text-anchor="middle">45분</text>
+      <text x="1032" y="80" fill="#e8ecf4" text-anchor="middle">기록 제출</text>
+      <text x="1032" y="108" fill="#9aa4b8" text-anchor="middle">5</text>
+    </g>
+    <g font-size="17" fill="#9aa4b8">
+      <text x="20" y="160">14:00</text><text x="103" y="160">14:15</text><text x="351" y="160">15:00</text>
+      <text x="681" y="160">16:00</text><text x="736" y="185">16:10</text><text x="984" y="160">16:55</text>
+      <text x="103" y="225" fill="#35d6e6">빌드가 헤드셋에서 돌게 · 과업 카드 준비</text>
+      <text x="420" y="225" fill="#ff5fa2">다른 팀이 우리 씬을 체험</text>
+      <text x="736" y="225" fill="#a8e05f">치명 문제부터 · 재측정</text>
+    </g>
+  </svg>
+  <div class="key vr">
+    <p class="small">15:00 정각 시작 → 빌드가 미완성이어도 <b>현재 상태 그대로</b> 테스트 · 구현 45분의 목표 = 기능 추가가 아니라 «헤드셋에서 처음부터 끝까지 도는 빌드»</p>
+  </div>
+  <aside class="notes">
+    - 구현 45분의 목표는 기능 추가가 아니라 «헤드셋에서 처음부터 끝까지 돌아가는 빌드»
+    - 15:00 정각에 플레이테스트 시작 · 늦는 팀은 현재 상태 그대로 테스트 받음
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">지난주 크리틱</div>
+  <h2>13주 기획서 — 다시 확인할 세 가지</h2>
+  <table style="font-size:.66em">
+    <tr><th>확인</th><th>흔한 형태</th><th>오늘 고칠 방법</th></tr>
+    <tr><td class="trap-txt"><b>측정 칸이 빈 근거</b></td><td>«텔레포트라서 편안함» 으로 끝남</td><td>오늘 SSQ · 관찰 기록으로 측정 칸 채우기</td></tr>
+    <tr><td class="trap-txt"><b>등급 과소 선언</b></td><td>연속 이동이 있는데 Comfortable</td><td>오늘 체험자 반응으로 등급 재판정</td></tr>
+    <tr><td class="trap-txt"><b>예산 숫자 = 기준선 복사</b></td><td>드로우콜 150 · 삼각형 50만 그대로</td><td>오늘 실측값을 예산 옆에 기록</td></tr>
+  </table>
+  <div class="ask" style="font-size:1em;margin-top:.8em">
+    복습 질문 : AI 가 이동 코드에 <span class="hl">Mathf.SmoothDamp</span> 로 가속·감속을 넣었다 — 몇 번 함정이고, 무엇으로 바꾸라고 요구할 것인가?
+  </div>
+  <aside class="notes">
+    - 답 : 함정 #9 (부드러운 가속 이동) · 텔레포트 또는 등속 + 즉시 전환 + 베그넷
+    - 13주 기획서 제출본에서 실제로 많이 나온 유형을 2~3개 익명으로 보여 주면 효과적
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">안전 · 필수 고지</div>
+  <h2>플레이테스트 전 안전 규칙</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>체험 1회 <b>최대 10분</b> · 연속 체험 금지 (체험자 교대)</li>
+        <li>진행자 = <b>스포터 겸임</b> · 주변·케이블·가디언 경계 확인</li>
+        <li>체험 전 동의 : 목적 · 증상 가능성 · <b>언제든 중단 가능</b> · 대체 역할 보장</li>
+        <li>위생 커버 1인 1매 · 반납 시 알코올 티슈</li>
+      </ul>
+    </div>
+    <div>
+      <table style="font-size:.64em">
+        <tr><th>단계</th><th>신호</th><th>조치</th></tr>
+        <tr><td>1</td><td>미열감 · 침 분비</td><td>이동 중단 · 정지</td></tr>
+        <tr><td>2</td><td>어지러움 · 두통</td><td>헤드셋 해제 · 착석 · 먼 곳 응시</td></tr>
+        <tr><td class="trap-txt">3</td><td class="trap-txt">메스꺼움</td><td class="trap-txt">종료 · 당일 재체험 금지</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="key vr">
+    <p class="small">근거 : 연구 참가자의 VR 부작용 중도 포기 평균 15.6% (Souchet et al. 2023) · 노출 10분 이상 연구의 SSQ 가 10분 미만보다 높음 (Saredakis et al. 2020) → 중단은 실패가 아니라 <b>기록할 데이터</b></p>
+  </div>
+</section>
+
+<!-- ========================================================= PART I -->
+<section class="divider part-ii">
+  <div class="kicker">Part I · 25분</div>
+  <div class="rule"></div>
+  <h1>남의 몸으로<br><em>검증하기</em></h1>
+  <p class="sub">플레이테스트 절차 · 생각 말하기 · SSQ 전후 측정</p>
+</section>
+
+<section>
+  <div class="tag vr">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>플레이테스트<small>Playtest</small></dt><dd>만든 사람이 아닌 사람에게 체험시키고 <b>관찰</b>해 문제를 찾는 시험</dd>
+    <dt>과업<small>Task</small></dt><dd>체험자에게 주는 구체적 목표 한 문장 — «연못에 돌 3개를 던지기»</dd>
+    <dt>생각 말하기<small>Think-aloud</small></dt><dd>체험자가 보고·생각하는 것을 <b>실시간으로 소리 내어</b> 말하게 하는 관찰 기법</dd>
+    <dt>개입<small>Intervention</small></dt><dd>진행자가 힌트·설명으로 체험자의 행동을 바꾸는 것 — 오늘 금지</dd>
+    <dt>사용성 문제<small>Usability issue</small></dt><dd>체험자가 막히거나 실수하거나 의도와 다르게 쓰는 지점</dd>
+    <dt>하위척도<small>Subscale</small></dt><dd>설문 문항을 성격별로 묶은 점수 — SSQ 의 오심(N) · 안구운동(O) · 방향감각 상실(D)</dd>
+    <dt>요구 특성<small>Demand characteristics</small></dt><dd>체험자가 진행자를 배려해 «괜찮다» 쪽으로 답하는 경향</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">테스트 · 1</div>
+  <h2>왜 만든 사람은 테스트할 수 없는가</h2>
+  <ul class="small">
+    <li><b>지식의 저주</b> : 이미 아는 사람은 모르는 상태를 상상하지 못함 → 만든 사람에게 «다음에 뭘 할지» 는 너무 당연</li>
+    <li><b>적응</b> : 수십 번 체험 → 멀미 둔감 · 조작 숙련 → 처음 체험자와 다른 몸</li>
+    <li><b>기대</b> : 의도대로 움직이는 장면만 눈에 들어옴 → 반대 증거를 지나침</li>
+  </ul>
+  <div class="analogy">
+    <p><b>내가 쓴 글의 오타</b> : 내 글은 «쓰려던 문장» 이 머릿속에 있어 오타를 건너뛰고 읽음 · 남이 읽으면 첫 줄에서 발견 → 문제는 눈이 아니라 <b>이미 아는 머리</b></p>
+  </div>
+  <div class="key vr">
+    <p class="small">그래서 : 체험자 = <b>다른 팀</b> · 우리 팀은 말하지 않고 기록만 → 우리가 모르는 문제가 드러나는 유일한 방법</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">테스트 · 2 ★</div>
+  <h2>역할 3종 — 고정</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 380" role="img" aria-label="플레이 구역 안 체험자, 옆의 진행자 겸 스포터, 캐스팅 화면을 보는 관찰자 배치">
+    <rect x="300" y="40" width="300" height="300" fill="rgba(168,224,95,0.06)" stroke="#a8e05f" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <text x="450" y="365" fill="#a8e05f" font-size="18" text-anchor="middle">플레이 구역 2 m × 2 m</text>
+    <circle cx="450" cy="190" r="34" fill="#421229" stroke="#ff5fa2" stroke-width="3"/>
+    <text x="450" y="197" fill="#ff5fa2" font-size="20" font-weight="700" text-anchor="middle">체험자</text>
+    <circle cx="650" cy="190" r="34" fill="#0e3a42" stroke="#35d6e6" stroke-width="3"/>
+    <text x="650" y="197" fill="#35d6e6" font-size="20" font-weight="700" text-anchor="middle">진행자</text>
+    <rect x="800" y="60" width="160" height="96" rx="8" fill="#171b25" stroke="#9aa4b8" stroke-width="2"/>
+    <text x="880" y="104" fill="#9aa4b8" font-size="17" text-anchor="middle">캐스팅 화면</text>
+    <text x="880" y="128" fill="#9aa4b8" font-size="15" text-anchor="middle">(헤드셋 시야)</text>
+    <circle cx="880" cy="260" r="34" fill="#21330f" stroke="#a8e05f" stroke-width="3"/>
+    <text x="880" y="267" fill="#a8e05f" font-size="20" font-weight="700" text-anchor="middle">관찰자</text>
+    <path d="M880,226 L880,160" stroke="#a8e05f" stroke-width="2" stroke-dasharray="5 4"/>
+    <g font-size="17" fill="#e8ecf4">
+      <text x="20" y="80" fill="#ff5fa2" font-weight="700">체험자 (다른 팀)</text>
+      <text x="20" y="106">과업 카드만 받음</text>
+      <text x="20" y="130">생각을 소리 내어 말함</text>
+      <text x="20" y="200" fill="#35d6e6" font-weight="700">진행자 (우리 팀)</text>
+      <text x="20" y="226">동의 · SSQ · 과업 전달</text>
+      <text x="20" y="250">스포터 겸임 · 중단 판단</text>
+      <text x="20" y="274">힌트 금지</text>
+      <text x="990" y="244" fill="#a8e05f" font-weight="700">관찰자</text>
+      <text x="990" y="270">(우리 팀)</text>
+      <text x="990" y="296">시각 · 행동</text>
+      <text x="990" y="320">· 발화 기록</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    - 역할은 세션 중 바꾸지 않음 · 우리 팀 나머지 인원(검증 담당 등)은 OVR Metrics 기록
+    - 캐스팅 : 헤드셋 화면을 노트북 브라우저나 휴대폰 앱으로 띄움 → 관찰자가 체험자가 보는 것을 같이 봄
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">테스트 · 3</div>
+  <h2>한 세션의 절차 — 10분 이내</h2>
+  <table style="font-size:.64em">
+    <tr><th>#</th><th>단계</th><th>시간</th><th>누가</th></tr>
+    <tr><td>1</td><td>동의 · 안전 안내 · 중단 방법 («그만» 한마디)</td><td>1분</td><td>진행자</td></tr>
+    <tr><td>2</td><td class="vr-txt"><b>SSQ 사전</b> — 체험자가 직접 표기</td><td>1분</td><td>체험자</td></tr>
+    <tr><td>3</td><td>과업 카드 읽기 · 생각 말하기 연습 한 문장</td><td>30초</td><td>진행자</td></tr>
+    <tr><td>4</td><td class="vr-txt"><b>체험</b> — 개입 없이 관찰 · 시작·종료 시각 기록 · 동시에 fps 기록</td><td>3~5분</td><td>전원</td></tr>
+    <tr><td>5</td><td class="vr-txt"><b>SSQ 직후</b> — 헤드셋 벗고 바로</td><td>1분</td><td>체험자</td></tr>
+    <tr><td>6</td><td>짧은 인터뷰 질문 2개 («가장 헷갈린 순간은?» · «선언 등급과 비교해 체감은?»)</td><td>1분</td><td>진행자</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>병원 건강검진</b> : 검사 전 문진표 → 검사 → 검사 후 상태 확인 · 순서가 정해져 있어 사람이 바뀌어도 결과를 비교 가능 → 절차 고정 = 체험자 간 비교 가능</p>
+  </div>
+  <div class="note">기록 양식 : labs/w14/플레이테스트-기록표.md · SSQ 문항지 : «팀프로젝트 가이드북»</div>
+</section>
+
+<section>
+  <div class="tag vr">테스트 · 4</div>
+  <h2>개입 금지 — 진행자가 할 수 있는 말</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>금지 (행동을 바꾸는 말)</h4>
+      «오른쪽에 있는 버튼 눌러 보세요»<br>
+      «그거 잡으면 돼요»<br>
+      «아, 그건 원래 그렇게 하는 게 아니라…»<br>
+      «멀미 안 나죠?»<br><br>
+      <span style="color:#ff5a4d">// 힌트 · 정답 · 유도 질문</span>
+    </div>
+    <div class="good">
+      <h4>허용 (관찰을 돕는 말)</h4>
+      «지금 무엇을 보고 계세요?»<br>
+      «무엇을 하려고 하시는 중인가요?»<br>
+      «계속 말씀해 주세요»<br>
+      «몸 상태는 어떠세요?» (중립 질문)<br><br>
+      <span style="color:#a8e05f">// 예외 : 안전 · 중단 요청 → 즉시 개입</span>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>운전면허 도로주행 시험관</b> : 핸들에 손대지 않고 채점만 · 길을 잘못 들어도 알려 주지 않음 · 단 사고 직전에는 보조 브레이크를 밟음 → 진행자 = 시험관</p>
+  </div>
+  <aside class="notes">
+    - 막힌 체험자가 3분 넘게 진척이 없으면 «과업 종료» 로 기록하고 다음 과업으로 · 그 자체가 치명 문제 기록
+    - 진행자가 가장 참기 힘든 순간이 가장 중요한 데이터
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">테스트 · 5</div>
+  <h2>생각 말하기 — 그리고 기록하기</h2>
+  <div class="cols">
+    <div>
+      <p class="small"><b>시작 전 연습</b> : «지금 이 방에서 보이는 것을 말하면서 문까지 걸어가 보세요» → 말하며 행동하는 감각</p>
+      <p class="small"><b>침묵 15초 이상</b> → «계속 말씀해 주세요» 한마디만</p>
+      <p class="small"><b>한계</b> : 말하면서 하면 조금 느려짐 → 과업 시간은 참고치 · VR 은 헤드셋 속 말소리가 작음 → 관찰자가 가까이</p>
+      <div class="analogy">
+        <p><b>스포츠 실황 중계</b> : 캐스터가 경기 장면을 그대로 말로 옮김 → 체험자 = 자기 행동의 캐스터 · 해설(왜 그랬는지)은 끝나고 인터뷰에서</p>
+      </div>
+    </div>
+    <div>
+      <p class="small"><b>관찰 기록 한 줄</b> = 시각 · 행동 · 발화 · (해석)</p>
+      <table style="font-size:.6em">
+        <tr><th>시각</th><th>관찰 (본 것)</th><th>해석 (추측)</th></tr>
+        <tr><td>0:42</td><td>돌 쪽으로 손 뻗음 · 잡기 2회 실패 · «안 잡히는데?»</td><td>그랩 판정 범위 작음?</td></tr>
+        <tr><td>1:30</td><td>뒤돌아 20초 탐색 · «다음 어디?»</td><td>목표 표시 안 보임</td></tr>
+        <tr><td>3:05</td><td>텔레포트 직후 고개 숙임 · 말 멈춤</td><td>불편 신호? 인터뷰 확인</td></tr>
+      </table>
+      <p class="small"><b>관찰과 해석을 다른 칸에</b> → 해석이 틀려도 관찰은 남음</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">테스트 · 6</div>
+  <h2>SSQ 전후 — 점수 계산</h2>
+  <p class="small">16증상 × 0~3점 (없음·약간·중간·심함) → 증상을 세 묶음으로 합산 → 묶음별 가중치 곱 (Kennedy et al. 1993)</p>
+  <div class="math-block">\[ N = 9.54\,n \quad O = 7.58\,o \quad D = 13.92\,d \quad \text{Total} = 3.74\,(n+o+d) \]</div>
+  <p class="small">n · o · d : 오심 · 안구운동 · 방향감각 상실 묶음에 속한 문항 점수의 합 (한 문항이 두 묶음에 들어가기도 함)</p>
+  <div class="cols">
+    <div class="card">
+      <h4>체험 전</h4>
+      <p class="small">n = 1 · o = 2 · d = 0<br>Total = 3.74 × 3 ≈ <b>11.2</b></p>
+    </div>
+    <div class="card vr">
+      <h4>체험 직후</h4>
+      <p class="small">n = 3 · o = 4 · d = 2 → D = 13.92 × 2 ≈ 27.8<br>Total = 3.74 × 9 ≈ <b>33.7</b> → 변화 <b class="vr-txt">+22.4</b></p>
+    </div>
+  </div>
+  <div class="key vr">
+    <p class="small">기록하는 값 = <b>직후 − 사전</b> (변화량) · 사전 점수가 이미 높은 사람(피곤·두통)을 구별하기 위해 사전 측정 필수</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">테스트 · 7</div>
+  <h2>SSQ 를 읽을 때의 한계</h2>
+  <ul class="small">
+    <li><b>절단점 없음</b> : «몇 점 이상 = 위험» 이라는 합의된 기준 없음 · 원래 비행 시뮬레이터 사용자로 만든 척도 → <b>버전 간 · 전후 비교</b>로만 사용</li>
+    <li><b>표본이 작음</b> : 팀당 체험자 2~4명 → 통계적 결론 불가 → 경향 · 중단자 수 · 발화와 함께 읽기</li>
+    <li><b>사전 설문의 암시</b> : 증상 목록을 먼저 읽으면 증상을 더 의식할 가능성</li>
+    <li><b>요구 특성</b> : 친구 팀 앞에서 «괜찮아» → 말 대신 <b>설문지에 직접 표기</b> · 진행자는 점수를 보며 반응하지 않기</li>
+  </ul>
+  <div class="analogy">
+    <p><b>체중계</b> : 체중계마다 0점이 조금씩 달라 남의 체중계 숫자와 비교는 무의미 · 같은 체중계로 아침·저녁을 재면 변화는 정확 → SSQ = 같은 조건 전후 비교용 저울</p>
+  </div>
+  <div class="note">근거 : Balk et al. «SSQ Twenty Years Later» · LaValle Ch.12.4 (측정 시점 · 요구 특성)</div>
+</section>
+
+<!-- ========================================================= PART II -->
+<section class="divider part-i">
+  <div class="kicker">Part II · 20분</div>
+  <div class="rule"></div>
+  <h1>헤드셋에서 잰<br><em>숫자만</em> 믿기</h1>
+  <p class="sub">온디바이스 프로파일링 · OVR Metrics Tool · 개선 기록표</p>
+</section>
+
+<section>
+  <div class="tag gfx">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>프로파일링<small>Profiling</small></dt><dd>프로그램이 <b>어디에 시간을 쓰는지</b> 측정하는 일</dd>
+    <dt>온디바이스<small>On-device</small></dt><dd>PC 가 아닌 <b>헤드셋 자체에서 실행</b>한 상태 — 오늘의 유일한 판정 기준</dd>
+    <dt>OVR Metrics Tool<small>Meta</small></dt><dd>헤드셋 화면에 fps · GPU/CPU 사용률 등을 겹쳐 띄우거나 파일로 기록하는 Meta 도구</dd>
+    <dt>Development Build<small>Unity</small></dt><dd>Profiler 를 붙일 수 있게 만든 진단용 빌드 — 배포용보다 약간 느림</dd>
+    <dt>병목<small>Bottleneck</small></dt><dd>전체 속도를 붙잡는 가장 느린 구간 — CPU 쪽인지 GPU 쪽인지부터 판별</dd>
+    <dt>스테일 프레임<small>Stale frame</small></dt><dd>새 프레임이 제때 준비되지 않아 <b>이전 프레임을 다시 보여 준</b> 횟수</dd>
+    <dt>타일 기반 GPU<small>Tile-based GPU</small></dt><dd>화면을 작은 타일로 나눠 칩 안 메모리에서 그리는 모바일 GPU 방식 — 화면 전체를 다시 읽는 작업에 약함</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">측정 · 1</div>
+  <h2>도구 두 개 — 무엇을 어디서 보는가</h2>
+  <table style="font-size:.62em">
+    <tr><th></th><th>OVR Metrics Tool</th><th>Unity Profiler (헤드셋 연결)</th></tr>
+    <tr><td>준비</td><td>헤드셋에 설치 · 오버레이 켜기</td><td>Build Profiles 에서 <b>Development Build</b> + <b>Autoconnect Profiler</b> · USB 연결</td></tr>
+    <tr><td>주로 보는 값</td><td>fps · GPU 사용률 · CPU/GPU 레벨 · 스테일 프레임</td><td>CPU 메인·렌더 스레드 ms · <b>Batches · SetPass · 드로우콜 · 삼각형</b> (Rendering 모듈)</td></tr>
+    <tr><td>장점</td><td>배포용 빌드에서도 측정 · 체험 중 기록 가능</td><td>어느 스크립트·어느 단계가 느린지 위치까지</td></tr>
+    <tr><td>주의</td><td>오버레이가 체험자 시야에 보임 → 플레이테스트 중에는 <b>파일 기록</b>으로</td><td>연결 자체가 부담 → fps 판정은 OVR Metrics 값 우선</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">역할 분담 : <b>fps 판정 = OVR Metrics</b> · <b>드로우콜·원인 위치 = Unity Profiler</b> → 플레이테스트 중엔 OVR Metrics 기록 · 개선 45분에 Profiler</p>
+  </div>
+  <p class="small muted">OVR Metrics 의 표시 항목·메뉴 이름은 버전마다 다름 · 설치는 Meta Quest Developer Hub 또는 스토어</p>
+</section>
+
+<section>
+  <div class="tag gfx">측정 · 2 ★</div>
+  <h2>평균 fps 만 보면 놓치는 것</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 330" role="img" aria-label="평균은 같지만 한쪽은 고른 프레임타임, 다른 쪽은 간헐적 25ms 튐이 있는 두 그래프">
+    <g font-size="17">
+      <line x1="60" y1="180" x2="520" y2="180" stroke="#ffc44d" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <line x1="600" y1="180" x2="1060" y2="180" stroke="#ffc44d" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <text x="60" y="172" fill="#ffc44d">11.1 ms 한도</text>
+      <text x="730" y="214" fill="#ffc44d">11.1 ms 한도</text>
+      <line x1="60" y1="260" x2="520" y2="260" stroke="#2a3040" stroke-width="2"/>
+      <line x1="600" y1="260" x2="1060" y2="260" stroke="#2a3040" stroke-width="2"/>
+      <text x="40" y="266" fill="#9aa4b8" text-anchor="end">0</text>
+      <polyline fill="none" stroke="#a8e05f" stroke-width="3" points="60,190 100,188 140,192 180,189 220,191 260,188 300,190 340,192 380,189 420,191 460,188 520,190"/>
+      <polyline fill="none" stroke="#ff5a4d" stroke-width="3" points="600,193 640,192 680,194 700,80 720,193 760,192 800,194 840,193 860,80 880,193 920,194 960,192 1000,80 1020,193 1060,192"/>
+      <text x="290" y="300" fill="#a8e05f" text-anchor="middle" font-size="20" font-weight="700">A : 고른 프레임 · 평균 약 10 ms</text>
+      <text x="830" y="300" fill="#ff5a4d" text-anchor="middle" font-size="20" font-weight="700">B : 간헐적 튐 · 평균도 약 10 ms</text>
+      <text x="700" y="70" fill="#ff5a4d" text-anchor="middle">25 ms</text>
+      
+      
+    </g>
+  </svg>
+  <p class="small"><b>손계산</b> : 100프레임 중 95프레임 9.3 ms + 5프레임 25 ms → 평균 \(\frac{95\times9.3+5\times25}{100}\approx 10.1\) ms · 평균은 합격 · 실제로는 1초에 약 4~5번 덜컥</p>
+  <div class="note">프레임·지연의 <b>변동</b> 자체가 멀미 요인 : St. Pierre et al. (2015) Applied Ergonomics — 기록표에 평균 + 최저 fps + 스테일 프레임 함께</div>
+</section>
+
+<!-- ========================================================= AI 함정 #10 -->
+<section class="divider trap">
+  <div class="kicker">AI 함정 #10</div>
+  <div class="rule"></div>
+  <h1>에디터 기준<br><em>최적화</em></h1>
+  <p class="sub">PC 에서 잰 숫자로 헤드셋 성능을 판정하는 함정</p>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 증상</div>
+  <h2>① 증상</h2>
+  <ul class="small">
+    <li>AI 에게 «90fps 로 최적화해 줘» 요청 → AI 가 수정안 제시 · 에디터 Game 뷰 Stats <b>120fps 이상</b> → «완료»</li>
+    <li>Quest 빌드 실행 : <b>60fps 이하</b> · 고개 돌릴 때 덜컥 · OVR Metrics 에 스테일 프레임 누적</li>
+    <li>AI 의 수정 중 일부는 실제 병목과 무관 (예 : CPU 쪽 스크립트 정리 · 실제 병목은 GPU 의 화면 전체 후처리)</li>
+  </ul>
+  <div class="key trap">
+    <p>공통점 : <b>측정 장소가 틀림</b> · 코드 오류 없음 · 에디터에서는 재현 불가<br>
+    → AI 는 헤드셋을 볼 수 없음 · 사람이 붙여 준 <b>에디터 숫자만으로 «개선됨» 판단</b></p>
+  </div>
+  <aside class="notes">
+    - 스타터 씬(함정 재현본) : 에디터 120fps 이상 · 헤드셋 50~60fps 수준 (기기 상태마다 다름)
+    - 학생에게 먼저 원인 추측 → 다음 장
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 원인 ★</div>
+  <h2>② 원인 — 같은 씬, 다른 기계</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 330" role="img" aria-label="에디터 Game 뷰는 데스크톱 GPU로 화면 하나 약 92만 픽셀, 헤드셋은 모바일 GPU로 두 눈 약 911만 픽셀">
+    <rect x="30" y="20" width="490" height="230" rx="14" fill="#171b25" stroke="#35d6e6" stroke-width="2"/>
+    <rect x="580" y="20" width="490" height="230" rx="14" fill="#1a1113" stroke="#ff5a4d" stroke-width="2"/>
+    <g font-size="20">
+      <text x="275" y="58" fill="#35d6e6" font-weight="700" text-anchor="middle">에디터 Game 뷰</text>
+      <text x="825" y="58" fill="#ff5a4d" font-weight="700" text-anchor="middle">Quest 3 온디바이스</text>
+    </g>
+    <rect x="200" y="78" width="150" height="84" fill="#0e3a42" stroke="#35d6e6"/>
+    <text x="275" y="126" fill="#e8ecf4" font-size="17" text-anchor="middle">화면 1개</text>
+    <rect x="640" y="72" width="170" height="100" fill="#431612" stroke="#ff5a4d"/>
+    <rect x="840" y="72" width="170" height="100" fill="#431612" stroke="#ff5a4d"/>
+    <text x="725" y="128" fill="#e8ecf4" font-size="17" text-anchor="middle">왼눈</text>
+    <text x="925" y="128" fill="#e8ecf4" font-size="17" text-anchor="middle">오른눈</text>
+    <g font-size="17" fill="#e8ecf4">
+      <text x="60" y="200">1280 × 720 ≈ 92만 픽셀</text>
+      <text x="60" y="228">데스크톱 GPU · 넓은 메모리 대역폭</text>
+      <text x="610" y="200">2064 × 2208 × 2 ≈ 911만 픽셀</text>
+      <text x="610" y="228">모바일 칩 · 타일 기반 GPU · 발열 제한</text>
+    </g>
+    <text x="550" y="300" fill="#ffc44d" font-size="22" font-weight="700" text-anchor="middle">픽셀 약 10배 · 계산 능력은 몇 분의 1 → 에디터 fps 는 헤드셋 성능의 근거가 아님</text>
+  </svg>
+  <div class="math-block">\[ \frac{2064 \times 2208 \times 2}{1280 \times 720} = \frac{9{,}114{,}624}{921{,}600} \approx 9.9 \]</div>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 원인</div>
+  <h2>② 원인 — 렌더 경로의 차이</h2>
+  <ul class="small">
+    <li><b>타일 기반 GPU</b> : 타일 안에서 끝나는 작업은 빠름 · 화면 전체를 메모리에 썼다 다시 읽는 작업(후처리 · Depth/Opaque Texture 복사 · HDR)은 대역폭 소모 큼 → 데스크톱에선 거의 공짜인 설정이 헤드셋에선 비쌈</li>
+    <li><b>두 눈 렌더</b> : 에디터 Game 뷰는 기본적으로 한 시점만 그림 → 싱글 패스 인스턴싱이 있어도 픽셀 계산은 두 눈 분량</li>
+    <li><b>발열 · 클럭 레벨</b> : 헤드셋은 온도·부하에 따라 CPU/GPU 속도 단계를 조정 → 처음 1분과 10분 후 수치가 다를 수 있음</li>
+    <li><b>AI 의 시야</b> : 코드와 사람이 붙여 준 로그만 앎 → 병목 위치를 모른 채 «일반적인 최적화 목록» 을 적용</li>
+  </ul>
+  <div class="analogy">
+    <p><b>트랙 기록과 산길 기록</b> : 평평한 운동장 트랙에서 잰 100 m 기록으로 산악 마라톤 완주 시간을 예측하는 것 · 같은 사람(씬)이라도 <b>길(기계)이 다르면 기록이 다름</b> → 산길 기록은 산길에서 재야 함</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 진단</div>
+  <h2>③ 진단 — CPU 병목인가, GPU 병목인가</h2>
+  <table style="font-size:.62em">
+    <tr><th>관찰 (헤드셋 실측)</th><th>판정</th><th>의심할 곳</th></tr>
+    <tr><td>OVR Metrics GPU 사용률이 계속 최대 근처 · fps 낮음</td><td class="trap-txt"><b>GPU 병목</b></td><td>후처리 · 투명 겹침(오버드로) · 실시간 그림자 · 무거운 셰이더 · 해상도</td></tr>
+    <tr><td>GPU 여유 · Profiler CPU 메인 스레드가 11.1 ms 근처 이상</td><td class="trap-txt"><b>CPU 병목</b></td><td>드로우콜 · Update 속 GetComponent·Find · 물리 · 가비지 생성</td></tr>
+    <tr><td>평소 정상 · 특정 순간만 튐</td><td class="trap-txt"><b>순간 부하</b></td><td>Instantiate · 에셋 로드 · 가비지 컬렉션 · 첫 셰이더 사용</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>식당 주문이 늦을 때</b> : 홀 직원(CPU)이 주문서를 늦게 넘기는지, 주방(GPU)이 요리를 늦게 내는지 먼저 확인 → 홀이 문제인데 주방 인원을 늘려도 소용없음</p>
+  </div>
+  <div class="key trap">
+    <p class="small">규칙 : <b>병목 판정 전에는 최적화 금지</b> · 판정 근거는 헤드셋 수치뿐 · 에디터 Profiler 는 «어디를 볼지» 힌트로만</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 수정</div>
+  <h2>④ 수정 — 병목별 처방</h2>
+  <div class="cols">
+    <div class="card trap">
+      <h4>GPU 병목</h4>
+      <ul class="small">
+        <li>URP 후처리 끄기 · HDR 끄기</li>
+        <li>Depth / Opaque Texture 필요 없으면 끄기</li>
+        <li>실시간 그림자 → 베이크 (함정 #4)</li>
+        <li>큰 반투명 면 줄이기 · Alpha Clip (함정 #5)</li>
+        <li>고정 포비티드 렌더링 켜기</li>
+        <li>최후 수단 : Render Scale 소폭 낮춤</li>
+      </ul>
+    </div>
+    <div class="card gfx">
+      <h4>CPU 병목</h4>
+      <ul class="small">
+        <li>SRP Batcher 켜짐 확인 · 정적 물체 Static</li>
+        <li>머티리얼 수 줄이기 → 드로우콜 감소</li>
+        <li>Update 속 GetComponent · Find 제거 (함정 #2)</li>
+        <li>물리 물체 수 · Fixed Timestep 점검</li>
+        <li>매 프레임 new · 문자열 결합 줄이기</li>
+      </ul>
+    </div>
+  </div>
+  <div class="key lab">
+    <p class="small">MSAA 4x 는 타일 기반 GPU 에서 비교적 저렴 → 앨리어싱 억제를 위해 유지가 일반적 (6주) · 고정 포비티드 설정 위치는 XR 플러그인마다 다름</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 수정</div>
+  <h2>AI 에게 성능 개선을 요청하는 법</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>에디터 기준 요청</h4>
+      «씬을 90fps 로 최적화해 줘.<br>
+      에디터에서 지금 75fps 나와.»<br><br>
+      <span style="color:#ff5a4d">// 측정 장소 · 병목 · 제약 없음<br>
+      // AI : 일반 최적화 목록 + «완료»</span>
+    </div>
+    <div class="good">
+      <h4>온디바이스 근거 요청</h4>
+      [측정] Quest 3 · 배포 빌드 · OVR Metrics<br>
+      평균 58fps · GPU 사용률 최대 근처<br>
+      Profiler CPU 메인 7 ms (여유)<br>
+      [판정] GPU 병목<br>
+      [요청] URP Asset 에서 GPU 비용 큰 설정 후보 3개를 비용 큰 순으로 · 각각 끄면 사라지는 시각 효과 설명<br>
+      [비목표] 스크립트 수정
+    </div>
+  </div>
+  <div class="key">
+    <p class="small">명세 4칸의 [검증 조건] = «헤드셋 실측 평균 · 최저 fps 와 스테일 프레임 수를 수정 전후로 기록» → AI 의 «완료» 는 검증 조건 통과 전까지 미완료</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">개선 · 1</div>
+  <h2>개선 기록표 — 문제 → 원인 → 조치 → 재측정</h2>
+  <table style="font-size:.58em">
+    <tr><th>#</th><th>문제 (관찰·수치)</th><th>원인 (근거)</th><th>조치 (하나만)</th><th>재측정</th></tr>
+    <tr><td>1</td><td>체험자 3명 중 2명 «다음 어디?» 20초 이상 탐색</td><td>다음 목표가 시야 ±30° 밖</td><td>목표 표시를 정면 1.5 m 로 이동</td><td>2명 중 2명 10초 이내 발견</td></tr>
+    <tr><td>2</td><td>평균 61fps · GPU 사용률 최대 근처</td><td>URP 후처리 Bloom 켜짐 (GPU 병목)</td><td>Post Processing 끔</td><td>평균 88fps · 스테일 감소</td></tr>
+    <tr><td>3</td><td>SSQ 변화 평균 +30 · 1명 2단계 중단</td><td>낙하 장면 가속 이동</td><td>낙하 → 페이드 전환</td><td>다음 세션 중단 0명 (+12)</td></tr>
+  </table>
+  <ul class="small">
+    <li><b>한 번에 하나만</b> 바꾸기 → 무엇이 효과였는지 분리</li>
+    <li><b>같은 조건</b> 재측정 : 같은 빌드 종류 · 같은 경로 · 같은 시간 길이</li>
+    <li>재측정 칸에 <b>단위 있는 숫자</b> · 나빠진 결과도 그대로 기록</li>
+  </ul>
+  <div class="analogy">
+    <p><b>국 간 맞추기</b> : 소금·간장·마늘을 한꺼번에 넣으면 무엇 때문에 맛이 변했는지 모름 → 하나 넣고 맛보고, 또 하나 넣고 맛보기</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">개선 · 2</div>
+  <h2>45분 개선 — 무엇부터 고치나</h2>
+  <table style="font-size:.64em">
+    <tr><th>순위</th><th>문제 종류</th><th>이유</th></tr>
+    <tr><td class="trap-txt"><b>1</b></td><td>안전 · 멀미로 중단 · 크래시</td><td>15주 시연 자체가 불가능해짐</td></tr>
+    <tr><td class="trap-txt"><b>2</b></td><td>과업 불가 (막혀서 끝내지 못함)</td><td>경험이 성립하지 않음</td></tr>
+    <tr><td><b>3</b></td><td>성능 — 90fps 미달 · 덜컥거림</td><td>멀미 요인 · 성능 15점</td></tr>
+    <tr><td><b>4</b></td><td>컴포트 등급 불일치</td><td>선언을 고치거나 설계를 고치거나</td></tr>
+    <tr><td>5</td><td>사소한 불편 · 외형</td><td>16주 보완 시간에</td></tr>
+  </table>
+  <div class="key lab">
+    <p class="small">45분 안에 1~3순위 중 <b>최소 2건 조치 + 재측정</b> · 시간이 부족하면 조치는 다음 주로, 기록은 오늘 완성</p>
+  </div>
+</section>
+
+<!-- ========================================================= PART III -->
+<section class="divider part-iii">
+  <div class="kicker">Part III · 운영</div>
+  <div class="rule"></div>
+  <h1>교차 플레이테스트</h1>
+  <p class="sub">짝 팀과 두 번 바꿔 앉기 · 60분</p>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1</div>
+  <h2>60분 로테이션 — 팀 A ↔ 팀 B</h2>
+  <table style="font-size:.64em">
+    <tr><th>시간</th><th>팀 A</th><th>팀 B</th></tr>
+    <tr><td>15:00–15:25</td><td class="lab-txt"><b>운영</b> — 진행자 · 관찰자 · 실측 기록</td><td class="vr-txt"><b>체험</b> — 2~3명 순서대로 (1인 최대 10분)</td></tr>
+    <tr><td>15:25–15:50</td><td class="vr-txt"><b>체험</b></td><td class="lab-txt"><b>운영</b></td></tr>
+    <tr><td>15:50–16:00</td><td colspan="2">기록 정리 · 문제 목록 합치기 · 우선순위 매기기</td></tr>
+  </table>
+  <ul class="small">
+    <li>짝 배정은 칠판 공지 · 홀수 팀이면 한 팀은 교수·조교가 체험</li>
+    <li>체험 대기 중인 사람 = 다른 체험자의 플레이를 <b>보지 않기</b> (스포일러 방지) → 대기석은 화면 반대쪽</li>
+    <li>체험자는 받은 과업 카드 외 정보 없음 · 기획서도 미리 보지 않음</li>
+  </ul>
+  <aside class="notes">
+    - 체험자가 앞사람 플레이를 보면 두 번째부터는 «처음 체험자» 가 아님 → 대기석 위치 중요
+    - 한 팀 체험자가 2명뿐이면 같은 사람이 두 번 하지 않음 (적응 효과)
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입 질문의 답</div>
+  <h2>왜 처음 해 본 사람은 같은 자리에 서 있었나</h2>
+  <div class="key">
+    <p>만든 사람의 머릿속에만 있는 정보 = <b>체험 안에는 없는 정보</b><br>
+    → 만든 사람은 그 정보를 «보이는 것» 으로 착각 (지식의 저주)</p>
+  </div>
+  <ul class="small">
+    <li>«다음 목표» 를 만든 사람은 알고 있음 · 체험자에겐 시야 ±30° 밖이라 보이지 않음</li>
+    <li>«이건 잡을 수 있다» 를 만든 사람은 알고 있음 · 체험자에겐 잡을 수 있는 물체와 배경의 구분 단서 없음</li>
+    <li>만든 사람은 수십 번 체험으로 적응 → 멀미 신호도 둔감</li>
+  </ul>
+  <div class="analogy">
+    <p><b>우리 집 가는 길 설명</b> : «편의점에서 꺾어» 라고 말하는 사람은 편의점이 두 개라는 사실을 의식하지 못함 · 처음 오는 사람만 갈림길에서 멈춤</p>
+  </div>
+  <p class="small">해결 : 짐작이 아니라 <b>관찰</b> — 남의 몸이 멈춘 지점이 곧 설계가 정보를 빠뜨린 지점</p>
+  <aside class="notes">
+    - 도입에서 적어 둔 «예상 소요 시간» 과 실제 관찰 시간을 비교해 발표하게 함
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">브리핑</div>
+  <h2>제출 · 15주 준비</h2>
+  <div class="cols">
+    <div class="card lab">
+      <h4>오늘 제출 (팀)</h4>
+      <ul class="small">
+        <li><code>labs/w14/플레이테스트-기록표.md</code> — 체험자별 1부</li>
+        <li><code>labs/w14/개선-기록표.md</code> — 최소 2행 + 재측정</li>
+        <li>OVR Metrics 기록 파일 또는 화면 사진</li>
+      </ul>
+    </div>
+    <div class="card vr">
+      <h4>15주 준비</h4>
+      <ul class="small">
+        <li><b>빌드 동결</b> : 시연 전날 밤 이후 기능 추가 금지 · 버그 수정만</li>
+        <li>발표 5분 슬라이드 : 경험 정의 · 지각적 근거 · 컴포트 등급 · <b>실측 수치</b></li>
+        <li>시연 리허설 1회 — 체험자 교대 시간 포함</li>
+        <li>헤드셋 충전 · 캐스팅 연결 확인</li>
+      </ul>
+    </div>
+  </div>
+  <div class="key">
+    <p class="small">15주 성능 15점 = <b>현장 온디바이스 실측</b> · 오늘 기록이 «개선 근거» 로 발표에 그대로 쓰임</p>
+  </div>
+</section>
+
+<!-- ========================================================= 정리 -->
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table style="font-size:.6em">
+    <tr><th>개념</th><th>핵심</th></tr>
+    <tr><td>운영</td><td>구현 45 → 교차 플레이테스트 60 → 개선 45 · 세션 최대 10분</td></tr>
+    <tr><td><b class="vr-txt">플레이테스트</b></td><td>진행자 · 관찰자 · 체험자 고정 · 개입 금지 (도로주행 시험관) · 안전은 예외</td></tr>
+    <tr><td>생각 말하기</td><td>자기 행동의 실황 중계 · 관찰과 해석은 다른 칸</td></tr>
+    <tr><td><b class="vr-txt">SSQ</b></td><td>Total = 3.74 × (n+o+d) · 직후 − 사전 · 절단점 없음 → 같은 저울로 전후 비교</td></tr>
+    <tr><td>측정 도구</td><td>fps 판정 = OVR Metrics · 드로우콜·원인 위치 = Unity Profiler (Development Build)</td></tr>
+    <tr><td>프레임 변동</td><td>평균이 같아도 튐이 있으면 덜컥 · 평균 + 최저 + 스테일 프레임</td></tr>
+    <tr><td><b class="trap-txt">AI 함정 #10</b></td><td>에디터 fps 로 판정 · 픽셀 약 10배 · 타일 GPU · 병목 판정 전 최적화 금지</td></tr>
+    <tr><td><b class="lab-txt">개선 기록표</b></td><td>문제 → 원인 → 조치(하나) → 재측정(같은 조건 · 단위 있는 숫자)</td></tr>
+  </table>
+</section>
+
+<section class="divider part-iii">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>기말 <em>전시</em></h1>
+  <p class="sub">팀별 부스 · 발표 5분 + 시연 10분 + 질의 5분<br>
+  관람자가 설명 없이 해내는가 · 선언한 컴포트 등급이 맞는가</p>
+  <div class="note">평가 5축 : 완성도 30 · 지각·컴포트 근거 25 · 성능 15 · 발표·시연 20 · 동료 평가 10</div>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/math/math.min.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

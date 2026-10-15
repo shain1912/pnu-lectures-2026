@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>13주차 · 팀 프로젝트 기획 — 컴퓨터그래픽스</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+<style>
+  .reveal svg.fig-svg { display:block; margin:.2em auto 0; width:100%; height:auto; max-height:460px; }
+  .reveal svg.fig-svg text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
+  .reveal .tl { display:grid; gap:.35em; font-size:.68em; }
+  .reveal .tl div { display:grid; grid-template-columns: 8.5em 1fr; gap:.8em; padding:.38em .7em; border-radius:8px; background:var(--bg-card); border:1px solid var(--line); }
+  .reveal .tl b.time { font-family:var(--mono); color:var(--fg-dim); font-weight:500; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ========================================================= 표지 -->
+<section class="cover">
+  <div class="week">Week 13</div>
+  <h1>팀 프로젝트 기획</h1>
+  <p class="muted" style="font-size:.8em;max-width:28em">
+    VR 콘텐츠 기획서, 역할 분담, 프로토타입 착수
+  </p>
+  <div class="meta">
+    컴퓨터그래픽스 VF3500076 · 디자인앤테크놀로지전공<br>
+    조성호 · 2026학년도 2학기
+  </div>
+</section>
+
+<!-- ========================================================= 도입 질문 -->
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask">
+    헤드셋도, 코드도 없이<br>
+    <span class="hl">종이와 몸</span>만으로<br><br>
+    VR 의 멀미 · 동선 · 손 닿는 거리 문제를<br>
+    <span class="hl">미리 찾을 수 있는가?</span>
+  </div>
+  <aside class="notes">
+    - 손을 들게 함 : "된다 / 안 된다"
+    - 대부분 "헤드셋으로 해 봐야 안다" 쪽 → 오늘 그 생각을 뒤집는 것이 목표
+    - 답은 Part II 끝 «도입 질문의 답» 에서 회수 (바디스토밍 · 공간 스케치)
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>이 수업 후 할 수 있는 것</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 기획서 6항목 작성</h4>
+      <p class="small">경험 정의 · <b>지각적 근거</b> · 컴포트 등급 · 성능 예산 · 검증 계획 · 플레이북을 <b>숫자와 주차 근거</b>로 채우기</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 종이·몸으로 위험 제거</h4>
+      <p class="small">공간 스케치와 바디스토밍으로 <b>뒤돌기 · 팔 피로 · 경계 이탈 · 가속 이동</b>을 구현 전에 발견</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 범위 줄이기</h4>
+      <p class="small">아이디어를 <b>3~5분 · 씬 1개 · 인터랙션 2~3종</b>의 수직 단면으로 잘라 2주 안에 완성 가능한 크기로 확정</p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:1.1em">
+    <p>오늘의 큰 그림 : <b>만들기 전에 틀리기</b> — 수정 비용이 가장 싼 시점에 가장 많이 틀려 보기</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">운영</div>
+  <h2>오늘 3시간</h2>
+  <div class="tl">
+    <div><b class="time">14:00–14:15</b><span>크리틱 — 12주 함정 #9 회고 · 컴포트 체크리스트 점검</span></div>
+    <div><b class="time">14:15–15:00</b><span><b>이론 45분</b> — 사용자 중심 VR 설계 · 페이퍼 프로토타이핑 · 컴포트 등급 · 기획서 쓰는 법</span></div>
+    <div><b class="time">15:00–15:10</b><span>팀 확정 · 역할 4종 배정</span></div>
+    <div><b class="time">15:10–15:20</b><span>휴식</span></div>
+    <div><b class="time">15:20–16:00</b><span class="lab-txt"><b>종이 프로토타입</b> — 공간 스케치 3장 + 바디스토밍</span></div>
+    <div><b class="time">16:00–16:25</b><span class="lab-txt"><b>1분 시나리오 발표</b> + 상호 크리틱 (팀당 약 3분)</span></div>
+    <div><b class="time">16:25–16:50</b><span class="lab-txt"><b>스켈레톤 씬 착수</b> — 1 m 기준 큐브 · 눈높이 · 이동 방식만</span></div>
+    <div><b class="time">16:50–17:00</b><span>브리핑 — 기획서 제출 · 14주 준비물</span></div>
+  </div>
+  <aside class="notes">
+    - 이론은 평소(90분)의 절반 · 나머지는 팀 작업
+    - 16:00 발표 순서는 미리 칠판에 적어 둠
+  </aside>
+</section>
+
+<!-- ========================================================= 크리틱 -->
+<section>
+  <div class="tag trap">지난주 크리틱 · 1</div>
+  <h2>함정 #9 복습 — 부드러운 가속 이동</h2>
+  <div class="ask" style="font-size:1.1em">
+    AI 가 «자연스럽게» 만들려고 넣은 <span class="hl">가속·감속 구간</span><br>
+    왜 그 구간이 멀미가 가장 심한 구간인가?
+  </div>
+  <div class="key trap" style="margin-top:1em">
+    <p class="small">눈 : «내가 빨라지고 있다» 보고 · 속귀(전정계) : 가속을 감지하는 기관인데 실제 몸은 정지 → <b>«가속 없음»</b> 보고<br>
+    → 두 감각의 보고가 정면으로 어긋나는 구간 = 가속 구간 · 등속 구간에서는 전정계가 원래 아무것도 보고하지 않음 → 충돌 작음</p>
+  </div>
+  <div class="analogy">
+    <p><b>엘리베이터</b> : 출발·정지 순간에만 몸이 쑥 꺼지거나 눌림 · 일정 속도로 오르는 동안은 움직임을 거의 못 느낌 → 속귀가 느끼는 것은 속도가 아니라 <b>속도의 변화</b></p>
+  </div>
+  <aside class="notes">
+    - 7주 벡션 · 12주 함정 #9 연결
+    - 학생 1명에게 답하게 하고, 엘리베이터 비유로 정리
+    - 오늘 기획서의 «컴포트 등급» 판단에 바로 쓰임
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">지난주 크리틱 · 2</div>
+  <h2>12주 컴포트 체크리스트 → 오늘 기획서 의무 항목</h2>
+  <table style="font-size:.66em">
+    <tr><th>12주 체크리스트 항목</th><th>13주 기획서에서 들어갈 자리</th></tr>
+    <tr><td>가속 이동 사용 여부</td><td>③ 컴포트 등급 근거</td></tr>
+    <tr><td>회전 방식 (스냅 / 부드러운 회전)</td><td>② 지각적 근거 · ③ 컴포트 등급</td></tr>
+    <tr><td>시야 가장자리 흐름 (베그넷 유무)</td><td>② 지각적 근거</td></tr>
+    <tr><td>프레임률 · 지연</td><td>④ 성능 예산표</td></tr>
+    <tr><td>고정 기준점 (바닥 · 지평선 · 콕핏)</td><td>② 지각적 근거</td></tr>
+    <tr><td>SSQ 전후 측정</td><td>⑤ 검증 계획</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">12주 = 체험해 보고 <b>진단</b> · 13주 = 만들기 전에 <b>예방</b> → 같은 목록을 앞으로 당겨 쓰기</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">팀 프로젝트</div>
+  <h2>남은 4주의 흐름과 배점</h2>
+  <div class="cols">
+    <div>
+      <table style="font-size:.68em">
+        <tr><th>주</th><th>할 일</th></tr>
+        <tr><td class="gfx-txt"><b>13</b></td><td>기획서 · 종이 프로토타입 · 스켈레톤 씬</td></tr>
+        <tr><td class="vr-txt"><b>14</b></td><td>구현 · <b>교차 플레이테스트</b> · 헤드셋 실측 · 개선</td></tr>
+        <tr><td class="trap-txt"><b>15</b></td><td>전시 · 발표 5 + 시연 10 + 질의 5 · 동료 평가</td></tr>
+        <tr><td class="lab-txt"><b>16</b></td><td>팀별 피드백 · 보완 · 포트폴리오</td></tr>
+      </table>
+    </div>
+    <div>
+      <table style="font-size:.68em">
+        <tr><th>기말 40% 의 5축</th><th>배점</th></tr>
+        <tr><td>완성도</td><td>30</td></tr>
+        <tr><td class="vr-txt"><b>지각·컴포트 설계 근거</b></td><td><b>25</b></td></tr>
+        <tr><td>성능 예산 준수</td><td>15</td></tr>
+        <tr><td>발표·시연</td><td>20</td></tr>
+        <tr><td>동료 평가</td><td>10</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="key vr">
+    <p class="small">두 번째로 큰 배점 = <b>설계 근거 25</b> → 오늘 쓰는 기획서 ② · ③ 항목이 곧 채점 근거 · 15주 질의도 기획서 기준으로 진행</p>
+  </div>
+  <div class="note">세부 규정 · SSQ 설문지 · 동료평가 양식 : «팀프로젝트 가이드북» (rubrics/)</div>
+</section>
+
+<section>
+  <div class="tag gfx">팀 구성</div>
+  <h2>3~4인 · 역할 4종</h2>
+  <table style="font-size:.64em">
+    <tr><th>역할</th><th>책임</th><th>산출물</th></tr>
+    <tr><td class="gfx-txt"><b>씬</b></td><td>공간 배치 · 스케일 · 조명 베이크 · 동선</td><td>평면도 · 씬 파일</td></tr>
+    <tr><td class="gfx-txt"><b>인터랙션</b></td><td>XR 리그 · 이동 · Grab/Ray · UI</td><td>입력 동작 목록 · 스크립트</td></tr>
+    <tr><td class="gfx-txt"><b>에셋</b></td><td>모델·텍스처 수급 · 삼각형·텍스처 예산 관리</td><td>에셋 목록 (출처·라이선스 포함)</td></tr>
+    <tr><td class="vr-txt"><b>검증</b></td><td>헤드셋 실측 · 플레이테스트 진행 · 기록표 관리</td><td>측정 기록 · 개선 기록표</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>영화 촬영 현장</b> : 미술감독(씬) · 무술감독(인터랙션) · 소품팀(에셋) · <b>스크립터</b>(검증) — 스크립터는 장면마다 «컵이 아까 오른손에 있었나» 를 기록해 이어붙였을 때 어긋남을 막는 사람</p>
+    <p>비유의 한계 : 3인 팀은 한 사람이 둘을 겸임 · 다만 <b>검증은 자기가 만든 부분을 검증하지 않도록</b> 배정</p>
+  </div>
+  <aside class="notes">
+    - 검증 역할을 가장 꼼꼼한 사람에게 · 14주 플레이테스트 진행자를 맡음
+    - 에셋 라이선스 : 출처 URL 과 라이선스를 목록에 반드시 기록 (포트폴리오 공개 시 문제)
+  </aside>
+</section>
+
+<!-- ========================================================= PART I -->
+<section class="divider part-i">
+  <div class="kicker">Part I · 25분</div>
+  <div class="rule"></div>
+  <h1>사람을 먼저,<br><em>코드는 나중</em></h1>
+  <p class="sub">사용자 중심 VR 설계 · 페이퍼 프로토타이핑 · 위험 요소 사전 제거</p>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>사용자 중심 설계<small>Human-centred design</small></dt><dd>만드는 사람의 취향이 아니라 <b>쓰는 사람의 관찰과 평가</b>를 기준으로 설계를 반복하는 방법</dd>
+    <dt>프로토타입<small>Prototype</small></dt><dd>완성 전에 아이디어를 시험해 보려고 만든 <b>값싼 시제품</b></dd>
+    <dt>페이퍼 프로토타입<small>Paper prototype</small></dt><dd>종이·펜·테이프로 만든 프로토타입 — 고치는 데 몇 분</dd>
+    <dt>공간 스케치<small>Spatial sketch</small></dt><dd>위에서 본 평면도 · 옆에서 본 측면도 · 눈에 보이는 범위를 <b>실제 치수(m)</b>로 그린 그림</dd>
+    <dt>바디스토밍<small>Bodystorming</small></dt><dd>실제 공간에서 <b>몸으로 직접 연기</b>하며 아이디어를 시험하는 방법 (브레인스토밍의 몸 버전)</dd>
+    <dt>그레이박스<small>Greybox</small></dt><dd>색·질감 없이 회색 상자만으로 배치와 크기를 잡은 씬 — 오늘 착수할 스켈레톤</dd>
+    <dt>컴포트 등급<small>Comfort rating</small></dt><dd>체험이 멀미를 일으킬 가능성을 미리 알리는 3단계 표시</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">설계 · 1</div>
+  <h2>사용자 중심 설계 — 4단계 반복</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 400" role="img" aria-label="이해, 요구 정의, 설계안, 평가 4단계 순환과 13~15주 매핑">
+    <defs>
+      <marker id="a13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker>
+    </defs>
+    <g fill="none" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#a13)">
+      <path d="M330,80 L560,80"/>
+      <path d="M690,120 L690,250"/>
+      <path d="M560,300 L330,300"/>
+      <path d="M200,250 L200,120"/>
+    </g>
+    <rect x="70" y="40" width="260" height="80" rx="14" fill="#171b25" stroke="#35d6e6" stroke-width="2"/>
+    <text x="200" y="76" fill="#35d6e6" font-size="24" font-weight="700" text-anchor="middle">① 사용 맥락 이해</text>
+    <text x="200" y="104" fill="#9aa4b8" font-size="17" text-anchor="middle">누가 · 어디서 · 얼마나 오래</text>
+    <rect x="560" y="40" width="260" height="80" rx="14" fill="#171b25" stroke="#35d6e6" stroke-width="2"/>
+    <text x="690" y="76" fill="#35d6e6" font-size="24" font-weight="700" text-anchor="middle">② 요구 정의</text>
+    <text x="690" y="104" fill="#9aa4b8" font-size="17" text-anchor="middle">컴포트 등급 · 성능 예산</text>
+    <rect x="560" y="250" width="260" height="90" rx="14" fill="#171b25" stroke="#a8e05f" stroke-width="2"/>
+    <text x="690" y="288" fill="#a8e05f" font-size="24" font-weight="700" text-anchor="middle">③ 설계안 제작</text>
+    <text x="690" y="316" fill="#9aa4b8" font-size="17" text-anchor="middle">종이 → 그레이박스 → 빌드</text>
+    <rect x="70" y="250" width="260" height="90" rx="14" fill="#171b25" stroke="#ff5fa2" stroke-width="2"/>
+    <text x="200" y="288" fill="#ff5fa2" font-size="24" font-weight="700" text-anchor="middle">④ 사용자 평가</text>
+    <text x="200" y="316" fill="#9aa4b8" font-size="17" text-anchor="middle">관찰 · SSQ · 실측</text>
+    <text x="445" y="200" fill="#e8ecf4" font-size="22" font-weight="700" text-anchor="middle">반복</text>
+    <text x="445" y="228" fill="#9aa4b8" font-size="17" text-anchor="middle">평가 결과로 ①로 복귀</text>
+    <g font-size="18">
+      <rect x="870" y="40" width="200" height="80" rx="10" fill="#0e3a42"/>
+      <text x="970" y="76" fill="#35d6e6" text-anchor="middle" font-weight="700">13주</text>
+      <text x="970" y="102" fill="#e8ecf4" text-anchor="middle">①②③ 종이까지</text>
+      <rect x="870" y="160" width="200" height="80" rx="10" fill="#421229"/>
+      <text x="970" y="196" fill="#ff5fa2" text-anchor="middle" font-weight="700">14주</text>
+      <text x="970" y="222" fill="#e8ecf4" text-anchor="middle">③④ 2바퀴 이상</text>
+      <rect x="870" y="280" width="200" height="80" rx="10" fill="#21330f"/>
+      <text x="970" y="316" fill="#a8e05f" text-anchor="middle" font-weight="700">15주</text>
+      <text x="970" y="342" fill="#e8ecf4" text-anchor="middle">관람자의 ④</text>
+    </g>
+  </svg>
+  <div class="note">ISO 9241-210 «인간 중심 설계» 의 4활동을 수업 일정에 대응</div>
+  <aside class="notes">
+    - 핵심 : 한 바퀴로 끝나지 않음 · 평가가 다시 이해로 돌아감
+    - 13주는 종이 단계까지 한 바퀴 돌리는 날
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">설계 · 2</div>
+  <h2>VR 에서 사용자 중심이 특히 중요한 이유</h2>
+  <ul class="small">
+    <li><b>만든 사람 = 가장 둔감한 체험자</b> → 수십 번 반복 체험으로 적응 · 동선을 이미 앎 → 처음 쓰는 사람의 멀미·막힘을 못 느낌</li>
+    <li><b>몸이 사람마다 다름</b> → 키 · 팔 길이 · 앉음/섬 · 안경 착용 → 내 몸에 맞춘 높이가 남에게는 닿지 않음</li>
+    <li><b>멀미 감수성의 개인차</b> → 현세대 HMD 사용자 최소 1/3 이 증상 경험 · 연구 참가자 중도 포기 평균 15.6% (Souchet et al. 2023)</li>
+  </ul>
+  <div class="analogy">
+    <p><b>맞춤 정장의 가봉</b> : 재단사는 원단을 자르기 전에 시침질로 대충 꿰매 손님에게 입혀 봄 → 어깨·소매 길이를 그 자리에서 수정 · 완성 후 고치면 원단을 버려야 함</p>
+    <p>→ 페이퍼 프로토타입 = VR 의 가봉 · 손님(체험자)의 몸에 먼저 대 보기</p>
+  </div>
+  <div class="note">출처 : Souchet, Lourdeaux, Pagani &amp; Rebenitsch (2023) Virtual Reality — 실증 연구 44편 집계</div>
+</section>
+
+<section>
+  <div class="tag gfx">설계 · 3</div>
+  <h2>늦게 발견할수록 비싸다</h2>
+  <table style="font-size:.68em">
+    <tr><th>발견 시점</th><th>«물건이 뒤에 있어 몸을 돌려야 함» 을 고치는 비용</th></tr>
+    <tr><td class="lab-txt"><b>종이 평면도</b></td><td>지우개로 옮기기 · <b>약 1분</b></td></tr>
+    <tr><td><b>그레이박스 씬</b></td><td>오브젝트 이동 · 라이트맵 재베이크 · <b>수십 분</b></td></tr>
+    <tr><td class="trap-txt"><b>완성 후 플레이테스트</b></td><td>배치 · 조명 · 상호작용 스크립트 · UI 위치 연쇄 수정 · <b>반나절 이상</b></td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>건축 도면</b> : 도면에서 벽을 옮기면 선 하나 · 콘크리트를 부은 뒤에는 벽을 부수고 다시 타설 → 건축가가 도면·모형 단계에 시간을 쓰는 이유</p>
+  </div>
+  <div class="key">
+    <p class="small">이유 : 단계가 진행될수록 한 결정에 <b>의존하는 다른 결정</b>이 늘어남 → 한 곳을 바꾸면 줄줄이 수정 · 그래서 오늘 = 가장 싸게 틀릴 수 있는 날</p>
+  </div>
+  <p class="small muted">시간 수치는 이 수업 규모의 경험적 예시 · 프로젝트마다 다름</p>
+</section>
+
+<section>
+  <div class="tag vr">설계 · 4</div>
+  <h2>VR 필요성 테스트 — «모니터로 만들어도 같은가?»</h2>
+  <table style="font-size:.66em">
+    <tr><th>질문</th><th>«예» 가 나와야 VR 다운 기획</th></tr>
+    <tr><td>① 몸의 <b>크기·거리 감각</b>이 경험의 핵심인가</td><td>실물 크기 공룡 앞에 서기 · 좁은 방의 압박감</td></tr>
+    <tr><td>② <b>머리·손의 실제 움직임</b>이 주된 입력인가</td><td>고개를 숙여 들여다보기 · 손으로 집어 돌려 보기</td></tr>
+    <tr><td>③ <b>둘러싸임</b>이 의미를 바꾸는가</td><td>사방에서 오는 소리 · 뒤를 돌아봐야 보이는 단서</td></tr>
+  </table>
+  <div class="key trap">
+    <p class="small">세 질문 모두 «아니오» → 화면 안 게임·영상이 더 나은 매체 → <b>교수 반려 대상</b><br>
+    예 : 메뉴 버튼 누르기 위주 퀴즈 · 정면 화면에 영상만 재생 · 키보드로 하던 조작을 컨트롤러로 옮긴 것</p>
+  </div>
+  <p class="small">근거 : 몰입형 VR 학습 효과 전체 g ≈ 0.38 (작은 효과, Coban et al. 2022) · 몰입이 높아도 인지 부하가 커지면 학습 저하 (Makransky et al. 2019) → <b>«VR 이면 자동으로 좋아짐» 은 성립하지 않음</b></p>
+  <aside class="notes">
+    - g : 두 집단 평균 차이를 표준편차 단위로 잰 효과 크기 · 0.2 작음 · 0.5 중간 · 0.8 큼 정도로 읽음
+    - 반려는 아이디어를 버리라는 뜻이 아니라 «VR 이 꼭 필요한 한 장면» 을 찾으라는 뜻
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">프로토타입 · 1 ★</div>
+  <h2>공간 스케치 — 1 m 격자 위에 그리기</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 430" role="img" aria-label="1m 격자 평면도에 플레이 구역, 시야 범위, 손 닿는 거리, UI 패널 배치">
+    <!-- grid 1m = 80px -->
+    <g stroke="#2a3040" stroke-width="1.5">
+      <path d="M60,20 V420 M140,20 V420 M220,20 V420 M300,20 V420 M380,20 V420 M460,20 V420 M540,20 V420"/>
+      <path d="M60,20 H540 M60,100 H540 M60,180 H540 M60,260 H540 M60,340 H540 M60,420 H540"/>
+    </g>
+    <!-- play area 2x2m centered at (300,300) -->
+    <rect x="220" y="220" width="160" height="160" fill="rgba(168,224,95,0.08)" stroke="#a8e05f" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <text x="300" y="374" fill="#a8e05f" font-size="17" text-anchor="middle">플레이 구역 2 m × 2 m</text>
+    <!-- FOV cone pointing up, ±30 comfort, ~±50 wide -->
+    <path d="M300,300 L156,51 A288,288 0 0 1 444,51 Z" fill="rgba(53,214,230,0.07)" stroke="none"/>
+    <path d="M300,300 L156,51 M300,300 L444,51" stroke="#35d6e6" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="300" y="44" fill="#35d6e6" font-size="18" text-anchor="middle">주요 콘텐츠 : 정면 ±30°</text>
+    <!-- reach circle 0.7m = 56px -->
+    <circle cx="300" cy="300" r="56" fill="none" stroke="#ff5fa2" stroke-width="2.5"/>
+    <circle cx="300" cy="300" r="32" fill="none" stroke="#ff5fa2" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <!-- user -->
+    <circle cx="300" cy="300" r="12" fill="#e8ecf4"/>
+    <path d="M300,288 L300,276" stroke="#e8ecf4" stroke-width="3"/>
+    <!-- UI panel at 1.2m = 96px ahead -->
+    <rect x="262" y="198" width="76" height="8" rx="3" fill="#ffc44d"/>
+    <!-- object behind -->
+    <rect x="290" y="394" width="20" height="20" fill="#ff5a4d"/>
+    <!-- labels right side -->
+    <g font-size="19">
+      <circle cx="600" cy="60" r="9" fill="#e8ecf4"/><text x="622" y="66" fill="#e8ecf4">체험자 · 화살표 = 시작 시 정면</text>
+      <circle cx="600" cy="110" r="10" fill="none" stroke="#ff5fa2" stroke-width="2.5"/><text x="622" y="116" fill="#e8ecf4">손 닿는 거리 0.4~0.7 m (12주)</text>
+      <rect x="590" y="152" width="22" height="7" fill="#ffc44d"/><text x="622" y="164" fill="#e8ecf4">UI 패널 · 정면 약 1.2 m (10주 : 0.5~2 m)</text>
+      <path d="M592,206 L612,206" stroke="#35d6e6" stroke-width="2" stroke-dasharray="6 5"/><text x="622" y="212" fill="#e8ecf4">시야 중심 ±30° (10주 수업 규칙)</text>
+      <rect x="591" y="246" width="18" height="18" fill="#ff5a4d"/><text x="622" y="262" fill="#ff5a4d">등 뒤 물체 → 180° 회전 강요 · 케이블 꼬임</text>
+      <text x="590" y="320" fill="#9aa4b8" font-size="18">격자 한 칸 = 1 m · 연필로 바로 그리고 바로 지우기</text>
+      <text x="590" y="350" fill="#9aa4b8" font-size="18">평면도 + 측면도(눈높이·손 높이) + 시야 스케치</text>
+      <text x="590" y="380" fill="#9aa4b8" font-size="18">= 공간 스케치 3장</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    - 칠판에 1 m 격자를 그리고 같은 그림을 직접 그려 보임
+    - 빨간 상자 : 학생 기획에서 가장 흔한 실수 (등 뒤에 중요한 물체)
+    - 측면도 : 선 사람 눈높이 약 1.6 m · 앉은 사람 약 1.2 m 를 둘 다 그림 → 앉아서도 되는지 확인
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">프로토타입 · 2</div>
+  <h2>바디스토밍 — 몸으로 리허설</h2>
+  <div class="cols">
+    <div>
+      <ol class="small">
+        <li>바닥에 마스킹 테이프로 <b>2 m × 2 m</b> 구역 표시</li>
+        <li>의자·상자·종이컵으로 가상 물체의 <b>대역</b> 배치 (평면도 치수 그대로)</li>
+        <li>역할 셋 : <b>체험자</b> (눈 가리지 않음) · <b>시스템 역</b> (화면 변화를 말로 알려 줌 · «문이 열립니다») · <b>관찰자</b> (기록)</li>
+        <li>시나리오를 처음부터 끝까지 <b>실제 속도로</b> 연기 · 3~5분 시간 재기</li>
+      </ol>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>연극의 블로킹 리허설</b> : 대사·조명 없이 배우가 무대 위에서 «어디에 서고 어디로 걷는지» 만 맞춰 봄 → 부딪힘·가림을 무대 세트 짓기 전에 해결</p>
+      </div>
+      <dl class="terms">
+        <dt>시스템 역<small>Wizard of Oz</small></dt><dd>사람이 컴퓨터 대신 반응을 흉내 내는 시험 방식 — 「오즈의 마법사」 커튼 뒤 사람에서 유래</dd>
+      </dl>
+    </div>
+  </div>
+  <aside class="notes">
+    - 실습 시간에 실제로 강의실 뒤쪽에서 진행 · 테이프 준비
+    - 체험자는 처음부터 끝까지 «몸이 실제로 하는 동작» 만 함 → 팔 들기, 쪼그려 앉기, 뒤돌기 횟수 그대로 드러남
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">프로토타입 · 3</div>
+  <h2>종이·몸으로 미리 잡는 위험</h2>
+  <table style="font-size:.6em">
+    <tr><th>위험</th><th>바디스토밍에서 보이는 신호</th><th>사전 제거</th></tr>
+    <tr><td class="trap-txt"><b>몸 돌리기</b></td><td>시나리오 중 180° 회전 2회 이상 · 케이블 꼬임</td><td>핵심 물체를 정면 ±30° 안으로</td></tr>
+    <tr><td class="trap-txt"><b>팔 피로</b></td><td>어깨보다 높이 팔 든 시간 30초 이상</td><td>조작 높이를 허리~가슴으로 · 패널 하단 배치</td></tr>
+    <tr><td class="trap-txt"><b>경계 이탈</b></td><td>2 m 구역 밖으로 발이 나감</td><td>텔레포트 · 구역 안 동선</td></tr>
+    <tr><td class="trap-txt"><b>바닥 줍기</b></td><td>쪼그려 앉기 · 앉은 체험자 불가</td><td>물체를 허리 높이 받침대에</td></tr>
+    <tr><td class="trap-txt"><b>가속 이동</b></td><td>«시스템 역» 이 «이제 앞으로 빨라집니다» 를 말해야 함</td><td>텔레포트 · 등속 · 컴포트 등급 재검토</td></tr>
+    <tr><td class="trap-txt"><b>길 잃음</b></td><td>체험자가 «이제 뭐 해요?» 질문</td><td>다음 목표를 시선 방향에 표시</td></tr>
+  </table>
+  <div class="key vr">
+    <p class="small">근거 : 팔꿈치를 허리 높이로 두는 설계 권고 · 심장 높이 이상 손 사용은 빠른 피로 (Meta Hands UI 가이드) · 12주 손 닿는 거리 0.4~0.7 m</p>
+  </div>
+  <p class="small muted">30초 · 2회 같은 문턱값은 이 수업의 점검용 기준 — 연구로 정해진 값 아님</p>
+</section>
+
+<section>
+  <div class="tag vr">컴포트 · 1 ★</div>
+  <h2>컴포트 등급 3단계</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 330" role="img" aria-label="Comfortable, Moderate, Intense 세 등급과 각각의 이동·회전 조건">
+    <defs>
+      <linearGradient id="cg13" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="#a8e05f"/><stop offset=".5" stop-color="#ffc44d"/><stop offset="1" stop-color="#ff5a4d"/>
+      </linearGradient>
+    </defs>
+    <rect x="40" y="30" width="1020" height="18" rx="9" fill="url(#cg13)"/>
+    <g font-size="26" font-weight="700">
+      <text x="40" y="92" fill="#a8e05f">Comfortable</text>
+      <text x="400" y="92" fill="#ffc44d">Moderate</text>
+      <text x="760" y="92" fill="#ff5a4d">Intense</text>
+    </g>
+    <g font-size="18" fill="#e8ecf4">
+      <text x="40" y="132">· 시점 이동 없음 또는 텔레포트</text>
+      <text x="40" y="162">· 회전 = 몸으로 · 스냅 턴</text>
+      <text x="40" y="192">· 고정 기준(바닥·지평선) 항상 보임</text>
+      <text x="40" y="222">· 대부분의 사람에게 적합</text>
+      <text x="400" y="132">· 연속 이동 일부 (등속 · 느리게)</text>
+      <text x="400" y="162">· 베그넷 등 완화 기법 적용</text>
+      <text x="400" y="192">· 높이 · 좁은 공간 등 약한 자극</text>
+      <text x="400" y="222">· 많은 사람에게 적합 · 전원은 아님</text>
+      <text x="760" y="132">· 가속 이동 · 부드러운 회전</text>
+      <text x="760" y="162">· 낙하 · 롤러코스터 · 강제 시점</text>
+      <text x="760" y="192">· 고정 기준 없음</text>
+      <text x="760" y="222">· 처음 체험자 대부분에게 부적합</text>
+    </g>
+    <rect x="40" y="258" width="1020" height="52" rx="10" fill="#171b25" stroke="#2a3040"/>
+    <text x="550" y="291" fill="#9aa4b8" font-size="18" text-anchor="middle">이 수업 권장 : Comfortable 또는 Moderate · Intense 는 사유 + 대체 모드 필수</text>
+  </svg>
+  <div class="note">Meta(구 Oculus) 스토어의 3단계 표시 체계를 차용 · 세부 조건은 이 수업의 정의</div>
+  <aside class="notes">
+    - 등급은 «얼마나 재밌나» 가 아니라 «얼마나 멀미 위험이 있나» 의 사전 고지
+    - 15주 동료 평가에서 «선언 등급 = 체감 등급» 일치 여부를 물음 → 과소 선언하면 감점 사유
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">컴포트 · 2</div>
+  <h2>등급은 «선언 + 근거 + 확인 방법» 한 묶음</h2>
+  <div class="analogy">
+    <p><b>놀이공원 탑승 안내판</b> : «키 120 cm 이상 · 임산부·심장 질환자 탑승 제한» → 타기 전에 스스로 판단하게 하는 사전 고지 · 안내판 내용과 실제 탑승감이 다르면 신뢰 붕괴</p>
+  </div>
+  <div class="vs">
+    <div class="bad">
+      <h4>근거 없는 선언</h4>
+      컴포트 등급 : Comfortable<br>
+      근거 : 편안하게 만들 예정<br><br>
+      <span style="color:#ff5a4d">// 측정할 수 있는 조건 없음<br>// 15주에 검증 불가</span>
+    </div>
+    <div class="good">
+      <h4>근거 있는 선언</h4>
+      컴포트 등급 : Moderate<br>
+      근거 : 연속 이동 1구간 (등속 0.8 m/s · 가속 없이 즉시 전환) · 회전은 스냅 22.5° · 이동 중 베그넷<br>
+      확인 : 체험 전·직후 SSQ · 중단자 수<br><br>
+      <span style="color:#a8e05f">// 숫자 · 기법 · 측정이 모두 있음</span>
+    </div>
+  </div>
+  <p class="small" style="margin-top:.6em">숫자의 출처 : 전방 등속 이동의 멀미 임계 평균 약 1.18 m/s (SD 0.84 · 개인차 큼 → 평균보다 낮게) · 스냅 22.5° 에서 SSQ 회전 약 −40% (Farmani &amp; Teather 2018)</p>
+  <div class="note">Terenzi &amp; Zaal (2020) NASA Ames · 참가자 18명 — 12주 슬라이드 재사용</div>
+</section>
+
+<!-- ========================================================= PART II -->
+<section class="divider part-ii">
+  <div class="kicker">Part II · 20분</div>
+  <div class="rule"></div>
+  <h1>기획서 <em>6항목</em><br>쓰는 법</h1>
+  <p class="sub">모든 문장을 숫자 · 주차 근거 · 측정 방법으로</p>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>지각적 근거<small>Perceptual rationale</small></dt><dd>«이 설계가 왜 편안·자연스러운가» 를 <b>사람의 지각 원리</b>로 설명한 문장</dd>
+    <dt>성능 예산<small>Performance budget</small></dt><dd>한 프레임 안에 쓸 수 있는 처리량의 상한을 미리 정한 표 — 용돈 한도처럼</dd>
+    <dt>드로우콜<small>Draw call</small></dt><dd>CPU 가 GPU 에 «이 물체 그려» 라고 보내는 명령 한 번</dd>
+    <dt>합격 기준<small>Acceptance criteria</small></dt><dd>«이 수치를 넘으면 통과» 라고 미리 적어 둔 판정 기준</dd>
+    <dt>SSQ<small>Simulator Sickness Questionnaire</small></dt><dd>멀미 증상 16개를 0~3 점으로 묻는 설문 (12주) — 체험 전후 차이로 해석</dd>
+    <dt>거리 과소추정<small>Distance compression</small></dt><dd>VR 속 거리를 실제보다 <b>가깝게</b> 느끼는 현상 (5주)</dd>
+    <dt>수직 단면<small>Vertical slice</small></dt><dd>완성품의 모든 층(공간·조작·피드백)을 갖춘 <b>짧은 한 구간</b></dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">기획서 · 0</div>
+  <h2>6항목 한눈에</h2>
+  <table style="font-size:.64em">
+    <tr><th>#</th><th>항목</th><th>답해야 할 질문</th><th>채점 연결</th></tr>
+    <tr><td>①</td><td>경험 한 줄 정의 · 대상 · 체험 시간</td><td>누가 · 무엇을 하며 · 무엇을 느끼나 · 몇 분</td><td>완성도</td></tr>
+    <tr><td class="vr-txt">②</td><td class="vr-txt"><b>지각적 근거</b></td><td>이 인터랙션이 편안한 이유는 어떤 지각 원리인가</td><td class="vr-txt">설계 근거 25</td></tr>
+    <tr><td class="vr-txt">③</td><td class="vr-txt"><b>컴포트 등급</b></td><td>3단계 중 무엇 · 근거 · 확인 방법</td><td class="vr-txt">설계 근거 25</td></tr>
+    <tr><td>④</td><td>성능 예산표</td><td>드로우콜 · 삼각형 · 그림자 · 텍스처 상한</td><td>성능 15</td></tr>
+    <tr><td>⑤</td><td>검증 계획</td><td>무엇을 · 언제 · 어떤 수치면 합격</td><td>설계 근거 · 성능</td></tr>
+    <tr><td>⑥</td><td>프롬프트 플레이북</td><td>9주 산출물 + 팀 규칙 갱신본</td><td>완성도</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">양식 : <code>assignments/w13/기획서-양식.md</code> · 분량 A4 3~4쪽 · 항목마다 예시가 들어 있음</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">기획서 · ①</div>
+  <h2>경험 한 줄 정의 — 로그라인처럼</h2>
+  <div class="analogy">
+    <p><b>영화 로그라인</b> : «상어가 나타난 해변 마을에서, 물을 무서워하는 경찰서장이 바다로 나간다» → 한 문장에 <b>누가 · 어디서 · 무엇을 · 왜 긴장되는가</b> 전부 · 투자자는 이 한 줄로 영화를 판단</p>
+  </div>
+  <div class="vs">
+    <div class="bad">
+      <h4>흐린 정의</h4>
+      «힐링되는 숲 VR 체험»<br><br>
+      <span style="color:#ff5a4d">// 누가? 무엇을 하며? 몇 분?<br>// 검증할 수 있는 것이 없음</span>
+    </div>
+    <div class="good">
+      <h4>선명한 정의</h4>
+      «시험 기간 대학생이 <b>앉은 채로</b> 숲속 작은 연못가에서 <b>돌을 집어 물수제비</b>를 뜨며 4분간 호흡을 고른다»<br><br>
+      <span style="color:#a8e05f">// 대상 · 자세 · 행동 · 시간 명시</span>
+    </div>
+  </div>
+  <p class="small" style="margin-top:.6em">체험 시간 <b>3~5분 권장</b> 이유 : 노출 10분 이상 연구의 SSQ 평균 33.42 vs 10분 미만 23.47 (Saredakis et al. 2020 메타분석) · 15주 시연 10분에 체험자 2~3명</p>
+</section>
+
+<section>
+  <div class="tag vr">기획서 · ②</div>
+  <h2>지각적 근거 — 쓰는 공식</h2>
+  <div class="key vr" style="font-size:1.05em">
+    <p><b>설계 결정</b> → 이 결정이 기대는 <b>지각 원리</b> → 그 원리를 배운 <b>주차·출처</b> → 확인할 <b>측정</b></p>
+  </div>
+  <div class="vs">
+    <div class="bad">
+      <h4>근거가 아닌 문장</h4>
+      «텔레포트를 써서 멀미가 없다»<br>
+      «UI 를 보기 좋게 배치했다»<br><br>
+      <span style="color:#ff5a4d">// 원리 · 수치 · 측정 없음</span>
+    </div>
+    <div class="good">
+      <h4>근거가 되는 문장</h4>
+      «이동은 텔레포트만 사용 — 연속 이동의 시야 흐름이 만드는 벡션과 전정-시각 충돌을 제거하기 위해 (7·11주) · 체험 전·직후 SSQ 로 확인»
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>요리 레시피의 «왜»</b> : «고기를 굽기 전에 30분 실온에 둔다 — 속까지 고르게 익히기 위해» → 이유가 적힌 레시피는 상황이 달라져도 응용 가능 · 이유 없는 레시피는 따라 하기만 가능</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">기획서 · ②</div>
+  <h2>지각적 근거 — 예시 3줄</h2>
+  <table style="font-size:.6em">
+    <tr><th>설계 결정</th><th>지각 원리</th><th>주차</th><th>측정</th></tr>
+    <tr><td>모든 물체에 간이 접촉 그림자 + 바닥 격자 무늬</td><td>단안 깊이 단서(그림자 · 결 기울기) 보강 → 물체가 떠 보이는 착각 · 거리 과소추정 완화</td><td>5주</td><td>집기 실패 횟수</td></tr>
+    <tr><td>안내 패널 = World Space · 정면 1.2 m · 시선 아래 10° 정도</td><td>화면 고정 UI 는 초점 불가 · 조절-수렴 충돌 회피 · 시야 중심 ±30°</td><td>10주</td><td>패널 읽기 성공 여부</td></tr>
+    <tr><td>회전 = 스냅 턴 22.5° · 이동 = 텔레포트</td><td>가속·회전 시야 흐름이 벡션 유발 · 전정계는 가속에 반응</td><td>7·11·12주</td><td>SSQ 전후 · 중단자</td></tr>
+    <tr><td>90Hz 고정 · 실시간 그림자 1개</td><td>프레임 지연·변동이 멀미 요인 · 두 눈 렌더 비용</td><td>3·5·12주</td><td>헤드셋 실측 fps</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">한 줄 = 한 결정 · 최소 3줄 · <b>«측정» 칸이 비면 근거가 아니라 희망</b></p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">기획서 · ③④</div>
+  <h2>컴포트 등급 · 성능 예산표</h2>
+  <div class="cols">
+    <div>
+      <p class="small"><b>③ 컴포트 등급</b> : 앞의 «선언 + 근거 + 확인» 형식 그대로</p>
+      <p class="small"><b>④ 성능 예산표</b> — 수업 기준선(Quest 3 · URP)</p>
+      <table style="font-size:.66em">
+        <tr><th>항목</th><th>기준선</th><th>예 : 우리 팀</th></tr>
+        <tr><td>프레임률</td><td>90Hz (11.1 ms)</td><td>90Hz</td></tr>
+        <tr><td>드로우콜</td><td>150 이하</td><td>120</td></tr>
+        <tr><td>삼각형/프레임</td><td>50만 이하</td><td>30만</td></tr>
+        <tr><td>실시간 그림자</td><td>0~1개</td><td>0 (전부 베이크)</td></tr>
+        <tr><td>텍스처</td><td>2048 이하 · 밉맵</td><td>1024 위주</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="math-block">\[ \frac{1000\ \text{ms}}{90} \approx 11.1\ \text{ms} \]</div>
+      <p class="small"><b>손계산</b> — 삼각형 예산<br>
+      배경 건물 1개 8만 + 소품 40개 × 평균 3,000 = 12만<br>
+      합계 20만 → 기준선 50만의 40% · 여유 충분</p>
+      <div class="analogy" style="margin-top:.4em">
+        <p><b>한 달 용돈</b> : 월초에 «식비·교통·여가» 상한을 정해 두면 월말에 굶지 않음 · 예산표 = 프레임 한 장의 용돈 계획</p>
+      </div>
+    </div>
+  </div>
+  <p class="small muted">팀 예산은 기준선보다 낮게 → 14주 실측에서 초과분이 드러날 여유 확보</p>
+</section>
+
+<section>
+  <div class="tag vr">기획서 · ⑤⑥</div>
+  <h2>검증 계획 · 프롬프트 플레이북</h2>
+  <div class="cols">
+    <div>
+      <p class="small"><b>⑤ 검증 계획</b> = 14주 플레이테스트의 설계도</p>
+      <table style="font-size:.64em">
+        <tr><th>무엇을</th><th>언제</th><th>합격 기준 (예)</th></tr>
+        <tr><td>과업 완료</td><td>체험 중</td><td>4명 중 3명 이상 안내 없이 완료</td></tr>
+        <tr><td>SSQ</td><td>체험 전 · 직후</td><td>중단자 0명 · 이전 버전보다 증가폭 감소</td></tr>
+        <tr><td>프레임률</td><td>체험 중 상시</td><td>헤드셋 실측 90 근처 유지 · 72 강등 0회</td></tr>
+        <tr><td>체험 시간</td><td>체험 중</td><td>3~5분 안에 종료</td></tr>
+      </table>
+    </div>
+    <div>
+      <p class="small"><b>⑥ 프롬프트 플레이북</b> (9주 산출물 첨부)</p>
+      <ul class="small">
+        <li>함정 #7~#9 재발 방지 규칙 추가 (World Space · 리그 이동 · 가속 금지)</li>
+        <li>④ 성능 예산을 <b>모든 프롬프트의 [제약] 칸에 고정 문구</b>로</li>
+        <li>팀 공용 명세 템플릿 1개</li>
+      </ul>
+    </div>
+  </div>
+  <div class="key trap">
+    <p class="small">SSQ 는 «몇 점 이상이면 위험» 이라는 합의된 절단점 없음 → <b>같은 팀 안 전후 비교 · 버전 간 비교</b>로만 해석</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">스케일 · 1 ★</div>
+  <h2>거리 과소추정을 반영한 스케일 검수</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 300" role="img" aria-label="실제 4m 가 약 3m 로 지각되는 비교 막대와, 지각 목표 3m 를 위한 실제 약 4.05m">
+    <g font-size="19">
+      <text x="30" y="52" fill="#e8ecf4">씬에 만든 거리</text>
+      <rect x="230" y="30" width="800" height="32" rx="6" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+      <text x="1040" y="54" fill="#35d6e6" font-weight="700">4 m</text>
+      <text x="30" y="112" fill="#e8ecf4">체험자가 느끼는 거리</text>
+      <rect x="230" y="90" width="592" height="32" rx="6" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
+      <text x="834" y="114" fill="#ff5fa2" font-weight="700">약 3 m (× 0.74)</text>
+      <path d="M822,140 L1030,140" stroke="#ffc44d" stroke-width="2" stroke-dasharray="6 5"/>
+      <text x="926" y="166" fill="#ffc44d" text-anchor="middle">약 1 m 짧게 느낌</text>
+      <line x1="30" y1="190" x2="1070" y2="190" stroke="#2a3040" stroke-width="2"/>
+      <text x="30" y="232" fill="#e8ecf4">거꾸로 계산</text>
+      <text x="230" y="232" fill="#9aa4b8">«3 m 떨어진 느낌» 이 목표 → 씬에는 3 ÷ 0.74 ≈ <tspan fill="#a8e05f" font-weight="700">4.05 m</tspan> 로 배치</text>
+      <text x="230" y="270" fill="#9aa4b8">단, 문·의자·컵 같은 <tspan fill="#e8ecf4" font-weight="700">물체 크기는 1:1 유지</tspan> — 간격만 조정</text>
+    </g>
+  </svg>
+  <div class="math-block">\[ d_{\text{배치}} = \frac{d_{\text{목표}}}{0.74} \qquad \frac{3\ \text{m}}{0.74} \approx 4.05\ \text{m} \]</div>
+  <div class="note">Renner, Velichkovsky &amp; Helmert (2013) ACM Computing Surveys 46(2) · 1993~2012 연구 집계 평균 · 최근 기기 74~82% · 측정법마다 다름</div>
+</section>
+
+<section>
+  <div class="tag vr">스케일 · 2</div>
+  <h2>스케일 검수 체크리스트</h2>
+  <ul class="small">
+    <li><b>1 unit = 1 m</b> : 씬에 1 m 기준 큐브 하나를 두고 모든 물체와 비교</li>
+    <li><b>친숙한 크기 물체</b> : 문 높이 약 2.1 m · 의자 좌판 약 0.45 m · 책상 약 0.75 m → 뇌의 크기 기준 역할 → 늘리거나 줄이지 않음</li>
+    <li><b>임포트 스케일</b> : 외부 모델이 cm 단위로 만들어졌으면 100배 크기로 들어옴 → Model Import Settings 의 Scale Factor 확인</li>
+    <li><b>눈높이</b> : XR Origin 의 Tracking Origin Mode = Floor → 실제 키가 그대로 반영 · AI 코드가 카메라 높이를 1.8 같은 숫자로 고정했는지 확인 (함정 #8 연결)</li>
+    <li><b>헤드셋에서 확인</b> : 에디터 화면으로는 크기 판단 불가 → 기준 큐브 옆에 서서 무릎·허리 높이와 대조</li>
+  </ul>
+  <div class="analogy">
+    <p><b>「걸리버 여행기」</b> : 소인국에서는 걸리버가 거인 · 거인국에서는 걸리버가 소인 → 크기 감각은 <b>주변 물체와의 비교</b>로 결정 · 친숙한 물체 크기가 틀리면 체험자 자신이 거인이나 소인이 된 느낌</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">범위 · 1 ★</div>
+  <h2>범위 축소 — 깔때기</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 360" role="img" aria-label="아이디어 전체에서 핵심 경험 1개, 3~5분, 씬 1개와 인터랙션 2~3종으로 좁혀지는 깔때기">
+    <path d="M60,30 L1040,30 L860,110 L240,110 Z" fill="#171b25" stroke="#9aa4b8" stroke-width="2"/>
+    <text x="550" y="78" fill="#e8ecf4" font-size="22" text-anchor="middle">처음 아이디어 — 여러 장소 · 이야기 · 캐릭터 · 멀티플레이 …</text>
+    <path d="M240,120 L860,120 L760,200 L340,200 Z" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+    <text x="550" y="168" fill="#35d6e6" font-size="22" font-weight="700" text-anchor="middle">핵심 경험 1개 — «VR 이어야 하는 한 장면»</text>
+    <path d="M340,210 L760,210 L690,280 L410,280 Z" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
+    <text x="550" y="252" fill="#ff5fa2" font-size="22" font-weight="700" text-anchor="middle">3~5분 · 시작과 끝이 있음</text>
+    <rect x="410" y="290" width="280" height="56" rx="10" fill="#21330f" stroke="#a8e05f" stroke-width="2"/>
+    <text x="550" y="326" fill="#a8e05f" font-size="21" font-weight="700" text-anchor="middle">씬 1개 · 인터랙션 2~3종</text>
+    <g font-size="18" fill="#9aa4b8">
+      <text x="30" y="220">잘라낼 후보</text>
+      <text x="30" y="250">· 멀티플레이 · 네트워크</text>
+      <text x="30" y="278">· 대사 많은 캐릭터</text>
+      <text x="30" y="306">· 넓은 오픈 월드</text>
+      <text x="30" y="334">· 전신 아바타 IK</text>
+      <text x="800" y="250">남길 것</text>
+      <text x="800" y="278">· 핵심 조작 1개를 완벽히</text>
+      <text x="800" y="306">· 시작 안내 · 끝 신호</text>
+      <text x="800" y="334">· 피드백 (소리 · 진동)</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    - 왼쪽 목록은 2주 안에 VR 로 완성하기 가장 어려운 것들 · AI 가 코드는 금방 주지만 헤드셋 검증이 오래 걸림
+    - 오른쪽 : 작아도 끝까지 다듬은 것이 15주 완성도 점수에 유리
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">범위 · 2</div>
+  <h2>수직 단면과 작업량 손계산</h2>
+  <div class="analogy">
+    <p><b>케이크 한 조각</b> : 시트만 한 판 전부 구운 것(공간만 넓음)보다 시트·크림·과일이 모두 든 <b>한 조각</b>이 «이 케이크가 어떤 맛인지» 를 보여 줌 → 수직 단면 = 모든 층을 갖춘 짧은 한 구간</p>
+  </div>
+  <div class="cols">
+    <div>
+      <p class="small"><b>손계산</b> — 주 6시간은 예시 · 팀 실제 시간으로 재계산</p>
+      <div class="math-block">\[ 4\text{명} \times 2\text{주} \times 6\ \tfrac{\text{시간}}{\text{주}} = 48\ \text{인시} \]</div>
+      <p class="small">빌드·헤드셋 확인 · 플레이테스트 · 개선에 약 절반 → <b>순수 제작 약 24 인시</b></p>
+    </div>
+    <div>
+      <table style="font-size:.64em">
+        <tr><th>분류</th><th>기준</th></tr>
+        <tr><td class="lab-txt"><b>반드시</b></td><td>없으면 경험이 성립 안 함 → 13~14주</td></tr>
+        <tr><td><b>있으면 좋음</b></td><td>반드시 항목 완료 후 → 14주 후반</td></tr>
+        <tr><td class="trap-txt"><b>이번엔 안 함</b></td><td>기획서에 «비목표» 로 명시</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="key trap">
+    <p class="small">교수 체크 — 축소 요청 신호 : 씬 2개 이상 · 체험 10분 이상 · «반드시» 항목 6개 이상 · 아직 정하지 않은 핵심 조작</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">윤리 · 안전</div>
+  <h2>기획 단계의 윤리 체크</h2>
+  <ul class="small">
+    <li><b>아바타 외형이 행동을 바꿈</b> : 프로테우스 효과 — 큰 키 아바타 → 협상에서 더 공격적 (Yee &amp; Bailenson 2007) · 메타분석 효과 크기 r ≈ .22~.26, 작은~중간 (Ratan et al. 2020)</li>
+    <li>→ 특정 집단의 몸을 «체험» 시키는 기획 · 공포·높이·폭력 소재 → 사전 고지 + <b>언제든 중단</b> 가능한 장치</li>
+    <li><b>VR 연구 윤리 지침</b> (Madary &amp; Metzinger 2016) : 사전 동의 · 비자발적 고통 금지 · 장기 몰입 위험 · 프라이버시</li>
+    <li>수업 운영 규칙 재확인 : 세션 최대 10분 · 2인 1조 스포터 · 멀미 3단계 프로토콜</li>
+  </ul>
+  <div class="key vr">
+    <p class="small">기획서 ① 에 «민감 소재 여부 · 중단 방법» 한 줄 추가 → 14주 플레이테스트 동의 절차에 그대로 사용</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">도입 질문의 답</div>
+  <h2>헤드셋 없이 VR 을 기획할 수 있는가</h2>
+  <div class="key">
+    <p><b>예 — 공간 · 몸 · 시간</b>의 문제는 종이와 몸으로 대부분 미리 드러남</p>
+  </div>
+  <table style="font-size:.64em">
+    <tr><th>문제</th><th>잡아내는 도구</th></tr>
+    <tr><td>뒤돌기 · 경계 이탈 · 케이블 꼬임</td><td>1 m 격자 평면도 + 바닥 테이프 2 m × 2 m</td></tr>
+    <tr><td>팔 피로 · 바닥 줍기 · 앉은 사람 불가</td><td>측면도 + 바디스토밍 (실제 높이로 연기)</td></tr>
+    <tr><td>가속 이동 · 강제 시점</td><td>«시스템 역» 이 말로 설명해야 하는 장면 = 경고 신호</td></tr>
+    <tr><td>체험 시간 초과</td><td>시나리오 실제 속도 연기 + 시간 재기</td></tr>
+  </table>
+  <div class="key trap">
+    <p class="small">종이로 <b>못</b> 잡는 것 : 실제 프레임률 · 렌즈 너머 가독성 · 개인별 멀미 정도 → 14주 헤드셋 플레이테스트의 몫</p>
+  </div>
+  <aside class="notes">
+    - 도입 질문 손들기 결과를 다시 언급
+    - 종이로 잡을 것은 종이로, 헤드셋으로만 잡을 수 있는 것은 헤드셋으로 → 헤드셋 시간을 아끼는 전략
+  </aside>
+</section>
+
+<!-- ========================================================= PART III -->
+<section class="divider part-iii">
+  <div class="kicker">Part III · 90분</div>
+  <div class="rule"></div>
+  <h1>종이에서 그레이박스까지</h1>
+  <p class="sub">공간 스케치 → 바디스토밍 → 1분 시나리오 → 크리틱 → 스켈레톤 씬</p>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1</div>
+  <h2>오늘의 실습 순서</h2>
+  <table style="font-size:.66em">
+    <tr><th>#</th><th>시간</th><th>할 일</th><th>결과물</th></tr>
+    <tr><td class="lab-txt"><b>1</b></td><td>20분</td><td>공간 스케치 3장 (1 m 격자 평면도 · 측면도 · 시야)</td><td>스케치 사진</td></tr>
+    <tr><td class="lab-txt"><b>2</b></td><td>20분</td><td>바디스토밍 2회 — 체험자를 바꿔서 · 관찰자는 위험 신호 기록</td><td>위험 목록</td></tr>
+    <tr><td class="lab-txt"><b>3</b></td><td>25분</td><td>1분 시나리오 발표 → 다른 팀 크리틱</td><td>크리틱 메모</td></tr>
+    <tr><td class="lab-txt"><b>4</b></td><td>25분</td><td>스켈레톤 씬 — 그레이박스 배치 · 기준 큐브 · XR Origin · 이동 방식</td><td>빌드 1회</td></tr>
+  </table>
+  <div class="key lab">
+    <p class="small">바디스토밍 2회차는 <b>팀원 중 키 차이가 가장 큰 사람</b> 또는 <b>앉은 자세</b>로 → 몸의 개인차를 오늘 확인</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 2</div>
+  <h2>1분 시나리오 발표와 크리틱</h2>
+  <div class="cols">
+    <div>
+      <p class="small"><b>발표 1분</b> — 이 순서로만</p>
+      <ol class="small">
+        <li>경험 한 줄 정의</li>
+        <li>평면도 보여 주며 체험자의 <b>첫 10초 · 마지막 10초</b></li>
+        <li>컴포트 등급 선언 + 근거 한 줄</li>
+      </ol>
+    </div>
+    <div>
+      <p class="small"><b>크리틱 질문 3개</b> — 듣는 팀이 하나씩</p>
+      <ul class="small">
+        <li>«모니터로 만들어도 같은가?»</li>
+        <li>«처음 10초에 무엇을 해야 하는지 어떻게 아는가?»</li>
+        <li>«선언한 등급보다 높아질 장면은?»</li>
+      </ul>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>엘리베이터 피치</b> : 엘리베이터에서 투자자를 만나 내릴 때까지 설명할 시간 약 1분 → 1분 안에 못 전하는 기획 = 아직 핵심이 정해지지 않은 기획</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 3</div>
+  <h2>스켈레톤 씬 명세 예시</h2>
+  <pre><code data-trim>[목표]
+팀 프로젝트의 그레이박스 씬을 만든다. 평면도(첨부 사진)의 배치를 그대로 옮긴다.
+
+[제약]
+- Unity 6 · URP · XR Interaction Toolkit 3.x · XR Origin (XR Rig) 사용
+- 1 unit = 1 m · 모든 물체는 회색 기본 머티리얼의 큐브/실린더로 대체
+- Tracking Origin Mode = Floor · 카메라 높이를 코드로 고정하지 않음
+- 이동은 텔레포트 + 스냅 턴 22.5° 만 · 연속 이동·가속 없음
+- 실시간 그림자 0개
+
+[검증 조건]
+- 1 m 기준 큐브와 문(높이 2.1 m)이 씬에 존재
+- 시작 위치에서 핵심 물체가 정면 ±30° 안에 보임
+- Quest 3 빌드에서 Stats 대신 헤드셋 실측으로 fps 기록
+
+[비목표]
+- 텍스처 · 조명 연출 · 사운드 · 최종 에셋
+</code></pre>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 4</div>
+  <h2>측정 — 스켈레톤이 맞게 섰는지</h2>
+  <pre><code class="language-csharp" data-trim>// 씬 시작 시 눈높이와 정면 각도 확인 (헤드셋에서 로그 확인)
+void Start() {
+    var cam = Camera.main.transform;
+    Debug.Log($"눈높이 {cam.position.y:F2} m");          // 앉음 약 1.2 · 섬 약 1.6
+
+    Vector3 toTarget = (target.position - cam.position);
+    toTarget.y = 0;                                        // 수평 각도만
+    Vector3 fwd = cam.forward; fwd.y = 0;
+    Debug.Log($"핵심 물체 각도 {Vector3.Angle(fwd, toTarget):F0}°"); // 30 이하
+}
+</code></pre>
+  <div class="key lab">
+    <p class="small">판정 : 눈높이가 매번 <b>체험자 키에 따라 달라지면</b> 정상 (Floor 모드) · 항상 같은 숫자면 카메라 높이 고정 의심 → 함정 #8</p>
+  </div>
+  <div class="note">헤드셋 로그 확인 : Development Build + Unity Console 연결 또는 adb logcat</div>
+</section>
+
+<section>
+  <div class="tag lab">브리핑</div>
+  <h2>과제 · 14주 준비</h2>
+  <div class="cols">
+    <div class="card lab">
+      <h4>기획서 제출</h4>
+      <ul class="small">
+        <li><code>assignments/w13/기획서-양식.md</code> 6항목</li>
+        <li>공간 스케치 3장 사진 · 바디스토밍 위험 목록</li>
+        <li>스켈레톤 씬 빌드 1회 성공 화면</li>
+        <li>마감 : 14주 수업 전날 23:59 (팀 대표 1명)</li>
+      </ul>
+    </div>
+    <div class="card vr">
+      <h4>14주 준비물</h4>
+      <ul class="small">
+        <li><b>헤드셋에서 실행되는 빌드</b> — 미완성이어도 됨</li>
+        <li>체험 과업 1~2개 (체험자에게 줄 지시문)</li>
+        <li>OVR Metrics Tool 설치 확인 (검증 담당)</li>
+        <li>USB 데이터 케이블</li>
+      </ul>
+    </div>
+  </div>
+  <div class="key">
+    <p class="small">14주 = 다른 팀이 우리 씬을 체험하는 날 → <b>빌드가 없으면 플레이테스트 불가</b> · 기능보다 «돌아가는 빌드» 우선</p>
+  </div>
+  <div class="note">제출 경로·세부 규정 : «팀프로젝트 가이드북» · 마감 시각은 LMS 공지 기준</div>
+</section>
+
+<!-- ========================================================= 정리 -->
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table style="font-size:.6em">
+    <tr><th>개념</th><th>핵심</th></tr>
+    <tr><td><b class="gfx-txt">사용자 중심 설계</b></td><td>이해 → 요구 → 설계안 → 평가 반복 · 만든 사람 = 가장 둔감한 체험자 (맞춤 정장 가봉)</td></tr>
+    <tr><td>VR 필요성</td><td>몸의 크기 · 머리·손 입력 · 둘러싸임 — 셋 다 «아니오» 면 반려</td></tr>
+    <tr><td><b class="lab-txt">페이퍼 프로토타입</b></td><td>1 m 격자 평면도 · 측면도 · 시야 스케치 + 바디스토밍 (블로킹 리허설)</td></tr>
+    <tr><td><b class="vr-txt">컴포트 등급</b></td><td>Comfortable · Moderate · Intense — 선언 + 근거 숫자 + 확인 방법</td></tr>
+    <tr><td><b class="vr-txt">지각적 근거</b></td><td>설계 결정 → 지각 원리 → 주차·출처 → 측정 · 측정 칸이 비면 희망</td></tr>
+    <tr><td>성능 예산</td><td>90Hz = 11.1 ms · 드로우콜 150 · 삼각형 50만 · 그림자 0~1 · 텍스처 2048</td></tr>
+    <tr><td>스케일 검수</td><td>거리 평균 74% 로 느낌 → 3 m 목표면 약 4.05 m 배치 · 물체 크기는 1:1</td></tr>
+    <tr><td>범위</td><td>3~5분 · 씬 1개 · 인터랙션 2~3종 · 케이크 한 조각(수직 단면)</td></tr>
+  </table>
+</section>
+
+<section class="divider part-ii">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>구현과 <em>플레이테스트</em></h1>
+  <p class="sub">이번 주 : 내 머리로 설계<br>
+  다음 주 : <b>남의 몸으로</b> 검증 — 교차 플레이테스트 · SSQ 실측 · 온디바이스 프로파일링</p>
+  <div class="note">AI 함정 #10 — 에디터 기준 최적화</div>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/math/math.min.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

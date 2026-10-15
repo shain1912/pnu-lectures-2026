@@ -1,0 +1,4 @@
+6주차 셰이더 기초
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/slides/w06/
+원본         : slides/w06/index.html

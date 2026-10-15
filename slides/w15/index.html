@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15주차 · 기말 VR 전시와 동료 평가 — 컴퓨터그래픽스</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+<style>
+  .reveal svg.fig-svg { display:block; margin:.2em auto 0; width:100%; height:auto; max-height:470px; }
+  .reveal svg.fig-svg text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ========================================================= 표지 -->
+<section class="cover">
+  <div class="week">Week 15 · 지정보강주</div>
+  <h1>기말 — VR 전시</h1>
+  <p class="muted" style="font-size:.8em;max-width:28em">
+    팀 프로젝트 최종 발표 및 VR 시연, 동료 평가
+  </p>
+  <div class="meta">
+    컴퓨터그래픽스 VF3500076 · 디자인앤테크놀로지전공<br>
+    조성호 · 2026학년도 2학기
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask">
+    설명 없이 주어진 <span class="hl">3분</span><br><br>
+    처음 헤드셋을 쓴 관람자는<br>
+    무엇을 보고 이 작품을 <span class="hl">판단</span>하는가?
+  </div>
+  <aside class="notes">
+    - 각 팀에게 10초 생각 시간 : "관람자가 가장 먼저 느낄 것 하나"
+    - 답은 마지막 «도입 질문의 답» 에서 회수 — 관람자는 기획서를 읽지 않음 · 몸으로 겪은 것만으로 판단
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">오늘</div>
+  <h2>오늘 끝까지 해낼 것</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 20분 슬롯 운영</h4>
+      <p class="small">발표 5 · 시연 10 · 질의 5 를 <b>시간 안에</b> · 다음 팀은 옆 스테이지에서 동시에 세팅</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 근거로 답하기</h4>
+      <p class="small">질의에 기획서 ② 지각적 근거 · ③ 컴포트 등급 · 14주 <b>실측 수치</b>로 답변</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 동료 평가</h4>
+      <p class="small">체험 직후 바로 · <b>관찰한 사실</b>로 강점 1 · 개선 1 · 컴포트 등급 일치 여부</p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:1.1em">
+    <p>기말 40% · 평가 축 5개 · 성능은 <b>현장 헤드셋 실측</b>으로만</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">운영 · 1 ★</div>
+  <h2>시간표 — 2 스테이지 교대 (8팀 기준 예시)</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 370" role="img" aria-label="14:00부터 17:00까지 세팅, 팀 1~4, 휴식, 팀 5~8, 동료평가 마감 시간표와 스테이지 A·B 교대">
+    <g font-size="17" fill="#9aa4b8">
+      <text x="140" y="30">14:00</text><text x="190" y="30">14:10</text><text x="434" y="30">15:30</text>
+      <text x="520" y="30">15:35</text><text x="764" y="30">16:55</text><text x="1010" y="30">17:00</text>
+    </g>
+    <g font-size="18">
+      <text x="20" y="84" fill="#35d6e6" font-weight="700">스테이지 A</text>
+      <text x="20" y="164" fill="#ff5fa2" font-weight="700">스테이지 B</text>
+      <text x="20" y="244" fill="#9aa4b8" font-weight="700">전체</text>
+    </g>
+    <!-- scale: 1 min = 3.05px from x=150 (14:00) ; 180 min -> 699 ; use 3.05 -->
+    <rect x="150" y="215" width="30" height="44" rx="6" fill="#171b25" stroke="#9aa4b8"/>
+    <text x="165" y="300" fill="#9aa4b8" font-size="16" text-anchor="middle">세팅</text>
+    <!-- teams 1-4: 14:10..15:30 = 80 min, each 20 -->
+    <rect x="181" y="55"  width="60" height="44" rx="6" fill="#0e3a42" stroke="#35d6e6"/><text x="211" y="84" fill="#e8ecf4" font-size="18" text-anchor="middle">1</text>
+    <rect x="242" y="135" width="60" height="44" rx="6" fill="#421229" stroke="#ff5fa2"/><text x="272" y="164" fill="#e8ecf4" font-size="18" text-anchor="middle">2</text>
+    <rect x="303" y="55"  width="60" height="44" rx="6" fill="#0e3a42" stroke="#35d6e6"/><text x="333" y="84" fill="#e8ecf4" font-size="18" text-anchor="middle">3</text>
+    <rect x="364" y="135" width="60" height="44" rx="6" fill="#421229" stroke="#ff5fa2"/><text x="394" y="164" fill="#e8ecf4" font-size="18" text-anchor="middle">4</text>
+    <rect x="425" y="215" width="15" height="44" rx="4" fill="#171b25" stroke="#2a3040"/>
+    <text x="432" y="300" fill="#9aa4b8" font-size="16" text-anchor="middle">휴식</text>
+    <!-- teams 5-8: 15:35..16:55 -->
+    <rect x="441" y="55"  width="60" height="44" rx="6" fill="#0e3a42" stroke="#35d6e6"/><text x="471" y="84" fill="#e8ecf4" font-size="18" text-anchor="middle">5</text>
+    <rect x="502" y="135" width="60" height="44" rx="6" fill="#421229" stroke="#ff5fa2"/><text x="532" y="164" fill="#e8ecf4" font-size="18" text-anchor="middle">6</text>
+    <rect x="563" y="55"  width="60" height="44" rx="6" fill="#0e3a42" stroke="#35d6e6"/><text x="593" y="84" fill="#e8ecf4" font-size="18" text-anchor="middle">7</text>
+    <rect x="624" y="135" width="60" height="44" rx="6" fill="#421229" stroke="#ff5fa2"/><text x="654" y="164" fill="#e8ecf4" font-size="18" text-anchor="middle">8</text>
+    <rect x="685" y="215" width="15" height="44" rx="4" fill="#21330f" stroke="#a8e05f"/>
+    <!-- setup ghost bars -->
+    <g fill="none" stroke="#5f6980" stroke-dasharray="4 4">
+      <rect x="181" y="135" width="60" height="44" rx="6"/>
+      <rect x="242" y="55" width="60" height="44" rx="6"/>
+      <rect x="303" y="135" width="60" height="44" rx="6"/>
+      <rect x="364" y="55" width="60" height="44" rx="6"/>
+      <rect x="441" y="135" width="60" height="44" rx="6"/>
+      <rect x="502" y="55" width="60" height="44" rx="6"/>
+      <rect x="563" y="135" width="60" height="44" rx="6"/>
+    </g>
+    <g font-size="18" fill="#e8ecf4">
+      <rect x="740" y="55" width="22" height="22" rx="4" fill="#0e3a42" stroke="#35d6e6"/><text x="772" y="73">팀 슬롯 20분 (발표 5 · 시연 10 · 질의 5)</text>
+      <rect x="740" y="95" width="22" height="22" rx="4" fill="none" stroke="#5f6980" stroke-dasharray="4 4"/><text x="772" y="113">다음 팀 세팅 (옆 스테이지)</text>
+      <rect x="740" y="135" width="22" height="22" rx="4" fill="#21330f" stroke="#a8e05f"/><text x="772" y="153">16:55 동료 평가 제출 마감</text>
+      <text x="740" y="210" fill="#9aa4b8">20분 × 8팀 = 160분</text>
+      <text x="740" y="240" fill="#9aa4b8">+ 세팅 10 + 휴식 5 + 마감 5 = 180분</text>
+      <text x="740" y="280" fill="#ffc44d">팀 수 · 공간 확정 후 조정</text>
+      <text x="740" y="310" fill="#9aa4b8">7팀 이하 → 남는 시간은 자유 체험</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    - 학과 공간 배정과 최종 팀 수에 따라 이 표를 다시 그림 (현재는 8팀 가정)
+    - 한 스테이지에서 발표·시연하는 동안 다른 스테이지에서 다음 팀이 가디언·캐스팅을 미리 세팅 → 교대 손실 0
+    - 휴식 5분은 짧음 → 휴식 중에도 화장실 등 자유 이동 허용
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">운영 · 2</div>
+  <h2>팀 슬롯 20분의 구성</h2>
+  <table style="font-size:.64em">
+    <tr><th>구간</th><th>시간</th><th>내용</th></tr>
+    <tr><td class="gfx-txt"><b>발표</b></td><td>5분</td><td>경험 한 줄 정의 · 지각적 근거 3줄 · 컴포트 등급 · <b>14주 실측과 개선 전후 수치</b></td></tr>
+    <tr><td class="vr-txt"><b>시연</b></td><td>10분</td><td>배정된 관람자 2~3명이 순서대로 체험 (1인 약 3분) · 캐스팅 화면을 전체에 공개 · 팀은 설명 금지</td></tr>
+    <tr><td class="lab-txt"><b>질의</b></td><td>5분</td><td>교수 질문 2개 이상 + 관람자 질문 · 성능 실측 확인</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>요리 경연의 시식</b> : 요리사는 접시를 내기 전에 의도를 짧게 소개 · 심사위원이 먹는 동안은 말하지 않음 · 다 먹은 뒤 질문 → 맛(체험)은 접시가 스스로 말해야 함</p>
+  </div>
+  <div class="key trap">
+    <p class="small">시연 중 팀의 허용 발언 = 안전 안내 · «시작하셔도 됩니다» 뿐 · 조작법 설명이 필요하면 → 그 자체가 <b>설계가 빠뜨린 정보</b> (14주 교훈)</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">운영 · 3 ★</div>
+  <h2>부스 배치</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 400" role="img" aria-label="두 스테이지의 플레이 구역, 스포터, 캐스팅 화면, 대기열, 위생 테이블, 관람석 배치">
+    <!-- stage A -->
+    <rect x="60" y="40" width="200" height="200" fill="rgba(53,214,230,0.07)" stroke="#35d6e6" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <text x="160" y="30" fill="#35d6e6" font-size="18" text-anchor="middle" font-weight="700">스테이지 A · 2 m × 2 m</text>
+    <circle cx="160" cy="140" r="22" fill="#421229" stroke="#ff5fa2" stroke-width="2.5"/>
+    <text x="160" y="146" fill="#ff5fa2" font-size="15" text-anchor="middle">체험</text>
+    <circle cx="290" cy="140" r="22" fill="#0e3a42" stroke="#35d6e6" stroke-width="2.5"/>
+    <text x="290" y="146" fill="#35d6e6" font-size="15" text-anchor="middle">스포터</text>
+    <!-- stage B -->
+    <rect x="440" y="40" width="200" height="200" fill="rgba(255,95,162,0.06)" stroke="#ff5fa2" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <text x="540" y="30" fill="#ff5fa2" font-size="18" text-anchor="middle" font-weight="700">스테이지 B · 다음 팀 세팅</text>
+    <circle cx="670" cy="140" r="22" fill="#0e3a42" stroke="#35d6e6" stroke-width="2.5"/>
+    <text x="670" y="146" fill="#35d6e6" font-size="15" text-anchor="middle">스포터</text>
+    <!-- screen -->
+    <rect x="200" y="290" width="300" height="20" rx="4" fill="#e8ecf4"/>
+    <text x="350" y="338" fill="#e8ecf4" font-size="17" text-anchor="middle">발표 · 캐스팅 공용 화면</text>
+    <!-- queue -->
+    <g fill="#9aa4b8"><circle cx="40" cy="300" r="12"/><circle cx="40" cy="335" r="12"/><circle cx="40" cy="370" r="12"/></g>
+    <text x="64" y="378" fill="#ffc44d" font-size="16">대기 최대 3명</text>
+    <!-- hygiene -->
+    <rect x="560" y="300" width="110" height="50" rx="6" fill="#21330f" stroke="#a8e05f"/>
+    <text x="615" y="331" fill="#a8e05f" font-size="16" text-anchor="middle">위생 테이블</text>
+    <!-- labels right -->
+    <g font-size="18" fill="#e8ecf4">
+      <text x="730" y="60" fill="#35d6e6" font-weight="700">스포터 (팀원 1명 고정)</text>
+      <text x="730" y="88">케이블 · 가디언 경계 · 주변 사람</text>
+      <text x="730" y="114">중단 신호 즉시 대응</text>
+      <text x="730" y="170" fill="#ffc44d" font-weight="700">대기열</text>
+      <text x="730" y="198">다음 체험자만 대기 · 최대 3명</text>
+      <text x="730" y="224">플레이 구역 2 m 밖에서 대기</text>
+      <text x="730" y="280" fill="#a8e05f" font-weight="700">위생 테이블</text>
+      <text x="730" y="308">커버 1인 1매 · 알코올 티슈</text>
+      <text x="730" y="334">렌즈 직사광선 금지 · 충전 케이블</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    - 두 스테이지 사이 간격 최소 1 m · 가디언 경계가 겹치지 않게
+    - 창가 배치 금지 (렌즈 직사광선 · 트래킹 불안정)
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">운영 · 4</div>
+  <h2>안전 운영 — 전시라도 규칙은 같다</h2>
+  <ul class="small">
+    <li><b>스포터</b> : 부스마다 1명 고정 · 체험 중 스포터는 다른 일(설명·질의 응대) 금지</li>
+    <li><b>세션 간 정리</b> : 커버 교체 · 페이스 인터페이스 세척 · 렌즈는 마른 극세사 천만</li>
+    <li><b>대기열 인원 제한</b> : 최대 3명 · 관람자 밀집 → 체험자 팔 동작 범위 침범 위험</li>
+    <li><b>체험 거부 · 중단 보장</b> : 연구 참가자의 VR 부작용 중도 포기 평균 15.6% (Souchet et al. 2023) → 체험하지 않은 관람자는 캐스팅 화면 관찰로 평가 · 불이익 없음</li>
+    <li>멀미 3단계 프로토콜 동일 · 3단계 체험자는 당일 재체험 금지</li>
+  </ul>
+  <div class="analogy">
+    <p><b>놀이기구 안전요원</b> : 손님이 즐기는 동안 안전바 · 탑승 대기 줄 · 비상 정지 버튼만 봄 · 놀이기구 설명은 다른 직원 몫 → 스포터 = 안전요원</p>
+  </div>
+</section>
+
+<!-- ========================================================= 평가 -->
+<section class="divider part-ii">
+  <div class="kicker">평가</div>
+  <div class="rule"></div>
+  <h1>무엇으로<br><em>채점하는가</em></h1>
+  <p class="sub">5축 · 확인 방법 · 동료 평가 작성법</p>
+</section>
+
+<section>
+  <div class="tag vr">평가 · 용어</div>
+  <h2>평가 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>완성도<small>Completeness</small></dt><dd>처음부터 끝까지 막힘·크래시 없이 체험이 성립하는 정도</dd>
+    <dt>지각·컴포트 근거<small>Perceptual rationale</small></dt><dd>설계 결정을 지각 원리와 측정으로 설명할 수 있는 정도 (기획서 ② ③)</dd>
+    <dt>온디바이스 실측<small>On-device measurement</small></dt><dd>현장에서 헤드셋으로 직접 잰 fps — 에디터 수치 불인정</dd>
+    <dt>등급 일치<small>Rating match</small></dt><dd>팀이 선언한 컴포트 등급과 체험자가 느낀 등급이 같은지</dd>
+    <dt>동료 평가<small>Peer review</small></dt><dd>다른 팀 학생이 체험 직후 관찰 근거로 남기는 평가</dd>
+    <dt>프레즌스<small>Presence</small></dt><dd>«그곳에 있다» 는 주관적 느낌 — 오늘 <b>성적 지표로 쓰지 않음</b></dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">평가 · 1</div>
+  <h2>5축과 확인 방법</h2>
+  <table style="font-size:.62em">
+    <tr><th>축</th><th>배점</th><th>확인 방법</th><th>무엇을 보는가</th></tr>
+    <tr><td>완성도</td><td>30</td><td>시연</td><td>안내 없이 시작~끝 · 크래시 0 · 과업 완료</td></tr>
+    <tr><td class="vr-txt"><b>지각·컴포트 근거</b></td><td><b>25</b></td><td>기획서 + 질의</td><td>설계 결정 → 원리 → 측정을 말로 설명 · 등급 일치</td></tr>
+    <tr><td>성능 예산 준수</td><td>15</td><td>온디바이스 실측</td><td>현장 fps · 기획서 예산 대비 · 14주 개선 기록</td></tr>
+    <tr><td>발표·시연</td><td>20</td><td>현장</td><td>5분 준수 · 수치 제시 · 시연 운영(안전·교대)</td></tr>
+    <tr><td>동료 평가</td><td>10</td><td>양식</td><td>받은 동료 평가 · 성실한 작성 여부</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>자동차 검사소</b> : 운전석에 앉아 «잘 나가요» 라는 주인 말을 믿지 않고 브레이크 시험기·배기가스 측정기로 확인 → 성능 15점 = 현장 계측기(헤드셋)의 숫자만</p>
+  </div>
+  <div class="note">교수 현장 채점표 : rubrics/기말-평가표.md · 동료평가 양식과 산식 : «팀프로젝트 가이드북»</div>
+</section>
+
+<section>
+  <div class="tag vr">평가 · 2</div>
+  <h2>질의 5분 — 예상 질문</h2>
+  <table style="font-size:.62em">
+    <tr><th>축</th><th>질문 예</th><th>좋은 답의 재료</th></tr>
+    <tr><td class="vr-txt">근거</td><td>«이 이동 방식이 편안하다고 판단한 근거는?»</td><td>벡션 · 전정계 · 스냅 22.5° · SSQ 전후</td></tr>
+    <tr><td class="vr-txt">근거</td><td>«선언 등급을 Moderate 로 한 이유는? 체험자 반응과 일치했나?»</td><td>14주 인터뷰 · 중단자 수</td></tr>
+    <tr><td>성능</td><td>«지금 fps 는? 가장 큰 개선 한 가지는?»</td><td>개선 기록표 전후 수치</td></tr>
+    <tr><td>성능</td><td>«CPU 병목이었나, GPU 병목이었나? 어떻게 알았나?»</td><td>OVR Metrics GPU 사용률 · Profiler CPU ms</td></tr>
+    <tr><td>설계</td><td>«AI 가 처음 만든 코드에서 고친 함정은?»</td><td>함정 번호 · 증상 · 진단</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">답의 형태 : <b>결정 → 원리 → 숫자</b> 한 문장 · «느낌상», «AI 가 그렇게 해서» 는 근거로 불인정</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">평가 · 3</div>
+  <h2>«몰입감이 높다» 는 점수가 아니다</h2>
+  <ul class="small">
+    <li>프레즌스 설문은 체험 후 회상 · 진행자를 배려한 응답(요구 특성)에 취약</li>
+    <li>Slater (2004) : 일부러 지어낸 가짜 속성 «경험의 색채감» 을 물어도 응답이 과제 성취·기분과 상관 → <b>사후 설문 점수만으로 «존재하는 무언가» 를 쟀다고 단정할 수 없음</b></li>
+    <li>그래서 오늘 : 프레즌스 · 몰입도 점수 = 성적 지표 아님 · «몰입감이 높다» 주장 → 관찰 · 실측 · 등급 일치로 바꿔 말하기</li>
+  </ul>
+  <div class="analogy">
+    <p><b>식당 앞 «인생 맛집» 현수막</b> : 손님은 현수막이 아니라 한 입 먹은 맛으로 판단 → «몰입감 최고» 대신 «체험자 3명 모두 안내 없이 완료 · 중단 0명» 이 맛</p>
+  </div>
+  <div class="note">출처 : Slater (2004) Presence 13(4) · Slater (2009) Phil. Trans. R. Soc. B — 장소 착각 · 개연성 착각 구분</div>
+</section>
+
+<section>
+  <div class="tag lab">동료 평가 · 1</div>
+  <h2>동료 평가 쓰는 법</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>근거 없는 평가</h4>
+      강점 : 재밌어요! 그래픽 예뻐요<br>
+      개선 : 좀 어지러웠음<br>
+      컴포트 등급 : 일치<br><br>
+      <span style="color:#ff5a4d">// 언제 · 무엇이 · 얼마나 없음<br>// 팀이 고칠 수 없음</span>
+    </div>
+    <div class="good">
+      <h4>관찰 근거 평가</h4>
+      강점 : 처음 10초 안에 연못 쪽 빛나는 돌을 보고 바로 집음 → 시작 안내 없이도 과업 파악<br>
+      개선 : 마지막 텔레포트 직후 바닥이 사라지는 장면에서 몸이 앞으로 쏠림 · 약간 어지러움 (2분경)<br>
+      컴포트 등급 : 선언 Comfortable / 체감 Moderate — 불일치
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>맛집 리뷰</b> : «맛있어요» 는 쓸모없는 리뷰 · «면은 쫄깃한데 국물이 식어서 나왔어요» 는 가게가 내일 고칠 수 있는 리뷰</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">동료 평가 · 2</div>
+  <h2>작성 규칙과 배정</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><b>체험 직후 즉시</b> 작성 — 다음 팀 발표 시작 전 · 기억은 몇 분 만에 «좋았다/나빴다» 로 뭉개짐</li>
+        <li>항목 : 과업 완료 여부 · 강점 1 · 개선 1 · <b>컴포트 등급 일치 여부</b> · 점수</li>
+        <li>체험하지 않고 화면으로만 본 팀 → «관찰» 표시 후 작성</li>
+        <li>자기 팀 평가 금지 · 익명 제출 · 인신공격 문장 무효</li>
+      </ul>
+    </div>
+    <div>
+      <table style="font-size:.64em">
+        <tr><th>팀 k 시연의 체험자</th></tr>
+        <tr><td>팀 k+1 에서 1명</td></tr>
+        <tr><td>팀 k+2 에서 1명</td></tr>
+        <tr><td>(선택) 자원자 1명</td></tr>
+      </table>
+      <p class="small">8팀 기준 → 한 사람이 최소 1회 체험 · 모든 팀이 다른 두 팀의 눈으로 평가받음</p>
+    </div>
+  </div>
+  <div class="key lab">
+    <p class="small">배정표는 당일 칠판·LMS 공지 · 마지막 팀(k+1 이 없을 때)은 1번 팀부터 다시 순환</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">점검</div>
+  <h2>슬롯 시작 5분 전 체크리스트</h2>
+  <table style="font-size:.66em">
+    <tr><th>#</th><th>확인</th><th>실패하면</th></tr>
+    <tr><td>1</td><td>헤드셋 배터리 50% 이상 · 예비 헤드셋 위치</td><td>시연 중 꺼짐</td></tr>
+    <tr><td>2</td><td>가디언 경계 다시 그리기 (스테이지 위치 기준)</td><td>벽·사람과 충돌</td></tr>
+    <tr><td>3</td><td>캐스팅 연결 · 공용 화면 출력</td><td>관람자·교수가 체험 내용을 못 봄</td></tr>
+    <tr><td>4</td><td><b>동결 빌드</b> 설치 확인 (버전 이름) · 배포용 빌드</td><td>디버그 빌드로 성능 저하</td></tr>
+    <tr><td>5</td><td>OVR Metrics 실측 준비 (질의 시간에 켜서 30초)</td><td>성능 15점 근거 없음</td></tr>
+    <tr><td>6</td><td>과업 카드 · 위생 커버 · 알코올 티슈</td><td>교대 지연</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>비행기 이륙 전 체크리스트</b> : 수천 번 비행한 조종사도 항목을 소리 내어 하나씩 확인 → 익숙할수록 빠뜨리는 항목을 막기 위한 장치</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">도입 질문의 답</div>
+  <h2>관람자는 무엇을 보고 판단하는가</h2>
+  <div class="key">
+    <p>관람자는 기획서를 읽지 않음 → <b>몸으로 겪은 3분</b>이 전부</p>
+  </div>
+  <table style="font-size:.64em">
+    <tr><th>관람자가 겪는 것</th><th>그 뒤에 있는 설계</th></tr>
+    <tr><td>처음 10초에 할 일을 아는가</td><td>시야 ±30° 안의 목표 · 시선 유도 (14주 관찰)</td></tr>
+    <tr><td>속이 편한가 · 선언 등급과 같은가</td><td>이동·회전 방식 · 베그넷 · 90fps (7·11·12주)</td></tr>
+    <tr><td>물체가 제자리에 놓인 느낌인가</td><td>접촉 그림자 · 스케일 1:1 · 바닥 단서 (5·13주)</td></tr>
+    <tr><td>글자가 읽히고 손이 닿는가</td><td>World Space UI 거리 · 손 닿는 거리 0.4~0.7 m (10·12주)</td></tr>
+  </table>
+  <p class="small">→ 학기 내내 배운 지각 이론이 관람자에게는 <b>«아무 문제 없음»</b> 으로만 보임 · 잘된 VR 설계는 눈에 띄지 않음</p>
+</section>
+
+<section class="divider part-iii">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>피드백과 <em>학기 정리</em></h1>
+  <p class="sub">팀별 피드백 15분 · 최신 XR 동향 · 포트폴리오 지도<br>
+  AI 함정 10종 회고 → 개인 체크리스트</p>
+  <div class="note">오늘 시연 영상(캐스팅 녹화)을 보관 → 16주 포트폴리오 재료</div>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/math/math.min.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

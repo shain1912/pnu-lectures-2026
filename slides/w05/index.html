@@ -8,6 +8,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
 <link rel="stylesheet" href="../_shared/theme.css">
+<style>
+/* 덱 고유 : 인라인 SVG 도해 */
+.reveal svg.dg { display:block; margin:.15em auto 0; max-width:100%; height:auto; }
+.reveal svg.dg text { font-family: var(--sans); }
+.reveal svg.dg text:not([fill]) { fill: #e8ecf4; }
+</style>
 </head>
 <body>
 <div class="reveal"><div class="slides">
@@ -156,6 +162,45 @@
     - 사진사 비유 : 광원 자리에 카메라를 세우고 찍는다 → 찍힌 곳은 빛이 닿고, 가려진 곳은 그림자
     - 전구는 사방을 비추니 사진사가 위·아래·앞·뒤·좌·우 여섯 번 찍어야 함 → 비싼 이유
     - 한계 : 실제로는 색 사진이 아니라 거리 사진(깊이)
+  </aside>
+</section>
+<section>
+  <div class="tag gfx">조명 · 3 도해</div>
+  <h2>그림자맵 판정 · 점광원은 6방향 촬영</h2>
+  <svg class="dg" viewBox="0 0 1120 420" width="1120" height="420" role="img" aria-label="광원에서 본 거리 기록과 실제 거리를 비교해 그림자를 판정하는 그림, 점광원이 6방향으로 그림자맵을 찍는 그림">
+    <text x="20" y="22" font-size="20" font-weight="700" fill="#ffc44d">① 광원 자리에서 «거리 사진» 촬영 → ② 각 점의 실제 거리와 비교</text>
+    <polygon points="300,340 449,340 300,230" fill="#000" fill-opacity=".55"/>
+    <line x1="30" y1="340" x2="630" y2="340" stroke="#9aa4b8" stroke-width="3"/>
+    <rect x="230" y="230" width="70" height="110" fill="#35d6e6" fill-opacity=".25" stroke="#35d6e6" stroke-width="2"/>
+    <text x="265" y="292" text-anchor="middle" font-size="19" fill="#35d6e6">상자</text>
+    <line x1="70" y1="60" x2="70.0" y2="30.0" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="91.2" y2="38.8" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="100.0" y2="60.0" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="91.2" y2="81.2" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="70.0" y2="90.0" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="48.8" y2="81.2" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="40.0" y2="60.0" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="48.8" y2="38.8" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/>
+    <circle cx="70" cy="60" r="18" fill="#ffc44d"/>
+    <text x="98" y="56" font-size="19" fill="#ffc44d">광원</text>
+    <line x1="70" y1="60" x2="262.1" y2="230" stroke="#ffc44d" stroke-width="3"/>
+    <line x1="262.1" y1="230" x2="380" y2="340" stroke="#ff5a4d" stroke-width="3" stroke-dasharray="8 6"/>
+    <circle cx="262.1" cy="230" r="6" fill="#ffc44d"/>
+    <line x1="70" y1="60" x2="560" y2="340" stroke="#ffc44d" stroke-width="3"/>
+    <circle cx="380" cy="340" r="9" fill="#ff5a4d"/>
+    <circle cx="560" cy="340" r="9" fill="#a8e05f"/>
+    <text x="215" y="222" text-anchor="end" font-size="19" fill="#ffc44d">기록 5 m</text>
+    <text x="320" y="374" font-size="20" font-weight="700" fill="#ff5a4d">B · 기록 5 m &lt; 실제 8 m</text>
+    <text x="320" y="400" font-size="19" fill="#ff5a4d">→ 앞에 막는 물체 있음 → 그림자</text>
+    <text x="630" y="170" text-anchor="end" font-size="20" font-weight="700" fill="#a8e05f">A · 기록 11 m = 실제 11 m</text>
+    <text x="630" y="196" text-anchor="end" font-size="19" fill="#a8e05f">→ 막는 물체 없음 → 빛 닿음</text>
+    <line x1="668" y1="40" x2="668" y2="410" stroke="#2a3040" stroke-width="2"/>
+    <text x="905" y="22" text-anchor="middle" font-size="20" font-weight="700" fill="#ffc44d">점광원 : 사방이라 6방향 각각 촬영</text>
+    <line x1="905.0" y1="189.0" x2="905.0" y2="125.0" stroke="#ffc44d" stroke-width="3"/><path d="M905.0 113.0 L911.0 125.0 L899.0 125.0 Z" fill="#ffc44d"/><rect x="871" y="45" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="905" y="82" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">위</text><line x1="905.0" y1="241.0" x2="905.0" y2="305.0" stroke="#ffc44d" stroke-width="3"/><path d="M905.0 317.0 L899.0 305.0 L911.0 305.0 Z" fill="#ffc44d"/><rect x="871" y="325" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="905" y="362" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">아래</text><line x1="879.0" y1="215.0" x2="805.0" y2="215.0" stroke="#ffc44d" stroke-width="3"/><path d="M793.0 215.0 L805.0 209.0 L805.0 221.0 Z" fill="#ffc44d"/><rect x="721" y="185" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="755" y="222" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">왼쪽</text><line x1="931.0" y1="215.0" x2="1005.0" y2="215.0" stroke="#ffc44d" stroke-width="3"/><path d="M1017.0 215.0 L1005.0 221.0 L1005.0 209.0 Z" fill="#ffc44d"/><rect x="1021" y="185" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="1055" y="222" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">오른쪽</text><line x1="886.6" y1="233.4" x2="840.4" y2="279.6" stroke="#ffc44d" stroke-width="3"/><path d="M831.9 288.1 L836.1 275.4 L844.6 283.9 Z" fill="#ffc44d"/><rect x="771" y="285" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="805" y="322" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">앞</text><line x1="923.4" y1="196.6" x2="969.6" y2="150.4" stroke="#ffc44d" stroke-width="3"/><path d="M978.1 141.9 L973.9 154.6 L965.4 146.1 Z" fill="#ffc44d"/><rect x="971" y="85" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="1005" y="122" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">뒤</text>
+    <circle cx="905" cy="215" r="20" fill="#ffc44d"/>
+    <text x="905" y="410" text-anchor="middle" font-size="19" fill="#9aa4b8">6장 = Spot 1장의 6배</text>
+  </svg>
+  <div class="analogy" style="margin-top:.4em">
+    <p><b>광원 자리의 사진사</b> · 사진에 «그 방향 첫 물체까지 거리»를 적어 둠 → 내 자리가 그보다 멀면 누군가 앞을 막은 것 = 그림자 · 전구 자리 사진사는 위·아래·앞·뒤·좌·우 6번 촬영</p>
+  </div>
+  <aside class="notes">
+    - 왼쪽 : B 쪽 방향으로 광원이 찍은 사진에는 상자 윗면까지 거리(약 5 m)가 적혀 있음 · B 의 실제 거리는 약 8 m → 더 멀다 = 상자 뒤 → 그림자
+    - A 방향은 바닥까지 막힘 없음 → 사진 기록과 실제 거리가 같음 → 빛
+    - 거리 숫자는 그림 비율 기준 예시
+    - 오른쪽 : 점광원은 사방을 비추므로 큐브맵 6면 각각을 찍음 → 장면을 6번 더 그림 → Spot 1장의 6배
   </aside>
 </section>
 
@@ -329,6 +374,47 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
   <aside class="notes">
     - 젖은 길 비유 : 걸으면 가로등 반짝임이 나를 따라옴 → 정반사는 "내 눈 위치" 가 식에 들어감
     - N·H : 면이 거울 조건(가운데 방향)을 얼마나 정확히 보고 있나
+  </aside>
+</section>
+<section>
+  <div class="tag gfx">반사 · 6 도해</div>
+  <h2>하프벡터 H — L 과 V 의 한가운데</h2>
+  <div class="cols wide-left" style="align-items:center">
+    <svg class="dg" viewBox="-30 40 670 340" width="670" height="340" role="img" aria-label="표면 위 한 점에서 광원 방향 L, 눈 방향 V, 그 가운데 H, 법선 N">
+      <line x1="80" y1="332" x2="62" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="102" y1="332" x2="84" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="124" y1="332" x2="106" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="146" y1="332" x2="128" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="168" y1="332" x2="150" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="190" y1="332" x2="172" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="212" y1="332" x2="194" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="234" y1="332" x2="216" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="256" y1="332" x2="238" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="278" y1="332" x2="260" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="300" y1="332" x2="282" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="322" y1="332" x2="304" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="344" y1="332" x2="326" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="366" y1="332" x2="348" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="388" y1="332" x2="370" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="410" y1="332" x2="392" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="432" y1="332" x2="414" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="454" y1="332" x2="436" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="476" y1="332" x2="458" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="498" y1="332" x2="480" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="520" y1="332" x2="502" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="542" y1="332" x2="524" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="564" y1="332" x2="546" y2="352" stroke="#2a3040" stroke-width="2"/>
+      <line x1="60" y1="330" x2="600" y2="330" stroke="#9aa4b8" stroke-width="3"/>
+      <path d="M229.9 266.9 A110 110 0 0 1 291.5 223.7" fill="none" stroke="#ffc44d" stroke-width="2.5" stroke-dasharray="6 5"/>
+      <path d="M291.5 223.7 A110 110 0 0 1 366.5 230.3" fill="none" stroke="#ffc44d" stroke-width="2.5" stroke-dasharray="6 5"/>
+      <text x="242.0" y="225.6" text-anchor="middle" font-size="22" font-style="italic" fill="#ffc44d">α</text>
+      <text x="331.9" y="201.5" text-anchor="middle" font-size="22" font-style="italic" fill="#ffc44d">α</text>
+      <line x1="320.0" y1="330.0" x2="320.0" y2="126.0" stroke="#9aa4b8" stroke-width="3"/><path d="M320.0 110.0 L328.0 126.0 L312.0 126.0 Z" fill="#9aa4b8"/>
+      <line x1="320.0" y1="330.0" x2="152.9" y2="213.0" stroke="#e8ecf4" stroke-width="4"/><path d="M139.8 203.8 L157.5 206.4 L148.3 219.5 Z" fill="#e8ecf4"/>
+      <line x1="320.0" y1="330.0" x2="406.2" y2="145.1" stroke="#35d6e6" stroke-width="4"/><path d="M413.0 130.6 L413.5 148.5 L399.0 141.7 Z" fill="#35d6e6"/>
+      <line x1="320.0" y1="330.0" x2="267.2" y2="133.0" stroke="#ffc44d" stroke-width="5"/><path d="M263.1 117.5 L274.9 130.9 L259.5 135.0 Z" fill="#ffc44d"/>
+      <circle cx="115.2" cy="186.6" r="17" fill="#ffc44d"/>
+      <text x="91.2" y="192.6" text-anchor="end" font-size="20" font-weight="700">L 광원 쪽</text>
+      <ellipse cx="425.7" cy="103.4" rx="20" ry="12" fill="#e8ecf4"/>
+      <circle cx="425.7" cy="103.4" r="6" fill="#0b0d12"/>
+      <text x="453.7" y="110.4" font-size="20" font-weight="700" fill="#35d6e6">V 눈 쪽</text>
+      <text x="253.1" y="105.5" text-anchor="end" font-size="22" font-weight="700" fill="#ffc44d">H</text>
+      <text x="330.0" y="100.0" font-size="20" font-weight="700" fill="#9aa4b8">N 법선</text>
+      <circle cx="320" cy="330" r="6" fill="#e8ecf4"/>
+    </svg>
+    <div>
+      <div class="key">
+        <p class="small"><b>H = L + V 를 길이 1 로</b> → 두 화살표 사이 각을 <b>반으로 접은 방향</b> (α = α)</p>
+        <p class="small">그림 : N 과 H 사이 15° → \( \mathbf{N}\cdot\mathbf{H} \approx 0.97 \) → 거울 조건에 거의 일치 → 반짝</p>
+        <p class="small">눈(V)이 움직이면 H 도 회전 → 하이라이트 이동</p>
+      </div>
+      <div class="analogy">
+        <p><b>젖은 아스팔트의 가로등</b> · «가로등과 내 눈의 한가운데»를 정면으로 보는 바닥 조각만 반짝</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    - 손으로 시연 : 한 팔은 광원, 다른 팔은 눈 쪽 → 두 팔 사이 가운데를 가리키는 것이 H
+    - N·H 가 1 에 가까울수록 반짝 · 다음 장의 광택 지수 s 가 "얼마나 정확히 맞아야 반짝이는가"를 결정
+    - 그림의 각도(L −55°, V +25° → H −15°)는 설명용 예시
   </aside>
 </section>
 
@@ -669,6 +755,58 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
     - 결론 : 재질 값만 고치지 말고 반사될 환경(스카이박스·반사 프로브)부터 확인
   </aside>
 </section>
+<section>
+  <div class="tag gfx">도입 질문의 답 · 그림</div>
+  <h2>같은 구 · 다른 방</h2>
+  <svg class="dg" viewBox="0 0 1100 420" width="1100" height="420" role="img" aria-label="같은 재질의 구가 빈 방에서는 하이라이트 점 하나만 있는 플라스틱처럼, 주변 환경이 있는 방에서는 하늘과 창문이 비친 금속처럼 보이는 비교">
+    <defs>
+      <radialGradient id="dgP" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#eef0f4"/><stop offset=".55" stop-color="#a3a9b4"/><stop offset="1" stop-color="#4c525e"/></radialGradient>
+      <radialGradient id="dgSpot" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+      <linearGradient id="dgSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f8fe0"/><stop offset="1" stop-color="#bfe0ff"/></linearGradient>
+      <linearGradient id="dgM" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#9fd0ff"/><stop offset=".40" stop-color="#e6f4ff"/><stop offset=".47" stop-color="#fff"/>
+        <stop offset=".50" stop-color="#7a6450"/><stop offset=".75" stop-color="#4a3626"/><stop offset="1" stop-color="#1e140c"/></linearGradient>
+      <radialGradient id="dgEdge" cx="50%" cy="50%" r="50%"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>
+      <clipPath id="dgClip"><circle cx="825" cy="200" r="105"/></clipPath>
+    </defs>
+    <text x="275" y="24" text-anchor="middle" font-size="20" font-weight="700">빈 방 · 단색 환경광 + 점광원 1개</text>
+    <rect x="40" y="38" width="470" height="300" rx="10" fill="#cfd3db"/>
+    <polygon points="40,270 510,270 510,338 40,338" fill="#b3b8c2"/>
+    <circle cx="90" cy="70" r="12" fill="#ffc44d"/>
+    <ellipse cx="275" cy="312" rx="92" ry="14" fill="#000" fill-opacity=".25"/>
+    <circle cx="275" cy="200" r="105" fill="url(#dgP)"/>
+    <circle cx="238" cy="160" r="16" fill="url(#dgSpot)"/>
+    <text x="275" y="372" text-anchor="middle" font-size="20" font-weight="700" fill="#ff5a4d">비칠 풍경 없음 → 하이라이트 점 하나</text>
+    <text x="275" y="400" text-anchor="middle" font-size="20" fill="#ff5a4d">→ 플라스틱 장난감처럼 보임</text>
+
+    <text x="825" y="24" text-anchor="middle" font-size="20" font-weight="700">주변 환경이 있는 방 · 스카이박스·반사 프로브</text>
+    <rect x="590" y="38" width="470" height="300" rx="10" fill="#6b5a48"/>
+    <rect x="620" y="60" width="150" height="150" fill="url(#dgSky)" stroke="#d9cbb8" stroke-width="5"/>
+    <line x1="695" y1="60" x2="695" y2="210" stroke="#d9cbb8" stroke-width="4"/>
+    <polygon points="590,270 1060,270 1060,338 590,338" fill="#4a3626"/>
+    <ellipse cx="825" cy="312" rx="92" ry="14" fill="#000" fill-opacity=".35"/>
+    <g clip-path="url(#dgClip)">
+      <rect x="715" y="90" width="220" height="220" fill="url(#dgM)"/>
+      <path d="M752 128 Q770 112 800 110 L800 168 Q772 170 756 182 Z" fill="#cfe9ff"/>
+      <path d="M800 110 Q812 110 818 111 L818 167 Q810 167 800 168 Z" fill="#d9cbb8"/>
+      <circle cx="825" cy="200" r="105" fill="url(#dgEdge)"/>
+    </g>
+    <circle cx="772" cy="138" r="9" fill="#fff"/>
+    <text x="825" y="372" text-anchor="middle" font-size="20" font-weight="700" fill="#a8e05f">하늘·창문·바닥이 표면에 비침</text>
+    <text x="825" y="400" text-anchor="middle" font-size="20" fill="#a8e05f">→ 금속처럼 보임</text>
+    <text x="550" y="206" text-anchor="middle" font-size="18" fill="#9aa4b8">같은</text>
+    <text x="550" y="230" text-anchor="middle" font-size="18" fill="#9aa4b8">재질</text>
+  </svg>
+  <div class="analogy" style="margin-top:.4em">
+    <p><b>거울</b> · 텅 빈 흰 방의 거울은 그냥 흰 판 · 금속도 비칠 주변이 있어야 «금속다움»이 드러남 → 재질 값보다 <b>반사될 환경</b>부터 확인</p>
+  </div>
+  <aside class="notes">
+    - 앞 슬라이드 답을 그림으로 : 두 구는 같은 모델·같은 재질 · 다른 것은 들어오는 빛(환경)뿐
+    - 오른쪽 구 표면 = 위쪽은 하늘, 가운데 밝은 띠는 지평선, 아래는 바닥, 왼쪽 위에 창문 상
+    - 왼쪽 구는 비칠 것이 단색 벽뿐이라 반사가 밋밋 → 점광원 하이라이트 점만 남음
+    - 단순화한 그림 · 실제 결과는 거칠기·환경 텍스처에 따라 다름
+  </aside>
+</section>
 
 <!-- ---------------------------------------------------- AI 함정 #4 -->
 <section class="divider trap">
@@ -870,6 +1008,34 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
     - 숫자로 확인 : 0.5 m 에서 7°, 10 m 에서 0.4° — 20배 거리면 차이 1/20
   </aside>
 </section>
+<section>
+  <div class="tag vr">지각 · 4 도해</div>
+  <h2>엄지 실험을 위에서 내려다보면</h2>
+  <svg class="dg" viewBox="0 0 1100 370" width="1100" height="370" role="img" aria-label="두 눈에서 0.5m 물체를 보는 각 약 7도, 10m 물체를 보는 각 약 0.4도">
+    <rect x="10" y="20" width="1080" height="150" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
+    <rect x="10" y="185" width="1080" height="150" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
+    <line x1="80" y1="70" x2="300" y2="100" stroke="#ff5fa2" stroke-width="3"/><line x1="80" y1="130" x2="300" y2="100" stroke="#ff5fa2" stroke-width="3"/><path d="M230.6 90.5 A70 70 0 0 0 230.6 109.5" fill="#ffc44d" fill-opacity=".25" stroke="#ffc44d" stroke-width="3"/>
+    <g><ellipse cx="80" cy="70" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="70" r="5" fill="#0b0d12"/></g><g><ellipse cx="80" cy="130" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="130" r="5" fill="#0b0d12"/></g>
+    <circle cx="300" cy="100" r="12" fill="#ffc44d"/>
+    <text x="330" y="94" font-size="22" font-weight="700" fill="#ffc44d">엄지 0.5 m → 두 시선 각 약 7°</text>
+    <text x="330" y="124" font-size="19" fill="#9aa4b8">두 눈 영상의 차이 큼 → 거리 단서 강함</text>
+    <text x="110" y="48" font-size="18" fill="#9aa4b8">왼눈</text>
+    <text x="110" y="160" font-size="18" fill="#9aa4b8">오른눈 (간격 6.3 cm)</text>
+    <line x1="80" y1="230" x2="960" y2="260" stroke="#ff5fa2" stroke-width="3"/><line x1="80" y1="290" x2="960" y2="260" stroke="#ff5fa2" stroke-width="3"/><path d="M800.1 254.5 A160 160 0 0 0 800.1 265.5" fill="#ffc44d" fill-opacity=".25" stroke="#ffc44d" stroke-width="3"/>
+    <g><ellipse cx="80" cy="230" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="230" r="5" fill="#0b0d12"/></g><g><ellipse cx="80" cy="290" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="290" r="5" fill="#0b0d12"/></g>
+    <rect x="946" y="220" width="28" height="80" fill="#9aa4b8"/>
+    <text x="760" y="224" text-anchor="end" font-size="22" font-weight="700" fill="#ffc44d">건물 10 m → 약 0.4°</text>
+    <text x="760" y="316" text-anchor="end" font-size="19" fill="#9aa4b8">두 시선이 거의 평행 → 거리 단서 약함</text>
+    <text x="1090" y="362" text-anchor="end" font-size="18" fill="#9aa4b8">눈 간격·각도는 보이도록 과장 · 각도 ≈ 6.3 cm ÷ 거리</text>
+  </svg>
+  <div class="analogy" style="margin-top:.4em">
+    <p><b>엄지 손가락 실험의 평면도</b> · 가까운 엄지는 두 눈의 시선이 크게 벌어져 번갈아 감을 때 크게 점프 · 먼 건물은 두 시선이 거의 겹쳐 그대로</p>
+  </div>
+  <aside class="notes">
+    - 0.063 ÷ 0.5 = 0.126 rad ≈ 7.2° · 0.063 ÷ 10 = 0.0063 rad ≈ 0.36° → 거리 20배 = 각도 1/20
+    - 그림은 보이도록 과장 · 실제 10 m 의 두 시선은 사실상 평행
+  </aside>
+</section>
 
 <section>
   <div class="tag vr">지각 · 5 ★</div>
@@ -975,6 +1141,35 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
   <aside class="notes">
     - 기차 비유 : 가까운 건 빨리, 먼 건 느리게 → 뇌는 이 속도 차이를 거리로 해석
     - 데모에서 드래그로 시점을 돌렸을 때 공 순서가 바로 보인 이유
+  </aside>
+</section>
+<section>
+  <div class="tag vr">지각 · 9 도해</div>
+  <h2>머리 10 cm 이동 — 가까운 것은 크게, 먼 것은 조금</h2>
+  <svg class="dg" viewBox="0 0 1100 370" width="1100" height="370" role="img" aria-label="머리를 10cm 옮기면 1m 물체 방향은 약 5.7도, 10m 물체 방향은 약 0.57도 바뀜">
+    <rect x="10" y="20" width="1080" height="150" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
+    <rect x="10" y="185" width="1080" height="150" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
+    <line x1="80" y1="70" x2="300" y2="70" stroke="#9aa4b8" stroke-width="3" stroke-dasharray="8 6"/><line x1="80" y1="130" x2="300" y2="70" stroke="#ff5fa2" stroke-width="3"/><path d="M230.0 70.0 A70 70 0 0 0 232.5 88.4" fill="#ffc44d" fill-opacity=".25" stroke="#ffc44d" stroke-width="3"/>
+    <g opacity=".35"><ellipse cx="80" cy="70" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="70" r="5" fill="#0b0d12"/></g><g><ellipse cx="80" cy="130" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="130" r="5" fill="#0b0d12"/></g>
+    <circle cx="300" cy="70" r="12" fill="#ffc44d"/>
+    <text x="330" y="78" font-size="22" font-weight="700" fill="#ffc44d">전봇대 1 m → 방향 약 5.7° 변화</text>
+    <text x="330" y="108" font-size="19" fill="#9aa4b8">화면 속에서 크게 휙 이동</text>
+    <text x="110" y="48" font-size="18" fill="#9aa4b8">이동 전 ①</text>
+    <text x="110" y="160" font-size="18" fill="#ff5fa2">이동 후 ② (10 cm 옆)</text>
+    <line x1="80" y1="230" x2="960" y2="230" stroke="#9aa4b8" stroke-width="3" stroke-dasharray="8 6"/><line x1="80" y1="290" x2="960" y2="230" stroke="#ff5fa2" stroke-width="3"/><path d="M800.0 230.0 A160 160 0 0 0 800.4 240.9" fill="#ffc44d" fill-opacity=".25" stroke="#ffc44d" stroke-width="3"/>
+    <g opacity=".35"><ellipse cx="80" cy="230" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="230" r="5" fill="#0b0d12"/></g><g><ellipse cx="80" cy="290" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="290" r="5" fill="#0b0d12"/></g>
+    <path d="M920 260 L960 190 L1000 260 Z" fill="#9aa4b8"/>
+    <text x="760" y="214" text-anchor="end" font-size="22" font-weight="700" fill="#ffc44d">먼 산 10 m → 약 0.57° 변화</text>
+    <text x="760" y="320" text-anchor="end" font-size="19" fill="#9aa4b8">화면 속에서 거의 그대로 → 10배 차이</text>
+    <text x="1090" y="362" text-anchor="end" font-size="18" fill="#9aa4b8">이동 거리·각도는 보이도록 과장 · 양안 시차와 같은 기하 (두 눈 대신 한 눈이 시간차로 이동)</text>
+  </svg>
+  <div class="analogy" style="margin-top:.4em">
+    <p><b>기차 창밖</b> · 같은 만큼 움직여도 가까운 전봇대는 시선 방향이 크게 꺾여 휙 지나가고, 먼 산은 거의 안 꺾여 천천히 흐름</p>
+  </div>
+  <aside class="notes">
+    - atan(0.1 ÷ 1) ≈ 5.7° · atan(0.1 ÷ 10) ≈ 0.57° → 거리 10배 = 이동각 1/10
+    - 앞의 양안 시차 그림과 모양이 같다는 점 짚기 : 두 눈 대신 한 눈이 옮겨 간 것
+    - VR 은 머리 트래킹으로 이 각도 변화를 매 프레임 정확히 재현해야 함
   </aside>
 </section>
 

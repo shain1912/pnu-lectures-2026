@@ -1,0 +1,4 @@
+8주차 중간고사
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/slides/w08/
+원본         : slides/w08/index.html

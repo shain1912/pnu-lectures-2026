@@ -8,6 +8,17 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
 <link rel="stylesheet" href="../_shared/theme.css">
+<style>
+  /* 인라인 SVG 도해 — viewBox 1단위 = 슬라이드 1px (글자 16px 이상 유지) */
+  .reveal svg.dg { display: block; margin: .25em auto 0; max-width: 100%; height: auto; overflow: visible; }
+  .reveal svg.dg text { font-family: var(--sans); fill: #e8ecf4; font-size: 18px; }
+  .reveal svg.dg .dim { fill: #9aa4b8; }
+  .reveal svg.dg .s { font-size: 16px; }
+  .reveal svg.dg .b { font-weight: 700; }
+  .reveal svg.dg .cg { fill: #35d6e6; } .reveal svg.dg .cv { fill: #ff5fa2; }
+  .reveal svg.dg .ct { fill: #ff5a4d; } .reveal svg.dg .cl { fill: #a8e05f; }
+  .reveal svg.dg .cw { fill: #ffc44d; } .reveal svg.dg .cb { fill: #4d9cff; }
+</style>
 </head>
 <body>
 <div class="reveal"><div class="slides">
@@ -240,6 +251,63 @@
 </section>
 
 <section>
+  <div class="tag gfx">벡터 · 5 도해</div>
+  <h2>그림으로 — 햇빛 아래 막대 그림자</h2>
+  <svg class="dg" width="1180" height="420" viewBox="0 0 1180 420" role="img" aria-label="내적은 햇빛 아래 막대 그림자의 길이">
+    <defs>
+      <marker id="d22-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#35d6e6"/></marker>
+      <marker id="d22-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5fa2"/></marker>
+      <marker id="d22-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker>
+    </defs>
+    <!-- 왼쪽 : 손계산 예 -->
+    <circle cx="560" cy="58" r="26" fill="#ffc44d"/>
+    <text x="520" y="64" text-anchor="end" class="cw">햇빛 · 바로 위에서 수직으로</text>
+    <g stroke="#ffc44d" stroke-width="2" stroke-dasharray="6 6" opacity=".75">
+      <line x1="490" y1="120" x2="490" y2="318" marker-end="url(#d22-w)"/>
+      <line x1="550" y1="120" x2="550" y2="318" marker-end="url(#d22-w)"/>
+      <line x1="610" y1="120" x2="610" y2="318" marker-end="url(#d22-w)"/>
+      <line x1="288" y1="90" x2="288" y2="326"/>
+    </g>
+    <line x1="40" y1="330" x2="620" y2="330" stroke="#5f6980" stroke-width="2"/>
+    <line x1="90" y1="330" x2="288" y2="330" stroke="#ffc44d" stroke-width="14"/>
+    <line x1="90" y1="330" x2="284" y2="71" stroke="#ff5fa2" stroke-width="6" marker-end="url(#d22-v)"/>
+    <path d="M140,330 A50,50 0 0 0 120,290" fill="none" stroke="#9aa4b8" stroke-width="2"/>
+    <text x="150" y="314" class="s dim">θ ≈ 53°</text>
+    <text x="160" y="180" text-anchor="end" class="cv b">막대 b</text>
+    <text x="160" y="204" text-anchor="end" class="s dim">(0.6, 0.8, 0) · 길이 1</text>
+    <text x="300" y="316" class="cw b">그림자 = a·b = 0.6</text>
+    <line x1="90" y1="372" x2="416" y2="372" stroke="#35d6e6" stroke-width="4" marker-end="url(#d22-g)"/>
+    <text x="430" y="378" class="cg">a = (1, 0, 0) · 바닥선, 길이 1</text>
+    <!-- 오른쪽 : 세 경우 -->
+    <line x1="650" y1="40" x2="650" y2="400" stroke="#2a3040" stroke-width="2"/>
+    <text x="910" y="70" text-anchor="middle" class="b">막대 기울기에 따라</text>
+    <g stroke="#5f6980" stroke-width="2">
+      <line x1="680" y1="280" x2="830" y2="280"/><line x1="860" y1="280" x2="990" y2="280"/><line x1="1030" y1="280" x2="1160" y2="280"/>
+    </g>
+    <!-- 나란히 -->
+    <text x="750" y="150" text-anchor="middle">나란히</text>
+    <line x1="700" y1="280" x2="800" y2="280" stroke="#ffc44d" stroke-width="14"/>
+    <line x1="700" y1="280" x2="796" y2="280" stroke="#ff5fa2" stroke-width="4" marker-end="url(#d22-v)"/>
+    <text x="750" y="325" text-anchor="middle" class="cw">그림자 1</text>
+    <!-- 직각 -->
+    <text x="910" y="150" text-anchor="middle">직각</text>
+    <line x1="910" y1="280" x2="910" y2="184" stroke="#ff5fa2" stroke-width="4" marker-end="url(#d22-v)"/>
+    <circle cx="910" cy="280" r="7" fill="#ffc44d"/>
+    <text x="910" y="325" text-anchor="middle" class="cw">그림자 0</text>
+    <!-- 뒤로 기움 -->
+    <text x="1095" y="150" text-anchor="middle">뒤로 기움</text>
+    <line x1="1060" y1="280" x2="1120" y2="280" stroke="#ffc44d" stroke-width="14"/>
+    <line x1="1120" y1="280" x2="1063" y2="204" stroke="#ff5fa2" stroke-width="4" marker-end="url(#d22-v)"/>
+    <text x="1095" y="325" text-anchor="middle" class="cw">그림자 −0.6 (뒤쪽)</text>
+    <text x="910" y="390" text-anchor="middle" class="s dim">a 는 모두 오른쪽 방향 · 결과 범위 1 ~ 0 ~ −1</text>
+  </svg>
+  <aside class="notes">
+    - 왼쪽 = 앞 슬라이드 손계산 그대로 : 길이 1 막대가 53° 기울면 그림자 0.6
+    - 오른쪽 세 경우 : 나란히 1, 직각 0, 뒤로 누우면 음수 → 앞·옆·뒤 판정
+  </aside>
+</section>
+
+<section>
   <div class="tag gfx">벡터 · 5</div>
   <h3 style="margin-bottom:.5em">내적·외적 직접 조작</h3>
   <div class="demo-wrap">
@@ -322,6 +390,62 @@ if (d > Mathf.Cos(60f * 0.5f * Mathf.Deg2Rad))   // = 0.866
     - 왼손을 들고 검지를 오른쪽(X), 중지를 위(Y)로 → 엄지가 앞(Z)을 가리킴 (손가락 배치는 학생마다 편한 방식으로)
     - 같은 계산식이라도 왼손/오른손 좌표계에 따라 화면에 보이는 방향이 거울처럼 뒤집힘
     - 비유의 한계 : 손가락은 방향만 알려줌 — 길이(평행사변형 넓이)는 따로 계산
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">벡터 · 8 도해</div>
+  <h2>왼손으로 확인 — Unity 축과 외적 방향</h2>
+  <svg class="dg" width="1180" height="420" viewBox="0 0 1180 420" role="img" aria-label="왼손 손가락과 Unity 축, 외적 방향">
+    <defs>
+      <marker id="d25-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5a4d"/></marker>
+      <marker id="d25-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8e05f"/></marker>
+      <marker id="d25-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4d9cff"/></marker>
+      <marker id="d25-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#35d6e6"/></marker>
+      <marker id="d25-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5fa2"/></marker>
+      <marker id="d25-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker>
+    </defs>
+    <!-- 왼쪽 : 좌표계 -->
+    <text x="300" y="40" text-anchor="middle" class="b">Unity 축 = 왼손 세 손가락</text>
+    <g stroke-linecap="round" stroke-width="30" opacity=".22">
+      <line x1="230" y1="300" x2="400" y2="300" stroke="#ff5a4d"/>
+      <line x1="230" y1="300" x2="230" y2="135" stroke="#a8e05f"/>
+      <line x1="230" y1="300" x2="350" y2="206" stroke="#4d9cff"/>
+    </g>
+    <circle cx="230" cy="300" r="40" fill="#2a3040"/>
+    <text x="230" y="364" text-anchor="middle" class="s dim">손바닥</text>
+    <line x1="230" y1="300" x2="430" y2="300" stroke="#ff5a4d" stroke-width="4" marker-end="url(#d25-r)"/>
+    <line x1="230" y1="300" x2="230" y2="105" stroke="#a8e05f" stroke-width="4" marker-end="url(#d25-l)"/>
+    <line x1="230" y1="300" x2="372" y2="188" stroke="#4d9cff" stroke-width="4" marker-end="url(#d25-b)"/>
+    <text x="442" y="306" class="ct b">엄지 = X</text>
+    <text x="442" y="330" class="s dim">오른쪽</text>
+    <text x="230" y="88" text-anchor="middle" class="cl b">검지 = Y · 위</text>
+    <text x="384" y="180" class="cb b">중지 = Z</text>
+    <text x="384" y="204" class="s dim">앞 · 화면 안쪽</text>
+    <line x1="590" y1="30" x2="590" y2="360" stroke="#2a3040" stroke-width="2"/>
+    <!-- 오른쪽 : 외적 -->
+    <text x="880" y="40" text-anchor="middle" class="b">외적 a × b 의 방향</text>
+    <g stroke-linecap="round" stroke-width="30" opacity=".22">
+      <line x1="800" y1="300" x2="970" y2="300" stroke="#35d6e6"/>
+      <line x1="800" y1="300" x2="800" y2="135" stroke="#ff5fa2"/>
+      <line x1="800" y1="300" x2="920" y2="206" stroke="#ffc44d"/>
+    </g>
+    <circle cx="800" cy="300" r="40" fill="#2a3040"/>
+    <text x="800" y="364" text-anchor="middle" class="s dim">손바닥</text>
+    <line x1="800" y1="300" x2="1000" y2="300" stroke="#35d6e6" stroke-width="4" marker-end="url(#d25-g)"/>
+    <line x1="800" y1="300" x2="800" y2="105" stroke="#ff5fa2" stroke-width="4" marker-end="url(#d25-v)"/>
+    <line x1="800" y1="300" x2="942" y2="188" stroke="#ffc44d" stroke-width="4" marker-end="url(#d25-w)"/>
+    <text x="1012" y="306" class="cg b">검지 = a</text>
+    <text x="1012" y="330" class="s dim">(1, 0, 0) 오른쪽</text>
+    <text x="800" y="88" text-anchor="middle" class="cv b">중지 = b · (0, 1, 0) 위</text>
+    <text x="954" y="180" class="cw b">엄지 = a × b</text>
+    <text x="954" y="204" class="s dim">(0, 0, 1) 앞 · 화면 안쪽</text>
+    <text x="590" y="400" text-anchor="middle" class="s dim">오른손으로 같은 동작 → 엄지가 반대(화면 바깥쪽) = Blender · Maya 같은 오른손 좌표계</text>
+  </svg>
+  <aside class="notes">
+    - 왼쪽 : 벡터 · 3 의 손가락 배치(엄지 X · 검지 Y · 중지 Z) 그대로
+    - 오른쪽 : 외적 슬라이드의 배치(검지 a · 중지 b · 엄지 결과) — 손가락 역할을 한 칸씩 돌린 것이라 같은 왼손으로 가능
+    - 화면 위 대각선 화살표 = 화면 안쪽으로 들어가는 방향
   </aside>
 </section>
 
@@ -674,7 +798,7 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
   <h2>회전 순서에 따른 결과 차이</h2>
   <img src="../../figures/out/w02-euler-order.svg" alt="오일러 회전 순서에 따른 차이" class="fig">
   <aside class="notes">
-    - 도해의 축 배치는 Z 가 위인 수학 좌표 — Unity(Y 가 위)와 다르니 «순서가 결과를 바꾼다»는 점만 읽기
+    - 도해는 Unity 축(Y 위 · X 오른쪽 · Z 앞, 왼손 좌표계) 기준 · 가운데 = Unity 적용 순서, 오른쪽 = 순서를 뒤집은 결과
     - 같은 (90°, 90°) 두 숫자, 순서만 바꿔 다른 자세
   </aside>
 </section>
@@ -708,6 +832,92 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
 </section>
 
 <section>
+  <div class="tag trap">회전 · 3 도해</div>
+  <h2>도입 질문의 답 — 두 큐브의 정면 추적</h2>
+<svg class="dg" width="1180" height="440" viewBox="0 0 1180 440" role="img" aria-label="도입 질문 A와 B의 큐브 회전 결과 비교">
+<defs>
+<marker id="d21-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4d9cff"/></marker>
+<marker id="d21-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8e05f"/></marker>
+<marker id="d21-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker>
+<g id="d21-cube" stroke="#5f6980" stroke-width="2" stroke-linejoin="round">
+<polygon points="-49,-24 -21,-46 49,-46 21,-24" fill="#252c3d"/>
+<polygon points="21,-24 49,-46 49,24 21,46" fill="#151a24"/>
+<rect x="-49" y="-24" width="70" height="70" fill="#1c2230"/>
+</g></defs>
+<text x="320" y="36" text-anchor="middle" class="dim">시작</text>
+<text x="570" y="36" text-anchor="middle" class="dim">1단계 후</text>
+<text x="820" y="36" text-anchor="middle" class="dim">2단계 후</text>
+<use href="#d21-cube" x="320" y="150"/>
+<use href="#d21-cube" x="570" y="150"/>
+<use href="#d21-cube" x="820" y="150"/>
+<line x1="320" y1="150" x2="320" y2="70" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<text x="310" y="78" text-anchor="end" class="cl b">위</text>
+
+<line x1="320" y1="150" x2="380" y2="102" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<text x="386" y="98" text-anchor="start" class="cb b">정면</text>
+
+<line x1="570" y1="150" x2="630" y2="102" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<text x="636" y="98" text-anchor="start" class="cl b">위</text>
+
+<line x1="570" y1="150" x2="570" y2="230" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<text x="580" y="222" text-anchor="start" class="cb b">정면</text>
+
+<line x1="820" y1="150" x2="900" y2="150" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<text x="908" y="156" text-anchor="start" class="cl b">위</text>
+
+<line x1="820" y1="150" x2="820" y2="230" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<text x="830" y="222" text-anchor="start" class="cb b">정면</text>
+
+<line x1="420" y1="150" x2="492" y2="150" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d21-d)"/>
+<text x="456.0" y="138" text-anchor="middle" class="b">X 90°</text>
+<text x="456.0" y="176" text-anchor="middle" class="s dim">월드 X축</text>
+<line x1="670" y1="150" x2="742" y2="150" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d21-d)"/>
+<text x="706.0" y="138" text-anchor="middle" class="b">Y 90°</text>
+<text x="706.0" y="176" text-anchor="middle" class="s dim">월드 Y축</text>
+<use href="#d21-cube" x="320" y="330"/>
+<use href="#d21-cube" x="570" y="330"/>
+<use href="#d21-cube" x="820" y="330"/>
+<line x1="320" y1="330" x2="320" y2="250" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<text x="310" y="258" text-anchor="end" class="cl b">위</text>
+
+<line x1="320" y1="330" x2="380" y2="282" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<text x="386" y="278" text-anchor="start" class="cb b">정면</text>
+
+<line x1="570" y1="330" x2="630" y2="282" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<text x="636" y="278" text-anchor="start" class="cl b">위</text>
+
+<line x1="570" y1="330" x2="570" y2="410" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<text x="580" y="402" text-anchor="start" class="cb b">정면</text>
+
+<line x1="820" y1="330" x2="880" y2="282" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<text x="886" y="278" text-anchor="start" class="cl b">위</text>
+
+<line x1="820" y1="330" x2="900" y2="330" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<text x="908" y="336" text-anchor="start" class="cb b">정면</text>
+
+<line x1="420" y1="330" x2="492" y2="330" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d21-d)"/>
+<text x="456.0" y="318" text-anchor="middle" class="b">X 90°</text>
+<text x="456.0" y="356" text-anchor="middle" class="s dim">자기 X축</text>
+<line x1="670" y1="330" x2="742" y2="330" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d21-d)"/>
+<text x="706.0" y="318" text-anchor="middle" class="b">Y 90°</text>
+<text x="706.0" y="356" text-anchor="middle" class="s dim">자기 위쪽 축</text>
+<text x="16" y="130" class="b">A · 인스펙터</text><text x="16" y="156">(90, 90, 0)</text><text x="16" y="182" class="s dim">월드 축 기준</text>
+<text x="16" y="300" class="b">B · Rotate 두 번</text><text x="16" y="326" class="s">Rotate(90, 0, 0)</text><text x="16" y="348" class="s">→ Rotate(0, 90, 0)</text><text x="16" y="372" class="s dim">자기 축 기준</text>
+<rect x="968" y="112" width="200" height="76" rx="10" fill="#171b25" stroke="#4d9cff" stroke-width="2"/>
+<text x="1068" y="144" text-anchor="middle" class="cb b">정면 → 아래</text>
+<text x="1068" y="172" text-anchor="middle" class="s dim">위 → 오른쪽</text>
+<rect x="968" y="292" width="200" height="76" rx="10" fill="#171b25" stroke="#4d9cff" stroke-width="2"/>
+<text x="1068" y="324" text-anchor="middle" class="cb b">정면 → 오른쪽</text>
+<text x="1068" y="352" text-anchor="middle" class="s dim">위 → 화면 안쪽</text>
+<text x="590" y="430" text-anchor="middle" class="s dim">파랑 = 큐브의 정면(자기 Z) · 초록 = 큐브의 위(자기 Y) · 오른쪽 위 대각선 = 화면 안쪽 · 큐브 모양은 90° 회전해도 같아 보여 화살표로 구분</text>
+</svg>  <aside class="notes">
+    - 1단계까지는 A, B 가 똑같음 (정면 아래, 위가 화면 안쪽)
+    - 갈림길은 2단계 : A 는 월드 Y축(세로)으로 돌아 아래를 보던 정면이 그대로, B 는 자기 위쪽 축(지금은 화면 안쪽을 가리킴)으로 돌아 정면이 오른쪽으로
+    - 큐브는 90° 돌려도 모양이 같아 보이므로 화살표(정면·위)로만 구분
+  </aside>
+</section>
+
+<section>
   <div class="tag trap">회전 · 4</div>
   <h2>짐벌락 — 회전축 하나의 상실</h2>
   <div class="cols wide-left">
@@ -734,6 +944,52 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
   <aside class="notes">
     - 비유 : 스마트폰 짐벌 스태빌라이저를 써 본 학생에게 질문 — 특정 자세에서 한쪽으로 안 돌아가는 경험
     - 고개로 해 보기 : 고개를 끝까지 들어 천장을 보면(피치 90°), 도리도리(요)와 갸웃(롤)이 거의 같은 움직임
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">회전 · 4 도해</div>
+  <h2>짐벌 링 세 개 — 정상 vs 축이 겹친 상태</h2>
+  <svg class="dg" width="1180" height="450" viewBox="0 0 1180 450" role="img" aria-label="짐벌 세 링의 정상 상태와 짐벌락 상태">
+    <text x="270" y="20" text-anchor="middle" class="b">정상</text>
+    <text x="850" y="20" text-anchor="middle" class="ct b">짐벌락 : 가운데 링 X 를 90°</text>
+    <!-- 왼쪽 정상 -->
+    <g fill="none" stroke-width="3" stroke-dasharray="8 7">
+      <line x1="270" y1="60" x2="270" y2="410" stroke="#a8e05f"/>
+      <line x1="95" y1="235" x2="445" y2="235" stroke="#ff5a4d"/>
+      <line x1="120" y1="355" x2="420" y2="115" stroke="#4d9cff"/>
+    </g>
+    <g fill="none" stroke-width="7">
+      <circle cx="270" cy="235" r="160" stroke="#a8e05f"/>
+      <ellipse cx="270" cy="235" rx="125" ry="40" stroke="#ff5a4d"/>
+      <ellipse cx="270" cy="235" rx="82" ry="26" stroke="#4d9cff" transform="rotate(-38.7 270 235)"/>
+    </g>
+    <rect x="258" y="223" width="24" height="24" rx="4" fill="#e8ecf4"/>
+    <text x="270" y="50" text-anchor="middle" class="s cl b">Y 바깥 링 · 요</text>
+    <text x="452" y="241" class="s ct b">X 가운데 · 피치</text>
+    <text x="428" y="110" class="s cb b">Z 안쪽 · 롤</text>
+    <text x="270" y="442" text-anchor="middle">회전축 세 개가 모두 다른 방향 → <tspan class="cl b">자유도 3</tspan></text>
+    <line x1="570" y1="30" x2="570" y2="420" stroke="#2a3040" stroke-width="2"/>
+    <!-- 오른쪽 짐벌락 -->
+    <g fill="none" stroke-width="3" stroke-dasharray="8 7">
+      <line x1="845" y1="60" x2="845" y2="410" stroke="#a8e05f"/>
+      <line x1="855" y1="60" x2="855" y2="410" stroke="#4d9cff"/>
+      <line x1="675" y1="235" x2="1025" y2="235" stroke="#ff5a4d"/>
+    </g>
+    <g fill="none" stroke-width="7">
+      <circle cx="850" cy="235" r="160" stroke="#a8e05f"/>
+      <circle cx="850" cy="235" r="125" stroke="#ff5a4d"/>
+      <ellipse cx="850" cy="235" rx="26" ry="82" stroke="#4d9cff"/>
+    </g>
+    <rect x="838" y="223" width="24" height="24" rx="4" fill="#e8ecf4"/>
+    <text x="850" y="50" text-anchor="middle" class="s b"><tspan class="cl">Y 축</tspan> = <tspan class="cb">Z 축</tspan> · 한 줄로 겹침</text>
+    <text x="1032" y="241" class="s ct b">X = 90°</text>
+    <text x="850" y="442" text-anchor="middle">바깥·안쪽 링이 같은 축으로 돎 → <tspan class="ct b">자유도 2</tspan></text>
+  </svg>
+  <aside class="notes">
+    - 왼쪽 : 초록(Y)·빨강(X)·파랑(Z) 점선 축이 세 방향 → 어느 쪽으로든 돌릴 수 있음
+    - 오른쪽 : 가운데 링을 90° 세우면 안쪽 링의 축(파랑)이 바깥 링의 축(초록)과 나란히 → 손잡이 둘이 같은 회전
+    - 다음 장 데모에서 같은 상황을 슬라이더로 직접 확인
   </aside>
 </section>
 
@@ -874,6 +1130,49 @@ transform.eulerAngles += new Vector3(0, speed * Time.deltaTime, 0);
 </section>
 
 <section>
+  <div class="tag gfx">계층 · 1 도해</div>
+  <h2>기차 안에서 걷는 사람 — 로컬 + 부모 = 월드</h2>
+  <svg class="dg" width="1180" height="420" viewBox="0 0 1180 420" role="img" aria-label="기차 이동 100 m 와 승객 걸음 2 m 가 더해져 월드 이동 102 m">
+    <defs>
+      <marker id="d24-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#35d6e6"/></marker>
+      <marker id="d24-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5fa2"/></marker>
+      <marker id="d24-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker>
+    </defs>
+    <text x="30" y="30" class="dim">땅(월드)에서 본 모습</text>
+    <text x="1150" y="30" text-anchor="end" class="s dim">그림 속 길이는 비율 아님</text>
+    <line x1="30" y1="302" x2="1150" y2="302" stroke="#5f6980" stroke-width="3"/>
+    <!-- 출발 -->
+    <text x="60" y="158" class="dim">출발</text>
+    <rect x="60" y="170" width="340" height="110" rx="14" fill="none" stroke="#5f6980" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <circle cx="120" cy="290" r="12" fill="none" stroke="#5f6980" stroke-width="2.5" stroke-dasharray="4 4"/>
+    <circle cx="340" cy="290" r="12" fill="none" stroke="#5f6980" stroke-width="2.5" stroke-dasharray="4 4"/>
+    <g stroke="#9aa4b8" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="150" cy="210" r="11"/><line x1="150" y1="221" x2="150" y2="250"/><line x1="150" y1="250" x2="140" y2="272"/><line x1="150" y1="250" x2="160" y2="272"/></g>
+    <!-- 잠시 뒤 -->
+    <text x="640" y="158" class="cg b">잠시 뒤</text>
+    <rect x="640" y="170" width="340" height="110" rx="14" fill="#171b25" stroke="#35d6e6" stroke-width="3"/>
+    <circle cx="700" cy="290" r="12" fill="#0b0d12" stroke="#35d6e6" stroke-width="3"/>
+    <circle cx="920" cy="290" r="12" fill="#0b0d12" stroke="#35d6e6" stroke-width="3"/>
+    <g stroke="#5f6980" stroke-width="3" stroke-linecap="round" fill="none" stroke-dasharray="3 5"><circle cx="730" cy="210" r="11"/><line x1="730" y1="221" x2="730" y2="250"/><line x1="730" y1="250" x2="720" y2="272"/><line x1="730" y1="250" x2="740" y2="272"/></g>
+    <g stroke="#ff5fa2" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="850" cy="210" r="11"/><line x1="850" y1="221" x2="850" y2="250"/><line x1="850" y1="250" x2="840" y2="272"/><line x1="850" y1="250" x2="862" y2="270"/></g>
+    <line x1="744" y1="238" x2="830" y2="238" stroke="#ff5fa2" stroke-width="3" marker-end="url(#d24-v)"/>
+    <text x="860" y="158" class="cv b">승객(자식) 걸음 2 m · 로컬</text>
+    <!-- 화살표 -->
+    <line x1="60" y1="328" x2="632" y2="328" stroke="#35d6e6" stroke-width="4" marker-end="url(#d24-g)"/>
+    <text x="346" y="356" text-anchor="middle" class="cg">기차(부모) 이동 100 m</text>
+    <line x1="150" y1="378" x2="842" y2="378" stroke="#ffc44d" stroke-width="4" marker-end="url(#d24-w)"/>
+    <text x="496" y="408" text-anchor="middle" class="cw b">땅에서 본 승객 이동 = 100 + 2 = 102 m · 월드</text>
+  </svg>
+  <div class="analogy" style="margin-top:.4em">
+    <p>기차 = <b>부모</b>(position 100 m 이동) · 기차 안 승객 자리 = <b>localPosition</b> · 땅에서 잰 승객 위치 = 자식의 <b>position</b>(월드)</p>
+  </div>
+  <aside class="notes">
+    - 기차 안 점선 사람 = 원래 자리, 분홍 사람 = 기차 안에서 2 m 걸은 자리
+    - 노란 화살표(월드) = 파란 화살표(부모) + 분홍 화살표(로컬)
+    - 지각 · 3 의 «XR Origin = 놀이공원 열차» 비유와 같은 구조
+  </aside>
+</section>
+
+<section>
   <div class="tag gfx">계층 · 2</div>
   <h2>부모-자식 = 행렬 곱의 연쇄</h2>
   <div class="math-block">\[ M_{\text{월드}} = M_{\text{부모}} \cdot M_{\text{자식}} \cdot M_{\text{손자}} \cdots \]</div>
@@ -925,6 +1224,56 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
   <aside class="notes">
     - 비유 : 고무판(부모의 스케일) 위 그림(자식) — 그림을 먼저 돌려 그려 놓고 판을 늘리면 각이 찌그러짐
     - 판을 먼저 늘리고 그 위에 똑바른 정사각형을 다시 그리면(빈 부모 방식) 찌그러짐 없음
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">계층 · 3 도해</div>
+  <h2>고무판 늘리기 — 정사각형이 마름모가 되는 3단계</h2>
+  <svg class="dg" width="1180" height="430" viewBox="0 0 1180 430" role="img" aria-label="회전한 정사각형을 세로로 늘리면 마름모로 찌그러짐">
+    <defs>
+      <marker id="d23-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker>
+    </defs>
+    <text x="120" y="28" text-anchor="middle" class="b">① 자식 정사각형</text>
+    <text x="120" y="54" text-anchor="middle" class="s dim">네 각 90°</text>
+    <text x="340" y="28" text-anchor="middle" class="b">② 자식 45° 회전</text>
+    <text x="340" y="54" text-anchor="middle" class="s dim">네 각 여전히 90°</text>
+    <text x="590" y="28" text-anchor="middle" class="ct b">③ 부모 Scale (1, 3, 1)</text>
+    <text x="590" y="54" text-anchor="middle" class="s dim">판(부모)을 세로로만 늘림</text>
+    <text x="995" y="28" text-anchor="middle" class="cl b">해결 : 빈 부모</text>
+    <text x="995" y="54" text-anchor="middle" class="s dim">늘리기 먼저, 회전은 나중</text>
+    <!-- ① -->
+    <rect x="81" y="206" width="78" height="78" fill="#0e3a42" stroke="#35d6e6" stroke-width="3"/>
+    <path d="M81,268 L97,268 L97,284" fill="none" stroke="#e8ecf4" stroke-width="2"/>
+    <!-- ② -->
+    <polygon points="340,190 395,245 340,300 285,245" fill="#0e3a42" stroke="#35d6e6" stroke-width="3"/>
+    <path d="M295,235 L305,245 L295,255" fill="none" stroke="#e8ecf4" stroke-width="2"/>
+    <line x1="195" y1="245" x2="255" y2="245" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d23-d)"/>
+    <!-- ③ -->
+    <g stroke="#9aa4b8" stroke-width="2.5">
+      <line x1="480" y1="228" x2="480" y2="112" marker-end="url(#d23-d)"/>
+      <line x1="480" y1="262" x2="480" y2="378" marker-end="url(#d23-d)"/>
+    </g>
+    <text x="480" y="251" text-anchor="middle" class="s b">×3</text>
+    <polygon points="590,80 645,245 590,410 535,245" fill="#431612" stroke="#ff5a4d" stroke-width="3"/>
+    <text x="590" y="132" text-anchor="middle" class="s cw b">37°</text>
+    <text x="545" y="251" class="s cw b">143°</text>
+    <text x="662" y="218" class="s dim">네 각 90°</text>
+    <text x="662" y="244" class="s ct b">→ 37° · 143°</text>
+    <text x="662" y="270" class="s ct">= 전단 (찌그러짐)</text>
+    <line x1="805" y1="20" x2="805" y2="420" stroke="#2a3040" stroke-width="2"/>
+    <!-- 해결 -->
+    <g transform="translate(995,235) rotate(45)">
+      <rect x="-39" y="-116" width="78" height="232" fill="#21330f" stroke="#a8e05f" stroke-width="3"/>
+      <path d="M-39,-100 L-23,-100 L-23,-116" fill="none" stroke="#e8ecf4" stroke-width="2"/>
+    </g>
+    <text x="995" y="388" text-anchor="middle" class="s">자식에서 늘리고 부모에서 회전</text>
+    <text x="995" y="414" text-anchor="middle" class="s cl b">네 각 90° 유지 → 기운 직사각형</text>
+  </svg>
+  <aside class="notes">
+    - ①→② 회전만 했을 때는 각이 그대로 90°
+    - ③ 부모가 세로로 3배 늘리면 비스듬한 변들이 서로 다른 비율로 늘어나 각이 37°/143° 로 바뀜 = 전단
+    - 오른쪽 : 같은 재료라도 «늘리기 먼저, 회전 나중» 이면 직각 유지 → 빈 부모 방식
   </aside>
 </section>
 

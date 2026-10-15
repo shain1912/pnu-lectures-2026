@@ -1,0 +1,4 @@
+12주차 VR 인터랙션 심화
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/slides/w12/
+원본         : slides/w12/index.html

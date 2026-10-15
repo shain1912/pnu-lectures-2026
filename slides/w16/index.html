@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>16주차 · 프로젝트 피드백과 학기 정리 — 컴퓨터그래픽스</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+<style>
+  .reveal svg.fig-svg { display:block; margin:.2em auto 0; width:100%; height:auto; max-height:460px; }
+  .reveal svg.fig-svg text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
+  .reveal .tl { display:grid; gap:.35em; font-size:.68em; }
+  .reveal .tl div { display:grid; grid-template-columns: 8.5em 1fr; gap:.8em; padding:.38em .7em; border-radius:8px; background:var(--bg-card); border:1px solid var(--line); }
+  .reveal .tl b.time { font-family:var(--mono); color:var(--fg-dim); font-weight:500; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ========================================================= 표지 -->
+<section class="cover">
+  <div class="week">Week 16 · 보강</div>
+  <h1>피드백과 학기 정리</h1>
+  <p class="muted" style="font-size:.8em;max-width:28em">
+    프로젝트 피드백 및 보완 · 최신 XR 동향 · 포트폴리오 · AI 함정 10종 회고
+  </p>
+  <div class="meta">
+    컴퓨터그래픽스 VF3500076 · 디자인앤테크놀로지전공<br>
+    조성호 · 2026학년도 2학기
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask">
+    코드는 대부분 <span class="hl">AI 가</span> 짰다<br><br>
+    그렇다면 이번 학기에<br>
+    <span class="hl">내 머리에 남은 것</span>은 무엇인가?
+  </div>
+  <aside class="notes">
+    - 포스트잇에 한 줄씩 쓰게 하고 걷어 둠 → 마지막 «도입 질문의 답» 에서 몇 장 읽기
+    - 1주차 명제 «AI 에게 무엇을 요구할지 알기 위해, 왜 틀렸는지 판별하기 위해» 로 회수
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>이 수업 후 할 수 있는 것</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 개선 계획 1장</h4>
+      <p class="small">팀 피드백을 <b>우선 개선 3가지 + 근거 + 재측정 방법</b>으로 정리해 보완</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 동향을 원리로 읽기</h4>
+      <p class="small">아이트래킹 포비티드 · 햅틱 · 패스스루 MR · 공간 비디오를 <b>학기 개념(주차)에 연결</b>해 설명</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 포트폴리오 · 체크리스트</h4>
+      <p class="small">시연 영상 2종 촬영 계획 · 근거·수치·검증이 담긴 문서 · <b>개인 AI 함정 체크리스트</b></p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:1.1em">
+    <p>오늘의 큰 그림 : 만든 것을 <b>설명할 수 있는 형태</b>로 남기기 — 다음 프로젝트에서 다시 쓰도록</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">운영</div>
+  <h2>오늘 3시간</h2>
+  <div class="tl">
+    <div><b class="time">14:00–14:05</b><span>안내 · 피드백 순서 공지</span></div>
+    <div><b class="time">14:05–14:35</b><span class="vr-txt"><b>최신 XR 동향</b> — 아이트래킹 포비티드 · 햅틱 · 패스스루 MR · 공간 비디오</span></div>
+    <div><b class="time">14:35–14:50</b><span class="trap-txt"><b>AI 함정 10종 회고</b> → 개인 체크리스트 작성법</span></div>
+    <div><b class="time">14:50–15:00</b><span class="lab-txt"><b>포트폴리오 지도</b> — 촬영 · 문서화 항목</span></div>
+    <div><b class="time">15:00–17:00</b><span><b>팀별 피드백 15분 × 8팀</b> (교수) ∥ 나머지 팀 : 보완 작업 · 포트폴리오 · 체크리스트</span></div>
+  </div>
+  <div class="key">
+    <p class="small">피드백 대기 중인 팀의 할 일 = 이 덱 Part II · III 의 실습 3개 (촬영 계획 · 문서 초안 · 체크리스트) → 피드백 받으러 올 때 초안 지참</p>
+  </div>
+  <div class="note">팀 수 8 가정 · 팀 수가 다르면 15:00 이후 순서표만 조정</div>
+</section>
+
+<section>
+  <div class="tag gfx">피드백 · 1</div>
+  <h2>팀별 피드백 15분</h2>
+  <table style="font-size:.64em">
+    <tr><th>구간</th><th>내용</th></tr>
+    <tr><td>0~5분</td><td>교수 : 15주 채점 근거 요약 — 5축별 잘된 점 · 깎인 점 · 동료 평가에서 반복된 문장</td></tr>
+    <tr><td>5~10분</td><td>팀 : 질문 · 반론 · «이건 의도였다» 설명</td></tr>
+    <tr><td>10~15분</td><td>합의 : <b>개선 방향 1장 요약</b> 작성 — 교수가 마지막 확인</td></tr>
+  </table>
+  <div class="cols">
+    <div class="card lab">
+      <h4>개선 방향 1장 요약 형식</h4>
+      <ul class="small">
+        <li>잘된 점 2 (포트폴리오에 강조)</li>
+        <li>우선 개선 3 — 문제 · 근거 · 조치 · 재측정 방법</li>
+        <li>보완 마감 : 학기 성적 입력 전 (LMS 공지)</li>
+      </ul>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>건강검진 결과 상담</b> : 수치표를 받는 것으로 끝나지 않고 «무엇부터 바꿀지» 3가지를 의사와 정하고 나옴 → 다음 검진에서 그 3가지를 다시 잼</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    - 보완 결과의 성적 반영 여부·범위는 학과 규정과 강의계획서 기준으로 사전 공지 (확인 필요)
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">피드백 · 2</div>
+  <h2>피드백을 잘 받는 법</h2>
+  <ul class="small">
+    <li><b>먼저 받아 적기</b> → 반론은 다 듣고 나서 · 첫 반응이 방어면 정보가 끊김</li>
+    <li><b>«왜» 대신 «어디서»</b> 질문 : «어느 장면에서 그렇게 느끼셨어요?» → 고칠 위치가 특정됨</li>
+    <li>동료 평가에서 <b>두 번 이상 나온 문장</b> = 우선 개선 후보 · 한 번 나온 극단 의견은 보류</li>
+    <li>칭찬도 기록 → 포트폴리오에서 «관람자가 실제로 이렇게 반응» 근거로 사용</li>
+  </ul>
+  <div class="analogy">
+    <p><b>내비게이션 경로 재탐색</b> : «경로를 이탈했습니다» 에 화내도 차는 그대로 · 바로 새 경로를 받는 운전자가 먼저 도착 → 피드백 = 현재 위치 알림</p>
+  </div>
+</section>
+
+<!-- ========================================================= PART I -->
+<section class="divider part-ii">
+  <div class="kicker">Part I · 30분</div>
+  <div class="rule"></div>
+  <h1>최신 XR 동향을<br><em>원리</em>로 읽기</h1>
+  <p class="sub">제품 이름은 바뀌어도 원리는 학기 내용 그대로 — 2026 기준</p>
+</section>
+
+<section>
+  <div class="tag vr">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>아이트래킹<small>Eye tracking</small></dt><dd>헤드셋 안 카메라로 <b>눈동자가 보는 방향</b>을 실시간 측정</dd>
+    <dt>포비티드 렌더링<small>Foveated rendering</small></dt><dd>시선 중심만 선명하게, 주변은 거칠게 그려 계산을 줄이는 방법 (6주 중심와)</dd>
+    <dt>FFR · ETFR<small>Fixed · Eye-tracked</small></dt><dd>선명한 영역이 <b>렌즈 중앙에 고정</b> · <b>시선을 따라 이동</b></dd>
+    <dt>햅틱<small>Haptics</small></dt><dd>진동·힘·압력 등 <b>촉각</b>으로 정보를 전달하는 기술</dd>
+    <dt>패스스루<small>Passthrough</small></dt><dd>헤드셋 바깥 카메라 영상으로 현실을 실시간으로 보여 주는 기능</dd>
+    <dt>혼합현실<small>Mixed reality, MR</small></dt><dd>현실 영상 위에 가상 물체를 섞어 같은 공간에 있는 것처럼 보이게 하는 경험</dd>
+    <dt>공간 비디오<small>Spatial video</small></dt><dd>두 렌즈로 찍어 <b>양쪽 눈에 다른 영상</b>을 보여 주는 입체 영상</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">동향 · 1 ★</div>
+  <h2>아이트래킹 포비티드 렌더링</h2>
+  <svg class="fig-svg" style="max-height:360px" viewBox="0 0 1100 360" role="img" aria-label="고정 포비티드는 선명 영역이 화면 중앙에 고정, 아이트래킹 포비티드는 시선 위치를 따라 선명 영역 이동">
+    <g font-size="20" font-weight="700">
+      <text x="270" y="32" fill="#35d6e6" text-anchor="middle">고정 포비티드 (FFR) — Quest 3</text>
+      <text x="830" y="32" fill="#ff5fa2" text-anchor="middle">아이트래킹 포비티드 (ETFR)</text>
+    </g>
+    <rect x="40" y="50" width="460" height="260" rx="12" fill="#171b25" stroke="#2a3040"/>
+    <ellipse cx="270" cy="180" rx="210" ry="120" fill="rgba(53,214,230,0.10)" stroke="#35d6e6" stroke-dasharray="6 5"/>
+    <ellipse cx="270" cy="180" rx="120" ry="70" fill="rgba(53,214,230,0.18)" stroke="#35d6e6"/>
+    <text x="270" y="187" fill="#e8ecf4" font-size="21" text-anchor="middle">항상 렌즈 중앙</text>
+    <circle cx="420" cy="110" r="8" fill="#ffc44d"/>
+    <text x="420" y="92" fill="#ffc44d" font-size="20" text-anchor="middle">시선</text>
+    <rect x="600" y="50" width="460" height="260" rx="12" fill="#171b25" stroke="#2a3040"/>
+    <ellipse cx="900" cy="150" rx="130" ry="80" fill="rgba(255,95,162,0.10)" stroke="#ff5fa2" stroke-dasharray="6 5"/>
+    <ellipse cx="900" cy="150" rx="60" ry="38" fill="rgba(255,95,162,0.22)" stroke="#ff5fa2"/>
+    <circle cx="900" cy="150" r="8" fill="#ffc44d"/>
+    <text x="900" y="266" fill="#e8ecf4" font-size="21" text-anchor="middle">선명 영역이 시선을 따라 이동</text>
+    <g font-size="21">
+      <text x="270" y="345" fill="#9aa4b8" text-anchor="middle">시선이 가장자리로 가면 거친 영역을 보게 됨</text>
+      <text x="830" y="345" fill="#9aa4b8" text-anchor="middle">선명 영역을 더 작게 → 절약 폭 큼</text>
+    </g>
+  </svg>
+  <div class="analogy">
+    <p><b>무대 스포트라이트</b> : 관객이 보는 배우에게만 강한 조명 · 고정 조명(FFR)은 무대 중앙만 밝음 · 추적 조명(ETFR)은 배우를 따라감 → 같은 전기로 더 작은 원을 더 정확히</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">동향 · 2</div>
+  <h2>포비티드 — 얼마나 아끼나 (손계산)</h2>
+  <div class="cols">
+    <div>
+      <p class="small">화면을 세 구역으로 나눈 예 · 해상도를 가로·세로 각각 절반 → 픽셀 수 1/4</p>
+      <div class="math-block">\[ 0.2 \times 1 + 0.3 \times \tfrac{1}{4} + 0.5 \times \tfrac{1}{16} \approx 0.31 \]</div>
+      <p class="small">중심 20% 원래대로 · 중간 30% 1/4 · 바깥 50% 1/16 → 계산할 픽셀 <b>약 31%</b> (약 3분의 1)</p>
+    </div>
+    <div>
+      <ul class="small">
+        <li>연구 : 시선 추적 포비티드로 셰이딩 픽셀 수 <b>10~15배 감소 · 5~6배 가속</b> (Guenter et al. 2012, 데스크톱 실험)</li>
+        <li>근거 : 중심와(시야 중심 약 2°)만 선명 · 주변시 해상도 급감 (6주)</li>
+        <li><b>한계</b> : 시선이 순간적으로 튈 때 선명 영역이 늦게 따라오면 거친 화면이 보임 → 시선 추적 지연이 작아야 함</li>
+      </ul>
+    </div>
+  </div>
+  <div class="key vr">
+    <p class="small">현재 수업 장비 Quest 3 = 아이트래킹 없음 → <b>FFR 만</b> · 아이트래킹은 일부 상위 헤드셋(Quest Pro · Apple Vision Pro · PS VR2 등)에 탑재 · 세부 사양은 기기·세대마다 다름</p>
+  </div>
+  <div class="note">Guenter et al. (2012) ACM TOG · Patney et al. (2016) — 12주 성능 파트와 연결</div>
+</section>
+
+<section>
+  <div class="tag vr">동향 · 3</div>
+  <h2>햅틱 — 손끝으로 확인하기</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><b>지금 쓸 수 있는 것</b> : 컨트롤러 진동 — 진폭(0~1) · 지속 시간(초) 두 값으로 요청 · XRI 3.x 의 햅틱 컴포넌트로 잡기·버튼 이벤트에 연결</li>
+        <li><b>연구·고급 제품</b> : 진동 파형 디자인 도구 · 햅틱 장갑 · 초음파 공중 촉각 · 힘 되먹임 장치</li>
+        <li><b>지각 근거</b> : 시각과 촉각이 <b>같은 순간</b>에 일어나면 가상 손을 내 손처럼 느끼는 경향 (고무손 착각 · Botvinick &amp; Cohen 1998) → 늦은 진동은 오히려 어색함</li>
+      </ul>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>휴대폰 키보드 진동</b> : 화면 유리를 눌렀을 뿐인데 «톡» 진동이 오면 버튼을 누른 확신 · 진동이 늦게 오면 두 번 누르게 됨</p>
+      </div>
+      <div class="key lab">
+        <p class="small">보완 작업 아이디어 : 잡기 성공 순간 짧은 진동 (예 : 진폭 0.3 · 0.05초) → 14주 «잡기 실패» 관찰이 있던 팀에 효과</p>
+      </div>
+    </div>
+  </div>
+  <div class="note">고무손 착각의 측정 지표 타당도는 논쟁 중 — vr-심리학-근거 7절</div>
+</section>
+
+<section>
+  <div class="tag vr">동향 · 4 ★</div>
+  <h2>패스스루 MR — 현실 영상 위에 그리기</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 340" role="img" aria-label="카메라 현실 영상, 깊이 정보, 가상 물체 세 층을 합성해 화면 하나를 만드는 과정">
+    <defs>
+      <marker id="a16" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker>
+    </defs>
+    <g font-size="18">
+      <rect x="30" y="30" width="230" height="80" rx="10" fill="#171b25" stroke="#9aa4b8"/>
+      <text x="145" y="64" fill="#e8ecf4" text-anchor="middle" font-weight="700">① 카메라 영상</text>
+      <text x="145" y="90" fill="#9aa4b8" text-anchor="middle">눈 위치로 보정한 현실</text>
+      <rect x="30" y="130" width="230" height="80" rx="10" fill="#171b25" stroke="#ffc44d"/>
+      <text x="145" y="164" fill="#ffc44d" text-anchor="middle" font-weight="700">② 깊이 · 공간 정보</text>
+      <text x="145" y="190" fill="#9aa4b8" text-anchor="middle">벽 · 바닥 · 가구 위치</text>
+      <rect x="30" y="230" width="230" height="80" rx="10" fill="#171b25" stroke="#35d6e6"/>
+      <text x="145" y="264" fill="#35d6e6" text-anchor="middle" font-weight="700">③ 가상 물체</text>
+      <text x="145" y="290" fill="#9aa4b8" text-anchor="middle">Unity 가 렌더링</text>
+    </g>
+    <g stroke="#9aa4b8" stroke-width="2.5" fill="none" marker-end="url(#a16)">
+      <path d="M262,70 C360,70 360,170 440,170"/>
+      <path d="M262,170 L440,170"/>
+      <path d="M262,270 C360,270 360,170 440,170"/>
+    </g>
+    <rect x="450" y="100" width="200" height="140" rx="12" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
+    <text x="550" y="162" fill="#ff5fa2" font-size="21" text-anchor="middle" font-weight="700">합성</text>
+    <text x="550" y="192" fill="#e8ecf4" font-size="17" text-anchor="middle">무엇이 앞에 있나</text>
+    <g font-size="18" fill="#e8ecf4">
+      <text x="700" y="80" fill="#ffc44d" font-weight="700">합성에서 생기는 지각 문제</text>
+      <text x="700" y="120">· 가림 : 현실 의자 뒤로 가상 공이 숨어야 함</text>
+      <text x="700" y="150">   → 깊이 정보 없으면 공이 의자 «위에» 떠 보임</text>
+      <text x="700" y="190">· 조명 : 가상 그림자가 현실 바닥에 맞아야 함</text>
+      <text x="700" y="230">· 지연 : 현실 영상이 머리보다 늦으면 세상이 출렁</text>
+      <text x="700" y="270">· 스케일 : 현실 문 옆이라 크기 오류가 바로 보임</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    - Unity 에서는 AR Foundation + Meta 용 OpenXR 패키지 조합이 일반적 경로 (평면 인식 · 앵커 · 깊이 기반 가림) — 패키지 이름·기능은 버전마다 확인
+    - 5주 깊이 단서(폐색 · 그림자)가 MR 에서 다시 핵심이 되는 점 강조
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">동향 · 5</div>
+  <h2>MR 이 VR 보다 까다로운 지점</h2>
+  <table style="font-size:.62em">
+    <tr><th>문제</th><th>학기 연결</th><th>VR 에서는</th><th>MR 에서는</th></tr>
+    <tr><td>폐색 (가림)</td><td>5주 단안 단서</td><td>모두 가상 → 깊이 버퍼가 해결</td><td class="trap-txt">현실 물체의 깊이를 따로 알아야 함</td></tr>
+    <tr><td>조명 일치</td><td>5주 조명·그림자</td><td>내가 정한 조명</td><td class="trap-txt">현실 조명을 추정해 맞춰야 함</td></tr>
+    <tr><td>크기·거리</td><td>13주 스케일 검수</td><td>비교 대상이 모두 가상</td><td>현실 물체가 기준 → 오류가 바로 드러남</td></tr>
+    <tr><td>지연</td><td>11주 motion-to-photon</td><td>가상 세계만 늦음</td><td class="trap-txt">현실 영상까지 늦으면 현실이 흔들림</td></tr>
+    <tr><td>멀미</td><td>12주 컴포트</td><td>가상 이동이 주원인</td><td>현실이 보여 고정 기준이 많음 → 대체로 완화 경향</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>합성 사진</b> : 사람을 다른 배경에 오려 붙였을 때 그림자 방향 · 빛 색 · 크기 중 하나만 어긋나도 «합성» 이 바로 보임 → MR = 매 프레임 실시간 합성 사진</p>
+  </div>
+  <p class="small muted">MR 의 멀미 완화는 경향 · 콘텐츠와 사람에 따라 다름</p>
+</section>
+
+<section>
+  <div class="tag vr">동향 · 6</div>
+  <h2>공간 비디오 — 촬영한 입체 영상</h2>
+  <ul class="small">
+    <li><b>무엇</b> : 사람 눈 간격 정도 떨어진 두 렌즈로 동시에 촬영 → 왼눈·오른눈에 각각 재생 → 양안 시차로 입체감 (4주 IPD · 5주 양안 시차)</li>
+    <li><b>어디서</b> : 일부 스마트폰·헤드셋이 직접 촬영 · 여러 헤드셋에서 재생 · 파일 형식·지원 범위는 기기·버전마다 다름</li>
+    <li><b>한계</b> : 촬영 위치에서 본 두 장면만 존재 → 머리를 옆으로 움직여도 <b>운동 시차 없음</b> (5주) · 정해진 시점에서 보는 «입체 창문»</li>
+    <li><b>비교</b> : 360° 영상 = 둘러보기 가능 · 보통 입체감 약함 / 6DoF 캡처(예 : 3D 가우시안 스플래팅) = 걸어 들어가 볼 수 있는 장면 복원 — 활발히 연구·제품화 중</li>
+  </ul>
+  <div class="analogy">
+    <p><b>뷰마스터 장난감</b> : 원판에 왼눈용·오른눈용 사진 두 장 → 들여다보면 입체 · 고개를 돌려도 장면 안을 둘러볼 수는 없음 → 공간 비디오 = 움직이는 뷰마스터</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">동향 · 7</div>
+  <h2>동향 정리 — 학기 개념으로 다시 보기</h2>
+  <table style="font-size:.62em">
+    <tr><th>기술</th><th>바탕이 되는 개념</th><th>주차</th><th>Quest 3 · 이 수업에서</th></tr>
+    <tr><td>아이트래킹 포비티드</td><td>중심와 · PPD · 셰이딩 비용</td><td>6 · 12</td><td>FFR 로 체험 가능</td></tr>
+    <tr><td>햅틱</td><td>시각-촉각 동기 · 피드백 지연</td><td>3 · 10</td><td><b class="lab-txt">컨트롤러 진동 바로 적용</b></td></tr>
+    <tr><td>패스스루 MR</td><td>폐색 · 조명 일치 · 지연 · 스케일</td><td>5 · 11 · 13</td><td>컬러 패스스루로 실습 가능</td></tr>
+    <tr><td>공간 비디오</td><td>양안 시차 · 운동 시차 부재</td><td>4 · 5</td><td>재생 체험</td></tr>
+  </table>
+  <div class="key vr">
+    <p class="small">제품 사양·출시 소식은 몇 달 단위로 바뀜 → 판단 기준은 <b>«어떤 지각 원리를 이용하는가 · 어떤 비용을 줄이는가»</b> · 수치는 제조사 최신 문서로 확인</p>
+  </div>
+</section>
+
+<!-- ========================================================= PART II -->
+<section class="divider part-iii">
+  <div class="kicker">Part II · 10분 + 작업</div>
+  <div class="rule"></div>
+  <h1>포트폴리오로<br>남기기</h1>
+  <p class="sub">시연 영상 2종 · 설계 근거 · 성능 수치 · 검증 결과</p>
+</section>
+
+<section>
+  <div class="tag lab">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>케이스 스터디<small>Case study</small></dt><dd>결과물만이 아니라 <b>문제 → 결정 → 검증 → 결과</b> 과정을 보여 주는 포트폴리오 형식</dd>
+    <dt>헤드셋 녹화<small>Headset capture</small></dt><dd>체험자가 보는 화면(1인칭)을 헤드셋 안에서 녹화</dd>
+    <dt>외부 촬영<small>External shot</small></dt><dd>카메라로 체험자의 몸과 동작(3인칭)을 찍은 영상</dd>
+    <dt>캐스팅<small>Casting</small></dt><dd>헤드셋 화면을 휴대폰·PC 로 실시간 전송 — 녹화도 가능</dd>
+    <dt>분할 화면<small>Split screen</small></dt><dd>1인칭 · 3인칭 영상을 한 화면에 나란히 · 시간 맞춰 편집</dd>
+    <dt>기여 명시<small>Contribution</small></dt><dd>팀 작업 중 <b>내가 맡은 부분</b>을 구체적으로 적는 것</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag lab">포트폴리오 · 1</div>
+  <h2>구조 — 완성 사진이 아니라 과정</h2>
+  <table style="font-size:.64em">
+    <tr><th>#</th><th>섹션</th><th>재료 (이미 가진 것)</th></tr>
+    <tr><td>1</td><td>한 줄 정의 · 내 역할</td><td>기획서 ① · 역할 4종</td></tr>
+    <tr><td>2</td><td>시연 영상 (60~90초)</td><td>15주 캐스팅 녹화 + 오늘 촬영</td></tr>
+    <tr><td>3</td><td><b>설계 근거</b></td><td>기획서 ② 지각적 근거 표 · 공간 스케치</td></tr>
+    <tr><td>4</td><td><b>검증 결과</b></td><td>14주 플레이테스트 기록 · SSQ 전후 · 관찰 인용</td></tr>
+    <tr><td>5</td><td><b>성능 수치</b></td><td>예산표 vs 실측 · 개선 기록표 전후</td></tr>
+    <tr><td>6</td><td>AI 활용과 함정</td><td>프롬프트 로그 · 해결한 함정 번호</td></tr>
+    <tr><td>7</td><td>회고 · 다음에 바꿀 것</td><td>16주 피드백 1장 요약</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>레시피 블로그 vs 음식 사진</b> : 완성 사진만 있는 글은 «맛있어 보임» 으로 끝 · 재료·순서·실패담이 있는 레시피는 이 사람이 <b>요리를 할 줄 안다</b>는 증거</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">포트폴리오 · 2 ★</div>
+  <h2>시연 영상 — 두 대의 카메라</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 330" role="img" aria-label="헤드셋 녹화 1인칭과 삼각대 외부 촬영 3인칭을 분할 화면으로 편집">
+    <defs>
+      <marker id="b16" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker>
+    </defs>
+    <rect x="160" y="60" width="200" height="200" fill="rgba(168,224,95,0.06)" stroke="#a8e05f" stroke-width="2" stroke-dasharray="8 6"/>
+    <circle cx="260" cy="160" r="26" fill="#421229" stroke="#ff5fa2" stroke-width="3"/>
+    <text x="260" y="166" fill="#ff5fa2" font-size="16" text-anchor="middle">체험자</text>
+    <rect x="248" y="122" width="24" height="12" rx="3" fill="#ff5fa2"/>
+    <rect x="30" y="140" width="60" height="40" rx="6" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+    <path d="M90,160 L230,160" stroke="#35d6e6" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="60" y="210" fill="#35d6e6" font-size="16" text-anchor="middle">삼각대</text>
+    <g font-size="17">
+      <text x="260" y="40" fill="#ff5fa2" text-anchor="middle">① 헤드셋 녹화 (1인칭)</text>
+      <text x="60" y="235" fill="#35d6e6" text-anchor="middle">② 외부 촬영</text>
+      <text x="60" y="258" fill="#35d6e6" text-anchor="middle">(3인칭)</text>
+    </g>
+    <path d="M380,160 L520,160" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#b16)"/>
+    <text x="450" y="148" fill="#9aa4b8" font-size="16" text-anchor="middle">편집</text>
+    <rect x="540" y="60" width="520" height="200" rx="12" fill="#171b25" stroke="#2a3040"/>
+    <rect x="555" y="75" width="300" height="170" rx="6" fill="#421229"/>
+    <text x="705" y="166" fill="#ff5fa2" font-size="20" text-anchor="middle" font-weight="700">1인칭 — 보이는 것</text>
+    <rect x="865" y="75" width="180" height="170" rx="6" fill="#0e3a42"/>
+    <text x="955" y="158" fill="#35d6e6" font-size="18" text-anchor="middle" font-weight="700">3인칭</text>
+    <text x="955" y="182" fill="#e8ecf4" font-size="15" text-anchor="middle">몸 · 손 동작</text>
+    <text x="800" y="300" fill="#e8ecf4" font-size="18" text-anchor="middle">시작할 때 손뼉 1회 → 두 영상의 소리·동작으로 시간 맞추기</text>
+  </svg>
+  <div class="analogy">
+    <p><b>스포츠 중계</b> : 선수 머리에 단 카메라만 보면 어지럽고 상황을 모름 · 중계 카메라만 보면 선수가 무엇을 봤는지 모름 → 두 화면을 같이 보여야 «무엇을 보고 어떻게 움직였나» 가 전달</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">포트폴리오 · 3</div>
+  <h2>촬영 방법과 주의점</h2>
+  <table style="font-size:.6em">
+    <tr><th></th><th>헤드셋 녹화 (1인칭)</th><th>외부 촬영 (3인칭)</th></tr>
+    <tr><td>방법</td><td>헤드셋 내장 녹화 · 캐스팅 화면 녹화 · Meta Quest Developer Hub — 메뉴·단축키는 OS 버전마다 다름</td><td>삼각대 고정 · 체험자 전신이 들어가게 · 밝고 단순한 배경</td></tr>
+    <tr><td>흔한 실패</td><td>머리를 빨리 돌려 영상이 어지러움 · 녹화 중 프레임 저하</td><td>역광 · 손이 화면 밖 · 플레이 구역이 잘림</td></tr>
+    <tr><td>대책</td><td>촬영용 체험자는 <b>천천히 · 목표를 오래 응시</b> · 녹화는 성능 측정과 <b>따로</b></td><td>창을 등지지 않게 · 구역 전체가 들어가는 거리에서 · 가로 촬영</td></tr>
+  </table>
+  <ul class="small">
+    <li>체험자 얼굴·목소리가 들어가면 <b>공개 동의</b> 받기 · 다른 학생이 배경에 찍히지 않게</li>
+    <li>녹화 영상은 한쪽 눈 기준으로 잘린 화면 · 실제 시야보다 좁음 → 자막으로 «헤드셋 녹화 화면» 표기</li>
+  </ul>
+  <aside class="notes">
+    - 녹화 해상도·프레임률은 개발자 설정이나 MQDH 에서 바꿀 수 있는 경우가 있음 → 각자 기기에서 확인
+    - 촬영 체험자 = 팀원 중 VR 에 가장 익숙한 사람 (천천히 움직이기 쉬움)
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">포트폴리오 · 4</div>
+  <h2>문서화 — 근거 · 수치 · 검증을 문장으로</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>흔한 포트폴리오 문장</h4>
+      «몰입감 있는 숲 VR 을 만들었습니다.<br>
+      최적화를 통해 부드러운 체험을 구현했고,<br>
+      사용자들이 만족했습니다.»<br><br>
+      <span style="color:#ff5a4d">// 근거 · 수치 · 검증 방법 없음<br>
+      // 누가 무엇을 했는지 없음</span>
+    </div>
+    <div class="good">
+      <h4>근거가 보이는 문장</h4>
+      «이동을 텔레포트와 22.5° 스냅 턴으로 제한 (벡션 회피). 다른 팀 체험자 4명의 SSQ 증가폭을 개선 전 평균 +30 에서 +12 로 낮춤.<br>
+      URP 후처리를 끄고 그림자를 베이크해 Quest 3 실측 61 → 88fps.<br>
+      나는 검증 담당 — 플레이테스트 진행과 측정을 맡음.»
+    </div>
+  </div>
+  <div class="key lab">
+    <p class="small">한 문장에 <b>결정 · 이유 · 숫자 · 내 역할</b> 중 최소 셋 · 숫자에는 측정 조건(기기 · 빌드 · 인원)을 함께</p>
+  </div>
+  <div class="note">상세 체크리스트 : labs/w16/포트폴리오-가이드.md</div>
+</section>
+
+<!-- ========================================================= PART III -->
+<section class="divider trap">
+  <div class="kicker">Part III · 15분 + 작업</div>
+  <div class="rule"></div>
+  <h1>AI 함정 10종<br><em>회고</em></h1>
+  <p class="sub">한 학기 동안 AI 가 그럴듯하게 틀린 10가지 → 나만의 확인 목록</p>
+</section>
+
+<section>
+  <div class="tag trap">회고 · 1</div>
+  <h2>함정 #1 ~ #5</h2>
+  <table style="font-size:.6em">
+    <tr><th>#</th><th>주</th><th>AI 가 한 일</th><th>증상</th><th>확인 질문</th></tr>
+    <tr><td class="trap-txt"><b>1</b></td><td>2</td><td>오일러각으로 회전</td><td>특정 각도에서 축이 잠김 (짐벌락)</td><td>회전을 쿼터니언으로 합성했나?</td></tr>
+    <tr><td class="trap-txt"><b>2</b></td><td>3</td><td>deltaTime 누락 · Update 에서 GetComponent 반복</td><td>PC 마다 다른 속도 · 프레임 저하</td><td>이동량에 시간이 곱해졌나? 참조를 캐시했나?</td></tr>
+    <tr><td class="trap-txt"><b>3</b></td><td>4</td><td>near 0.01 · far 10000</td><td>먼 면이 깜빡임 (z-fighting)</td><td>near/far 비율이 필요 이상 큰가?</td></tr>
+    <tr><td class="trap-txt"><b>4</b></td><td>5</td><td>광원마다 실시간 그림자 · Gamma 색공간</td><td>헤드셋 프레임 급락 · 색 바램</td><td>그림자 광원 0~1개? Color Space = Linear?</td></tr>
+    <tr><td class="trap-txt"><b>5</b></td><td>6</td><td>밉맵 끔 · 알파 블렌딩 남용</td><td>먼 무늬 반짝임 · 투명 앞뒤 뒤바뀜</td><td>밉맵 켰나? Alpha Clip 으로 되나?</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="tag trap">회고 · 2</div>
+  <h2>함정 #6 ~ #10</h2>
+  <table style="font-size:.6em">
+    <tr><th>#</th><th>주</th><th>AI 가 한 일</th><th>증상</th><th>확인 질문</th></tr>
+    <tr><td class="trap-txt"><b>6</b></td><td>7</td><td>transform.position 으로 물리 물체 이동</td><td>벽 통과 · 떨림</td><td>Rigidbody 는 MovePosition · velocity 로?</td></tr>
+    <tr><td class="trap-txt"><b>7</b></td><td>10</td><td>Screen Space Overlay 캔버스</td><td>헤드셋에서 UI 사라짐</td><td>World Space · 0.5~2 m 에 배치했나?</td></tr>
+    <tr><td class="trap-txt"><b>8</b></td><td>11</td><td>카메라 Transform 직접 조작</td><td>세상 흔들림 · 즉각 멀미</td><td>카메라가 아니라 XR Origin 을 옮겼나?</td></tr>
+    <tr><td class="trap-txt"><b>9</b></td><td>12</td><td>부드러운 가속 이동</td><td>다수 체험자 멀미</td><td>가속 구간이 있나? 텔레포트·등속으로?</td></tr>
+    <tr><td class="trap-txt"><b>10</b></td><td>14</td><td>에디터 fps 로 최적화 판정</td><td>헤드셋 60fps 이하</td><td>헤드셋 실측 · 병목 판정 후 고쳤나?</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="tag trap">회고 · 3 ★</div>
+  <h2>10종의 공통 패턴</h2>
+  <svg class="fig-svg" viewBox="0 0 1100 360" role="img" aria-label="함정 10종을 수학·코드, 렌더링 설정, VR 구조, 몸과 기기 네 묶음으로 분류하고 공통 원인 표시">
+    <g font-size="19">
+      <rect x="20" y="30" width="250" height="190" rx="12" fill="#171b25" stroke="#35d6e6" stroke-width="2"/>
+      <text x="145" y="66" fill="#35d6e6" text-anchor="middle" font-weight="700">수학 · 코드</text>
+      <text x="145" y="106" fill="#e8ecf4" text-anchor="middle">#1 짐벌락</text>
+      <text x="145" y="138" fill="#e8ecf4" text-anchor="middle">#2 deltaTime</text>
+      <text x="145" y="170" fill="#e8ecf4" text-anchor="middle">#6 물리 무력화</text>
+      <rect x="290" y="30" width="250" height="190" rx="12" fill="#171b25" stroke="#ffc44d" stroke-width="2"/>
+      <text x="415" y="66" fill="#ffc44d" text-anchor="middle" font-weight="700">렌더링 설정</text>
+      <text x="415" y="106" fill="#e8ecf4" text-anchor="middle">#3 z-fighting</text>
+      <text x="415" y="138" fill="#e8ecf4" text-anchor="middle">#4 그림자 · 색공간</text>
+      <text x="415" y="170" fill="#e8ecf4" text-anchor="middle">#5 밉맵 · 알파</text>
+      <rect x="560" y="30" width="250" height="190" rx="12" fill="#171b25" stroke="#ff5fa2" stroke-width="2"/>
+      <text x="685" y="66" fill="#ff5fa2" text-anchor="middle" font-weight="700">VR 구조</text>
+      <text x="685" y="106" fill="#e8ecf4" text-anchor="middle">#7 Overlay UI</text>
+      <text x="685" y="138" fill="#e8ecf4" text-anchor="middle">#8 카메라 직접 조작</text>
+      <rect x="830" y="30" width="250" height="190" rx="12" fill="#171b25" stroke="#ff5a4d" stroke-width="2"/>
+      <text x="955" y="66" fill="#ff5a4d" text-anchor="middle" font-weight="700">몸 · 기기</text>
+      <text x="955" y="106" fill="#e8ecf4" text-anchor="middle">#9 가속 이동</text>
+      <text x="955" y="138" fill="#e8ecf4" text-anchor="middle">#10 에디터 기준</text>
+    </g>
+    <g stroke="#9aa4b8" stroke-width="2" fill="none">
+      <path d="M145,222 L145,252 L955,252 L955,222"/>
+      <path d="M415,222 L415,252"/><path d="M685,222 L685,252"/>
+      <path d="M550,252 L550,272"/>
+    </g>
+    <rect x="160" y="275" width="780" height="70" rx="12" fill="#431612" stroke="#ff5a4d" stroke-width="2"/>
+    <text x="550" y="306" fill="#e8ecf4" font-size="20" text-anchor="middle" font-weight="700">공통 원인 : 코드는 그럴듯함 · 틀린 곳은 코드 밖</text>
+    <text x="550" y="334" fill="#9aa4b8" font-size="18" text-anchor="middle">수학적 조건 · 설정 화면 · 헤드셋 · 사람의 몸 — AI 가 볼 수 없는 곳</text>
+  </svg>
+  <aside class="notes">
+    - 왼쪽에서 오른쪽으로 갈수록 «에디터에서 안 보이는 정도» 가 커짐
+    - 그래서 학기 후반 함정일수록 헤드셋과 남의 몸이 필요했음
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">회고 · 4</div>
+  <h2>개인 체크리스트 만들기</h2>
+  <ol class="small">
+    <li>10종 중 <b>내가 실제로 걸린 것</b>에 표시 · 몇 주차 과제에서 어떤 증상이었는지 한 줄</li>
+    <li>각 항목을 <b>내 말로 된 확인 질문</b> 하나로 · «Linear 인가?» 처럼 예/아니오로 답할 수 있게</li>
+    <li>질문마다 <b>확인 위치</b> : 코드 · Inspector · Project Settings · 헤드셋 · 체험자</li>
+    <li>다음 프로젝트 프롬프트의 <b>[검증 조건] 칸</b>에 이 목록을 붙여 넣기</li>
+  </ol>
+  <pre style="font-size:.62em"><code data-trim>[검증 조건 — 내 체크리스트]
+- (#4) 그림자 켠 광원 수 로그 ≤ 1 · Project Settings Color Space = Linear
+- (#8) 이동 코드가 Camera 가 아닌 XR Origin 의 Transform 만 변경
+- (#10) fps 는 Quest 배포 빌드에서 OVR Metrics 로 30초 측정한 값만 보고
+</code></pre>
+  <div class="analogy">
+    <p><b>운전의 사각지대 확인</b> : 초보는 사이드미러만 보다 사고 · 숙련자는 차선 바꾸기 전 고개를 돌리는 <b>습관</b>이 몸에 붙음 → 체크리스트 = 그 습관을 글로 적은 것</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">도입 질문의 답</div>
+  <h2>코드는 AI 가 짰다 — 내 머리에 남은 것</h2>
+  <div class="cols">
+    <div class="card gfx">
+      <h4>무엇을 요구할지 아는 능력</h4>
+      <p class="small">«회전은 쿼터니언 · 그림자는 하나 · UI 는 World Space 1.2 m · 이동은 텔레포트» → <b>용어와 숫자로 된 명세</b> · 개념을 모르면 쓸 수 없는 문장</p>
+    </div>
+    <div class="card trap">
+      <h4>왜 틀렸는지 판별하는 능력</h4>
+      <p class="small">에디터에서 멀쩡한 결과의 함정 10종 · 증상 → 원인 → <b>확인 위치</b> · 헤드셋과 남의 몸으로 검증하는 습관</p>
+    </div>
+  </div>
+  <div class="key vr" style="margin-top:.8em">
+    <p>그리고 하나 더 : <b>VR 은 픽셀이 아니라 지각을 다루는 일</b> — 사람의 눈 · 속귀 · 손이 설계 기준</p>
+  </div>
+  <aside class="notes">
+    - 도입에서 걷은 포스트잇 몇 장 읽기 → 위 세 줄과 연결
+    - 1주차 명제 슬라이드를 다시 띄우면 좋음
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">학기 정리</div>
+  <h2>한 학기 한 장 — 그래픽스 이론과 지각 짝</h2>
+  <table style="font-size:.6em">
+    <tr><th>주</th><th>그래픽스 이론</th><th>지각 · HMD 짝</th><th>AI 함정</th></tr>
+    <tr><td>2</td><td>벡터 · 행렬 · 좌표계</td><td>머리 좌표계 · 전정계</td><td>#1</td></tr>
+    <tr><td>3</td><td>게임 루프 · deltaTime</td><td>motion-to-photon 지연</td><td>#2</td></tr>
+    <tr><td>4</td><td>렌더링 파이프라인 · 투영</td><td>양안 렌더링 · 렌즈 왜곡 · IPD</td><td>#3</td></tr>
+    <tr><td>5</td><td>조명 · PBR · 베이크</td><td>단안 깊이 단서 · 거리 과소추정</td><td>#4</td></tr>
+    <tr><td>6</td><td>셰이더 · 텍스처 · 밉맵</td><td>중심와 · PPD · 포비티드</td><td>#5</td></tr>
+    <tr><td>7</td><td>애니메이션 · 물리</td><td>광학 흐름 · 벡션</td><td>#6</td></tr>
+    <tr><td>10~12</td><td>입력 · UI · XR 리그 · 성능 예산</td><td>공간 UI · 트래킹 · 컴포트</td><td>#7~#9</td></tr>
+    <tr><td>13~15</td><td>팀 프로젝트 · 프로파일링</td><td>사용자 중심 설계 · 플레이테스트 · SSQ</td><td>#10</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="tag lab">마무리</div>
+  <h2>보완 · 제출 안내</h2>
+  <div class="cols">
+    <div class="card lab">
+      <h4>팀</h4>
+      <ul class="small">
+        <li>개선 방향 1장 요약의 우선 개선 3가지 반영 · 개선 기록표에 재측정 추가</li>
+        <li>최종 빌드 · 시연 영상(분할 화면 60~90초)</li>
+      </ul>
+    </div>
+    <div class="card gfx">
+      <h4>개인</h4>
+      <ul class="small">
+        <li>포트폴리오 초안 (가이드 7섹션)</li>
+        <li>개인 AI 함정 체크리스트 (확인 질문 · 확인 위치)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="key">
+    <p class="small">마감 · 제출 경로 · 성적 반영 범위 : LMS 공지 기준 · 장비 반납 : 위생 커버 폐기 · 페이스 인터페이스 세척 · 충전 케이블 동봉</p>
+  </div>
+</section>
+
+<section class="divider part-i">
+  <div class="kicker">한 학기 수고하셨습니다</div>
+  <div class="rule"></div>
+  <h1>개념으로 <em>요구</em>하고<br>몸으로 <em>검증</em>하기</h1>
+  <p class="sub">AI 가 코드를 쓰는 시대의 그래픽스 · 사람의 지각이 기준인 VR</p>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/math/math.min.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

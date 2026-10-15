@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8주차 · 중간고사 — 컴퓨터그래픽스</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+<style>
+  /* 8주 덱 전용 : 인라인 SVG 도해 */
+  .reveal svg.dia { display:block; margin:.2em auto 0; width:100%; height:auto; max-height:470px; }
+  .reveal svg.dia text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
+  .reveal .scale td:first-child { white-space:nowrap; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ========================================================= 표지 -->
+<section class="cover">
+  <div class="week">Week 08</div>
+  <h1>중간고사</h1>
+  <p class="muted" style="font-size:.8em;max-width:28em">
+    개인 미니 프로젝트(인터랙티브 3D 씬) 구현 평가 및 코드 리뷰
+  </p>
+  <div class="meta">
+    컴퓨터그래픽스 VF3500076 · 디자인앤테크놀로지전공<br>
+    조성호 · 2026학년도 2학기
+  </div>
+  <aside class="notes">
+    - 시작 전 : 발표 순서 추첨 결과를 화면 «순서표» 슬라이드에 기입해 두기
+    - 평가표(rubrics/중간-평가표.md) 인쇄본을 학생 수만큼 · 동료 크리틱 양식도 학생 수만큼
+    - 14:00–14:12 안내 → 14:12 첫 발표 시작
+  </aside>
+</section>
+
+<!-- ========================================================= 도입 질문 -->
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask">
+    여러분의 씬은 <span class="hl">AI 가 짠 코드</span>로 돌아감<br><br>
+    그 코드 한 줄을 가리키며<br>
+    «<span class="hl">왜 이렇게 짜야 했나</span>» 라고 물으면<br>
+    대답할 수 있는가?
+  </div>
+  <aside class="notes">
+    - 손을 들게 하지 않음 · 속으로 답해 보게만
+    - 핵심 : 오늘 평가는 «작동하느냐» 보다 «설명할 수 있느냐» 의 비중이 큼
+    - 답 회수 : «도입 질문의 답» 슬라이드 (VR 예고 직전)
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>오늘 끝나면 할 수 있는 것</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 5분 시연</h4>
+      <p class="small">내 씬에서 2~7주 개념이 <b>어디에 들어 있는지</b> 스위치를 켜고 끄며 보여 주기</p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 구술 방어</h4>
+      <p class="small">AI 가 쓴 코드 한 줄을 <b>증상 → 원인 개념 → 확인 방법</b> 순서로 설명</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 근거 있는 크리틱</h4>
+      <p class="small">동료 씬을 보고 <b>관찰 · 근거 · 제안</b> 세 칸으로 된 크리틱 1건 작성</p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:1.1em">
+    <p>오늘의 큰 그림 : 지난 7주간 키운 <b>지각 실험실 씬</b>의 결산 · 11주차에 그 씬 안으로 직접 들어가기 전의 점검</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">용어</div>
+  <h2>오늘 쓰는 말 미리보기</h2>
+  <dl class="terms">
+    <dt>구술 방어<small>Oral defense</small></dt><dd>만든 것에 대한 질문에 <b>말로 답해 근거를 증명</b>하는 평가 — 논문 심사에서 온 말</dd>
+    <dt>코드 리뷰<small>Code review</small></dt><dd>다른 사람(또는 AI)이 쓴 코드를 읽고 문제·개선점을 찾는 검토</dd>
+    <dt>프롬프트 로그<small>Prompt log</small></dt><dd>AI 에게 보낸 요청과 받은 응답을 <b>순서대로 빠짐없이</b> 남긴 기록</dd>
+    <dt>검증 리포트<small>Verification report</small></dt><dd>«이 코드가 맞다» 를 <b>측정값</b>(ms · 각도 · 거리)으로 보인 문서</dd>
+    <dt>지각 실험실<small>Perception Lab</small></dt><dd>2주부터 각자 키워 온 씬 — 작품이 아니라 <b>개념 검증용 실험대</b></dd>
+    <dt>크리틱<small>Critique</small></dt><dd>작업을 근거와 함께 평가·제안하는 디자인 수업식 피드백</dd>
+    <dt>재현<small>Reproduce</small></dt><dd>같은 조건에서 같은 현상을 <b>다시 일으켜 보이기</b> — 함정 증명의 기본</dd>
+  </dl>
+</section>
+
+<!-- ========================================================= 운영 -->
+<section>
+  <div class="tag lab">운영 · 1</div>
+  <h2>한 사람 15분의 구조</h2>
+  <svg class="dia" viewBox="0 0 1160 420" role="img" aria-label="시연 5분, 구술 방어 5분, 상호 크리틱 5분의 타임라인">
+    <rect x="20" y="40" width="370" height="120" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+    <rect x="395" y="40" width="370" height="120" rx="14" fill="#431612" stroke="#ff5a4d" stroke-width="2"/>
+    <rect x="770" y="40" width="370" height="120" rx="14" fill="#21330f" stroke="#a8e05f" stroke-width="2"/>
+    <text x="205" y="92" text-anchor="middle" fill="#35d6e6" font-size="30" font-weight="700">① 시연 5분</text>
+    <text x="205" y="132" text-anchor="middle" fill="#e8ecf4" font-size="20">발표자가 씬을 조작</text>
+    <text x="580" y="92" text-anchor="middle" fill="#ff5a4d" font-size="30" font-weight="700">② 구술 방어 5분</text>
+    <text x="580" y="132" text-anchor="middle" fill="#e8ecf4" font-size="20">교수 질문 2개 · 추첨</text>
+    <text x="955" y="92" text-anchor="middle" fill="#a8e05f" font-size="30" font-weight="700">③ 상호 크리틱 5분</text>
+    <text x="955" y="132" text-anchor="middle" fill="#e8ecf4" font-size="20">지정 동료 1명 + 청중</text>
+    <line x1="20" y1="200" x2="1140" y2="200" stroke="#2a3040" stroke-width="3"/>
+    <g fill="#9aa4b8" font-size="20" text-anchor="middle">
+      <text x="20" y="232">0′</text><text x="392" y="232">5′</text><text x="767" y="232">10′</text><text x="1140" y="232">15′</text>
+    </g>
+    <g font-size="19" fill="#9aa4b8">
+      <text x="30" y="290">· 실험실 스위치 켜고 끄기</text>
+      <text x="30" y="322">· 함정 1개 재현 → 수정본</text>
+      <text x="30" y="354">· 측정값 1개 화면에 띄우기</text>
+      <text x="405" y="290">· 질문 1개당 약 2분 30초</text>
+      <text x="405" y="322">· 증상 → 원인 → 확인 방법</text>
+      <text x="405" y="354">· 코드 화면 띄운 채 답변</text>
+      <text x="780" y="290">· 지정 동료 구두 2분</text>
+      <text x="780" y="322">· 발표자 응답 1분</text>
+      <text x="780" y="354">· 청중 질문 2분</text>
+    </g>
+    <text x="580" y="405" text-anchor="middle" fill="#ffc44d" font-size="20">교대 1분 포함 → 1인 약 16분 · 시간 초과 시 타이머로 끊음</text>
+  </svg>
+  <aside class="notes">
+    - 타이머는 화면 구석에 크게 · 5분 종이 울리면 문장만 마치고 다음 단계
+    - 시연이 길어지면 구술 시간이 줄어드는 게 아니라 시연을 끊음 — 미리 공지
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">운영 · 2</div>
+  <h2>오늘의 시간표</h2>
+  <table style="font-size:.7em">
+    <tr><th>시각</th><th>블록</th><th>내용</th></tr>
+    <tr><td>14:00–14:12</td><td>안내</td><td>순서 공지 · 평가 기준 · 크리틱 양식 배포</td></tr>
+    <tr><td>14:12–15:20</td><td class="gfx-txt"><b>발표 1조</b></td><td>약 4명 × 16분 + 여유</td></tr>
+    <tr><td>15:20–15:30</td><td>휴식</td><td>2조 장비 연결 점검</td></tr>
+    <tr><td>15:30–16:45</td><td class="gfx-txt"><b>발표 2조</b></td><td>약 4~5명 × 16분</td></tr>
+    <tr><td>16:45–17:00</td><td class="lab-txt"><b>정리</b></td><td>공통 피드백 · 크리틱 양식 회수 · 9주 예고</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">한 번에 진행 가능한 인원 : 약 140분 ÷ 16분 ≈ <b>8~9명</b><br>
+    인원이 더 많으면 → 교수 공지에 따른 <b>분반 진행</b>(시간대 분할) · 시연 영상 사전 제출로 시연 단계 단축</p>
+  </div>
+  <aside class="notes">
+    - 수강 인원에 맞춰 이 표를 당일 수정 (확인 필요 : 수강 인원 · 학사 규정상 구술 평가 가능 여부)
+    - 분반 진행 시 대기 학생은 조용히 청중 메모 작성
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">운영 · 3</div>
+  <h2>발표 순서와 역할 교대</h2>
+  <svg class="dia" viewBox="0 0 1160 300" role="img" aria-label="발표자, 크리틱 담당, 준비 학생이 한 칸씩 이동하는 교대">
+    <g font-size="22" text-anchor="middle">
+      <rect x="40" y="40" width="300" height="110" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+      <text x="190" y="88" fill="#35d6e6" font-weight="700">발표자 k번</text>
+      <text x="190" y="122" fill="#e8ecf4" font-size="19">시연 · 구술</text>
+      <rect x="430" y="40" width="300" height="110" rx="14" fill="#21330f" stroke="#a8e05f" stroke-width="2"/>
+      <text x="580" y="88" fill="#a8e05f" font-weight="700">크리틱 담당 k+1번</text>
+      <text x="580" y="122" fill="#e8ecf4" font-size="19">k번 씬 관찰 · 양식 작성</text>
+      <rect x="820" y="40" width="300" height="110" rx="14" fill="#171b25" stroke="#9aa4b8" stroke-width="2"/>
+      <text x="970" y="88" fill="#e8ecf4" font-weight="700">준비 k+2번</text>
+      <text x="970" y="122" fill="#9aa4b8" font-size="19">노트북 연결 · 씬 열기</text>
+    </g>
+    <g stroke="#ffc44d" stroke-width="3" fill="none">
+      <path d="M 560 190 L 230 190" marker-end="url(#ar8)"/>
+      <path d="M 950 190 L 620 190" marker-end="url(#ar8)"/>
+    </g>
+    <g fill="#ffc44d" font-size="18" text-anchor="middle">
+      <text x="395" y="225">다음 발표자로</text>
+      <text x="785" y="225">다음 크리틱 담당으로</text>
+    </g>
+    <defs><marker id="ar8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker></defs>
+    <text x="580" y="280" text-anchor="middle" fill="#ffc44d" font-size="20">한 명 끝날 때마다 세 역할이 왼쪽으로 한 칸씩 이동 · 마지막 발표자의 크리틱 담당 = 1번</text>
+  </svg>
+  <p class="small">순서 : 시작 전 <b>추첨</b> · 크리틱 담당은 «내 다음 순서» 로 자동 결정 → 모든 학생이 크리틱 1건씩 작성</p>
+  <aside class="notes">
+    - 추첨 결과를 칠판이나 이 슬라이드 옆 화면에 적어 둠
+    - 크리틱 담당은 자기 발표 직전이라 긴장 상태 — 그래서 양식이 «세 칸» 으로 짧음
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">운영 · 4</div>
+  <h2>순서표 (당일 기입)</h2>
+  <table style="font-size:.66em">
+    <tr><th>#</th><th>발표자</th><th>크리틱 담당</th><th>구술 문항 (추첨)</th><th>#</th><th>발표자</th><th>크리틱 담당</th><th>구술 문항 (추첨)</th></tr>
+    <tr><td>1</td><td></td><td>2번</td><td>&nbsp;·&nbsp;</td><td>6</td><td></td><td>7번</td><td>&nbsp;·&nbsp;</td></tr>
+    <tr><td>2</td><td></td><td>3번</td><td>&nbsp;·&nbsp;</td><td>7</td><td></td><td>8번</td><td>&nbsp;·&nbsp;</td></tr>
+    <tr><td>3</td><td></td><td>4번</td><td>&nbsp;·&nbsp;</td><td>8</td><td></td><td>9번</td><td>&nbsp;·&nbsp;</td></tr>
+    <tr><td>4</td><td></td><td>5번</td><td>&nbsp;·&nbsp;</td><td>9</td><td></td><td>10번</td><td>&nbsp;·&nbsp;</td></tr>
+    <tr><td>5</td><td></td><td>6번</td><td>&nbsp;·&nbsp;</td><td>10</td><td></td><td>1번</td><td>&nbsp;·&nbsp;</td></tr>
+  </table>
+  <p class="small">구술 문항 칸 : 질문 은행 Q1~Q6 중 <b>발표 직전 추첨한 번호 2개</b> 기입 · 한 학생 안에서는 서로 다른 두 문항</p>
+  <aside class="notes">
+    - 화면에서 직접 편집하지 말고 칠판·인쇄본에 기입 → 이 슬라이드는 형식 안내용
+    - 인원이 10명 미만이면 마지막 발표자의 크리틱 담당 = 1번
+  </aside>
+</section>
+
+<!-- ========================================================= 시연 -->
+<section>
+  <div class="tag gfx">① 시연</div>
+  <h2>5분 시연에서 보여 줄 것</h2>
+  <table style="font-size:.66em">
+    <tr><th>주차</th><th>실험실에 있어야 할 것</th><th>시연 방법</th></tr>
+    <tr><td>2주</td><td>부모-자식 변환 체인 · 쿼터니언 회전</td><td>부모 회전 → 자식 따라감 · 피치 90° 근처에서도 잠김 없음</td></tr>
+    <tr><td>3주</td><td>프레임 독립 이동</td><td>fps 제한 30 ↔ 120 전환 · 같은 시간에 같은 거리</td></tr>
+    <tr><td>4주</td><td>카메라 near/far 설정</td><td>먼 바닥 겹친 면에서 깜빡임 없음 · far/near 비율 표시</td></tr>
+    <tr><td>5주</td><td>깊이 단서 스위치 5종</td><td>접촉 그림자 끄기 → 물체가 떠 보임</td></tr>
+    <tr><td>6주</td><td>고주파 바닥 · 밉맵</td><td>밉맵 끄기 → 먼 바닥 지글거림</td></tr>
+    <tr><td>7주</td><td>이동 스크립트 2종</td><td>Transform 이동 → 벽 통과 · Rigidbody 이동 → 막힘</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">전부 보여 줄 시간 없음 → <b>가장 자신 있는 3개</b> + 함정 1개의 «재현 → 수정본» 비교 · 측정값(ms · 거리 · 각도) 1개 이상 화면에 표시</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">① 시연</div>
+  <h2>좋은 시연의 순서</h2>
+  <ol class="small">
+    <li><b>한 문장 소개</b> — «이 씬은 ○○ 를 확인하는 실험대»</li>
+    <li><b>스위치 하나 끄기</b> — 무엇이 무너지는지 먼저 보여 줌</li>
+    <li><b>다시 켜기</b> — 원래대로 돌아오는 것 확인</li>
+    <li><b>숫자로 확인</b> — 콘솔 로그나 화면 표시로 측정값 제시</li>
+    <li>2~4 를 2~3회 반복</li>
+  </ol>
+  <div class="analogy">
+    <p><b>과학관 실험 시연자</b> : «촛불에 유리컵을 덮으면 꺼집니다» 를 말로만 하지 않음 → 덮어서 꺼지는 것을 보여 주고, 컵을 떼고 다시 켜 보임 → 원인을 하나만 바꿔 결과가 바뀌는 모습이 곧 설명</p>
+    <p>비유의 한계 : 과학관은 결과가 정해진 쇼 · 여기서는 실패한 스위치도 그대로 보여 주는 것이 감점 아님</p>
+  </div>
+  <aside class="notes">
+    - 시연 중 오류가 나면 그 자리에서 «무엇이 원인일지» 말하게 함 — 그게 구술의 예고편
+    - 예쁜 연출(음악, 컷씬)은 점수와 무관하다고 다시 강조
+  </aside>
+</section>
+
+<!-- ========================================================= 구술 방어 -->
+<section>
+  <div class="tag trap">② 구술 방어</div>
+  <h2>구술 방어 = «설명할 수 있는가» 확인</h2>
+  <div class="analogy">
+    <p><b>내비게이션 운전 vs 길 설명</b> : 내비를 따라 목적지에 도착한 사람 · 길을 아는 사람 → 둘 다 도착은 함 · 차이는 «왜 이 길로 왔나», «이 다리가 막히면 어디로 돌아가나» 를 물었을 때 드러남</p>
+    <p>AI 코드 = 내비 · 씬이 작동 = 도착 · 구술 방어 = 내비를 끄고 길을 설명해 보는 시간</p>
+  </div>
+  <ul class="small">
+    <li>이유 : 작동하는 코드만으로는 <b>이해했는지 · 우연히 돌아가는지</b> 구분 불가</li>
+    <li>그래서 : 코드를 화면에 띄워 둔 채 «이 줄이 없으면 무엇이 무너지나» 를 질문</li>
+    <li>모든 질문의 출처 = 2~7주 <b>AI 함정</b> → 수업에서 이미 재현·진단해 본 내용</li>
+  </ul>
+  <aside class="notes">
+    - 겁주지 않기 : 처음 보는 문제가 아니라 매주 실습한 함정에서만 출제
+    - 코드는 학생 본인 것을 띄움 — 교수 코드가 아님
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">② 구술 방어</div>
+  <h2>무엇을 보는가 — 답의 세 칸</h2>
+  <div class="cols3">
+    <div class="card">
+      <h4><span class="step">1</span> 증상</h4>
+      <p class="small">무엇이 <b>어떻게</b> 잘못 보이나 · 언제(어떤 조건에서) 나타나나</p>
+      <p class="small muted">예 : 피치를 90° 근처로 올리면 좌우 회전과 기울이기가 같은 움직임</p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 원인 개념</h4>
+      <p class="small">그 증상을 만드는 <b>그래픽스 개념</b>을 정확한 용어로</p>
+      <p class="small muted">예 : 오일러각의 회전축 두 개가 겹침 → 자유도 3 → 2 (짐벌락)</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 확인 · 수정</h4>
+      <p class="small">무엇을 <b>측정</b>해서 판정하나 · AI 에게 무엇을 요구하나</p>
+      <p class="small muted">예 : Quaternion 누적 요구 · 피치 89~91° 구간에서 회전 튐 0 확인</p>
+    </div>
+  </div>
+  <div class="key trap">
+    <p class="small">한 칸만 맞혀도 부분 점수 · 세 칸이 <b>이어져야</b> 만점 → «증상 → 왜 → 그래서 무엇을 확인» 의 이유 사슬</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">② 구술 방어</div>
+  <h2>질문 은행 — 2문항 추첨</h2>
+  <table style="font-size:.66em">
+    <tr><th>#</th><th>질문</th><th>출처 함정</th></tr>
+    <tr><td class="trap-txt"><b>Q1</b></td><td>이 회전 코드가 특정 각도에서 잠기는 이유는?</td><td>#1 짐벌락 · 2주</td></tr>
+    <tr><td class="trap-txt"><b>Q2</b></td><td>이 이동 코드가 다른 PC 에서 다른 속도가 되는 조건은?</td><td>#2 deltaTime · 3주</td></tr>
+    <tr><td class="trap-txt"><b>Q3</b></td><td>near 를 0.01 로 두면 먼 물체에서 무엇이 무너지는가?</td><td>#3 z-fighting · 4주</td></tr>
+    <tr><td class="trap-txt"><b>Q4</b></td><td>이 그림자를 베이크로 돌린 판단 근거는?</td><td>#4 그림자·색공간 · 5주</td></tr>
+    <tr><td class="trap-txt"><b>Q5</b></td><td>밉맵을 끄면 어느 거리에서 무엇이 보이는가?</td><td>#5 밉맵·알파 · 6주</td></tr>
+    <tr><td class="trap-txt"><b>Q6</b></td><td>Rigidbody 대신 Transform 을 쓰면 무엇이 사라지는가?</td><td>#6 Transform 이동 · 7주</td></tr>
+  </table>
+  <p class="small">씬에 해당 기능이 없으면 → «내 씬에 넣는다면 어떻게 명세할지» 로 질문 변형</p>
+  <aside class="notes">
+    - 추첨 : 1~6 주사위 두 번 (같은 번호 나오면 다시)
+    - 꼬리 질문 예 : Q2 → "FixedUpdate 안에서는?" · Q3 → "far 를 줄이면 해결되나?" (정답 : 거의 안 됨, near 가 지배)
+    - Q4 꼬리 : "Color Space 는 어디서 확인?" · Q6 꼬리 : "빠른 물체가 벽을 뚫으면 무엇을 켜나?" (CCD)
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">② 구술 방어</div>
+  <h2>같은 질문, 다른 답 — Q2 예시</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>약한 답</h4>
+      <span style="color:#e8ecf4">"AI 가 deltaTime 을 넣어 줘서<br>
+      괜찮습니다."</span><br><br>
+      <span style="color:#5f6980">// 증상 없음<br>
+      // 원인 개념 없음<br>
+      // 확인 방법 없음</span><br><br>
+      <span style="color:#ff5a4d">// 코드를 «믿음» · 설명 아님</span>
+    </div>
+    <div class="good">
+      <h4>강한 답</h4>
+      <span style="color:#e8ecf4">"deltaTime 이 없으면<br>
+      프레임마다 speed 만큼 이동해서<br>
+      120fps PC 가 30fps 보다 4배 멀리 갑니다.<br>
+      fps 를 30·120 으로 제한하고<br>
+      10초 이동 거리를 비교해 확인했습니다."</span><br><br>
+      <span style="color:#a8e05f">// 증상 · 원인 · 측정 모두 포함</span>
+    </div>
+  </div>
+  <p class="small" style="margin-top:.6em">강한 답의 특징 : <b>숫자</b>(4배 · 10초)가 들어 있음 → 수업에서 직접 재 본 사람만 말할 수 있는 숫자</p>
+</section>
+
+<section>
+  <div class="tag trap">② 구술 방어</div>
+  <h2>막혔을 때 쓰는 방법</h2>
+  <ul class="small">
+    <li><b>모른다고 말하기 + 확인 방법 제시</b> → «원인은 확실하지 않지만, ○○ 를 끄고 비교해 보면 판별 가능» — 세 번째 칸 점수 인정</li>
+    <li><b>증상부터 말하기</b> → 원인이 떠오르지 않아도 첫 칸은 확보</li>
+    <li><b>코드를 짚으며 생각하기</b> → 화면의 줄을 가리키며 «이 줄이 매 프레임 실행되니까…» 처럼 소리 내어 추론</li>
+  </ul>
+  <div class="analogy">
+    <p><b>의사의 «검사해 봅시다»</b> : 진료실에서 바로 병명을 모르는 의사도 «혈액 검사로 확인하겠습니다» 라고 말함 → 모른다는 사실과 확인 방법을 함께 말하는 것이 전문가의 답</p>
+  </div>
+  <div class="key trap">
+    <p class="small">감점 큰 답 : 틀린 원인을 <b>확신하며</b> 말하기 · «AI 가 그렇게 짜 줬다» 로 끝내기</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">② 구술 방어</div>
+  <h2>문항별 채점 기준 (각 15점)</h2>
+  <table class="scale" style="font-size:.66em">
+    <tr><th>칸</th><th>5점</th><th>3점</th><th>1점</th><th>0점</th></tr>
+    <tr><td>증상</td><td>조건 + 현상을 구체적으로</td><td>현상만</td><td>«이상해진다» 수준</td><td>무응답</td></tr>
+    <tr><td>원인 개념</td><td>정확한 용어 + 이유 사슬</td><td>방향은 맞음 · 용어 부정확</td><td>용어만 나열</td><td>틀린 원인 확신</td></tr>
+    <tr><td>확인 · 수정</td><td>측정 방법 + 합격 기준 숫자</td><td>측정 방법만</td><td>«다시 시켜 본다»</td><td>무응답</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">2문항 × 15점 = <b>30점</b> (중간 프로젝트 100점 중) · 채점은 평가표 1인 1장에 즉시 기록</p>
+  </div>
+  <aside class="notes">
+    - 평가표 양식 : rubrics/중간-평가표.md
+    - 꼬리 질문으로 칸을 채울 기회를 1회 줌 — 첫 답이 약해도 바로 0점 처리하지 않음
+  </aside>
+</section>
+
+<!-- ========================================================= 크리틱 -->
+<section>
+  <div class="tag lab">③ 상호 크리틱</div>
+  <h2>크리틱 = 관찰 · 근거 · 제안</h2>
+  <div class="analogy">
+    <p><b>음식 평가</b> : «맛없어요» → 요리사가 고칠 방법 없음 · «국물이 짜요 (관찰) — 간장을 두 번 넣으신 것 같아요 (근거) — 물을 반 컵 더하면 (제안)» → 다음 요리가 바뀜</p>
+  </div>
+  <table style="font-size:.68em">
+    <tr><th>칸</th><th>쓰는 것</th><th>예</th></tr>
+    <tr><td class="lab-txt"><b>관찰</b></td><td>본 것 그대로 · 평가어 금지</td><td>카메라를 빨리 돌리면 먼 바닥 무늬가 지글거림</td></tr>
+    <tr><td class="lab-txt"><b>근거</b></td><td>수업 개념과 연결</td><td>밉맵이 꺼져 있거나 필터링이 Point 일 가능성 (6주)</td></tr>
+    <tr><td class="lab-txt"><b>제안</b></td><td>확인 방법 또는 프롬프트 문장</td><td>«Generate Mip Maps 켬 · Trilinear» 를 명세 제약에 추가</td></tr>
+  </table>
+  <aside class="notes">
+    - 디자인 크리틱과 같은 구조 — 학생들에게 익숙한 방식임을 상기
+    - 칭찬도 같은 세 칸으로 : "접촉 그림자 덕분에 공이 바닥에 붙어 보임 (관찰) — 5주 깊이 단서 (근거) — VR 에서도 유지 (제안)"
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">③ 상호 크리틱</div>
+  <h2>크리틱 문장 고치기</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>피할 문장</h4>
+      "멋있어요."<br><br>
+      "좀 어색해요."<br><br>
+      "코드가 별로인 것 같아요."<br><br>
+      <span style="color:#5f6980">// 무엇을 · 왜 · 어떻게 고칠지<br>// 하나도 없음</span>
+    </div>
+    <div class="good">
+      <h4>바꾼 문장</h4>
+      <span style="color:#e8ecf4">"공이 떨어질 때 바닥을 1프레임<br>뚫었다 튀어나옴 (관찰)<br>
+      → 빠른 물체 + 이산 충돌 판정 (근거 · 7주)<br>
+      → Collision Detection 을<br>Continuous 로 바꿔 비교 (제안)"</span><br><br>
+      <span style="color:#a8e05f">// 발표자가 내일 바로 시도 가능</span>
+    </div>
+  </div>
+  <div class="key lab" style="margin-top:.8em">
+    <p class="small">크리틱의 대상 = <b>씬과 프롬프트</b> · 사람이 아님 · 지정 동료 구두 2분 → 서면 양식은 수업 끝까지 제출</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">③ 상호 크리틱</div>
+  <h2>청중이 할 일</h2>
+  <div class="cols">
+    <div>
+      <p class="small">발표자·크리틱 담당이 아닌 학생</p>
+      <ul class="small">
+        <li>발표마다 <b>«내 씬에도 있는 문제» 1줄</b> 메모</li>
+        <li>청중 질문 2분 : 손든 순서 · 1인 1질문</li>
+        <li>질문 형식 : «○○ 를 껐을 때 무엇이 바뀌나요?» 처럼 <b>확인 가능한 질문</b></li>
+      </ul>
+    </div>
+    <div>
+      <div class="key lab">
+        <p class="small">남의 씬에서 본 결함 = 내 씬에서 못 본 결함일 가능성<br>
+        → 9주 «AI 함정 카탈로그» 에 학생 기여분으로 병합</p>
+      </div>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>남의 글 맞춤법</b> : 내 글의 오타는 몇 번을 읽어도 안 보이는데 친구 글의 오타는 한 번에 보임 → 남의 씬 관찰 = 내 씬 점검의 지름길</p>
+  </div>
+</section>
+
+<!-- ========================================================= 채점 · 제출 -->
+<section>
+  <div class="tag gfx">채점</div>
+  <h2>중간 프로젝트 채점 (총점의 20%)</h2>
+  <table style="font-size:.66em">
+    <tr><th>항목</th><th>점수</th><th>보는 것</th></tr>
+    <tr><td class="gfx-txt"><b>결과물</b></td><td>50</td><td>씬 동작 20 · 2~7주 개념 반영(실험실 스위치) 15 · 검증 리포트 측정값 15</td></tr>
+    <tr><td class="trap-txt"><b>개념 구술 방어</b></td><td>30</td><td>2문항 × 15 (증상 · 원인 · 확인)</td></tr>
+    <tr><td class="lab-txt"><b>프롬프트 로그</b></td><td>20</td><td>로그 전문 · 명세 4칸 · 재프롬프트 이유 · 동료 크리틱 제출</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">손계산 : 결과물 42 + 구술 21 + 로그 16 = 79점 → 학기 성적 반영분 \(79 \times 0.2 = 15.8\) 점 (20점 만점)</p>
+  </div>
+  <div class="note">세부 배점 : rubrics/중간-평가표.md · PLAN.md 4장 평가 재설계</div>
+</section>
+
+<section>
+  <div class="tag gfx">제출</div>
+  <h2>제출물 네 가지</h2>
+  <table style="font-size:.66em">
+    <tr><th>제출물</th><th>내용</th><th>자주 빠지는 것</th></tr>
+    <tr><td><b>씬 빌드</b></td><td>실행 파일 또는 프로젝트 압축</td><td>Library 폴더 포함으로 용량 초과 → 제외하고 압축</td></tr>
+    <tr><td><b>프롬프트 로그 전문</b></td><td>요청 · 응답 · 내 판단 순서대로</td><td>실패한 요청 삭제 → <b>실패 기록도 점수 대상</b></td></tr>
+    <tr><td><b>검증 리포트</b></td><td>측정 항목 · 측정값 · 합격 기준</td><td>«잘 됨» 같은 서술 → ms · m · ° 단위 숫자 필요</td></tr>
+    <tr><td><b>동료 크리틱 1건</b></td><td>관찰 · 근거 · 제안 양식</td><td>평가어만 적기</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>요리 경연의 레시피 노트</b> : 완성 접시만 내는 것이 아니라 «소금을 줄였다 → 싱거워서 다시 늘렸다» 같은 과정 기록 → 심사위원은 그 판단 과정에서 실력을 봄</p>
+  </div>
+</section>
+
+<!-- ========================================================= 회수 -->
+<section>
+  <div class="tag gfx">도입 질문의 답</div>
+  <h2>AI 가 짠 코드를 설명할 수 있는가</h2>
+  <ul class="small">
+    <li>설명할 수 있는 코드 = <b>검수한 코드</b> · 설명할 수 없는 코드 = 운 좋게 돌아가는 코드</li>
+    <li>설명의 재료 = 7주간의 함정 경험 : 증상을 직접 재현하고, 원인을 개념으로 말하고, 측정으로 확인한 기억</li>
+    <li>오늘 막힌 질문 = 개인 오답 노트 → 9주 «재발 방지 규칙» 의 재료</li>
+  </ul>
+  <div class="key">
+    <p>이 수업의 명제 재확인 : 이론을 배우는 이유 = AI 에게 <b>무엇을 요구할지</b> 알고, 결과가 <b>왜 틀렸는지</b> 판별하기 위해</p>
+  </div>
+  <aside class="notes">
+    - 발표가 모두 끝난 뒤 이 슬라이드로 정리
+    - 오늘 가장 많이 막힌 문항 번호를 말로 공유 → 9주 크리틱에서 다시 다룬다고 예고
+  </aside>
+</section>
+
+<section class="divider part-ii">
+  <div class="kicker">예고 · VR</div>
+  <div class="rule"></div>
+  <h1>이 씬 안으로<br><em>들어갈</em> 차례</h1>
+  <p class="sub">11주차 : 각자의 실험실 씬을 Quest 3 로 포팅 · 직접 진입<br>
+  오늘 상위 3개 씬 = 11주차 <b>공개 포팅 시연 대상</b> (본인 동의 시)<br>
+  9주 : 프롬프트·컨텍스트 엔지니어링 — 7주간의 함정을 규칙 문서로</p>
+  <div class="note">준비 : Meta 개발자 계정 인증 상태 확인 (2주차 과제) · 데이터 전송용 USB-C 케이블</div>
+  <aside class="notes">
+    - 상위 3개 선정 기준 : 개념 반영(스위치)과 검증 리포트 점수 합 — 화려함 기준 아님
+    - 개발자 계정 미인증 학생은 9주까지 해결하도록 개별 안내
+  </aside>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/math/math.min.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

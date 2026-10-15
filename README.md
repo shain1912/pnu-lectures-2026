@@ -11,12 +11,26 @@
 
 ### 컴퓨터그래픽스
 
-| 주차 | 제목 | 슬라이드 | PDF |
-|---|---|---|---|
-| 2 | 그래픽스 수학 기초 | https://shain1912.github.io/pnu-lectures-2026/slides/w02/ | [dist](dist/w02-그래픽스수학기초.pdf) |
-| 3 | Unity 기초와 게임 루프 | https://shain1912.github.io/pnu-lectures-2026/slides/w03/ | [dist](dist/w03-Unity기초와게임루프.pdf) |
-| 4 | 렌더링 파이프라인의 이해 | https://shain1912.github.io/pnu-lectures-2026/slides/w04/ | [dist](dist/w04-렌더링파이프라인.pdf) |
-| 5 | 조명과 재질 | https://shain1912.github.io/pnu-lectures-2026/slides/w05/ | [dist](dist/w05-조명과재질.pdf) |
+| 주차 | 제목 | 슬라이드 |
+|---|---|---|
+| 1 | 강의 소개와 컴퓨터그래픽스 개요 | https://shain1912.github.io/pnu-lectures-2026/slides/w01/ |
+| 2 | 그래픽스 수학 기초 | https://shain1912.github.io/pnu-lectures-2026/slides/w02/ |
+| 3 | Unity 기초와 게임 루프 | https://shain1912.github.io/pnu-lectures-2026/slides/w03/ |
+| 4 | 렌더링 파이프라인의 이해 | https://shain1912.github.io/pnu-lectures-2026/slides/w04/ |
+| 5 | 조명과 재질 | https://shain1912.github.io/pnu-lectures-2026/slides/w05/ |
+| 6 | 셰이더 기초 | https://shain1912.github.io/pnu-lectures-2026/slides/w06/ |
+| 7 | 애니메이션과 물리 | https://shain1912.github.io/pnu-lectures-2026/slides/w07/ |
+| 8 | 중간고사 | https://shain1912.github.io/pnu-lectures-2026/slides/w08/ |
+| 9 | 바이브코딩 심화 | https://shain1912.github.io/pnu-lectures-2026/slides/w09/ |
+| 10 | 인터랙션 설계 | https://shain1912.github.io/pnu-lectures-2026/slides/w10/ |
+| 11 | VR 개발 기초 | https://shain1912.github.io/pnu-lectures-2026/slides/w11/ |
+| 12 | VR 인터랙션 심화 | https://shain1912.github.io/pnu-lectures-2026/slides/w12/ |
+| 13 | 팀 프로젝트 기획 | https://shain1912.github.io/pnu-lectures-2026/slides/w13/ |
+| 14 | 팀 프로젝트 구현 및 플레이테스트 | https://shain1912.github.io/pnu-lectures-2026/slides/w14/ |
+| 15 | 기말 VR 전시와 동료 평가 | https://shain1912.github.io/pnu-lectures-2026/slides/w15/ |
+| 16 | 프로젝트 피드백과 학기 정리 | https://shain1912.github.io/pnu-lectures-2026/slides/w16/ |
+
+문서 : [강의계획서](syllabus/강의계획서.md) · [AI 사용 정책 · 프롬프트 로그 양식](syllabus/AI-사용-정책.md) · [용어집](syllabus/용어집.md) · [환경 설치 가이드](setup/환경설치-가이드.md) · [빌드 가이드 (Quest)](setup/빌드-가이드.md) · [Quest 운영 매뉴얼](setup/Quest-운영-매뉴얼.md) · [트러블슈팅 FAQ](setup/트러블슈팅-FAQ.md) · [AI 함정 카탈로그](labs/_traps/카탈로그.md) · [루브릭 총괄](rubrics/루브릭-총괄.md) · [팀 프로젝트 가이드북](rubrics/팀프로젝트-가이드북.md) · [SSQ 설문지](rubrics/SSQ-설문지.md)
 
 ### 데이터리터러시의이해
 

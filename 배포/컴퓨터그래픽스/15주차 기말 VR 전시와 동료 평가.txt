@@ -1,0 +1,4 @@
+15주차 기말 VR 전시와 동료 평가
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/slides/w15/
+원본         : slides/w15/index.html

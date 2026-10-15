@@ -1,0 +1,1418 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1주차 · 강의 소개와 컴퓨터그래픽스 개요 — 컴퓨터그래픽스</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+<style>
+  /* 1주차 덱 전용 — 인라인 SVG 도해 */
+  .reveal svg.dia { display:block; width:100%; height:auto; margin:.2em auto 0; }
+  .reveal svg.dia text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
+  .reveal .swatch { display:inline-block; width:1.1em; height:1.1em; border-radius:4px; vertical-align:-.18em; margin-right:.35em; border:1px solid #2a3040; }
+  .reveal .tight li { margin-bottom:.25em; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ========================================================= 표지 -->
+<section class="cover">
+  <div class="week">Week 01</div>
+  <h1>강의 소개와<br>컴퓨터그래픽스 개요</h1>
+  <p class="muted" style="font-size:.8em;max-width:28em">
+    강의 소개 및 컴퓨터그래픽스 개요, 개발환경 구축
+  </p>
+  <div class="meta">
+    컴퓨터그래픽스 VF3500076 · 디자인앤테크놀로지전공<br>
+    조성호 · 2026학년도 2학기
+  </div>
+  <aside class="notes">
+    - 14:00 시작 · 출석 확인은 체험 대기 시간에 병행
+    - 첫 10분은 말보다 체험 : 헤드셋 먼저, 소개는 그 뒤
+  </aside>
+</section>
+
+<!-- ========================================================= 도입 질문 -->
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask">
+    헤드셋을 쓴 3분 동안<br>
+    눈앞에 있던 것 = <span class="hl">손바닥만 한 화면 두 장</span><br><br>
+    그런데 몸은 방 안에 서 있다고 느낌<br><br>
+    당신은 방금 <span class="hl">무엇에</span> 속았는가?
+  </div>
+  <aside class="notes">
+    - 체험 운영 : 시연용 Quest 를 지원자 순서로 1인 약 2~3분 · 2인 1조(착용자 + 옆에서 지켜보는 스포터)
+    - 체험 콘텐츠 : 높은 곳 가장자리에 서 보기 · 가까운 물체에 손 뻗기처럼 몸이 먼저 반응하는 장면 권장
+    - 안전 : 가디언 경계 설정 후 착용 · 어지러우면 즉시 벗기 · 착용 전 위생 커버
+    - 체험하지 않은 학생 : 스포터로 참여 → 착용자의 몸 반응(뒷걸음, 손 뻗기)을 관찰해 기록
+    - 질문만 던지고 답은 보류 · 회수 지점 : Part II 끝 «도입 질문의 답»
+    - 확인 필요 : 1주차 시연용 헤드셋 대수 (학기 대여분 확정 전이면 교수 개인 기기)
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>이 수업 후 할 수 있는 것</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 파이프라인 설명</h4>
+      <p class="small">3D 장면 데이터가 <b>픽셀 하나의 색</b>이 되기까지 다섯 단계를 순서대로 말하고, 각 단계를 배울 주차 짚기</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> VR 시스템 분해</h4>
+      <p class="small">트래킹 → 가상 세계 → 렌더링 → 디스플레이 → <b>사람</b>으로 이어지는 고리를 그리고, 사람이 왜 «부품» 인지 설명</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 첫 명세와 검증</h4>
+      <p class="small">Unity 프로젝트를 만들고, AI 의 씬 설명을 <b>Hierarchy 와 대조해 틀린 곳 찾기</b> · 명세 4칸으로 첫 요청 작성</p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:1.1em">
+    <p>오늘의 큰 그림 : 화면 = <b>숫자로 만든 빛</b> · VR = 그 빛으로 <b>뇌를 설득하는 장치</b></p>
+  </div>
+</section>
+
+<!-- ========================================================= 오리엔테이션 -->
+<section class="divider part-i">
+  <div class="kicker">Orientation · 20분</div>
+  <div class="rule"></div>
+  <h1>이 수업의 <em>명제</em></h1>
+  <p class="sub">AI 가 코드를 짜 주는 시대에 그래픽스 이론을 배우는 이유</p>
+</section>
+
+<section>
+  <div class="tag gfx">명제 · 1</div>
+  <h2>AI 시대에 이론을 배우는 이유</h2>
+  <div class="cols">
+    <div class="card gfx">
+      <h4>이유 ① 무엇을 요구할지 알기 위해</h4>
+      <p class="small">«부드럽게 회전» 대신 «쿼터니언으로 누적, 초당 45°» → 용어를 알아야 <b>정확한 요구</b> 가능 → 요구가 정확해야 결과도 정확</p>
+    </div>
+    <div class="card trap">
+      <h4>이유 ② 왜 틀렸는지 판별하기 위해</h4>
+      <p class="small">AI 의 결과 = 대부분 그럴듯함 · 일부는 <b>그럴듯하게 틀림</b> → 원리를 알아야 «어디가 왜» 틀렸는지 지적 가능</p>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>인테리어 시공 의뢰</b> : 도면을 읽을 줄 모르는 건축주 → «예쁘게 해 주세요» 밖에 말 못 함 · 벽 속 배관이 잘못돼도 완공 후 물이 샐 때야 앎 → 시공(코드)은 맡겨도 <b>도면 읽기(이론)</b>는 건축주 몫</p>
+  </div>
+  <div class="key">
+    <p class="small">그래서 이 수업의 평가 기준 : <b>프롬프트의 질 = 개념 이해도의 증거</b> → 프롬프트 자체가 채점 대상</p>
+  </div>
+  <aside class="notes">
+    - "AI 가 다 해 주는데 왜 배우나요" 라는 질문을 먼저 학생 입으로 꺼내게 하면 좋음
+    - 시공 비유 : 맡기는 사람이 기준을 모르면 결과를 검수할 수 없음
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">명제 · 2</div>
+  <h2>두 번째 축 — VR 은 지각을 다루는 일</h2>
+  <ul class="small">
+    <li>그래픽스의 질문 : 픽셀을 <b>어떻게 그리는가</b></li>
+    <li>VR 의 질문 : 그 픽셀에 사람의 눈·귀·균형 감각이 <b>어떻게 반응하는가</b></li>
+    <li>이유 : 같은 화면이라도 모니터에선 «멋진 장면» · 헤드셋에선 «멀미 나는 장면» 가능 → 판단 기준이 화면이 아니라 <b>사람</b></li>
+  </ul>
+  <div class="key vr">
+    <p>목표 인재상 : 그래픽스 원리와 인간 지각 특성을 <b>근거</b>로 VR 경험을 설계하고, 그 설계를 <b>AI 에게 정확히 지시</b>하는 사람</p>
+  </div>
+  <div class="analogy">
+    <p><b>요리사와 미각</b> : 레시피(그래픽스)만 알면 음식은 나옴 · 손님 혀(지각)가 짠맛을 어떻게 느끼는지 알아야 «맛있는» 음식 → VR 개발자에게 손님 혀 = 사용자의 감각 기관</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">운영 · 1</div>
+  <h2>매주 3시간의 구성</h2>
+  <table style="font-size:.66em">
+    <tr><th>시간</th><th>블록</th><th>하는 일</th><th>왜</th></tr>
+    <tr><td class="mono">14:00</td><td><b>프롬프트 크리틱</b> 20분</td><td>지난주 학생 프롬프트·AI 오답 함께 해부</td><td>남의 실수에서 같은 함정을 미리 학습</td></tr>
+    <tr><td class="mono">14:20</td><td class="gfx-txt"><b>이론 I</b> 60분</td><td>그래픽스 이론 — 원리와 손계산</td><td>요구·판별의 재료 = 용어와 원리</td></tr>
+    <tr><td class="mono">15:20</td><td>휴식 10분</td><td></td><td></td></tr>
+    <tr><td class="mono">15:30</td><td class="vr-txt"><b>이론 II</b> 30분</td><td>같은 주 그래픽스 개념의 <b>지각 짝</b> (LaValle)</td><td>화면 기준 → 사람 기준으로 번역</td></tr>
+    <tr><td class="mono">16:00</td><td class="lab-txt"><b>프롬프트 실습</b> 50분</td><td>명세 작성 → AI 실행 → 검증 → 재요청</td><td>이해를 손으로 확인</td></tr>
+    <tr><td class="mono">16:50</td><td>과제 브리핑 10분</td><td>과제·다음 주 준비</td><td></td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>디자인 크리틱 그대로</b> : 작품 대신 <b>프롬프트와 AI 결과물</b>을 벽에 붙이고 함께 비평 → 잘 쓴 명세와 실패한 명세의 차이를 눈으로 확인</p>
+  </div>
+  <aside class="notes">
+    - 오늘(1주)은 크리틱 대신 체험·소개 · 2주차부터 정식 운영
+    - 크리틱 자료는 익명 처리 원칙 · 공개를 원하지 않으면 사전에 말할 것
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">운영 · 2</div>
+  <h2>모든 실습의 단위 — 개념 → 명세 → 검증</h2>
+  <div class="cols3" style="margin-top:.6em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 개념</h4>
+      <p class="small">이론 강의로 원리 이해 · 용어 확보</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">2</span> 명세</h4>
+      <p class="small">그 개념을 <b>정확한 용어</b>로 AI 에게 요구 · 용어를 모르면 이 단계에서 막힘</p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 검증</h4>
+      <p class="small">결과가 이론적으로 맞는지 확인 · 틀렸다면 <b>어디가 왜</b> → 재요청</p>
+    </div>
+  </div>
+  <div class="key lab" style="margin-top:1em">
+    <p>역할 분담 : <b>코드 작성 = AI</b> · <b>요구와 판별 = 학생</b><br>
+    <span class="small">손코딩 따라 치기 실습 없음 · 대신 «무엇을 요구했고 어떻게 확인했나» 를 기록으로 남김</span></p>
+  </div>
+  <div class="analogy">
+    <p><b>운전과 내비게이션</b> : 내비(AI)가 길을 알려 줘도 목적지 입력(명세)과 «이 길이 맞나» 판단(검증)은 운전자 몫 · 목적지를 잘못 넣으면 내비는 아주 정확하게 엉뚱한 곳으로 안내</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">운영 · 3</div>
+  <h2>AI 함정이란</h2>
+  <p class="small"><span class="t">AI 함정</span> (AI Trap) : AI 가 <b>그럴듯하게 틀리는</b> 지점을 교수가 미리 심어 둔 실습 장치 — 매주 1개</p>
+  <div class="cols wide-left">
+    <div>
+      <table style="font-size:.6em">
+        <tr><th>주</th><th>함정</th><th>필요한 개념</th></tr>
+        <tr><td>2</td><td>오일러각 회전 → 짐벌락</td><td style="white-space:nowrap">회전 순서 · 쿼터니언</td></tr>
+        <tr><td>3</td><td><code>Time.deltaTime</code> 누락</td><td style="white-space:nowrap">프레임 독립성</td></tr>
+        <tr><td>4</td><td>near 0.01 · far 10000 → 깜빡임</td><td>깊이 버퍼 정밀도</td></tr>
+        <tr><td>5</td><td>실시간 그림자 남발 · 색공간 혼동</td><td style="white-space:nowrap">베이킹 · 색공간</td></tr>
+        <tr><td>6~12</td><td>밉맵 · 물리 무력화 · 화면 고정 UI · 카메라 직접 조작 · 가속 이동</td><td>각 주 이론</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="key trap">
+        <p class="small">대응 4단계<br>
+        <b>① 증상</b> 무엇이 이상한가<br>
+        <b>② 원인</b> 어느 개념이 깨졌나<br>
+        <b>③ 진단</b> 어떻게 확인하나<br>
+        <b>④ 수정</b> 무엇을 요구하나</p>
+      </div>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>자동차 정비사</b> : «소리가 이상해요» (증상) → 귀로 위치 추정 (원인) → 리프트에 올려 확인 (진단) → 부품 교체 (수정) · 원리를 모르는 운전자는 증상 단계에서 멈춤</p>
+  </div>
+  <aside class="notes">
+    - 함정을 통과 못하면 개념을 모르는 것 → 지필시험보다 정확한 측정 도구라는 점 강조
+    - 오늘은 맛보기 함정 #0 (Part I 끝)
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">운영 · 4</div>
+  <h2>지각 실험실 — 한 학기 동안 키우는 씬 하나</h2>
+  <svg class="dia" viewBox="0 0 1160 330" role="img" aria-label="지각 실험실 씬 누적 일정">
+    <line x1="60" y1="120" x2="1110" y2="120" stroke="#2a3040" stroke-width="6" stroke-linecap="round"/>
+    <g font-size="20" fill="#e8ecf4" text-anchor="middle">
+      <circle cx="80" cy="120" r="16" fill="#a8e05f"/>
+      <text x="80" y="70" font-weight="700" fill="#a8e05f">1주</text>
+      <text x="80" y="175">뼈대</text><text x="80" y="200" fill="#9aa4b8" font-size="17">바닥·큐브·눈높이</text>
+
+      <circle cx="225" cy="120" r="13" fill="#35d6e6"/>
+      <text x="225" y="70" font-weight="700">2주</text>
+      <text x="225" y="175">좌표계 체인</text>
+
+      <circle cx="360" cy="120" r="13" fill="#35d6e6"/>
+      <text x="360" y="70" font-weight="700">3주</text>
+      <text x="360" y="175">프레임 독립성</text><text x="360" y="200" fill="#9aa4b8" font-size="17">측정</text>
+
+      <circle cx="495" cy="120" r="13" fill="#35d6e6"/>
+      <text x="495" y="70" font-weight="700">4주</text>
+      <text x="495" y="175">z-fighting</text><text x="495" y="200" fill="#9aa4b8" font-size="17">재현·해결</text>
+
+      <circle cx="630" cy="120" r="13" fill="#35d6e6"/>
+      <text x="630" y="70" font-weight="700">5주</text>
+      <text x="630" y="175">깊이 단서</text><text x="630" y="200" fill="#9aa4b8" font-size="17">스위치</text>
+
+      <circle cx="765" cy="120" r="13" fill="#35d6e6"/>
+      <text x="765" y="70" font-weight="700">6·7주</text>
+      <text x="765" y="175">앨리어싱</text><text x="765" y="200" fill="#9aa4b8" font-size="17">물리 오차</text>
+
+      <circle cx="900" cy="120" r="16" fill="#ffc44d"/>
+      <text x="900" y="70" font-weight="700" fill="#ffc44d">8주</text>
+      <text x="900" y="175">중간 시연</text><text x="900" y="200" fill="#9aa4b8" font-size="17">= 실험실 완성판</text>
+
+      <circle cx="1060" cy="120" r="22" fill="#ff5fa2"/>
+      <text x="1060" y="128" font-size="22" fill="#0b0d12" font-weight="700">★</text>
+      <text x="1060" y="70" font-weight="700" fill="#ff5fa2">11·12주</text>
+      <text x="1060" y="175" fill="#ff5fa2">VR 로 포팅</text><text x="1060" y="200" fill="#9aa4b8" font-size="17">내 실험실에 입장</text>
+    </g>
+    <rect x="60" y="245" width="1050" height="62" rx="12" fill="rgba(168,224,95,0.08)" stroke="#3c5220"/>
+    <text x="585" y="284" font-size="20" fill="#e8ecf4" text-anchor="middle">매주 새 프로젝트 대신 <tspan fill="#a8e05f" font-weight="700">같은 씬</tspan>에 그 주 개념을 검증하는 장치를 하나씩 추가</text>
+  </svg>
+  <div class="analogy">
+    <p><b>과학 실험실 실험대</b> : 예쁜 전시품이 아니라 매주 새 장치를 올려 측정하는 작업대 · 학기 말엔 그 실험대 위에 직접 올라섬</p>
+  </div>
+  <aside class="notes">
+    - 11주차에 "내가 만든 실험실에 내가 들어가는" 순간이 학기 정점
+    - 오늘 실습 마지막 단계에서 이 씬의 뼈대를 만듦
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">운영 · 5</div>
+  <h2>평가</h2>
+  <table style="font-size:.66em">
+    <tr><th>항목</th><th>배점</th><th>무엇을 보나</th></tr>
+    <tr><td>출석</td><td class="mono"><b>10%</b></td><td>학칙 기준</td></tr>
+    <tr><td class="lab-txt"><b>실습과제</b></td><td class="mono"><b>30%</b></td><td>결과물 40 + <b>프롬프트 명세 30</b> + <b>검증 리포트 30</b></td></tr>
+    <tr><td class="gfx-txt"><b>중간 프로젝트</b> (8주)</td><td class="mono"><b>20%</b></td><td>결과물 50 + <b>개념 구술 방어 30</b> + 프롬프트 로그 20</td></tr>
+    <tr><td class="vr-txt"><b>기말 팀 프로젝트</b> (15주)</td><td class="mono"><b>40%</b></td><td>완성도 30 + <b>지각·컴포트 설계 근거 25</b> + 성능 예산 15 + 발표·시연 20 + 동료평가 10</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">공통점 : 결과물만으로는 만점 불가 → <b>왜 그렇게 요구했고 어떻게 확인했나</b>가 점수의 절반 안팎<br>
+    <span class="t">구술 방어</span> : «AI 가 이 코드를 짰다. 왜 이렇게 짜야 했는지 설명하라» 에 답하는 5분 면담</p>
+  </div>
+  <aside class="notes">
+    - 학교 제출본 배점 10/30/20/40 그대로 · 세부 비율은 루브릭 문서로 별도 공지
+    - 구술 방어 질문 예 : "이 회전 코드가 특정 각도에서 잠기는 이유는?"
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">운영 · 6</div>
+  <h2>AI 사용 규칙 · 교재 · 연락</h2>
+  <div class="cols">
+    <div>
+      <div class="key trap">
+        <p class="small"><b>AI 사용 : 허용 + 기록 의무</b><br>
+        모든 실습·과제에서 사용 가능 · 대신 <b>프롬프트 로그</b> 제출<br>
+        로그 항목 : 날짜 · 도구 · 모델 · 프롬프트 원문 · 결과 요약 · 검증 · 수정 이유<br>
+        금지 : 로그 사후 위조 · 남의 로그 복사 · 구술 방어 중 AI 사용</p>
+      </div>
+      <p class="xs muted">전문 : syllabus/AI-사용-정책.md</p>
+    </div>
+    <div>
+      <ul class="small tight">
+        <li>주교재 : LaValle 『Virtual Reality』 — <b>전문 무료 공개</b> lavalle.pl/vr</li>
+        <li>보조 : 셔먼·크레이그 『VR의 이해 2/e』 (에이콘)</li>
+        <li>준비물 : 노트북 (Windows 또는 macOS) · 여유 공간 약 30 GB</li>
+        <li>제출 : PLATO · 문의 : seongho.cho@kodekorea.kr</li>
+      </ul>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>요리 경연의 재료 영수증</b> : 사 온 소스(AI)를 써도 됨 · 단, 무엇을 어디서 얼마나 썼는지 영수증 첨부 → 심사위원은 소스가 아니라 <b>소스를 고르고 조합한 판단</b>을 채점</p>
+  </div>
+</section>
+
+<!-- ========================================================= PART I -->
+<section class="divider part-i">
+  <div class="kicker">Part I · 60분</div>
+  <div class="rule"></div>
+  <h1>픽셀 하나의<br><em>색</em>이 정해지기까지</h1>
+  <p class="sub">컴퓨터그래픽스 조감 · 2~6주에 하나씩 확대할 지도</p>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>픽셀<small>Pixel</small></dt><dd>화면을 이루는 가장 작은 색 칸 하나 — picture element 의 줄임말</dd>
+    <dt>해상도<small>Resolution</small></dt><dd>화면의 가로 × 세로 픽셀 개수 — 예 : 1920 × 1080</dd>
+    <dt>렌더링<small>Rendering</small></dt><dd>3D 장면 데이터를 계산해 <b>픽셀 색 배열(이미지)</b>로 만드는 과정</dd>
+    <dt>메시<small>Mesh</small></dt><dd>삼각형을 이어 붙여 만든 3D 물체의 겉모양 데이터</dd>
+    <dt>정점<small>Vertex</small></dt><dd>삼각형의 꼭짓점 하나 — 위치 (x, y, z) 등을 담은 점</dd>
+    <dt>파이프라인<small>Pipeline</small></dt><dd>여러 계산 단계를 정해진 순서로 잇는 작업 흐름 — 조립 라인</dd>
+    <dt>프레임<small>Frame</small></dt><dd>화면에 한 번 그려지는 정지 그림 한 장 — 초당 장수 = fps</dd>
+    <dt>GPU<small>Graphics Processing Unit</small></dt><dd>같은 계산을 동시에 대량으로 처리하는 그래픽 전용 칩</dd>
+  </dl>
+  <aside class="notes">
+    - 지금 외울 필요 없음 · 슬라이드마다 다시 풀어 줌
+    - 학기 용어집 : syllabus/용어집.md (매주 누적)
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">픽셀 · 1</div>
+  <h2>화면 = 색 칸의 격자</h2>
+  <div class="cols">
+    <div>
+      <p class="small">모니터를 돋보기로 보면 → 작은 색 칸의 바둑판 · 칸 하나 = <span class="t">픽셀</span></p>
+      <p class="small"><b>손계산</b> — 칸이 몇 개인가<br>
+      FHD 모니터 : \(1920 \times 1080 = 2{,}073{,}600\) → 약 207만 개<br>
+      Quest 3 한 눈 : \(2064 \times 2208 \approx 456\)만 개<br>
+      두 눈 합계 : 약 911만 개 → 모니터의 <b>약 4.4배</b></p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:.2em">
+        <p><b>타일 모자이크</b> : 멀리서 보면 매끈한 그림 · 가까이 가면 한 색씩 칠한 네모 타일 · 타일이 작고 많을수록 매끈</p>
+        <p>비유의 한계 : 타일은 한 번 붙이면 끝 · 픽셀은 1초에 수십 번 다시 칠함</p>
+      </div>
+    </div>
+  </div>
+  <div class="key">
+    <p class="small">컴퓨터그래픽스의 최종 산출물 = <b>이 칸 하나하나에 들어갈 색</b> · 나머지 모든 이론 = 그 색을 정하는 방법</p>
+  </div>
+  <div class="note">Quest 3 패널 해상도 : 제조사 공개 사양 기준 · 실제 렌더 해상도는 설정마다 다름</div>
+</section>
+
+<section>
+  <div class="tag gfx">픽셀 · 2</div>
+  <h2>픽셀 하나 = 숫자 세 개</h2>
+  <p class="small">빛의 삼원색 <b>빨강 · 초록 · 파랑</b>(RGB)을 각각 0~255 단계로 섞어 색 표현</p>
+  <table style="font-size:.7em;width:auto">
+    <tr><th>색</th><th>(R, G, B)</th><th>읽는 법</th></tr>
+    <tr><td><span class="swatch" style="background:rgb(255,140,0)"></span>주황</td><td class="mono">(255, 140, 0)</td><td>빨강 최대 + 초록 절반쯤 · 파랑 없음</td></tr>
+    <tr><td><span class="swatch" style="background:rgb(53,214,230)"></span>시안</td><td class="mono">(53, 214, 230)</td><td>초록·파랑 강함 · 빨강 약함</td></tr>
+    <tr><td><span class="swatch" style="background:rgb(128,128,128)"></span>회색</td><td class="mono">(128, 128, 128)</td><td>세 값이 같으면 무채색</td></tr>
+  </table>
+  <p class="small"><b>손계산</b> — 표현 가능한 색의 수 : \(256 \times 256 \times 256 = 256^{3} = 16{,}777{,}216\) → 약 1,677만 색</p>
+  <div class="analogy">
+    <p><b>조명 세 개짜리 무대</b> : 빨강·초록·파랑 조명의 밝기 다이얼만 돌려 흰 벽 색을 바꿈 · 셋 다 최대 = 흰색 · 셋 다 끔 = 검정</p>
+    <p>비유의 한계 : 물감은 섞을수록 어두워짐(감산 혼합) · 빛은 섞을수록 밝아짐(가산 혼합) → 화면은 빛 쪽</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">개요 · 1</div>
+  <h2>컴퓨터그래픽스 = 장면 데이터 → 픽셀 색</h2>
+  <p class="small">입력 : 3D 장면을 설명하는 숫자들 · 출력 : 픽셀 색 배열 · 사이의 계산 = <span class="t">렌더링</span></p>
+  <table style="font-size:.66em">
+    <tr><th>장면의 재료</th><th>담은 정보</th><th>촬영장에 대응</th><th>배울 주차</th></tr>
+    <tr><td class="gfx-txt"><b>메시</b></td><td>삼각형 꼭짓점 위치</td><td>배우·소품의 몸</td><td>2 · 4주</td></tr>
+    <tr><td class="gfx-txt"><b>재질</b> Material</td><td>표면 색·광택·거칠기</td><td>의상·분장</td><td>5 · 6주</td></tr>
+    <tr><td class="gfx-txt"><b>광원</b> Light</td><td>빛의 위치·방향·세기</td><td>조명 감독</td><td>5주</td></tr>
+    <tr><td class="gfx-txt"><b>카메라</b> Camera</td><td>보는 위치·방향·화각</td><td>촬영 감독</td><td>4주</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>영화 촬영장</b> : 배우(메시)에게 의상(재질)을 입히고 조명을 켠 뒤 카메라로 찍으면 필름 한 장(프레임) · 렌더링 = 이 촬영을 <b>계산으로</b> 하는 일</p>
+    <p>비유의 한계 : 실제 촬영은 빛이 저절로 퍼짐 · 컴퓨터는 빛의 경로를 하나하나 계산해야 함 → 그래서 근사와 요령이 필요</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">개요 · 2</div>
+  <h2>왜 모든 것을 삼각형으로 만드는가</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>점 3개 → 항상 <b>하나의 평면</b> 위 · 휘거나 뒤틀릴 수 없음</li>
+        <li>사각형 4점 → 네 번째 점이 들뜨면 면이 휨 → 어느 쪽으로 휜 건지 계산이 모호</li>
+        <li>그래서 : GPU 는 삼각형만 처리 · 곡면은 작은 삼각형 여러 개로 근사</li>
+      </ul>
+      <p class="small"><b>손계산</b> — 정육면체 : 면 6개 × 삼각형 2개 = <b>삼각형 12개</b> · 꼭짓점 8개</p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:.2em">
+        <p><b>세 다리 의자</b> : 울퉁불퉁한 바닥에서도 절대 흔들리지 않음 (세 점은 늘 한 평면) · 네 다리 식탁은 한 다리가 뜨면 덜컹 → 그래픽스도 «흔들리지 않는» 삼각형 선택</p>
+      </div>
+      <p class="small muted">Unity 의 Sphere : 삼각형 약 770개로 만든 근사 구 · 가까이 보면 모서리 보임</p>
+    </div>
+  </div>
+  <aside class="notes">
+    - Unity 기본 Sphere 메시는 정점 515개 · 삼각형 768개 수준 (버전에 따라 다를 수 있음 → "약" 으로 표기)
+    - Wireframe 모드로 Scene 뷰에서 직접 보여 주면 효과적 (Scene 뷰 좌상단 Shading Mode → Wireframe)
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">파이프라인 · 1 ★</div>
+  <h3>렌더링 파이프라인 조감 — 2~6주 지도</h3>
+  <svg class="dia" viewBox="0 0 1180 420" role="img" aria-label="렌더링 파이프라인 다섯 단계와 배울 주차">
+    <defs>
+      <marker id="ar1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/>
+      </marker>
+    </defs>
+    <!-- 입력 -->
+    <rect x="10" y="20" width="250" height="56" rx="10" fill="#171b25" stroke="#2a3040"/>
+    <text x="135" y="55" font-size="19" fill="#e8ecf4" text-anchor="middle">입력 : 메시 · 재질 · 광원 · 카메라</text>
+    <!-- 출력 -->
+    <rect x="920" y="20" width="250" height="56" rx="10" fill="#171b25" stroke="#2a3040"/>
+    <text x="1045" y="55" font-size="19" fill="#e8ecf4" text-anchor="middle">출력 : 픽셀 색 배열 1장</text>
+
+    <g font-size="20" text-anchor="middle">
+      <!-- 1 -->
+      <rect x="10" y="130" width="205" height="120" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+      <text x="112" y="172" fill="#35d6e6" font-weight="700">① 좌표 변환</text>
+      <text x="112" y="203" fill="#e8ecf4" font-size="18">물체를 세상에 배치</text>
+      <text x="112" y="230" fill="#9aa4b8" font-size="17">카메라 기준으로</text>
+      <!-- 2 -->
+      <rect x="250" y="130" width="205" height="120" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+      <text x="352" y="172" fill="#35d6e6" font-weight="700">② 투영</text>
+      <text x="352" y="203" fill="#e8ecf4" font-size="18">3D → 2D 화면</text>
+      <text x="352" y="230" fill="#9aa4b8" font-size="17">멀수록 작게</text>
+      <!-- 3 -->
+      <rect x="490" y="130" width="205" height="120" rx="14" fill="#171b25" stroke="#ffc44d" stroke-width="2"/>
+      <text x="592" y="172" fill="#ffc44d" font-weight="700">③ 래스터화</text>
+      <text x="592" y="203" fill="#e8ecf4" font-size="18">삼각형이 덮는</text>
+      <text x="592" y="230" fill="#e8ecf4" font-size="18">픽셀 고르기</text>
+      <!-- 4 -->
+      <rect x="730" y="130" width="205" height="120" rx="14" fill="#171b25" stroke="#a8e05f" stroke-width="2"/>
+      <text x="832" y="172" fill="#a8e05f" font-weight="700">④ 셰이딩</text>
+      <text x="832" y="203" fill="#e8ecf4" font-size="18">픽셀마다 색 계산</text>
+      <text x="832" y="230" fill="#9aa4b8" font-size="17">빛 × 방향 × 재질</text>
+      <!-- 5 -->
+      <rect x="970" y="130" width="200" height="120" rx="14" fill="#171b25" stroke="#a8e05f" stroke-width="2"/>
+      <text x="1070" y="172" fill="#a8e05f" font-weight="700">⑤ 깊이 판정</text>
+      <text x="1070" y="203" fill="#e8ecf4" font-size="18">가장 앞의 색만</text>
+      <text x="1070" y="230" fill="#e8ecf4" font-size="18">남기기</text>
+    </g>
+    <g stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#ar1)">
+      <line x1="217" y1="190" x2="246" y2="190"/>
+      <line x1="457" y1="190" x2="486" y2="190"/>
+      <line x1="697" y1="190" x2="726" y2="190"/>
+      <line x1="937" y1="190" x2="966" y2="190"/>
+      <line x1="135" y1="78" x2="112" y2="126"/>
+      <line x1="1070" y1="128" x2="1045" y2="80"/>
+    </g>
+    <!-- 주차 -->
+    <g font-size="19" text-anchor="middle" font-weight="700">
+      <text x="112" y="285" fill="#e8ecf4">2주</text>
+      <text x="352" y="285" fill="#e8ecf4">4주</text>
+      <text x="592" y="285" fill="#e8ecf4">4주</text>
+      <text x="832" y="285" fill="#e8ecf4">5 · 6주</text>
+      <text x="1070" y="285" fill="#e8ecf4">4주</text>
+    </g>
+    <!-- 묶음 -->
+    <path d="M14,312 L14,326 L451,326 L451,312" fill="none" stroke="#35d6e6" stroke-width="2"/>
+    <text x="232" y="356" font-size="18" fill="#35d6e6" text-anchor="middle">꼭짓점(정점) 단위 계산 — 정점 셰이더</text>
+    <path d="M734,312 L734,326 L1166,326 L1166,312" fill="none" stroke="#a8e05f" stroke-width="2"/>
+    <text x="950" y="356" font-size="18" fill="#a8e05f" text-anchor="middle">픽셀(프래그먼트) 단위 계산</text>
+    <text x="592" y="356" font-size="18" fill="#ffc44d" text-anchor="middle">점 → 칸 전환</text>
+    <text x="590" y="400" font-size="17" fill="#9aa4b8" text-anchor="middle">④ ⑤ 순서는 GPU 최적화로 바뀌기도 함 (깊이를 먼저 보고 가려진 픽셀의 색 계산 생략)</text>
+  </svg>
+  <aside class="notes">
+    - 이 그림이 학기 전반부(2~6주)의 목차
+    - 왼쪽 두 칸은 "점" 을 다루고, 가운데에서 "칸(픽셀)" 으로 바뀌며, 오른쪽 두 칸은 칸마다 계산
+    - 다음 장들에서 단계마다 숫자 하나씩 손으로 계산
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">파이프라인 · 2</div>
+  <h2>왜 «파이프라인» 인가</h2>
+  <div class="analogy">
+    <p><b>자동차 조립 라인</b> : 차체 → 도색 → 엔진 → 검수 · 한 대를 끝까지 만든 뒤 다음 차를 시작하지 않음 → 각 공정이 동시에 다른 차를 작업 → 시간당 생산량 증가</p>
+    <p>비유의 한계 : 실제 GPU 는 한 공정 안에서도 수천 개를 동시에 처리 → 줄 하나가 아니라 수천 줄의 라인</p>
+  </div>
+  <ul class="small">
+    <li>삼각형 수십만 개 · 픽셀 수백만 개 → 같은 계산의 반복 → <b>공정을 나눠 흘려보내는 구조</b>가 유리</li>
+    <li>단계마다 입력·출력 형식 고정 → 한 단계의 결함이 뒤 단계 전체로 전파</li>
+    <li>그래서 AI 결과물 검증 = <b>«어느 단계에서 틀렸나»</b> 로 위치를 좁히는 일</li>
+  </ul>
+  <div class="key">
+    <p class="small">예 : 물체가 안 보임 → ① 위치가 틀렸나 · ② 카메라 밖인가 · ⑤ 다른 물체에 가려졌나 → 단계 지도가 있어야 <b>질문 순서</b>가 생김</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">파이프라인 · 3</div>
+  <h2>① 좌표 변환 — 물체를 세상에, 세상을 카메라 앞에</h2>
+  <div class="cols">
+    <div>
+      <p class="small">메시의 꼭짓점 = 물체 자신 기준 좌표 (<span class="t">로컬 좌표</span>)<br>
+      → 씬 전체 기준 (<span class="t">월드 좌표</span>)<br>
+      → 카메라 기준 (뷰 좌표)</p>
+      <p class="small"><b>손계산</b> — 의자 모델의 앉는 면 중심 : 로컬 (0, 0.5, 0)<br>
+      의자를 월드 (3, 0, 2) 에 배치<br>
+      → 월드 좌표 = (0+3, 0.5+0, 0+2) = <b>(3, 0.5, 2)</b></p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:.2em">
+        <p><b>주소 체계</b> : «3층 왼쪽 방» (건물 기준) → «부산대 704동 406호» (도시 기준) → «내가 선 곳에서 오른쪽 20 m» (나 기준) · 같은 장소, 기준만 바뀜</p>
+      </div>
+      <p class="small">회전·크기까지 섞이면 덧셈만으로 부족 → <b>행렬</b>로 한 번에 처리 (2주차)</p>
+    </div>
+  </div>
+  <div class="note">2주차 : 벡터 · 행렬 · 동차좌표 · 회전 순서와 짐벌락</div>
+</section>
+
+<section>
+  <div class="tag gfx">파이프라인 · 4</div>
+  <h2>② 투영 — 멀수록 작게</h2>
+  <div class="cols wide-right">
+    <div>
+      <div class="math-block">\[ x' = f \cdot \frac{x}{z} \]</div>
+      <p class="small">x : 물체 높이 · z : 카메라까지 거리 · f : 카메라에서 화면까지 거리 · x′ : 화면 위 높이</p>
+      <p class="small"><b>손계산</b> (f = 1, 높이 1 m)<br>
+      2 m 거리 : \(1 \times \tfrac{1}{2} = 0.5\)<br>
+      4 m 거리 : \(1 \times \tfrac{1}{4} = 0.25\) → <b>거리 2배 · 크기 1/2</b></p>
+    </div>
+    <div>
+      <svg class="dia" viewBox="0 0 640 330" role="img" aria-label="거리에 따라 화면 위 크기가 줄어드는 원근 투영">
+        <text x="330" y="30" font-size="18" fill="#e8ecf4" text-anchor="middle">화면 위 높이 : <tspan fill="#35d6e6">2 m → 0.5</tspan> · <tspan fill="#a8e05f">4 m → 0.25</tspan></text>
+        <line x1="40" y1="260" x2="620" y2="260" stroke="#2a3040" stroke-width="2"/>
+        <circle cx="60" cy="260" r="10" fill="#ff5fa2"/>
+        <text x="60" y="296" font-size="18" fill="#ff5fa2" text-anchor="middle">눈</text>
+        <line x1="180" y1="80" x2="180" y2="280" stroke="#ffc44d" stroke-width="3"/>
+        <text x="180" y="306" font-size="17" fill="#ffc44d" text-anchor="middle">화면 (f = 1)</text>
+        <rect x="292" y="140" width="16" height="120" fill="#35d6e6"/>
+        <text x="300" y="296" font-size="17" fill="#e8ecf4" text-anchor="middle">2 m</text>
+        <rect x="532" y="140" width="16" height="120" fill="#a8e05f"/>
+        <text x="540" y="296" font-size="17" fill="#e8ecf4" text-anchor="middle">4 m</text>
+        <g stroke-width="2" stroke-dasharray="6 5">
+          <line x1="60" y1="260" x2="300" y2="140" stroke="#35d6e6"/>
+          <line x1="60" y1="260" x2="540" y2="140" stroke="#a8e05f"/>
+        </g>
+        <rect x="183" y="200" width="10" height="60" fill="#35d6e6"/>
+        <rect x="167" y="230" width="10" height="30" fill="#a8e05f"/>
+        <text x="555" y="125" font-size="16" fill="#9aa4b8" text-anchor="middle">높이 1 m</text>
+      </svg>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>창문에 풍경 따라 그리기</b> (르네상스 원근법) : 한쪽 눈을 고정하고 유리창에 바깥 풍경을 그대로 따라 그리면 → 먼 나무는 작게, 가까운 나무는 크게 그려짐 · 투영 = 이 유리창 그림을 계산으로</p>
+  </div>
+  <aside class="notes">
+    - 그림 : 눈에서 물체 꼭대기로 그은 선이 화면(노란 선)을 지나는 높이 = 화면 위 크기
+    - 실제 4주차 투영 행렬은 이 나눗셈(÷z)을 행렬 + 원근 나눗셈으로 처리
+    - 실습 명세(오늘 마지막)에서 2 m · 4 m 큐브를 놓고 이 비율을 화면에서 검증
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">파이프라인 · 5</div>
+  <h2>③ 래스터화 — 삼각형을 칸으로</h2>
+  <div class="cols wide-right">
+    <div>
+      <ul class="small">
+        <li>입력 : 화면 위 삼각형 (꼭짓점 3개)</li>
+        <li>질문 : 어떤 픽셀 칸이 이 삼각형 안에 있나</li>
+        <li>판정 : 칸의 <b>중심점</b>이 삼각형 안 → 그 칸 선택</li>
+        <li>결과 : 선택된 칸 각각 = <span class="t">프래그먼트</span> (색칠 후보)</li>
+      </ul>
+      <p class="small"><b>세어 보기</b> — 오른쪽 그림 : 112칸 중 <b>37칸</b> 선택</p>
+    </div>
+    <div>
+      <svg class="dia" viewBox="0 0 572 344" style="max-height:355px" role="img" aria-label="삼각형이 덮는 픽셀 칸 선택">
+<rect x="20" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="58" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="96" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="134" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="172" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="210" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="248" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="286" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="324" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="362" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="400" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="438" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="476" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="514" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="20" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="58" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="96" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="134" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="172" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="210" y="58" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="229.0" cy="77.0" r="3.5" fill="#35d6e6"/>
+<rect x="248" y="58" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="267.0" cy="77.0" r="3.5" fill="#35d6e6"/>
+<rect x="286" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="324" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="362" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="400" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="438" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="476" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="514" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="20" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="58" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="96" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="134" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="172" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="210" y="96" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="229.0" cy="115.0" r="3.5" fill="#35d6e6"/>
+<rect x="248" y="96" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="267.0" cy="115.0" r="3.5" fill="#35d6e6"/>
+<rect x="286" y="96" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="305.0" cy="115.0" r="3.5" fill="#35d6e6"/>
+<rect x="324" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="362" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="400" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="438" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="476" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="514" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="20" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="58" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="96" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="134" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="172" y="134" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="191.0" cy="153.0" r="3.5" fill="#35d6e6"/>
+<rect x="210" y="134" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="229.0" cy="153.0" r="3.5" fill="#35d6e6"/>
+<rect x="248" y="134" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="267.0" cy="153.0" r="3.5" fill="#35d6e6"/>
+<rect x="286" y="134" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="305.0" cy="153.0" r="3.5" fill="#35d6e6"/>
+<rect x="324" y="134" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="343.0" cy="153.0" r="3.5" fill="#35d6e6"/>
+<rect x="362" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="400" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="438" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="476" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="514" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="20" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="58" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="96" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="134" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="153.0" cy="191.0" r="3.5" fill="#35d6e6"/>
+<rect x="172" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="191.0" cy="191.0" r="3.5" fill="#35d6e6"/>
+<rect x="210" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="229.0" cy="191.0" r="3.5" fill="#35d6e6"/>
+<rect x="248" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="267.0" cy="191.0" r="3.5" fill="#35d6e6"/>
+<rect x="286" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="305.0" cy="191.0" r="3.5" fill="#35d6e6"/>
+<rect x="324" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="343.0" cy="191.0" r="3.5" fill="#35d6e6"/>
+<rect x="362" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="381.0" cy="191.0" r="3.5" fill="#35d6e6"/>
+<rect x="400" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="438" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="476" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="514" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="20" y="210" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="58" y="210" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="96" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="115.0" cy="229.0" r="3.5" fill="#35d6e6"/>
+<rect x="134" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="153.0" cy="229.0" r="3.5" fill="#35d6e6"/>
+<rect x="172" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="191.0" cy="229.0" r="3.5" fill="#35d6e6"/>
+<rect x="210" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="229.0" cy="229.0" r="3.5" fill="#35d6e6"/>
+<rect x="248" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="267.0" cy="229.0" r="3.5" fill="#35d6e6"/>
+<rect x="286" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="305.0" cy="229.0" r="3.5" fill="#35d6e6"/>
+<rect x="324" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="343.0" cy="229.0" r="3.5" fill="#35d6e6"/>
+<rect x="362" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="381.0" cy="229.0" r="3.5" fill="#35d6e6"/>
+<rect x="400" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="419.0" cy="229.0" r="3.5" fill="#35d6e6"/>
+<rect x="438" y="210" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="476" y="210" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="514" y="210" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="20" y="248" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="58" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="77.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="96" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="115.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="134" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="153.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="172" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="191.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="210" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="229.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="248" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="267.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="286" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="305.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="324" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="343.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="362" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="381.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="400" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="419.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="438" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
+<circle cx="457.0" cy="267.0" r="3.5" fill="#35d6e6"/>
+<rect x="476" y="248" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="514" y="248" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="20" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="58" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="96" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="134" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="172" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="210" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="248" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="286" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="324" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="362" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="400" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="438" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="476" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<rect x="514" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
+<polygon points="69.4,270.8 491.2,301.2 255.6,42.8" fill="none" stroke="#ffc44d" stroke-width="3"/>
+<circle cx="69.4" cy="270.8" r="6" fill="#ffc44d"/>
+<circle cx="491.2" cy="301.2" r="6" fill="#ffc44d"/>
+<circle cx="255.6" cy="42.8" r="6" fill="#ffc44d"/>
+      </svg>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>모눈종이에 도형 칠하기</b> : 연필로 그린 삼각형 선 위에서, 칸의 한가운데가 선 안쪽인 칸만 색칠 → 매끈한 사선이 계단 모양으로 바뀜 = <b>앨리어싱</b>(계단 현상)의 출발점 (6주차)</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">파이프라인 · 6</div>
+  <h2>④ 셰이딩 — 칸마다 색 계산</h2>
+  <div class="cols">
+    <div>
+      <p class="small">같은 빨간 공이라도 빛을 정면으로 받는 쪽은 밝고, 비스듬히 받는 쪽은 어두움 → 칸마다 다른 색</p>
+      <div class="math-block">\[ \text{밝기} = \text{바탕색} \times \cos\theta \]</div>
+      <p class="small">θ : 면이 바라보는 방향과 빛이 오는 방향 사이 각도</p>
+    </div>
+    <div>
+      <p class="small"><b>손계산</b> — 바탕색 빨강 값 0.8<br>
+      빛이 정면 (θ = 0°) : \(0.8 \times 1 = 0.8\)<br>
+      빛이 60° 기울어짐 : \(0.8 \times 0.5 = 0.4\)<br>
+      빛이 90° (스치듯) : \(0.8 \times 0 = 0\)</p>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>해바라기 판</b> : 해를 정면으로 마주한 판이 가장 뜨겁고, 기울일수록 덜 뜨거움 · 같은 햇빛이 더 넓은 면적에 퍼지기 때문 → 픽셀 밝기도 같은 원리</p>
+  </div>
+  <p class="small">이 계산을 담당하는 작은 프로그램 = <span class="t">셰이더</span> (Shader) · 5주차 조명 · 6주차 직접 작성</p>
+</section>
+
+<section>
+  <div class="tag gfx">파이프라인 · 7</div>
+  <h2>⑤ 깊이 판정 — 가장 앞의 색만 남기기</h2>
+  <div class="cols">
+    <div>
+      <p class="small">한 픽셀에 여러 물체가 겹침 → 어느 색을 남기나</p>
+      <p class="small"><b>예</b> — 같은 픽셀 자리의 후보 둘<br>
+      회색 벽 : 카메라에서 5 m<br>
+      빨간 의자 : 카메라에서 2 m<br>
+      → 2 &lt; 5 → <b>빨간색</b> 남김 · 벽 색 버림</p>
+      <p class="small">픽셀마다 «지금까지 가장 가까운 거리» 를 적어 두는 표 = <span class="t">깊이 버퍼</span></p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:.2em">
+        <p><b>단체 사진의 자리 다툼</b> : 사진 속 한 점에는 한 사람만 찍힘 · 카메라에 더 가까이 선 사람이 뒷사람을 가림 → 픽셀마다 «누가 가장 앞인가» 만 비교</p>
+        <p>비유의 한계 : 깊이 버퍼는 거리를 유한한 칸 수로 적음 → 거의 같은 거리면 판정이 흔들려 깜빡임 (4주차 z-fighting)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">프레임</div>
+  <h2>한 프레임 = 다섯 단계 × 모든 픽셀</h2>
+  <div class="cols">
+    <div>
+      <p class="small"><b>손계산</b> — 1초에 칠해야 하는 픽셀 수<br>
+      모니터 60Hz : \(207\text{만} \times 60 \approx 1.2\)억<br>
+      Quest 3 90Hz : \(911\text{만} \times 90 \approx 8.2\)억 → <b>약 6.6배</b></p>
+      <p class="small">한 장에 쓸 수 있는 시간 : \(1000\,\text{ms} \div 90 \approx 11.1\,\text{ms}\)</p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:.2em">
+        <p><b>플립북</b> : 종이 한 장 = 프레임 · 넘기는 속도가 빠르면 움직임으로 보임 · VR 은 1초에 90장을 <b>두 권 동시에</b> 그려야 함</p>
+      </div>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>수학 박사 8명 vs 초등학생 수천 명</b> : 어려운 문제 몇 개 = 박사(CPU) 유리 · 쉬운 곱셈 수억 개 = 초등학생 수천 명(GPU)이 나눠 푸는 쪽이 압도적 → 픽셀 계산은 후자</p>
+    <p>비유의 한계 : 역할 차이만 보여 줌 · 실제 GPU 코어도 꽤 복잡한 계산 가능</p>
+  </div>
+  <div class="note">3주차 : 프레임 예산 · 12주차 : VR 성능 예산 실측</div>
+</section>
+
+<section>
+  <div class="tag lab">역할 분담</div>
+  <h2>Unity · AI · 나 — 누가 무엇을 하나</h2>
+  <table style="font-size:.68em">
+    <tr><th>주체</th><th>하는 일</th><th>못 하는 일</th></tr>
+    <tr><td class="gfx-txt"><b>Unity</b></td><td>파이프라인 다섯 단계를 자동 실행</td><td>«무엇을 그릴지» 결정</td></tr>
+    <tr><td class="lab-txt"><b>AI</b></td><td>씬 구성·설정·C# 코드를 빠르게 생성</td><td>내 의도 추측 · 헤드셋 속 결과 확인</td></tr>
+    <tr><td class="vr-txt"><b>나</b></td><td>무엇을 요구할지 결정 · 결과가 맞는지 판정</td><td>— (대신해 줄 주체 없음)</td></tr>
+  </table>
+  <div class="key">
+    <p>파이프라인 지도 = AI 에게 줄 <b>요구의 어휘</b> · AI 결과를 검사할 <b>점검표</b><br>
+    <span class="small">«깜빡여요» 대신 «⑤ 깊이 판정 단계에서 두 면이 경합 · near 값을 0.3 으로» → 이것이 명세</span></p>
+  </div>
+  <div class="analogy">
+    <p><b>유능한 신입 인턴</b> : 일은 빠르고 말투는 자신감 넘침 · 다만 처음 보는 회사 사정은 모르고, 모르는 것도 아는 척할 때가 있음 → 지시는 구체적으로, 결과는 반드시 검수</p>
+  </div>
+</section>
+
+<!-- ========================================================= AI 함정 #0 -->
+<section class="divider trap">
+  <div class="kicker">AI 함정 #0 · 맛보기</div>
+  <div class="rule"></div>
+  <h1>보지 않은 씬을<br><em>본 것처럼</em></h1>
+  <p class="sub">컨텍스트 없이 질문하면 AI 는 «평균적인 Unity 씬» 을 지어냄</p>
+</section>
+
+<section>
+  <div class="tag trap">함정 #0 · 증상</div>
+  <h2>① 증상</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>이렇게 물으면</h4>
+      "내 Unity 씬 구조 설명해 줘"
+      <div style="margin-top:.9em;color:#8a93a8">↓ AI 의 답 (예)</div>
+      <div style="margin-top:.5em">
+        · Main Camera, Directional Light<br>
+        · <b>Plane</b> 바닥과 <b>Player</b> 오브젝트<br>
+        · <b>EventSystem</b> 이 UI 입력 담당<br>
+        · Edit → Project Settings → … (구버전 메뉴)
+      </div>
+    </div>
+    <div class="good">
+      <h4>실제 Hierarchy (Universal 3D 템플릿 예)</h4>
+      · Main Camera<br>
+      · Directional Light<br>
+      · Global Volume<br><br>
+      <span style="color:#ff5a4d">Plane · Player · EventSystem = 존재하지 않음</span><br><br>
+      <span style="color:#a8e05f">→ 문장은 매끄럽고 확신에 차 있음<br>→ 틀린 곳이 눈에 띄지 않음</span>
+    </div>
+  </div>
+  <p class="xs muted" style="margin-top:.6em">템플릿·Unity 버전에 따라 기본 오브젝트는 다를 수 있음 → 각자 자기 Hierarchy 가 정답</p>
+  <aside class="notes">
+    - 실습 시간에 각자 재현 : 채팅형 AI 에 파일 없이 질문 → 답을 Hierarchy 와 대조
+    - 에이전트형 도구(프로젝트 폴더를 읽는 도구)는 실제 파일을 읽고 답할 수 있음 → 그래도 "어떤 파일을 읽었나" 를 확인
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">함정 #0 · 원인 · 진단 · 수정</div>
+  <h2>② 원인 · ③ 진단 · ④ 수정</h2>
+  <div class="cols3">
+    <div class="card trap">
+      <h4>② 원인</h4>
+      <p class="small">AI = 학습한 수많은 예시를 바탕으로 <b>가장 그럴듯한 다음 문장</b>을 만드는 모델 → 내 파일을 못 봤으면 «흔한 씬» 으로 빈칸을 채움 · 모른다는 말 대신 그럴듯한 추측</p>
+    </div>
+    <div class="card">
+      <h4>③ 진단</h4>
+      <p class="small">답의 항목을 <b>Hierarchy · Inspector 와 1:1 대조표</b>로 정리 · «이 정보를 어디서 확인했나» 되묻기 · 메뉴 경로는 실제 클릭으로 확인</p>
+    </div>
+    <div class="card lab">
+      <h4>④ 수정</h4>
+      <p class="small">컨텍스트 제공 : Unity 버전 · 템플릿 이름 · Hierarchy 목록을 함께 붙임 · 제약 추가 : «주어진 정보에 없는 오브젝트는 추측하지 말고 모른다고 표시»</p>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>전화로 받는 집 수리 견적</b> : 집을 안 본 기사도 «보통 이런 집은…» 하고 견적을 냄 · 사진과 평면도를 보내야 내 집 기준 답이 나옴 → AI 에게 사진·평면도 = 컨텍스트</p>
+  </div>
+  <div class="key trap">
+    <p class="small">이 함정의 교훈 = 학기 전체의 원칙 : <b>AI 의 확신 ≠ 정확성</b> · 판정 기준은 언제나 <b>내 화면의 실제 값</b></p>
+  </div>
+</section>
+
+<!-- ========================================================= PART II -->
+<section class="divider part-ii">
+  <div class="kicker">Part II · 30분</div>
+  <div class="rule"></div>
+  <h1>VR 시스템과<br><em>인간</em>이라는 마지막 부품</h1>
+  <p class="sub">LaValle 『Virtual Reality』 Ch.1 – 2</p>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>VR<small>Virtual Reality</small></dt><dd>인공적인 감각 자극으로 «실제로 그곳에 있다» 는 경험을 만드는 기술</dd>
+    <dt>HMD<small>Head-Mounted Display</small></dt><dd>머리에 쓰는 디스플레이 — Quest 3 같은 VR 헤드셋</dd>
+    <dt>트래킹<small>Tracking</small></dt><dd>센서로 머리·손의 위치와 회전을 매 순간 측정하는 일</dd>
+    <dt>6DoF<small>6 Degrees of Freedom</small></dt><dd>위치 3방향(앞뒤·좌우·위아래) + 회전 3방향을 모두 추적 · 회전만이면 3DoF</dd>
+    <dt>지각<small>Perception</small></dt><dd>감각 신호를 뇌가 해석해 «무엇이 어디에 있다» 로 알아차리는 과정</dd>
+    <dt>전정계<small>Vestibular system</small></dt><dd>귀 안쪽의 균형 감각 기관 — 머리의 회전·가속을 느낌</dd>
+    <dt>몰입<small>Immersion</small></dt><dd>시스템이 감각을 얼마나 넓고 정확하게 대신하는지 — <b>장비의 속성</b></dd>
+    <dt>프레즌스<small>Presence</small></dt><dd>«내가 지금 그곳에 있다» 는 사용자의 느낌 — <b>사람의 경험</b></dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">VR · 1</div>
+  <h2>VR 의 정의 — LaValle</h2>
+  <div class="key vr">
+    <p>«인공적인 감각 자극을 써서 생명체에 <b>의도한 행동</b>을 끌어내는 것 — 그 개입을 생명체가 <b>거의 또는 전혀 의식하지 못하는</b> 상태에서»</p>
+  </div>
+  <table style="font-size:.64em">
+    <tr><th>요소</th><th>뜻</th><th>오늘 체험의 예</th></tr>
+    <tr><td class="vr-txt"><b>의도한 행동</b></td><td>설계자가 노린 반응</td><td>가장자리에서 뒷걸음질</td></tr>
+    <tr><td class="vr-txt"><b>생명체</b></td><td>사람 (동물 실험도 포함)</td><td>체험한 학생</td></tr>
+    <tr><td class="vr-txt"><b>인공 감각 자극</b></td><td>화면·소리·진동으로 진짜 자극을 대체</td><td>렌즈 너머 화면 두 장</td></tr>
+    <tr><td class="vr-txt"><b>개입의 비인지</b></td><td>속고 있다는 사실을 잊는 상태</td><td>바닥이 진짜 같다고 느낌</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>마술 공연</b> : 관객은 속임수인 줄 알면서도 눈앞에서는 속음 · 좋은 마술 = 손기술(기술)보다 <b>관객의 주의가 어디로 가는지</b>(지각)를 아는 것</p>
+  </div>
+  <div class="note">LaValle 『Virtual Reality』 Ch.1.1 · 전문 무료 lavalle.pl/vr</div>
+</section>
+
+<section>
+  <div class="tag vr">VR · 2 ★</div>
+  <h3>VR 시스템 = 닫힌 고리</h3>
+  <svg class="dia" viewBox="0 0 1180 470" role="img" aria-label="VR 시스템 루프 : 트래킹, 가상 세계 생성, 렌더링, 디스플레이, 감각 기관, 뇌, 움직임">
+    <defs>
+      <marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/>
+      </marker>
+    </defs>
+    <rect x="150" y="10" width="880" height="190" rx="18" fill="rgba(53,214,230,0.05)" stroke="#1d5a66" stroke-dasharray="8 6"/>
+    <text x="170" y="40" font-size="18" fill="#35d6e6" font-weight="700">기계 — 하드웨어 + 소프트웨어</text>
+    <rect x="150" y="260" width="880" height="190" rx="18" fill="rgba(255,95,162,0.05)" stroke="#6e2545" stroke-dasharray="8 6"/>
+    <text x="170" y="437" font-size="18" fill="#ff5fa2" font-weight="700">인간 — 마지막 부품</text>
+
+    <g font-size="20" text-anchor="middle">
+      <rect x="180" y="65" width="230" height="100" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+      <text x="295" y="105" fill="#35d6e6" font-weight="700">트래킹</text>
+      <text x="295" y="138" fill="#e8ecf4" font-size="17">IMU · 카메라 센서</text>
+
+      <rect x="475" y="65" width="230" height="100" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+      <text x="590" y="105" fill="#35d6e6" font-weight="700">가상 세계 생성</text>
+      <text x="590" y="138" fill="#e8ecf4" font-size="17">Unity 씬 · 물리 · 규칙</text>
+
+      <rect x="770" y="65" width="230" height="100" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+      <text x="885" y="105" fill="#35d6e6" font-weight="700">렌더링</text>
+      <text x="885" y="138" fill="#e8ecf4" font-size="17">GPU · 두 눈 각각</text>
+
+      <rect x="1040" y="185" width="130" height="100" rx="14" fill="#171b25" stroke="#ffc44d" stroke-width="2"/>
+      <text x="1105" y="225" fill="#ffc44d" font-weight="700">디스플레이</text>
+      <text x="1105" y="256" fill="#e8ecf4" font-size="17">+ 렌즈</text>
+
+      <rect x="770" y="300" width="230" height="100" rx="14" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
+      <text x="885" y="340" fill="#ff5fa2" font-weight="700">감각 기관</text>
+      <text x="885" y="373" fill="#e8ecf4" font-size="17">눈 · 귀 · 전정계</text>
+
+      <rect x="475" y="300" width="230" height="100" rx="14" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
+      <text x="590" y="340" fill="#ff5fa2" font-weight="700">뇌 — 지각</text>
+      <text x="590" y="373" fill="#e8ecf4" font-size="17">해석 · 판단 · 느낌</text>
+
+      <rect x="180" y="300" width="230" height="100" rx="14" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
+      <text x="295" y="340" fill="#ff5fa2" font-weight="700">몸의 움직임</text>
+      <text x="295" y="373" fill="#e8ecf4" font-size="17">고개 돌림 · 손 뻗기</text>
+    </g>
+    <g stroke="#9aa4b8" stroke-width="2.5" fill="none" marker-end="url(#ar2)">
+      <line x1="412" y1="115" x2="471" y2="115"/>
+      <line x1="707" y1="115" x2="766" y2="115"/>
+      <path d="M1002,115 Q1105,115 1105,181"/>
+      <path d="M1105,287 Q1105,350 1004,350"/>
+      <line x1="768" y1="350" x2="709" y2="350"/>
+      <line x1="473" y1="350" x2="414" y2="350"/>
+      <path d="M178,350 Q80,350 80,240 Q80,115 176,115"/>
+    </g>
+    <text x="40" y="246" font-size="17" fill="#9aa4b8" text-anchor="middle" transform="rotate(-90 40 246)">다시 센서로</text>
+    <text x="590" y="240" font-size="19" fill="#e8ecf4" text-anchor="middle">한 바퀴에 걸리는 시간 = <tspan fill="#ffc44d" font-weight="700">motion-to-photon 지연</tspan> (3 · 11주)</text>
+  </svg>
+  <aside class="notes">
+    - LaValle Ch.2 의 VR 시스템 그림을 단순화 : 기계 쪽 3단계 + 디스플레이 + 사람 쪽 3단계
+    - 핵심 : 고리가 닫혀 있음 → 사람의 움직임이 다시 입력 → 영화와 결정적 차이
+    - 기계 쪽 상자 = 이 수업의 그래픽스 이론 · 사람 쪽 상자 = 지각 이론
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">VR · 3</div>
+  <h2>하드웨어와 소프트웨어 — Quest 3 로 보기</h2>
+  <table style="font-size:.64em">
+    <tr><th>고리의 칸</th><th>Quest 3 의 부품</th><th>대략의 사양</th></tr>
+    <tr><td class="gfx-txt">트래킹</td><td>IMU (회전·가속 센서) + 바깥을 보는 카메라</td><td>머리·컨트롤러 <b>6DoF</b> · 손 추적</td></tr>
+    <tr><td class="gfx-txt">가상 세계 생성 · 렌더링</td><td>헤드셋 내장 모바일 칩 (Snapdragon XR2 Gen 2)</td><td>휴대폰급 GPU · PC 보다 성능 여유 적음</td></tr>
+    <tr><td><span style="color:var(--warn)">디스플레이</span></td><td>LCD 2장 + 팬케이크 렌즈</td><td>한 눈 2064 × 2208 · 72~120Hz · 수평 시야 약 110°</td></tr>
+    <tr><td><span style="color:var(--warn)">소리 · 촉각</span></td><td>스트랩 스피커 · 컨트롤러 진동</td><td>공간 음향 · 단순 진동</td></tr>
+  </table>
+  <div class="key vr">
+    <p class="small">소프트웨어 쪽 핵심 = <b>가상 세계 생성기</b> : 씬 · 물리 · 규칙을 매 프레임 갱신 → Unity 가 담당 · 우리가 AI 와 함께 만드는 부분</p>
+  </div>
+  <div class="analogy">
+    <p><b>인형극 무대</b> : 조명·무대 장치 = 하드웨어 · 대본과 연출 = 소프트웨어 · 같은 무대라도 연출에 따라 관객 반응이 전혀 다름</p>
+  </div>
+  <div class="note">사양 : Meta 공개 자료 기준 · 펌웨어·설정에 따라 다름 (주사율 기본값 등)</div>
+</section>
+
+<section>
+  <div class="tag vr">VR · 4</div>
+  <h2>인간이라는 마지막 부품</h2>
+  <ul class="small">
+    <li>고리의 마지막 칸 = 사람의 감각 기관과 뇌 → 여기서 <b>경험</b>이 최종 결정</li>
+    <li>이 부품의 특징 : <b>교체 불가 · 업데이트 불가 · 사람마다 다름</b></li>
+    <li>그래서 : 기계 쪽이 사람에 맞춰야 함 → 사람 사양을 모르면 맞출 기준이 없음</li>
+  </ul>
+  <div class="analogy">
+    <p><b>오디오 시스템과 귀</b> : 앰프·스피커가 아무리 좋아도 사람 귀가 못 듣는 소리(약 20 kHz 이상)를 키우는 건 낭비 · 반대로 귀가 민감한 잡음 하나는 음악 전체를 망침 → 투자할 곳과 절대 틀리면 안 되는 곳을 <b>귀의 사양</b>이 결정</p>
+    <p>비유의 한계 : 귀는 소리를 받기만 함 · VR 의 사람은 움직여서 다시 입력을 만듦 (닫힌 고리)</p>
+  </div>
+  <div class="key vr">
+    <p class="small">VR 설계의 질문 순서 : 화면이 무엇을 보여 주나 (X) → 사람이 그것을 <b>무엇으로 해석하나</b> (O)</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">VR · 5</div>
+  <h2>인간 부품의 사양표</h2>
+  <table style="font-size:.62em">
+    <tr><th>감각</th><th>사람의 사양 (대략)</th><th>VR 이 공급하는 것</th><th>틈 → 결과</th><th>주차</th></tr>
+    <tr><td class="vr-txt"><b>시각</b></td><td>수평 시야 약 200° · 선명한 중심 약 2°</td><td>시야 약 110° · 화면 전체 같은 해상도</td><td>주변시 축소</td><td>5·6</td></tr>
+    <tr><td class="vr-txt"><b>깊이</b></td><td>두 눈 차이 + 그림자·크기 등 단서</td><td>두 눈 따로 렌더링</td><td>초점 거리 고정 → 피로</td><td>4·5·10</td></tr>
+    <tr><td class="vr-txt"><b>전정계</b></td><td>회전·가속 감지</td><td class="trap-txt">헤드셋으로는 자극 불가</td><td>눈과 귀 속 신호 충돌 → 멀미</td><td>7·12</td></tr>
+    <tr><td class="vr-txt"><b>고유감각</b></td><td>눈 감고도 손 위치를 앎</td><td>손·컨트롤러 트래킹</td><td>가상 손 위치 어긋남 → 어색함</td><td>10·11</td></tr>
+    <tr><td class="vr-txt"><b>시간</b></td><td>움직임과 화면의 어긋남에 민감</td><td>예측 · 재투영</td><td>지연 → 세상이 끌려옴</td><td>3·11</td></tr>
+  </table>
+  <dl class="terms">
+    <dt>고유감각<small>Proprioception</small></dt><dd>눈을 감아도 내 팔다리가 어디 있는지 아는 몸속 감각</dd>
+  </dl>
+  <div class="note">LaValle Ch.2.3 · Ch.5 · 수치는 개인차·기기에 따라 다름</div>
+</section>
+
+<section>
+  <div class="tag vr">VR · 6 ★</div>
+  <h3 style="margin-bottom:.45em">속는 눈 실험 — 같은 숫자, 다른 색</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="same-pixel">
+      <div class="demo-badge">체커 그림자 착시 · 화면을 클릭하면 그 점의 RGB 측정</div>
+    </div>
+    <div class="demo-ui">
+      <button data-mask>맥락 가리기</button>
+      <button data-bridge>A–B 연결 띠</button>
+      <button data-shadow>그림자 원기둥 치우기</button>
+      <button data-reset>처음으로</button>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <p class="xs muted" style="margin-top:.5em">Adelson 의 체커 그림자 착시(1995)를 재구성 · A 칸과 B 칸의 픽셀 값을 직접 측정해 볼 것</p>
+  <aside class="notes">
+    - ① 먼저 질문 : "A 와 B 중 어느 칸이 더 어두운가" → 대부분 A
+    - ② A, B 를 차례로 클릭 → 둘 다 (118, 118, 118)
+    - ③ «맥락 가리기» → 주변을 지우면 같은 회색으로 보임
+    - ④ «연결 띠» → 같은 색 띠로 잇는 순간 이음매가 사라짐
+    - ⑤ «그림자 원기둥 치우기» → B 가 실제로 밝아짐(190) → 뇌는 그림자를 «빼고» 표면색을 추정했다는 증거
+    - 연결 : 모니터는 숫자를 정확히 내보냄 · 경험은 뇌가 만듦 = 인간이라는 마지막 부품
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">VR · 7</div>
+  <h2>실험이 보여 준 것 — 뇌는 측정기가 아니라 추론기</h2>
+  <ul class="small">
+    <li>화면 : A · B 모두 정확히 (118, 118, 118) 출력</li>
+    <li>뇌 : «B 는 그림자 속 → 원래는 밝은 칸» 으로 <b>조명을 빼고</b> 표면 색을 추정</li>
+    <li>이유 : 현실에서 중요한 것 = 순간의 빛 양이 아니라 <b>물체 자체의 성질</b> → 뇌의 해석 규칙도 그쪽에 맞춰져 있음</li>
+  </ul>
+  <div class="cols">
+    <div class="card lab">
+      <h4>그래서 VR 이 가능</h4>
+      <p class="small">뇌가 단서로 추론 → 그럴듯한 단서만 주면 <b>없는 공간도 «있다» 고 결론</b></p>
+    </div>
+    <div class="card trap">
+      <h4>그래서 VR 이 위험</h4>
+      <p class="small">단서끼리 어긋나면(눈은 움직임 · 귀 속은 정지) 뇌가 혼란 → <b>멀미·피로</b></p>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>명탐정</b> : 단서 몇 개로 사건 전체를 재구성 · 단서가 조작되면 틀린 범인을 확신 → VR 개발자 = 단서를 설계하는 사람</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">VR · 8</div>
+  <h2>몰입과 프레즌스 — 장비와 경험의 구분</h2>
+  <div class="cols">
+    <div class="card gfx">
+      <h4>몰입 Immersion = 장비의 속성</h4>
+      <p class="small">시야각 · 해상도 · 트래킹 정확도 · 지연 → <b>숫자로 측정</b> 가능 · 사양표에 적히는 값</p>
+    </div>
+    <div class="card vr">
+      <h4>프레즌스 Presence = 사람의 경험</h4>
+      <p class="small">«내가 그곳에 있다» 는 느낌 · 같은 장비라도 사람·콘텐츠마다 다름 → 주로 설문으로 측정</p>
+    </div>
+  </div>
+  <ul class="small">
+    <li>Slater 의 구분 : <b>장소 착각</b> (그곳에 있다) + <b>개연성 착각</b> (지금 실제로 일어나는 일이다) → 둘이 함께 성립할 때 현실처럼 반응</li>
+    <li>주의 : 설문 점수만으로 결론 금지 — 실제 현실과 가상 환경을 구분 못한 보고 존재</li>
+  </ul>
+  <div class="analogy">
+    <p><b>영화관</b> : 아이맥스 스크린·음향 = 몰입 (극장 사양) · 영화에 빠져 손에 든 팝콘을 잊는 것 = 프레즌스 · 같은 극장에서도 지루한 영화엔 안 빠짐</p>
+  </div>
+  <div class="note">Slater (2009) Phil. Trans. R. Soc. B 364 · Slater (2004) Presence 13(4) · 11·14주차에서 측정 방법 상세</div>
+</section>
+
+<section>
+  <div class="tag vr">VR · 9</div>
+  <h2>고리가 늦게 닫히면 — 지연의 손계산</h2>
+  <div class="cols">
+    <div>
+      <div class="math-block">\[ \text{어긋난 각도} = \text{회전 속도} \times \text{지연 시간} \]</div>
+      <p class="small"><b>손계산</b> — 고개를 초당 100° 로 돌릴 때<br>
+      지연 50 ms : \(100 \times 0.05 = 5^{\circ}\)<br>
+      지연 20 ms : \(100 \times 0.02 = 2^{\circ}\)</p>
+      <p class="small">5° = 팔을 뻗었을 때 주먹 폭(약 10°)의 절반 → 세상이 고개를 <b>뒤늦게 따라오는</b> 느낌</p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:.2em">
+        <p><b>입 모양과 안 맞는 더빙</b> : 소리가 조금만 늦어도 금방 거슬림 · 화면이 고개보다 늦으면 같은 위화감 + 귓속 균형 감각과 충돌 → 멀미의 한 원인</p>
+      </div>
+      <p class="small">모니터 게임 : 화면이 늦어도 «느리다» 로 끝 · VR : 몸이 «세상이 흔들린다» 로 받아들임</p>
+    </div>
+  </div>
+  <div class="note">예시 수치 · 지연 지각 기준은 사람·머리 속도마다 다름 (Jerald 2009) — 3·11주차 상세</div>
+</section>
+
+<section>
+  <div class="tag vr">도입 질문의 답</div>
+  <h2>당신은 무엇에 속았는가</h2>
+  <table style="font-size:.66em">
+    <tr><th>실제 입력</th><th>뇌의 결론</th><th>속인 장치</th></tr>
+    <tr><td>눈앞 몇 cm 의 평평한 화면 두 장</td><td>깊이 있는 넓은 공간</td><td>두 눈에 조금 다른 그림 + 그림자·크기 단서</td></tr>
+    <tr><td>고정된 화면</td><td>고개를 돌리면 세상은 제자리</td><td>트래킹 → 매 프레임 반대로 다시 그림</td></tr>
+    <tr><td>픽셀 색 숫자</td><td>단단한 바닥 · 손에 잡힐 물체</td><td>조명·음영으로 만든 표면 단서</td></tr>
+    <tr><td>교실에 선 몸</td><td>«나는 그곳에 있다»</td><td>위 단서들이 서로 모순 없이 맞물림</td></tr>
+  </table>
+  <div class="key vr">
+    <p>속은 대상 = 눈이 아니라 <b>뇌의 해석 규칙</b> · VR = 지각을 속이는 장치 → 이 수업 = 그 장치를 <b>근거를 갖고</b> 설계하는 법</p>
+  </div>
+  <aside class="notes">
+    - 체험 학생에게 "가장자리에서 왜 뒷걸음질 쳤나" 다시 묻기 → 머리로는 교실인 줄 알아도 몸은 단서를 믿음
+    - 다음 주부터 매주 그래픽스 이론 하나와 그 이론이 속이는 지각 규칙 하나를 짝으로 배움
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">VR · 10</div>
+  <h2>이 수업의 짝 구조 — 그래픽스 이론 ↔ 지각 이론</h2>
+  <table style="font-size:.62em">
+    <tr><th>주</th><th class="gfx-txt">그래픽스 이론 (화면 쪽)</th><th class="vr-txt">짝이 되는 지각 이론 (사람 쪽)</th></tr>
+    <tr><td>2</td><td>좌표계 · 변환</td><td>머리 좌표계 · 전정계</td></tr>
+    <tr><td>3</td><td>게임 루프 · 프레임 시간</td><td>motion-to-photon 지연</td></tr>
+    <tr><td>4</td><td>렌더링 파이프라인 · 투영</td><td>양안 렌더링 · 렌즈 왜곡 · 두 눈 사이 거리</td></tr>
+    <tr><td>5</td><td>조명 · 재질</td><td>그림자·음영이 만드는 깊이 단서</td></tr>
+    <tr><td>6</td><td>셰이더 · 텍스처</td><td>시각 해상도 · 중심와와 주변시</td></tr>
+    <tr><td>7</td><td>애니메이션 · 물리</td><td>움직임 지각 · 벡션 · 멀미</td></tr>
+    <tr><td>10~12</td><td>인터랙션 · 트래킹 · 성능 예산</td><td>공간 UI · 센서 오차 · 컴포트 설계</td></tr>
+  </table>
+  <div class="key vr">
+    <p class="small">매주 후반 30분 = 그 주 이론의 <b>사람 쪽 결과</b> · 교재 LaValle 해당 장 표시</p>
+  </div>
+</section>
+
+<!-- ========================================================= PART III -->
+<section class="divider part-iii">
+  <div class="kicker">Part III · 50분</div>
+  <div class="rule"></div>
+  <h1>개발환경과 첫 프롬프트</h1>
+  <p class="sub">설치 → 프로젝트 → 저장소 → AI 에게 첫 질문 → <em>대조로 검증</em></p>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1</div>
+  <h2>설치 체크리스트</h2>
+  <table style="font-size:.64em">
+    <tr><th>#</th><th>설치 항목</th><th>확인 방법</th></tr>
+    <tr><td class="lab-txt"><b>1</b></td><td><b>Unity Hub</b> + Unity ID 로그인 · Personal 라이선스</td><td>Hub 좌측 하단 계정 아이콘</td></tr>
+    <tr><td class="lab-txt"><b>2</b></td><td><b>Unity 6 LTS</b> + 모듈 <b>Android Build Support</b> (OpenJDK · SDK &amp; NDK 포함)</td><td>Hub → Installs 에 안드로이드 아이콘</td></tr>
+    <tr><td class="lab-txt"><b>3</b></td><td>코드 에디터 : <b>VS Code</b> (Unity 확장) 또는 <b>Rider</b></td><td>스크립트 더블클릭 → 에디터에서 열림</td></tr>
+    <tr><td class="lab-txt"><b>4</b></td><td><b>Git</b> + <b>GitHub</b> 계정</td><td>터미널 <code>git --version</code></td></tr>
+    <tr><td class="lab-txt"><b>5</b></td><td><b>AI 코딩 도구</b> 1개 이상</td><td>도구에서 «안녕» 에 응답</td></tr>
+  </table>
+  <dl class="terms">
+    <dt>LTS<small>Long-Term Support</small></dt><dd>오래 버그 수정을 보장하는 안정판 — 학기 내내 같은 버전 유지</dd>
+    <dt>Android Build Support</dt><dd>Quest 는 안드로이드 기반 → 헤드셋용 앱을 만드는 데 필요한 추가 모듈 (11주차)</dd>
+  </dl>
+  <p class="xs muted">상세 절차 · Windows / macOS 분기 : setup/환경설치-가이드.md · 막히면 setup/트러블슈팅-FAQ.md</p>
+  <aside class="notes">
+    - 정확한 Unity 6 LTS 버전 번호는 실습실 설치본과 맞춰 PLATO 공지 (확인 필요)
+    - Android 모듈은 용량이 큼 → 오늘 집에서 마무리해도 됨 · 11주 전에는 반드시
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 2</div>
+  <h2>프로젝트 만들기와 Unity 화면</h2>
+  <div class="cols">
+    <div>
+      <ul class="small tight">
+        <li>Hub → New project → 템플릿 <b>Universal 3D</b> (URP)</li>
+        <li>이름 <code>PerceptionLab</code> · 경로에 한글·공백 없는 폴더</li>
+        <li>열린 뒤 확인 : Project Settings → Player → <b>Color Space = Linear</b></li>
+      </ul>
+      <dl class="terms">
+        <dt>URP<small>Universal Render Pipeline</small></dt><dd>Unity 의 범용 렌더링 방식 — PC·모바일·Quest 모두 지원 · 이 수업 기준</dd>
+      </dl>
+    </div>
+    <div>
+      <table style="font-size:.66em">
+        <tr><th>창</th><th>촬영장에 대응</th></tr>
+        <tr><td><b>Scene</b></td><td>세트장 (자유롭게 둘러봄)</td></tr>
+        <tr><td><b>Game</b></td><td>카메라 모니터 (관객이 볼 화면)</td></tr>
+        <tr><td><b>Hierarchy</b></td><td>출연자·소품 명단</td></tr>
+        <tr><td><b>Inspector</b></td><td>선택한 소품의 상세 설정표</td></tr>
+        <tr><td><b>Project</b></td><td>창고 (파일 전체)</td></tr>
+        <tr><td><b>Console</b></td><td>스태프 무전 (오류·로그)</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>촬영장 비유 재사용</b> : Scene 뷰 = 감독이 세트를 걸어 다니며 보는 시점 · Game 뷰 = 실제 카메라에 찍히는 화면 → 둘이 다르면 «카메라가 어디를 보나» 부터 확인</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 3</div>
+  <h2>Git — 되돌아갈 수 있는 세이브 포인트</h2>
+  <div class="cols">
+    <div>
+      <pre style="font-size:.6em"><code class="language-bash" data-trim>cd PerceptionLab
+# Unity 용 .gitignore 를 먼저 복사 (가이드 참고)
+git init
+git add .
+git commit -m "1주차: 빈 URP 프로젝트"
+git branch -M main
+git remote add origin https://github.com/내아이디/PerceptionLab.git
+git push -u origin main</code></pre>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:.2em">
+        <p><b>게임 세이브 포인트</b> : 보스전 전에 저장 → 지면 저장 지점에서 재시작 · 커밋 = 프로젝트의 세이브 · AI 가 씬을 망쳐도 직전 커밋으로 복구</p>
+      </div>
+      <div class="key trap">
+        <p class="small"><code>.gitignore</code> 없이 커밋 → 자동 생성 폴더 <code>Library</code> (수 GB) 까지 올라감 → 업로드 실패</p>
+      </div>
+    </div>
+  </div>
+  <p class="small">AI 에게 큰 수정을 맡기기 <b>직전마다 커밋</b> = 이 수업의 기본 습관</p>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 4</div>
+  <h2>AI 코딩 도구의 세 갈래</h2>
+  <table style="font-size:.64em">
+    <tr><th>종류</th><th>예</th><th>내 프로젝트를 보나</th><th>쓰임</th></tr>
+    <tr><td><b>채팅형</b></td><td>웹·앱 대화창 AI</td><td class="trap-txt">붙여 넣은 것만</td><td>개념 질문 · 짧은 코드</td></tr>
+    <tr><td><b>에디터 통합형</b></td><td>VS Code·Rider 의 AI 확장 · AI 내장 에디터</td><td>열린 파일 중심</td><td>코드 작성·수정</td></tr>
+    <tr><td><b>에이전트형</b></td><td>OpenCode · Claude Code · Antigravity 등</td><td class="lab-txt">폴더 전체를 읽고 실행</td><td>여러 파일에 걸친 작업</td></tr>
+  </table>
+  <ul class="small">
+    <li>도구 선택 자유 · 단, <b>도구 이름과 모델 이름을 로그에 기록</b> (같은 프롬프트라도 모델마다 결과가 다름)</li>
+    <li>에이전트형 주의 : 파일을 직접 고침 → <b>실행 전 커밋</b> · 고친 파일 목록 확인</li>
+  </ul>
+  <div class="analogy">
+    <p><b>전화 상담 · 방문 상담 · 출장 수리</b> : 전화(채팅)는 말해 준 것만 앎 · 출장 기사(에이전트)는 집 안을 직접 보고 고침 → 정확하지만, 무엇을 만졌는지 확인 필수</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 5</div>
+  <h2>첫 프롬프트 — AI 에게 내 씬을 설명시키기</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>1차 : 컨텍스트 없이</h4>
+      "Unity 씬 구조를 설명해 줘"<br><br>
+      <span style="color:#8a93a8">→ 일반론 · 없는 오브젝트 등장 가능<br>→ 함정 #0 재현</span>
+    </div>
+    <div class="good">
+      <h4>2차 : 컨텍스트 + 제약</h4>
+      <span style="color:#e8ecf4">"Unity 6 LTS · Universal 3D 템플릿.<br>
+      아래 Hierarchy 의 각 오브젝트가<br>
+      무슨 역할인지, 어떤 컴포넌트를<br>
+      가졌을지 설명해 줘.<br>
+      목록에 없는 것은 추측하지 말 것.<br>
+      [Hierarchy 목록 붙여 넣기]"</span>
+    </div>
+  </div>
+  <div class="key lab" style="margin-top:.8em">
+    <p class="small">검증 : AI 가 말한 컴포넌트를 Inspector 에서 하나씩 클릭해 <b>있음 / 없음 / 다름</b> 표시 → 대조표가 오늘의 검증 리포트</p>
+  </div>
+  <aside class="notes">
+    - 에이전트형 도구 사용자 : 프로젝트 폴더에서 실행 후 같은 질문 → "어떤 파일을 읽었는지 먼저 말해 줘" 추가
+    - Global Volume 의 역할(포스트 프로세싱 설정)을 AI 가 어떻게 설명하는지 비교해 보면 좋음
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 6</div>
+  <h2>명세 4칸 맛보기 — 지각 실험실의 뼈대</h2>
+  <pre style="font-size:.56em"><code data-trim>[목표]
+지각 실험실 씬의 뼈대를 만든다. 바닥 1개, 기준 큐브 3개, 눈높이 카메라.
+
+[제약]
+- 1 unit = 1 m. 바닥은 Plane, Scale (2, 1, 2) → 20 m × 20 m
+- 큐브는 한 변 1 m, 바닥 위에 놓일 것 (y = 0.5)
+- 큐브 앞면이 카메라 정면 2 m · 4 m · 8 m 거리 (중심 z = 2.5 · 4.5 · 8.5)
+- Main Camera 위치 (0, 1.6, 0) — 서 있는 사람의 눈높이
+- 스크립트를 쓰지 말고 에디터 조작 순서로 안내할 것
+
+[검증 조건]
+- Inspector 의 Position · Scale 이 위 수치와 일치
+- Game 뷰에서 앞면 세로 모서리 길이 : 2 m 큐브 = 4 m 큐브의 2배 (±10%)
+
+[비목표]
+- 재질 · 조명 변경, VR 설정, 패키지 설치</code></pre>
+  <div class="key lab">
+    <p class="small">네 칸 = 학기 표준 양식 · 검증 조건의 «2배» = 오늘 Part I 투영 손계산 \(x' = f\,x/z\) 의 재등장</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 7</div>
+  <h2>오늘의 실습 — 50분</h2>
+  <table style="font-size:.68em">
+    <tr><th>#</th><th>실습</th><th>확인할 것</th><th>시간</th></tr>
+    <tr><td class="lab-txt"><b>1</b></td><td>설치 확인 · Hub 로그인 · 에디터 연결 (스크립트 더블클릭)</td><td>체크리스트 5항목</td><td>15분</td></tr>
+    <tr><td class="lab-txt"><b>2</b></td><td><code>PerceptionLab</code> 생성 · Color Space 확인 · 첫 커밋과 push</td><td>GitHub 에 파일 표시</td><td>10분</td></tr>
+    <tr><td class="lab-txt"><b>3</b></td><td>첫 프롬프트 1차·2차 → <b>Hierarchy 대조표</b> 작성</td><td>함정 #0 재현</td><td>10분</td></tr>
+    <tr><td class="lab-txt"><b>4</b></td><td>명세 4칸으로 실험실 뼈대 요청 → 수치 검증 → 커밋</td><td>투영 비율 2배</td><td>15분</td></tr>
+    <tr><td class="vr-txt"><b>5</b></td><td class="vr-txt">확장 : <code>.unity</code> 씬 파일을 텍스트로 열어 AI 에게 구조 설명 요청</td><td>씬 = 텍스트 데이터</td><td>—</td></tr>
+  </table>
+  <p class="small" style="margin-top:.6em">1~4 필수 · 5 확장 · 설치가 끝나지 않은 사람 : 옆 사람 화면으로 3·4 진행 후 집에서 마무리</p>
+  <aside class="notes">
+    - 설치 지연이 가장 흔한 변수 → 실습실 PC 에 미리 설치된 Unity 로 3·4 진행 가능
+    - 4번 결과 : 2 m 큐브와 4 m 큐브 화면 높이를 스크린샷 위에서 픽셀로 재 보게 함
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">과제 · 브리핑</div>
+  <h2>1주차 과제 — 환경 준비 확인</h2>
+  <div class="card lab" style="max-width:36em;margin-top:.4em">
+    <h4>제출물 3가지 · PLATO · 2주차 수업 전까지</h4>
+    <ol class="small">
+      <li>Unity Hub <b>Installs 화면</b> 캡처 — Unity 6 LTS + Android 아이콘 보이게</li>
+      <li><code>PerceptionLab</code> <b>GitHub 저장소 주소</b> — 뼈대 씬 커밋 포함</li>
+      <li><b>프롬프트 로그 1건</b> — 오늘 실습 3·4 중 하나 · 양식 : syllabus/AI-사용-정책.md</li>
+    </ol>
+  </div>
+  <div class="key trap" style="margin-top:.9em">
+    <p class="small">다음 주 과제 예고 : <b>Meta 개발자 계정</b> 인증 — 본인 확인에 며칠 걸릴 수 있음 · 11주차 VR 실습의 전제 조건</p>
+  </div>
+  <aside class="notes">
+    - 배점 처리(Pass/Fail 또는 실습과제 점수 반영)는 루브릭 공지와 맞춰 확정 — 확인 필요
+    - 프롬프트 로그 양식을 화면에 한 번 띄워 항목 7개를 읽어 줄 것
+  </aside>
+</section>
+
+<!-- ========================================================= 정리 -->
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table style="font-size:.6em">
+    <tr><th>개념</th><th>핵심</th><th>비유</th></tr>
+    <tr><td><b>수업 명제</b></td><td>이론 = AI 에게 <b>요구할 어휘</b> + 결과를 <b>판별할 기준</b></td><td>시공 의뢰와 도면</td></tr>
+    <tr><td>운영</td><td>크리틱 → 이론 I → 이론 II → 실습 · 개념 → 명세 → 검증</td><td>내비와 운전자</td></tr>
+    <tr><td><b class="trap-txt">AI 함정</b></td><td>그럴듯하게 틀리는 지점 · 증상 → 원인 → 진단 → 수정</td><td>정비사</td></tr>
+    <tr><td>픽셀</td><td>숫자 세 개(RGB) · 약 1,677만 색 · Quest 3 두 눈 약 911만 칸</td><td>타일 모자이크</td></tr>
+    <tr><td><b class="gfx-txt">파이프라인</b></td><td>좌표 변환 → 투영 → 래스터화 → 셰이딩 → 깊이 판정</td><td>조립 라인</td></tr>
+    <tr><td>투영</td><td>\(x' = f\,x/z\) · 거리 2배 → 크기 1/2</td><td>창문에 따라 그리기</td></tr>
+    <tr><td><b class="vr-txt">VR 시스템</b></td><td>트래킹 → 가상 세계 → 렌더링 → 디스플레이 → <b>사람</b> → 다시 트래킹</td><td>닫힌 고리</td></tr>
+    <tr><td><b class="vr-txt">인간 부품</b></td><td>교체·업데이트 불가 · 뇌는 추론기 → VR 의 가능성이자 위험</td><td>오디오와 귀 · 명탐정</td></tr>
+    <tr><td>몰입 · 프레즌스</td><td>장비의 속성 vs 사람의 경험</td><td>극장 사양 vs 빠져든 관객</td></tr>
+  </table>
+</section>
+
+<section class="divider part-i">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>그래픽스 <em>수학</em> 기초</h1>
+  <p class="sub">오늘 지도의 ① 좌표 변환을 확대<br>
+  벡터 · 행렬 · 좌표계 변환 · Unity Transform<br>
+  짝 : 머리 좌표계와 전정계</p>
+  <div class="note">AI 함정 #1 — 오일러각 회전과 짐벌락 · 과제 : Meta 개발자 계정</div>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/math/math.min.js"></script>
+<script src="../_shared/demos/_stage.js"></script>
+<script src="../_shared/demos/w01.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

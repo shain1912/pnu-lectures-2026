@@ -1,7 +1,4 @@
 3주차 Unity 기초와 게임 루프
 ----------------------------------------------
 배포 주소    : https://shain1912.github.io/pnu-lectures-2026/slides/w03/
-PDF          : https://shain1912.github.io/pnu-lectures-2026/dist/w03-Unity기초와게임루프.pdf
-zip          : https://shain1912.github.io/pnu-lectures-2026/dist/w03-interactive-slides.zip
-예비 주소    : https://claude.ai/artifact/GwYbvNRcmTvrmsdXDPpTt1   (claude.ai · 비공개 상태)
 원본         : slides/w03/index.html

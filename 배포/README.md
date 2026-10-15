@@ -9,10 +9,22 @@ GitHub Pages 로 배포 · 링크만 열면 브라우저에서 바로 실행 · 
 
 | 주차 | 제목 | 주소 |
 |---|---|---|
+| 1주차 | 강의 소개와 컴퓨터그래픽스 개요 | https://shain1912.github.io/pnu-lectures-2026/slides/w01/ |
 | 2주차 | 그래픽스 수학 기초 | https://shain1912.github.io/pnu-lectures-2026/slides/w02/ |
 | 3주차 | Unity 기초와 게임 루프 | https://shain1912.github.io/pnu-lectures-2026/slides/w03/ |
 | 4주차 | 렌더링 파이프라인의 이해 | https://shain1912.github.io/pnu-lectures-2026/slides/w04/ |
 | 5주차 | 조명과 재질 | https://shain1912.github.io/pnu-lectures-2026/slides/w05/ |
+| 6주차 | 셰이더 기초 | https://shain1912.github.io/pnu-lectures-2026/slides/w06/ |
+| 7주차 | 애니메이션과 물리 | https://shain1912.github.io/pnu-lectures-2026/slides/w07/ |
+| 8주차 | 중간고사 | https://shain1912.github.io/pnu-lectures-2026/slides/w08/ |
+| 9주차 | 바이브코딩 심화 | https://shain1912.github.io/pnu-lectures-2026/slides/w09/ |
+| 10주차 | 인터랙션 설계 | https://shain1912.github.io/pnu-lectures-2026/slides/w10/ |
+| 11주차 | VR 개발 기초 | https://shain1912.github.io/pnu-lectures-2026/slides/w11/ |
+| 12주차 | VR 인터랙션 심화 | https://shain1912.github.io/pnu-lectures-2026/slides/w12/ |
+| 13주차 | 팀 프로젝트 기획 | https://shain1912.github.io/pnu-lectures-2026/slides/w13/ |
+| 14주차 | 팀 프로젝트 구현 및 플레이테스트 | https://shain1912.github.io/pnu-lectures-2026/slides/w14/ |
+| 15주차 | 기말 VR 전시와 동료 평가 | https://shain1912.github.io/pnu-lectures-2026/slides/w15/ |
+| 16주차 | 프로젝트 피드백과 학기 정리 | https://shain1912.github.io/pnu-lectures-2026/slides/w16/ |
 
 ## 데이터리터러시의이해 (SF1101084)
 

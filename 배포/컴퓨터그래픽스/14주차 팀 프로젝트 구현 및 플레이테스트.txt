@@ -1,0 +1,4 @@
+14주차 팀 프로젝트 구현 및 플레이테스트
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/slides/w14/
+원본         : slides/w14/index.html

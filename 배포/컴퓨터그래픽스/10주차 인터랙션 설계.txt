@@ -1,0 +1,4 @@
+10주차 인터랙션 설계
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/slides/w10/
+원본         : slides/w10/index.html

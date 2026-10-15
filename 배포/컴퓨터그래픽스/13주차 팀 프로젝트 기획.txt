@@ -1,0 +1,4 @@
+13주차 팀 프로젝트 기획
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/slides/w13/
+원본         : slides/w13/index.html

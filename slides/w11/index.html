@@ -1,0 +1,1608 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11주차 · VR 개발 기초 — 컴퓨터그래픽스</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme.css">
+<style>
+  /* 11주 덱 전용 — 인라인 SVG 도해 */
+  .reveal svg.fig { display: block; margin: 0.1em auto 0; width: 100%; height: auto; max-height: 470px; }
+  .reveal section:has(> h3) svg.fig { max-height: 520px; }
+  .reveal svg.fig text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
+  /* 프레임 안에서 일어나는 순서 (함정 원인) */
+  .reveal .flow { display: flex; gap: .5em; align-items: stretch; margin: .6em 0; }
+  .reveal .flow > div {
+    flex: 1; background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px;
+    padding: .6em .75em; font-size: .62em; line-height: 1.45;
+  }
+  .reveal .flow > div b { display: block; margin-bottom: .25em; font-size: 1.08em; }
+  .reveal .flow > i { align-self: center; color: var(--fg-faint); font-style: normal; font-size: .8em; }
+  .reveal .flow .bad { border-color: #6e2a24; background: #1a1113; }
+  .reveal .flow .ok  { border-color: #3c5220; }
+  .reveal .check li { list-style: none; margin-left: -1.1em; }
+  .reveal .check li::before { content: "☐ "; color: var(--lab); }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ========================================================= 표지 -->
+<section class="cover">
+  <div class="week">Week 11 · ★ 학기의 정점</div>
+  <h1>VR 개발 기초</h1>
+  <p class="muted" style="font-size:.8em;max-width:30em">
+    XR Plugin 세팅, HMD·컨트롤러 입력, 시점 이동과 텔레포트
+  </p>
+  <div class="meta">
+    컴퓨터그래픽스 VF3500076 · 디자인앤테크놀로지전공<br>
+    조성호 · 2026학년도 2학기
+  </div>
+  <aside class="notes">
+    - 오늘은 3시간 중 90분이 헤드셋 실기 — 이론은 평소보다 압축 · 대신 밀도 높게
+    - 시작 전 확인 : 헤드셋 충전 상태 · USB 케이블 · 위생 커버 · 실습실 조명(트래킹용으로 너무 어둡지 않게)
+    - 한 문장 예고 : "오늘 여러분은 8주 동안 만든 실험실 씬 안으로 직접 들어갑니다"
+  </aside>
+</section>
+
+<!-- ========================================================= 도입 질문 -->
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask vr">
+    헤드셋을 쓰고 고개를 휙 돌렸을 때<br>
+    세상이 살짝 <span class="hl">«미끄러지는»</span> 느낌<br><br>
+    화면은 90Hz 로 잘 나오는데<br>
+    그 미끄러짐은 <span class="hl">어디서</span> 오는가?
+  </div>
+  <aside class="notes">
+    - 1주차 Quest 체험 때 이 느낌을 받은 학생 손 들어보기 (보통 몇 명은 있음)
+    - 오답 유도 : "프레임이 낮아서?" → 프레임은 정상이라는 조건을 강조
+    - 힌트 : "헤드셋은 여러분 머리가 어디를 보고 있는지 어떻게 알까요?"
+    - 정답 슬라이드 : Part I 끝 «도입 질문의 답» (AI 함정 #8 직전)
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>이 수업 후 할 수 있는 것</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span> 트래킹 오차 손계산</h4>
+      <p class="small">자이로 바이어스 × 시간으로 <b>드리프트 크기 계산</b> · 머리 속도 × 지연으로 <b>화면 어긋남 각도 계산</b> · 예측이 오버슈트를 만드는 이유 설명</p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정 진단</h4>
+      <p class="small">AI 가 <b>Main Camera Transform 을 직접 움직이는</b> 코드를 찾아내고 → 리그 루트 이동(텔레포트 요청)으로 고치게 명세</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> 내 씬에 들어가기</h4>
+      <p class="small">XR 세팅 → 빌드 → 헤드셋 반입 → <b>자기 실험실 씬</b>에서 스케일·눈높이 점검 → 텔레포트·스냅 턴 장착</p>
+    </div>
+  </div>
+  <div class="key" style="margin-top:1.1em">
+    <p>오늘의 큰 그림 : 헤드셋이 <b>머리 자세를 아는 법(트래킹)</b> → 그 자세가 씬에 <b>꽂히는 자리(XR 리그)</b> → 그 자리를 <b>옮기는 법(텔레포트)</b></p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>오늘의 3시간 — 평소와 다른 배분</h2>
+  <table style="font-size:.68em">
+    <tr><th>시간</th><th>블록</th><th>내용</th></tr>
+    <tr><td>14:00–14:10</td><td>크리틱</td><td>10주 AI 함정 #7 (Screen Space Overlay) 복습</td></tr>
+    <tr><td class="gfx-txt">14:10–15:00</td><td class="gfx-txt"><b>Part I · 트래킹</b></td><td>IMU · 드리프트 · 센서 융합 · SLAM · 예측 · 지연 예산 · <b class="trap-txt">AI 함정 #8</b></td></tr>
+    <tr><td>15:00–15:05</td><td>휴식</td><td>헤드셋 배부 준비</td></tr>
+    <tr><td class="vr-txt">15:05–15:30</td><td class="vr-txt"><b>Part II · XR 리그</b></td><td>XR Origin 구조 · 원점 모드 · 텔레포트 · 스냅 턴 · 입력 · 햅틱</td></tr>
+    <tr><td class="lab-txt">15:30–17:00</td><td class="lab-txt"><b>Part III · VR 실기 90분</b></td><td>2인 1조 · 안전 브리핑 → 빌드 → <b>자기 실험실 씬 포팅</b> → 텔레포트 → UI 비교 → 1분 소감</td></tr>
+  </table>
+  <div class="key lab">
+    <p class="small">프롬프트 실습 50분 + 브리핑 10분 → 이번 주만 <b>헤드셋 실기 90분</b>으로 대체 · 명세 작성은 실기 안에서 진행</p>
+  </div>
+  <aside class="notes">
+    - 이론 I 을 60 → 50분으로 압축 · 수식은 손계산 위주, 칼만 필터는 비유로만
+    - 실기 시간이 부족해지는 게 가장 큰 위험 → 15:30 정각에 실기 시작을 지킬 것
+  </aside>
+</section>
+
+<!-- ========================================================= 크리틱 -->
+<section>
+  <div class="tag trap">지난주 크리틱 · 1</div>
+  <h2>복습 질문 — AI 함정 #7</h2>
+  <div class="ask" style="font-size:1.15em">
+    에디터에서 완벽했던 <span class="hl">Screen Space Overlay</span> 메뉴<br>
+    헤드셋에서는 왜 사라지거나 눈앞에 붙는가?
+  </div>
+  <div class="cols" style="margin-top:.9em">
+    <div class="card trap">
+      <h4>원인 (10주)</h4>
+      <p class="small">Overlay 캔버스 = 모니터 화면 평면에 바로 그림 → XR 카메라의 <b>양안 렌더 경로에 없음</b> → 눈마다 그려지지 않음 · 렌즈 초점 거리와도 무관한 «0 cm 평면»</p>
+    </div>
+    <div class="card lab">
+      <h4>수정 (10주)</h4>
+      <p class="small"><b>World Space</b> 캔버스로 전환 · 거리 0.5~2 m · 시야 중심 ±30° 안 · 크기는 각도 기준으로 재계산</p>
+    </div>
+  </div>
+  <p class="small" style="margin-top:.6em">오늘 실기 ④ : 10주에 만든 <b>두 벌의 UI 를 헤드셋 안에서 직접 비교</b> → 함정 #7 실증</p>
+  <aside class="notes">
+    - 학생 2~3명에게 구두로 원인 설명 요청 → "양안" "카메라 경로" 라는 단어가 나오는지 확인
+    - 10주에 제출한 프롬프트 중 좋은 예/나쁜 예 1개씩 다음 장에서 비교
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">지난주 크리틱 · 2</div>
+  <h2>프롬프트 비교 — 같은 메뉴, 다른 명세</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>구체성 부족</h4>
+      "VR 에서 보이는 메뉴 만들어줘.<br>
+      버튼 3개, 깔끔하게."<br><br>
+      <span style="color:#ff5a4d">// AI 결과 : Canvas 기본값 = Overlay<br>
+      // 거리·크기·렌더 모드 언급 없음<br>
+      // 검증 방법 없음</span>
+    </div>
+    <div class="good">
+      <h4>개념이 들어간 명세</h4>
+      "Render Mode = World Space,<br>
+      카메라 정면 1.2 m, 시야 중심 ±15° 안,<br>
+      글자 높이는 시각 약 1° 이상.<br>
+      검증 : 헤드셋에서 두 눈으로 봤을 때<br>
+      글자가 겹쳐 보이지 않을 것"<br><br>
+      <span style="color:#a8e05f">// 거리·각도·검증 조건이 숫자로 고정</span>
+    </div>
+  </div>
+  <div class="key" style="margin-top:.8em">
+    <p class="small">차이를 만든 것 = <b>렌더 모드 · 거리 · 각도</b> 세 단어를 알고 있었는가 → 오늘 배울 용어 : <b>XR Origin · Tracked Pose Driver · Teleportation Provider</b></p>
+  </div>
+  <aside class="notes">
+    - 실제 학생 프롬프트로 교체해서 사용 (익명)
+    - "1° 이상" 같은 수치는 10주 각도 기준 크기(DMM) 개념 — 예시 값임을 밝힐 것
+  </aside>
+</section>
+
+<!-- ========================================================= PART I -->
+<section class="divider part-i">
+  <div class="kicker">Part I · 50분</div>
+  <div class="rule"></div>
+  <h1>헤드셋은 내 머리가<br><em>어디를 보는지</em> 어떻게 아는가</h1>
+  <p class="sub">트래킹 · 센서 융합 · 예측 · 지연 예산 — LaValle 『Virtual Reality』 Ch.9</p>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>트래킹<small>Tracking</small></dt><dd>머리·손의 <b>위치와 방향을 매 순간 측정</b>해 가상 카메라에 넘기는 일</dd>
+    <dt>자세<small>Pose</small></dt><dd>위치(어디에) + 방향(어느 쪽을 보며) 를 묶은 값 — 2주차 Transform 의 position · rotation</dd>
+    <dt>자유도<small>DoF, Degrees of Freedom</small></dt><dd>독립적으로 움직일 수 있는 방향의 개수 — 회전 3 · 이동 3</dd>
+    <dt>IMU<small>Inertial Measurement Unit</small></dt><dd>헤드셋 안의 <b>관성 센서 묶음</b> — 자이로 · 가속도계 (· 자력계)</dd>
+    <dt>드리프트<small>Drift</small></dt><dd>작은 측정 오차가 쌓여 추정값이 <b>천천히 한쪽으로 흘러가는</b> 현상</dd>
+    <dt>센서 융합<small>Sensor fusion</small></dt><dd>장단점이 다른 센서 여러 개를 섞어 하나의 더 나은 추정값을 만드는 계산</dd>
+    <dt>SLAM<small>동시 위치추정·지도작성</small></dt><dd>카메라 영상으로 <b>주변 지도를 그리면서 동시에 그 안의 내 위치</b>를 찾는 기술</dd>
+    <dt>예측<small>Prediction</small></dt><dd>지금 측정값으로 <b>몇 ms 뒤의 머리 자세</b>를 미리 계산해 그리는 기법</dd>
+  </dl>
+  <aside class="notes">
+    - 다 외울 필요 없음 · 슬라이드마다 다시 풀어 줌
+    - "자세(pose)" 는 2주차 Transform 그 자체라는 점만 짚고 넘어감
+  </aside>
+</section>
+
+<!-- ---------------------------------------------------- 트래킹 개요 -->
+<section>
+  <div class="tag gfx">트래킹 · 1</div>
+  <h2>트래킹이 채우는 자리 — 2주차 변환 체인</h2>
+  <div class="math-block">\[ \text{World} \;\rightarrow\; \text{Play Area} \;\rightarrow\; \underbrace{\text{HMD}}_{\text{트래킹이 매 프레임 채움}} \;\rightarrow\; \text{Eye} \]</div>
+  <ul class="small">
+    <li>2주차 : 체인 안에 <b>«내가 통제할 수 없는 변환»</b> 하나 → 사용자의 머리</li>
+    <li>그 변환을 매 프레임 측정해 넣는 장치 = 트래킹 → 측정이 틀리면 → 화면 속 세상 전체가 틀린 자리에 그려짐</li>
+    <li>그래서 : VR 에서 «세상이 흔들린다» = 대부분 <b>세상이 아니라 머리 측정값이 흔들린 것</b></li>
+  </ul>
+  <div class="analogy">
+    <p><b>내비게이션의 내 차 화살표</b> : 지도(세상)는 고정 · 화살표(내 위치·방향)만 GPS 로 매초 갱신 → GPS 가 틀리면 화살표가 엉뚱한 골목에 표시 · 지도는 멀쩡</p>
+    <p>비유의 한계 : VR 은 화살표가 아니라 <b>내 눈 자체</b>가 그 자리에 놓임 → 오차가 «지도 전체가 움직이는» 느낌으로 체감</p>
+  </div>
+  <aside class="notes">
+    - 2주차 체인 슬라이드를 잠깐 띄워 연결
+    - 핵심 문장 : "VR 에서 세상이 흔들리면, 세상이 아니라 머리 측정값을 의심하라"
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">트래킹 · 2</div>
+  <h2>3DoF 와 6DoF</h2>
+  <div class="cols">
+    <div class="card">
+      <h4>3DoF — 회전만</h4>
+      <p class="small">좌우 돌리기(yaw) · 끄덕이기(pitch) · 갸웃하기(roll)<br>
+      예 : 초기 모바일 VR · 360° 영상 뷰어</p>
+    </div>
+    <div class="card gfx">
+      <h4>6DoF — 회전 + 이동</h4>
+      <p class="small">회전 3 + 좌우·위아래·앞뒤 이동 3<br>
+      예 : Quest 3 · 걸어 다니고 몸을 숙이는 동작까지 반영</p>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>회전의자에 고정된 사람 vs 방 안을 걷는 사람</b> : 3DoF = 의자에 묶인 채 고개만 돌림 · 6DoF = 일어나서 걸어가 책상 밑을 들여다볼 수 있음</p>
+  </div>
+  <div class="key">
+    <p class="small">자유도 = 숫자 6개의 측정 문제 → 회전 3개는 헤드셋 내부 센서만으로 비교적 쉬움 · <b>이동 3개는 외부 기준(카메라)이 있어야 가능</b> → 이유는 IMU 파트에서</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">트래킹 · 3</div>
+  <h2>회전만 추적할 때 생기는 위치 오차</h2>
+  <div class="cols">
+    <div>
+      <p class="small">고개를 숙이는 회전축 = <b>목</b> · 눈은 목에서 위·앞으로 떨어진 곳 → 고개만 숙여도 <b>눈의 위치가 이동</b></p>
+      <div class="math-block">\[ d \approx 2r\sin\frac{\varphi}{2} \]</div>
+      <p class="small"><b>손계산</b> : 목 회전 중심 → 눈 거리 r ≈ 0.1 m (예시) · 숙임 φ = 30°<br>
+      \( d \approx 2 \times 0.1 \times \sin 15^\circ \approx 0.2 \times 0.26 \approx 0.05\ \text{m} \) → <b>약 5 cm</b></p>
+    </div>
+    <div>
+      <div class="key trap">
+        <p class="small">3DoF 는 이 5 cm 를 모름 → 눈이 목 위 한 점에 고정된 채 회전 → 가까운 물체의 <b>운동 시차</b>(5주 · 머리 움직임에 따라 가까운 것이 더 많이 움직여 보이는 단서) 소실 → 전정계가 느낀 움직임과 화면이 어긋남</p>
+      </div>
+      <p class="small">절충 : <span class="t">목 모델</span>(neck model) — 목 길이를 가정해 회전에서 눈 위치를 계산 → 몸을 숙이거나 걷는 이동은 여전히 불가</p>
+    </div>
+  </div>
+  <aside class="notes">
+    - 직접 시연 : 고개를 숙이면 눈이 앞으로 나가는 것을 손으로 보여주기
+    - r 값은 개인차 큼 · "몇 cm 단위의 이동이 생긴다" 가 요점
+    - LaValle 9.1~9.2 의 head model 언급
+  </aside>
+</section>
+
+<!-- ---------------------------------------------------- IMU -->
+<section>
+  <div class="tag gfx">IMU · 1</div>
+  <h2>헤드셋 속 관성 센서 — 귀 속 기관의 기계판</h2>
+  <dl class="terms">
+    <dt>자이로스코프<small>Gyroscope</small></dt><dd><b>회전 속도(각속도)</b>를 잼 — 단위 °/s · «지금 초당 몇 도로 돌고 있나»</dd>
+    <dt>가속도계<small>Accelerometer</small></dt><dd><b>가속도</b>를 잼 — 단위 m/s² · 가만히 있어도 <b>중력 9.8 m/s²</b> 이 측정됨</dd>
+    <dt>자력계<small>Magnetometer</small></dt><dd>지구 자기장 방향을 잼 — 전자 나침반</dd>
+  </dl>
+  <div class="analogy">
+    <p><b>속귀의 전정기관</b> : 반고리관 = 머리 회전 감지 (자이로 역할) · 이석기관 = 기울기·직선 가속 감지 (가속도계 역할) → 눈 감고 회전의자에 앉아도 돌고 있음을 앎</p>
+    <p>비유의 한계 : 전정기관은 일정한 속도의 회전이 계속되면 몇십 초 안에 적응해 감지가 약해짐 · 자이로는 그대로 측정</p>
+  </div>
+  <p class="small">IMU 측정 빈도 : 약 1000 Hz 수준 (기기마다 다름) → 화면 90Hz 보다 <b>10배 이상 자주</b> 측정 → 빠른 회전 추적의 주력</p>
+  <aside class="notes">
+    - 7주 전정-시각 충돌과 연결 : 우리 귀에 있는 센서를 헤드셋도 똑같이 갖고 있다
+    - 1000 Hz 는 대략치 · LaValle 도 "수백~1000 Hz" 정도로 서술
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">IMU · 2</div>
+  <h2>자이로로 방향 구하기 — 속도를 계속 더하기</h2>
+  <div class="math-block">\[ \theta(t) = \theta_0 + \sum_{k} \omega_k\,\Delta t \]</div>
+  <p class="small">θ : 머리 방향 각도 · ω : 측정된 회전 속도 (°/s) · Δt : 측정 간격 (1000 Hz 면 0.001 s) — 3주차 <code>speed * Time.deltaTime</code> 누적과 같은 구조</p>
+  <div class="cols">
+    <div>
+      <p class="small"><b>손계산</b> : 90 °/s 로 0.5 초 회전<br>
+      측정 500회 × (90 × 0.001) = 500 × 0.09° = <b>45°</b></p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>눈 감고 걸음 수로 위치 추측하기</b> : «한 걸음 70 cm × 20 걸음 = 14 m 왔다» → 바깥을 보지 않고 자기 움직임만 더해 현재 위치 계산 (추측항법)</p>
+      </div>
+    </div>
+  </div>
+  <div class="key">
+    <p class="small">장점 : 빠르고 매끄러움 · 외부 도움 불필요 / 약점 : 측정값의 <b>작은 오차까지 같이 더해짐</b> → 다음 장</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">IMU · 3 ★</div>
+  <h3 style="margin-bottom:.3em">드리프트 — 작은 오차가 시간에 비례해 쌓임</h3>
+  <svg class="fig" viewBox="0 0 1100 440" role="img" aria-label="바이어스와 노이즈에 의한 자이로 적분 오차 누적 그래프">
+    <rect x="0" y="0" width="1100" height="440" rx="14" fill="#0f1218"/>
+    <!-- 축 -->
+    <g stroke="#2a3040" stroke-width="1.5">
+      <line x1="100" y1="360" x2="1060" y2="360"/>
+      <line x1="100" y1="60" x2="100" y2="360"/>
+      <line x1="100" y1="290" x2="1060" y2="290" stroke="#1b2130"/>
+      <line x1="100" y1="220" x2="1060" y2="220" stroke="#1b2130"/>
+      <line x1="100" y1="150" x2="1060" y2="150" stroke="#1b2130"/>
+      <line x1="100" y1="80" x2="1060" y2="80" stroke="#1b2130"/>
+    </g>
+    <g fill="#9aa4b8" font-size="18" text-anchor="end">
+      <text x="88" y="366">0°</text><text x="88" y="296">2°</text><text x="88" y="226">4°</text>
+      <text x="88" y="156">6°</text><text x="88" y="86">8°</text>
+    </g>
+    <g fill="#9aa4b8" font-size="18" text-anchor="middle">
+      <text x="100" y="388">0</text><text x="292" y="388">2분</text><text x="484" y="388">4분</text>
+      <text x="676" y="388">6분</text><text x="868" y="388">8분</text><text x="1060" y="388">10분</text>
+    </g>
+    <text x="580" y="424" fill="#9aa4b8" font-size="18" text-anchor="middle">적분 시간 (헤드셋을 쓰고 있는 시간)</text>
+    <text x="40" y="44" fill="#e8ecf4" font-size="20" font-weight="700">방향 오차 (추정 − 실제)</text>
+    <!-- 0.1°/s : 1분에 6° -->
+    <line x1="100" y1="360" x2="196" y2="150" stroke="#ffc44d" stroke-width="3" stroke-dasharray="8 6"/>
+    <line x1="196" y1="150" x2="215" y2="108" stroke="#ffc44d" stroke-width="3" stroke-dasharray="8 6"/>
+    <text x="226" y="106" fill="#ffc44d" font-size="19">바이어스 0.1 °/s → 1분 만에 6°</text>
+    <!-- 0.01°/s : 10분에 6° -->
+    <line x1="100" y1="360" x2="1060" y2="150" stroke="#ff5a4d" stroke-width="4"/>
+    <circle cx="1060" cy="150" r="7" fill="#ff5a4d"/>
+    <text x="1040" y="132" fill="#ff5a4d" font-size="19" text-anchor="end">바이어스 0.01 °/s → 10분 후 6°</text>
+    <!-- 노이즈만 : 랜덤워크 -->
+    <polyline fill="none" stroke="#9aa4b8" stroke-width="2.2"
+      points="100,360 140,352 180,366 220,348 260,355 300,340 340,350 380,336 420,344 460,330 500,346 540,334 580,341 620,325 660,338 700,329 740,342 780,331 820,320 860,334 900,326 940,337 980,322 1020,330 1060,318"/>
+    <g font-size="18">
+      <rect x="600" y="56" width="26" height="4" fill="#9aa4b8"/>
+      <text x="636" y="64" fill="#9aa4b8">회색 : 노이즈만 — 들쭉날쭉 · 천천히 퍼짐</text>
+      <rect x="600" y="84" width="26" height="4" fill="#a8e05f"/>
+      <text x="636" y="92" fill="#a8e05f">초록 : 기준 센서로 보정한 융합 — 0° 근처 유지</text>
+    </g>
+    <!-- 융합 -->
+    <polyline fill="none" stroke="#a8e05f" stroke-width="3"
+      points="100,360 200,357 300,362 400,358 500,361 600,357 700,360 800,358 900,362 1000,359 1060,360"/>
+  </svg>
+  <aside class="notes">
+    - 빨간 선 : 바이어스(0점이 살짝 어긋난 값)가 매 측정마다 같은 방향으로 더해짐 → 직선으로 증가
+    - 회색 선 : 무작위 노이즈 → 서로 일부 상쇄 → 훨씬 느리게 퍼짐
+    - 초록 선 : 다음 장들의 결론 미리보기 — 기준 센서가 있으면 오차가 묶여 있음
+    - 숫자는 설명용 예시 · 실제 바이어스는 센서·온도·보정 상태마다 다름
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">IMU · 4</div>
+  <h2>드리프트 손계산 — \( e(t) = b \times t \)</h2>
+  <dl class="terms">
+    <dt>바이어스<small>Bias</small></dt><dd>회전하지 않는데도 측정되는 <b>0점의 어긋남</b> — 항상 같은 방향으로 조금씩 더해짐</dd>
+    <dt>노이즈<small>Noise</small></dt><dd>측정할 때마다 무작위로 +·− 로 튀는 오차 — 서로 일부 상쇄</dd>
+  </dl>
+  <div class="cols">
+    <div class="card trap">
+      <h4>바이어스 0.01 °/s</h4>
+      <p class="small">\( 0.01\ ^\circ/\text{s} \times 600\ \text{s} = 6^\circ \)<br>10분 착용 → 정면이 <b>6° 돌아가 있음</b></p>
+    </div>
+    <div class="card trap">
+      <h4>바이어스 0.1 °/s</h4>
+      <p class="small">\( 0.1\ ^\circ/\text{s} \times 60\ \text{s} = 6^\circ \)<br>1분 만에 같은 오차 · 분당 수 도 규모</p>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>1분에 1초씩 빠른 시계</b> : 1초는 티도 안 남 → 하루면 1440초 = <b>24분</b> 빠름 · 작은 오차 × 긴 시간 = 큰 오차</p>
+  </div>
+  <p class="small">노이즈는 상쇄 덕분에 √시간 으로 커짐 → 시간 100배면 오차 약 10배 · <b>바이어스가 더 무서운 이유</b> = 시간에 정비례</p>
+  <aside class="notes">
+    - 시계 비유 : 1분에 1초면 하루에 24분 — 학생들이 직접 계산하게
+    - 6° 가 체감되나? → 정면 의자가 살짝 옆으로 돌아간 정도. 자이로만 있으면 세상이 천천히 회전하는 느낌
+    - √t 는 깊게 들어가지 말 것 — "무작위 오차는 서로 일부 상쇄된다" 만
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">IMU · 5</div>
+  <h2>가속도계 — 중력으로 기울기 바로잡기</h2>
+  <div class="cols">
+    <div>
+      <p class="small">가만히 있을 때 가속도계 = <b>중력 방향</b>(항상 아래 9.8 m/s²) 측정 → «어느 쪽이 아래인가» = 기울기의 <b>절대 기준</b></p>
+      <p class="small"><b>손계산</b> : 정지 상태 측정값 — 앞쪽 성분 1.7 · 아래쪽 성분 9.66 (m/s²)<br>
+      크기 \( \sqrt{1.7^2+9.66^2} \approx 9.81 \) → 중력 확인<br>
+      \( \tan\phi = 1.7 / 9.66 \approx 0.176 \Rightarrow \phi \approx 10^\circ \) → 고개가 <b>약 10° 숙여짐</b></p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>물방울 수평계</b> : 기울어진 정도는 정확히 알려 줌 · 그런데 수평계를 바닥에 놓고 빙글 돌려도 방울은 그대로 → <b>동서남북(좌우 회전)은 모름</b></p>
+      </div>
+      <div class="key trap">
+        <p class="small">한계 ① 머리를 움직이는 중에는 운동 가속도가 섞임 → 순간값은 흔들림<br>
+        한계 ② 좌우 회전(yaw)은 중력과 나란한 축 → <b>보정 불가</b></p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    - 수평계 비유가 핵심 : 기울기(pitch·roll)는 OK, yaw 는 불가
+    - 그래서 yaw 기준이 따로 필요 → 다음 장
+    - LaValle 9.2 tilt correction / yaw correction 구분
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">IMU · 6</div>
+  <h2>축마다 다른 «기준 센서»</h2>
+  <table style="font-size:.68em">
+    <tr><th>추정 대상</th><th>빠른 추정</th><th>느린 절대 기준</th><th>기준의 약점</th></tr>
+    <tr><td>기울기 (pitch · roll)</td><td>자이로 적분</td><td class="lab-txt">가속도계 (중력)</td><td>움직이는 중 흔들림</td></tr>
+    <tr><td>좌우 회전 (yaw)</td><td>자이로 적분</td><td class="lab-txt">자력계 (나침반) 또는 카메라</td><td>자력계 : 철골·스피커 자석에 교란</td></tr>
+    <tr><td>위치 (x · y · z)</td><td>가속도 두 번 적분 → <span class="trap-txt">오차가 시간² 으로 폭증</span></td><td class="lab-txt">카메라 (SLAM)</td><td>어두움·무늬 없는 벽</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">위치를 IMU 만으로 못 구하는 이유 : 가속도 → 속도 → 위치로 <b>두 번</b> 더함 → 작은 바이어스도 시간의 제곱으로 커짐 → 몇 초 만에 수십 cm 이상 어긋날 수 있음<br>
+    → 6DoF 의 이동 3축 = <b>카메라 기반 트래킹</b>이 반드시 필요</p>
+  </div>
+  <p class="small muted">인사이드아웃 헤드셋(Quest 계열)은 카메라 영상이 yaw · 위치 기준을 함께 제공</p>
+  <aside class="notes">
+    - 위치 이중 적분 예 : 가속도 바이어스 0.05 m/s² → ½·b·t² → 10초면 2.5 m (이건 말로만)
+    - 결론 : 회전은 IMU 가 주력, 위치는 카메라가 주력
+  </aside>
+</section>
+
+<!-- ---------------------------------------------------- 센서 융합 -->
+<section>
+  <div class="tag gfx">융합 · 1 ★</div>
+  <h3 style="margin-bottom:.3em">센서 융합 — 빠른 센서와 정확한 센서 섞기</h3>
+  <svg class="fig" viewBox="0 0 1100 420" role="img" aria-label="자이로·가속도계·카메라가 융합 필터를 거쳐 예측과 렌더로 이어지는 흐름">
+    <rect x="0" y="0" width="1100" height="420" rx="14" fill="#0f1218"/>
+    <defs>
+      <marker id="ar11" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/>
+      </marker>
+    </defs>
+    <!-- 센서 3개 -->
+    <g>
+      <rect x="24" y="28" width="330" height="108" rx="12" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
+      <text x="44" y="62" fill="#35d6e6" font-size="22" font-weight="700">자이로 · 약 1000 Hz</text>
+      <text x="44" y="92" fill="#e8ecf4" font-size="18">회전 속도 → 적분 · 빠르고 매끄러움</text>
+      <text x="44" y="120" fill="#ff5a4d" font-size="18">약점 : 드리프트 (시간에 비례)</text>
+
+      <rect x="24" y="156" width="330" height="108" rx="12" fill="#3a2d0e" stroke="#ffc44d" stroke-width="2"/>
+      <text x="44" y="190" fill="#ffc44d" font-size="22" font-weight="700">가속도계</text>
+      <text x="44" y="220" fill="#e8ecf4" font-size="18">중력 방향 → 기울기의 절대 기준</text>
+      <text x="44" y="248" fill="#ff5a4d" font-size="18">약점 : 움직이면 흔들림 · yaw 모름</text>
+
+      <rect x="24" y="284" width="330" height="108" rx="12" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
+      <text x="44" y="318" fill="#ff5fa2" font-size="22" font-weight="700">카메라 (SLAM) · 수십 Hz</text>
+      <text x="44" y="348" fill="#e8ecf4" font-size="18">위치 + yaw 의 절대 기준</text>
+      <text x="44" y="376" fill="#ff5a4d" font-size="18">약점 : 느림 · 어두우면 실패</text>
+    </g>
+    <!-- 화살표 → 필터 -->
+    <g stroke="#9aa4b8" stroke-width="2.5" fill="none" marker-end="url(#ar11)">
+      <path d="M354,82 C420,82 420,190 452,196"/>
+      <path d="M354,210 L452,210"/>
+      <path d="M354,338 C420,338 420,230 452,224"/>
+    </g>
+    <rect x="456" y="150" width="236" height="120" rx="14" fill="#21330f" stroke="#a8e05f" stroke-width="2.5"/>
+    <text x="574" y="194" fill="#a8e05f" font-size="22" font-weight="700" text-anchor="middle">융합 필터</text>
+    <text x="574" y="224" fill="#e8ecf4" font-size="18" text-anchor="middle">상보 필터 · 칼만 필터</text>
+    <text x="574" y="250" fill="#9aa4b8" font-size="17" text-anchor="middle">속도는 자이로 · 기준은 나머지</text>
+    <!-- 오른쪽 -->
+    <g stroke="#9aa4b8" stroke-width="2.5" fill="none" marker-end="url(#ar11)">
+      <path d="M692,210 L742,210 L742,88 L770,88"/>
+      <path d="M920,120 L920,166"/>
+      <path d="M920,238 L920,286"/>
+    </g>
+    <rect x="770" y="50" width="300" height="70" rx="12" fill="#171b25" stroke="#2a3040" stroke-width="2"/>
+    <text x="920" y="80" fill="#e8ecf4" font-size="20" font-weight="700" text-anchor="middle">추정 자세 (측정 시점)</text>
+    <text x="920" y="106" fill="#9aa4b8" font-size="17" text-anchor="middle">위치 3 + 방향 3</text>
+    <rect x="770" y="168" width="300" height="70" rx="12" fill="#171b25" stroke="#ffc44d" stroke-width="2"/>
+    <text x="920" y="198" fill="#ffc44d" font-size="20" font-weight="700" text-anchor="middle">예측 + Δt</text>
+    <text x="920" y="224" fill="#9aa4b8" font-size="17" text-anchor="middle">빛이 눈에 닿을 시점의 자세</text>
+    <rect x="770" y="288" width="300" height="70" rx="12" fill="#171b25" stroke="#35d6e6" stroke-width="2"/>
+    <text x="920" y="318" fill="#35d6e6" font-size="20" font-weight="700" text-anchor="middle">렌더 → 화면</text>
+    <text x="920" y="344" fill="#9aa4b8" font-size="17" text-anchor="middle">Main Camera 에 자세 적용</text>
+  </svg>
+  <aside class="notes">
+    - 왼쪽 세 센서는 각자 약점이 다름 → 서로의 약점을 덮도록 섞는 것이 융합
+    - 오른쪽 아래로 이어지는 "예측 → 렌더" 는 이 파트 후반 내용
+    - Unity 에서 마지막 박스 = Tracked Pose Driver 가 Main Camera 에 값을 쓰는 지점 → 함정 #8 의 무대
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">융합 · 2</div>
+  <h2>상보 필터 — 가장 단순한 융합</h2>
+  <div class="math-block">\[ \hat\theta_k = \alpha\,\big(\hat\theta_{k-1} + \omega_k\,\Delta t\big) + (1-\alpha)\,\theta_{\text{ref}} \]</div>
+  <p class="small">\(\hat\theta\) : 추정 각도 · 괄호 안 = 자이로로 한 걸음 진행 · \(\theta_{\text{ref}}\) = 기준 센서 값(가속도계·카메라) · α = 자이로를 믿는 비율 (예 : 0.98)</p>
+  <div class="cols">
+    <div>
+      <p class="small"><b>손계산</b> : 자이로 진행값 32° · 기준 센서 30° · α = 0.98<br>
+      \( 0.98 \times 32 + 0.02 \times 30 = 31.36 + 0.6 = 31.96^\circ \)<br>
+      → 한 번에 오차의 <b>2%</b> 만 기준 쪽으로 당김<br>
+      1000 Hz 면 \(0.98^{35} \approx 0.49\) → 약 <b>35 ms 만에 오차 절반</b></p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>손목시계 + 정오의 라디오 시보</b> : 평소엔 손목시계(자이로)를 봄 — 정밀하지만 조금씩 틀어짐 · 라디오 시보(기준 센서)를 들을 때마다 살짝 맞춤 → 하루 종일 정확</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    - 수식의 구조만 : "대부분은 자이로(α), 조금은 기준(1−α)"
+    - 손계산을 같이 : 32 와 30 의 98:2 가중 평균
+    - 한 번에 2% 지만 1초에 1000번 → 금방 수렴
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">융합 · 3</div>
+  <h2>α 고르기 — 매끄러움과 정확함의 줄다리기</h2>
+  <table style="font-size:.7em">
+    <tr><th>α</th><th>믿는 쪽</th><th>장점</th><th>단점</th></tr>
+    <tr><td><b>1.0</b> (보정 없음)</td><td>자이로만</td><td>가장 매끄러움</td><td class="trap-txt">드리프트 무한 누적</td></tr>
+    <tr><td><b>0.99~0.999</b></td><td>자이로 위주</td><td>매끄러움 유지 · 드리프트 천천히 회수</td><td>회수 속도 느림</td></tr>
+    <tr><td><b>0.8 이하</b></td><td>기준 센서 위주</td><td>드리프트 즉시 제거</td><td class="trap-txt">기준 센서의 흔들림이 그대로 화면에 → 떨림</td></tr>
+  </table>
+  <div class="key">
+    <p>정답 α 는 없음 → <b>센서 품질 · 움직임 상황</b>에 따라 다름 → 상황마다 α 를 자동으로 바꿔 주는 방법 = 칼만 필터 (다음 장)</p>
+  </div>
+  <div class="analogy">
+    <p><b>운전대 보정</b> : 차선 이탈을 아주 천천히 고치면(α 큼) 승차감은 좋지만 계속 비뚤게 감 · 확확 고치면(α 작음) 차선은 지키지만 차가 좌우로 출렁임</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">융합 · 4</div>
+  <h2>칼만 필터 — 수식 대신 개념</h2>
+  <div class="analogy">
+    <p><b>두 증인의 진술 듣기</b> : 증인 A(자이로)는 순간 기억력이 좋지만 시간이 갈수록 헷갈림 · 증인 B(카메라)는 늘 대충 맞지만 세부가 흐림 → 판사는 <b>각자의 «지금 신뢰도»를 따져</b> 비중을 정함</p>
+    <p>비유의 한계 : 칼만 필터는 신뢰도를 숫자(오차의 크기 · 분산)로 직접 계산 · 사람의 감이 아님</p>
+  </div>
+  <ol class="small">
+    <li><b>예측</b> : 자이로로 다음 자세를 계산 → 시간이 지날수록 «이 추정의 불확실성» 증가</li>
+    <li><b>보정</b> : 카메라 측정이 도착 → 내 추정과 측정 중 <b>불확실성이 작은 쪽에 더 큰 비중</b></li>
+    <li>반복 → 상보 필터의 α 를 매 순간 자동 계산하는 셈</li>
+  </ol>
+  <div class="key">
+    <p class="small">실제 헤드셋 : 카메라 + IMU 를 묶은 칼만 계열 필터 (VIO, 시각-관성 주행거리 측정) 사용 · 상세 구현은 기기 회사 비공개 → 우리가 다룰 일은 <b>그 출력(자세)을 올바른 노드에 받는 것</b></p>
+  </div>
+  <aside class="notes">
+    - 수식은 다루지 않음 · "불확실한 쪽을 덜 믿는다" 한 문장이 핵심
+    - 날씨 예보 비유도 가능 : 모델 예측 + 관측소 실측을 섞음
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">융합 · 5 ★</div>
+  <h3 style="margin-bottom:.4em">드리프트 시뮬레이터</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="tracking-drift"></div>
+    <div class="demo-ui">
+      <label>자이로 노이즈 <input type="range" data-noise min="0" max="2" step="0.1" value="0.5"><span class="val" data-noise-v></span></label>
+      <label>바이어스 <input type="range" data-bias min="0" max="0.1" step="0.005" value="0.01"><span class="val" data-bias-v></span></label>
+      <label>적분 시간 <input type="range" data-time min="10" max="600" step="10" value="600"><span class="val" data-time-v></span></label>
+      <label>보정 강도 <input type="range" data-alpha min="0" max="5" step="1" value="0"><span class="val" data-alpha-v style="min-width:6.5em"></span></label>
+      <label>예측 <input type="range" data-pred min="0" max="40" step="1" value="0"><span class="val" data-pred-v></span></label>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <aside class="notes">
+    - ① 보정 0 · 바이어스 0.01 · 10분 → 빨간 선이 약 6° 까지 올라감 (손계산과 대조)
+    - ② 노이즈 2 · 바이어스 0 → 들쭉날쭉하지만 직선보다는 느림
+    - ③ 보정 강도를 한 칸씩 → 초록 선이 0 근처로 묶임 · 최대로 올리면 초록 선이 굵게 떨림 (기준 센서 흔들림 유입) → α 줄다리기
+    - 오른쪽 그래프는 예측 파트에서 다시 사용 (지금은 예측 0ms → 분홍이 청록보다 늦게 따라옴)
+  </aside>
+</section>
+
+<!-- ---------------------------------------------------- SLAM -->
+<section>
+  <div class="tag gfx">SLAM · 1</div>
+  <h2>인사이드아웃 트래킹 — 헤드셋이 바깥을 봄</h2>
+  <div class="cols">
+    <div class="card">
+      <h4>아웃사이드인 (Outside-in)</h4>
+      <p class="small">방에 설치한 외부 센서·기지국이 헤드셋을 관측 · 정확하지만 설치 필요 · 센서 시야 밖은 추적 불가</p>
+    </div>
+    <div class="card gfx">
+      <h4>인사이드아웃 (Inside-out)</h4>
+      <p class="small">헤드셋에 달린 여러 대의 카메라가 <b>방을 관측</b> · 설치 불필요 · Quest 3 방식</p>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>낯선 동네 산책</b> : 간판·전봇대·모퉁이 같은 눈에 띄는 것을 기억하며 머릿속 지도를 그림 → 동시에 «편의점이 오른쪽 뒤에 있으니 나는 여기» 로 내 위치를 앎 → 지도 그리기와 위치 찾기를 <b>동시에</b></p>
+  </div>
+  <p class="small">SLAM 4단계 : ① 영상에서 <span class="t">특징점</span>(모서리·무늬처럼 다시 찾기 쉬운 점) 추출 → ② 이전 프레임과 같은 점 짝짓기 → ③ 점들이 움직인 모양으로 내 위치·방향 계산 → ④ 지도(점들의 3D 위치) 갱신</p>
+  <aside class="notes">
+    - Quest 3 의 추적용 카메라 수·배치는 공식 사양 확인 후 말할 것 (여기선 "여러 대"로만)
+    - 동네 산책 비유 : 처음 오는 곳에서도 몇 분이면 지도를 그리며 길을 찾는다
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">SLAM · 2</div>
+  <h2>SLAM 이 실패하는 환경 — 오늘 실습실 점검</h2>
+  <table style="font-size:.66em">
+    <tr><th>환경</th><th>왜 실패하나</th><th>체감 증상</th></tr>
+    <tr><td>어두운 조명</td><td>영상 노이즈 · 특징점 부족</td><td>«트래킹 손실» 경고 · 세상 멈춤</td></tr>
+    <tr><td>무늬 없는 흰 벽 · 빈 바닥</td><td>다시 찾을 점이 없음</td><td>위치가 천천히 미끄러짐</td></tr>
+    <tr><td>거울 · 유리창</td><td>비친 상을 실제 공간으로 오인</td><td>갑작스러운 위치 튐</td></tr>
+    <tr><td>반복 무늬 (같은 타일·블라인드)</td><td>짝짓기 혼동</td><td>순간 점프</td></tr>
+    <tr><td>창가 직사광선</td><td>과노출 · <span class="trap-txt">렌즈에 햇빛이 모이면 화면 손상</span></td><td>트래킹 불안정 + 장비 손상</td></tr>
+    <tr><td>주변에 움직이는 사람 다수</td><td>움직이는 점을 고정된 점으로 오인</td><td>미세한 흔들림</td></tr>
+  </table>
+  <div class="key trap">
+    <p class="small">이때 IMU 만 남음 → 회전은 잠시 버티지만 <b>위치는 금방 흘러감</b> → 도입 질문의 «미끄러짐» 원인 중 하나</p>
+  </div>
+  <p class="small"><b>컨트롤러도 같은 구조</b> : 자체 IMU(회전) + 헤드셋 카메라가 컨트롤러의 <b>적외선 LED</b>(눈에 안 보이는 빛)를 관측(위치) → 등 뒤·머리 위로 가리면 IMU 만 남아 위치가 흘러감 → 잡기·버튼 동작은 <b>시야 앞쪽</b>에 배치</p>
+  <aside class="notes">
+    - 실습실 블라인드 · 조명 상태를 지금 같이 점검
+    - 직사광선은 안전 규칙과도 연결 (실기 안전 슬라이드에서 다시)
+  </aside>
+</section>
+
+<!-- ---------------------------------------------------- 예측 -->
+<section>
+  <div class="tag gfx">예측 · 1</div>
+  <h2>왜 «미래»를 그려야 하나</h2>
+  <ul class="small">
+    <li>측정한 순간 ≠ 그 자세가 눈에 보이는 순간 → 사이에 계산·렌더·화면 출력 시간 존재 (3주차 motion-to-photon)</li>
+    <li>그동안 머리는 계속 돌아감 → 측정값 그대로 그리면 <b>항상 과거의 자세</b> → 화면이 머리를 늦게 따라옴</li>
+    <li>그래서 : 측정값 + 회전 속도로 <b>빛이 눈에 닿을 시점의 자세를 미리 계산</b>해서 그림</li>
+  </ul>
+  <div class="math-block">\[ \theta_{\text{pred}} = \theta + \omega\,\Delta t \]</div>
+  <p class="small"><b>손계산</b> : 머리 회전 200 °/s · 남은 지연 20 ms → \( 200 \times 0.02 = 4^\circ \) 앞을 그림 · 예측 없으면 4° 뒤처진 화면</p>
+  <div class="analogy">
+    <p><b>축구의 스루 패스</b> : 달리는 동료의 «지금 위치»가 아니라 공이 도착할 때 <b>동료가 있을 자리</b>로 찬다</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">예측 · 2 ★</div>
+  <h3 style="margin-bottom:.3em">예측의 대가 — 갑자기 멈추면 지나침</h3>
+  <svg class="fig" viewBox="0 0 1100 430" role="img" aria-label="실제 머리 각도, 예측 없는 화면, 과예측 화면의 시간 그래프">
+    <rect x="0" y="0" width="1100" height="430" rx="14" fill="#0f1218"/>
+    <g stroke="#2a3040" stroke-width="1.5">
+      <line x1="90" y1="360" x2="1060" y2="360"/>
+      <line x1="90" y1="50" x2="90" y2="360"/>
+    </g>
+    <text x="40" y="38" fill="#e8ecf4" font-size="20" font-weight="700">머리 방향 (°)</text>
+    <text x="1060" y="392" fill="#9aa4b8" font-size="18" text-anchor="end">시간 →</text>
+    <!-- 멈춤 순간 -->
+    <line x1="520" y1="50" x2="520" y2="360" stroke="#ffc44d" stroke-width="1.6" stroke-dasharray="5 6"/>
+    <text x="512" y="350" fill="#ffc44d" font-size="18" text-anchor="end">머리가 갑자기 멈춤 →</text>
+    <!-- 실제 -->
+    <path d="M90,320 L200,320 C230,320 240,300 260,280 L500,128 C512,120 516,118 520,118 L1060,118"
+      fill="none" stroke="#35d6e6" stroke-width="5"/>
+    <!-- 예측 없음 (지연) -->
+    <path d="M90,320 L250,320 C280,320 290,300 310,280 L550,128 C562,120 566,118 570,118 L1060,118"
+      fill="none" stroke="#ff5fa2" stroke-width="3" stroke-dasharray="10 7"/>
+    <!-- 과예측 -->
+    <path d="M90,320 L180,320 C200,318 205,300 222,276 L490,110 C510,98 520,80 530,74 C552,64 572,112 600,118 L1060,118"
+      fill="none" stroke="#ffc44d" stroke-width="3.4"/>
+    <!-- 주석 : 지연 -->
+    <line x1="380" y1="204" x2="430" y2="204" stroke="#ff5fa2" stroke-width="2"/>
+    <text x="590" y="214" fill="#ff5fa2" font-size="18">예측 없음 : 오른쪽으로 밀림 = 늦게 따라옴</text>
+    <line x1="586" y1="208" x2="436" y2="206" stroke="#ff5fa2" stroke-width="1.2" stroke-dasharray="3 4"/>
+    <!-- 주석 : 오버슈트 -->
+    <line x1="530" y1="74" x2="530" y2="118" stroke="#ff5a4d" stroke-width="3"/>
+    <line x1="534" y1="74" x2="616" y2="66" stroke="#ff5a4d" stroke-width="1.2" stroke-dasharray="3 4"/>
+    <text x="622" y="72" fill="#ff5a4d" font-size="19" font-weight="700">오버슈트 (지나쳤다 되돌아옴)</text>
+    <!-- 범례 -->
+    <g font-size="18">
+      <rect x="640" y="270" width="26" height="5" fill="#35d6e6"/><text x="676" y="278" fill="#e8ecf4">실제 머리</text>
+      <rect x="640" y="302" width="26" height="5" fill="#ff5fa2"/><text x="676" y="310" fill="#e8ecf4">화면 — 예측 없음</text>
+      <rect x="640" y="334" width="26" height="5" fill="#ffc44d"/><text x="676" y="342" fill="#e8ecf4">화면 — 예측 시간이 실제 지연보다 김 (과예측)</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    - 등속 회전 구간 : 예측이 맞으면 청록과 노랑이 겹침 · 예측이 길면 노랑이 앞서감
+    - 멈춤 순간 : 예측은 "계속 돈다" 고 가정 → 지나쳤다가 측정값이 들어오면 되돌아옴 → 사용자는 «튕김» 으로 느낌
+    - 도해는 개념도 · 실제 오버슈트 크기는 예측 방식·필터에 따라 다름
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">예측 · 3</div>
+  <h2>과예측 — 오버슈트의 원리</h2>
+  <ul class="small">
+    <li>예측의 가정 = <b>«지금 속도가 Δt 동안 유지된다»</b> → 등속 회전에서는 정확</li>
+    <li>머리가 갑자기 멈춤 → 측정값에는 아직 속도가 남음 → 예측은 계속 진행 → 실제보다 <b>더 돌아간 화면</b></li>
+    <li>예측 시간 Δt 가 클수록 : 이동 중엔 앞서가고 · 멈출 땐 더 많이 지나침 · 센서 잡음도 Δt 배로 확대</li>
+  </ul>
+  <p class="small"><b>손계산</b> : 회전 200 °/s · 예측 40 ms (실제 지연 20 ms 의 2배)<br>
+  이동 중 : 필요한 4° 보다 4° 더 앞섬 (\(200\times0.04 = 8^\circ\)) · 멈춤 직후 : 남은 속도만큼 수 도 지나침</p>
+  <div class="analogy">
+    <p><b>앞차 따라 운전하며 앞차 속도로 미리 출발</b> : 앞차가 계속 달리면 간격 유지 완벽 · 앞차가 급정거하면 그대로 들이받을 뻔함</p>
+  </div>
+  <div class="key trap">
+    <p class="small">원칙 : 예측 시간 ≈ <b>실제 남은 지연</b> · 예측은 헤드셋 런타임이 담당 → 앱이 할 일 = 지연을 늘리지 않는 것 (프레임 드롭 방지)</p>
+  </div>
+  <p class="note">과예측의 정량 효과 크기(몇 도 · 불편감)는 동료심사 자료 미확보 — 정성 서술 · plans/vr-심리학-근거.md §4</p>
+</section>
+
+<section>
+  <div class="tag gfx">예측 · 4 ★</div>
+  <h3 style="margin-bottom:.4em">예측 시뮬레이터 — 오른쪽 그래프 보기</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="tracking-drift"></div>
+    <div class="demo-ui">
+      <label>자이로 노이즈 <input type="range" data-noise min="0" max="2" step="0.1" value="0.3"><span class="val" data-noise-v></span></label>
+      <label>바이어스 <input type="range" data-bias min="0" max="0.1" step="0.005" value="0.01"><span class="val" data-bias-v></span></label>
+      <label>적분 시간 <input type="range" data-time min="10" max="600" step="10" value="300"><span class="val" data-time-v></span></label>
+      <label>보정 강도 <input type="range" data-alpha min="0" max="5" step="1" value="2"><span class="val" data-alpha-v style="min-width:6.5em"></span></label>
+      <label>예측 <input type="range" data-pred min="0" max="40" step="1" value="20"><span class="val" data-pred-v></span></label>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <aside class="notes">
+    - 시스템 지연은 20 ms 로 고정된 시뮬레이션
+    - 예측 0 : 회전 중 화면이 4° 늦음 (손계산 200 °/s × 20 ms 와 일치)
+    - 예측 20 : 회전 중 오차 거의 0 · 멈춤 순간 작은 튕김
+    - 예측 40 : 회전 중 4° 앞섬 · 멈춤 직후 오버슈트 크게
+    - 노이즈를 올리고 예측을 늘리면 오차 그래프가 더 지글거림 → 예측이 잡음도 키움
+  </aside>
+</section>
+
+<!-- ---------------------------------------------------- motion-to-photon -->
+<section>
+  <div class="tag vr">지연 · 1</div>
+  <h3 style="margin-bottom:.45em">3주차 복습 — 화면은 항상 과거를 보여준다</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="latency">
+      <div class="demo-badge">위에서 내려다본 머리 (3주차 데모)</div>
+    </div>
+    <div class="demo-ui">
+      <label>지연 <input type="range" data-lat min="0" max="80" step="1" value="20"><span class="val" data-lat-v></span></label>
+      <label>고개 회전 폭 <input type="range" data-spd min="10" max="70" step="1" value="40"><span class="val" data-spd-v></span></label>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <p class="small" style="margin-top:.4em"><span class="t">motion-to-photon 지연</span> : 머리가 움직인 순간부터 그 움직임이 반영된 빛이 눈에 닿기까지의 시간</p>
+  <aside class="notes">
+    - 3주차 데모 재사용 : 지연 20 → 50 ms 로 올리며 빨간 부채꼴 확인
+    - 오늘의 추가 질문 : 이 지연은 어디에서 쌓이나? → 다음 장 예산 분해
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">지연 · 2 ★</div>
+  <h3 style="margin-bottom:.3em">motion-to-photon 예산 분해 (예시)</h3>
+  <svg class="fig" viewBox="0 0 1100 400" role="img" aria-label="센서부터 화면 점등까지 지연 구간 막대">
+    <rect x="0" y="0" width="1100" height="400" rx="14" fill="#0f1218"/>
+    <text x="40" y="44" fill="#e8ecf4" font-size="20" font-weight="700">머리 움직임 → 눈에 빛이 닿기까지 (90Hz · 예측·재투영 없다고 가정)</text>
+    <!-- 막대 : 30 px / ms, 시작 x=40 -->
+    <g font-size="17" text-anchor="middle">
+      <rect x="40"  y="120" width="30"  height="64" fill="#35d6e6"/>
+      <rect x="70"  y="120" width="30"  height="64" fill="#a8e05f"/>
+      <rect x="100" y="120" width="333" height="64" fill="#2b5f8a"/>
+      <rect x="433" y="120" width="333" height="64" fill="#7a3fb0"/>
+      <rect x="766" y="120" width="165" height="64" fill="#ff5fa2"/>
+      <rect x="931" y="120" width="60"  height="64" fill="#ffc44d"/>
+      <text x="266" y="158" fill="#e8ecf4" font-size="20">앱 CPU · 11.1 ms</text>
+      <text x="600" y="158" fill="#e8ecf4" font-size="20">GPU 렌더 · 11.1 ms</text>
+      <text x="848" y="158" fill="#0b0d12" font-size="18" font-weight="700">스캔아웃 ~5.5</text>
+    </g>
+    <!-- 작은 구간 라벨 -->
+    <g font-size="17" fill="#9aa4b8">
+      <line x1="55" y1="120" x2="55" y2="88" stroke="#35d6e6" stroke-width="2"/>
+      <text x="40" y="80" fill="#35d6e6">센서 ~1</text>
+      <line x1="85" y1="184" x2="85" y2="222" stroke="#a8e05f" stroke-width="2"/>
+      <text x="70" y="240" fill="#a8e05f">융합 ~1</text>
+      <line x1="961" y1="120" x2="961" y2="88" stroke="#ffc44d" stroke-width="2"/>
+      <text x="1000" y="80" fill="#ffc44d" text-anchor="end">점등 ~2</text>
+    </g>
+    <text x="1000" y="240" fill="#e8ecf4" font-size="22" font-weight="700" text-anchor="end">합계 약 32 ms</text>
+    <!-- 재투영 -->
+    <path d="M766,276 L766,292 L991,292 L991,276" fill="none" stroke="#a8e05f" stroke-width="3"/>
+    <text x="878" y="320" fill="#a8e05f" font-size="18" text-anchor="middle">재투영 후 회전에 대해 남는 구간</text>
+    <text x="878" y="344" fill="#a8e05f" font-size="18" text-anchor="middle">+ 예측이 이 구간을 메움</text>
+    <path d="M40,276 L40,292 L760,292 L760,276" fill="none" stroke="#9aa4b8" stroke-width="2"/>
+    <text x="400" y="320" fill="#9aa4b8" font-size="18" text-anchor="middle">렌더 직전에 최신 자세로 다시 맞추면(늦은 갱신 · 재투영) 회전 지연에서 상당 부분 빠짐</text>
+    <text x="40" y="380" fill="#5f6980" font-size="16">구간별 수치는 설명용 예시 · 실제 값은 기기·런타임·앱마다 다름</text>
+  </svg>
+  <aside class="notes">
+    - 막대 길이 = 시간. 가장 큰 덩어리 = 우리 앱이 쓰는 CPU·GPU 시간 → 프레임 드롭이 지연을 직접 늘림
+    - 스캔아웃 : 화면 위→아래로 픽셀을 내보내는 시간 · 점등 : 픽셀이 실제로 빛나는 시간
+    - 재투영(4주차 timewarp) 은 회전에만 강함 · 위치 이동·애니메이션 지연은 남음
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">지연 · 3</div>
+  <h2>얼마나 짧아야 하나 — 하나의 숫자가 아님</h2>
+  <table style="font-size:.68em">
+    <tr><th>항목</th><th>수치</th><th>뜻</th></tr>
+    <tr><td>업계 관행</td><td>«20 ms 이하»</td><td>널리 쓰이는 목표치 · 절대 기준은 아님</td></tr>
+    <tr><td>최소 변별 임계 (Jerald 2009)</td><td class="trap-txt"><b>3.2 ms</b></td><td>가장 예민한 참가자가 구분한 지연 차이</td></tr>
+    <tr><td>평균 변별 임계 (JND)</td><td>16.9 ms (SD 10.4)</td><td>평균적으로 «차이를 알아챔»</td></tr>
+    <tr><td>평균 75% 지연 임계</td><td>55.6 ms (SD 23.4)</td><td>지연 존재를 75% 확률로 알아챔</td></tr>
+    <tr><td>머리 속도별 허용</td><td>최대 속도 약 23 ms · 20°/s 약 41 ms</td><td>빨리 돌릴수록 허용 지연이 짧아짐</td></tr>
+  </table>
+  <p class="small"><b>손계산</b> : 머리 100 °/s · 지연 20 ms → \( 100 \times 0.02 = 2^\circ \) 어긋남 · 같은 지연이라도 <b>천천히 돌리면</b> 어긋남이 작아 덜 느껴짐</p>
+  <div class="key vr">
+    <p class="small">개인차 큼 (3.2 ~ 60.5 ms) → «평균이 괜찮다» ≠ «모두에게 괜찮다» · 지연이 들쭉날쭉한 것 자체도 불편감 요인</p>
+  </div>
+  <p class="note">Jerald (2009) UNC TR 10-013 · 참가자 6명 분석 · Perceptual Tolerance to MTP Latency with Head Movement (IEEE) · plans/vr-심리학-근거.md §4</p>
+</section>
+
+<section>
+  <div class="tag vr">지연 · 4</div>
+  <h2>지연을 숨기는 세 장치 — 누가 담당하나</h2>
+  <table style="font-size:.68em">
+    <tr><th>장치</th><th>하는 일</th><th>담당</th></tr>
+    <tr><td><b>예측</b></td><td>빛이 닿을 시점의 자세를 미리 계산</td><td>헤드셋 런타임 (OpenXR)</td></tr>
+    <tr><td><b>늦은 갱신</b><br><small>late latching</small></td><td>렌더 명령을 보내기 직전에 최신 자세로 카메라 값 교체</td><td>런타임 + Unity 의 Tracked Pose Driver (렌더 직전 갱신)</td></tr>
+    <tr><td><b>재투영</b><br><small>timewarp · 4주차</small></td><td>다 그린 그림을 출력 직전 최신 회전에 맞춰 살짝 돌림</td><td>헤드셋 컴포지터</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>생방송 자막</b> : 원고를 미리 써 두고(예측) · 방송 직전에 최신 소식으로 한 줄 고치고(늦은 갱신) · 화면에 띄우기 직전 위치만 맞춤(재투영)</p>
+  </div>
+  <div class="key trap">
+    <p class="small">세 장치 모두 <b>Main Camera 에 트래킹 값이 그대로 들어간다</b>는 전제 위에서 작동 → 내 코드가 카메라 값을 건드리면 → 전부 어긋남 → <b>AI 함정 #8</b></p>
+  </div>
+</section>
+
+<!-- ---------------------------------------------------- 도입 질문 회수 -->
+<section>
+  <div class="tag gfx">도입 질문의 답</div>
+  <h2>세상이 «미끄러지는» 느낌의 출처</h2>
+  <div class="key">
+    <p>화면 속 세상은 가만히 있음 → 미끄러지는 것은 <b>머리 자세 추정값</b> → 추정이 실제 머리와 어긋나는 네 가지 경로</p>
+  </div>
+  <table style="font-size:.66em">
+    <tr><th>원인</th><th>체감</th><th>오늘 배운 근거</th></tr>
+    <tr><td>① 지연</td><td>고개를 돌릴 때 세상이 살짝 끌려옴</td><td>200 °/s × 20 ms = 4°</td></tr>
+    <tr><td>② 드리프트 · 트래킹 손실</td><td>가만히 있어도 세상이 천천히 돎·흘러감</td><td>0.01 °/s × 600 s = 6° · SLAM 실패 환경</td></tr>
+    <tr><td>③ 과예측</td><td>멈출 때 세상이 «튕김»</td><td>예측 시간 > 실제 지연</td></tr>
+    <tr><td class="trap-txt">④ 내 코드</td><td class="trap-txt">카메라를 직접 움직여 트래킹과 싸움</td><td class="trap-txt">다음 : AI 함정 #8</td></tr>
+  </table>
+  <div class="analogy">
+    <p><b>흔들리는 배 위의 망원경</b> : 별은 그대로인데 망원경 받침대가 흔들리면 별이 흔들려 보임 → 원인은 하늘이 아니라 받침대(자세 추정)</p>
+  </div>
+  <aside class="notes">
+    - 도입 질문 다시 띄우고 학생 답과 비교
+    - ①~③ 은 하드웨어·런타임 몫, ④ 는 우리가 만드는 문제 → 함정으로 연결
+  </aside>
+</section>
+
+<!-- ---------------------------------------------------- AI 함정 #8 -->
+<section class="divider trap">
+  <div class="kicker">AI 함정 #8</div>
+  <div class="rule"></div>
+  <h1>카메라 Transform<br><em>직접 조작</em></h1>
+  <p class="sub">트래킹이 매 프레임 덮어쓰는 노드에 이동 코드를 쓰는 실수</p>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 증상</div>
+  <h2>① 증상</h2>
+  <p class="small">요청 : «A 버튼을 누르면 다음 관찰 지점으로 시점 이동하는 스크립트 만들어줘»</p>
+  <ul class="small">
+    <li>에디터 (헤드셋 없이 Game 뷰) : <b>정상 이동</b> → 통과로 착각</li>
+    <li>헤드셋 빌드 : 버튼을 눌러도 <b>제자리</b> · 또는 한 순간 깜빡이고 원위치</li>
+    <li>AI 에게 «안 움직여» → AI 의 2차 수정 : <span class="trap-txt">Tracked Pose Driver 끄기</span> 또는 LateUpdate 에서 다시 덮어쓰기</li>
+    <li>그 결과 : 이동은 되지만 <b>고개를 돌려도 세상이 같이 따라 돎</b> · 또는 화면이 덜덜 떨림 → 몇 초 안에 멀미</li>
+  </ul>
+  <div class="key trap">
+    <p>최악의 결말 : 학생이 «VR 은 원래 어지럽다» 로 결론 → 원인(구조 오류)을 못 찾음</p>
+  </div>
+  <aside class="notes">
+    - 스타터 starters/w11/Trap_CameraDirectMove.cs 를 헤드셋 빌드로 시연 (교수 기기)
+    - 2차 수정 버전은 시연 시간을 10초 이내로 · 멀미 유발 주의
+    - 학생에게 먼저 원인 추측 받기
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 원인</div>
+  <h2>② 원인 — 한 프레임 안의 순서</h2>
+  <div class="flow">
+    <div class="ok"><b class="gfx-txt">1. 입력 갱신</b>Tracked Pose Driver 가 헤드셋 자세로 Main Camera 의 localPosition · localRotation 기록</div>
+    <i>→</i>
+    <div class="bad"><b class="trap-txt">2. Update</b>내 스크립트 : <code>Camera.main.transform.position = 관찰 지점</code></div>
+    <i>→</i>
+    <div class="ok"><b class="gfx-txt">3. 렌더 직전</b>Tracked Pose Driver 가 <b>다시</b> 헤드셋 자세로 덮어씀 (늦은 갱신)</div>
+    <i>→</i>
+    <div><b>4. 렌더</b>화면에는 덮어쓴 값만 남음 → 내 이동은 <b>소멸</b></div>
+  </div>
+  <ul class="small">
+    <li>Main Camera 의 <span class="t">Tracked Pose Driver</span> (헤드셋 자세를 카메라에 쓰는 컴포넌트) 기본 갱신 시점 = <b>Update and Before Render</b></li>
+    <li>에디터에서 정상이었던 이유 : 헤드셋이 없으면 받을 자세가 없음 → 덮어쓰기 없음 (설정·버전마다 다름 · XR Device Simulator 사용 시에는 에디터에서도 재현)</li>
+  </ul>
+  <aside class="notes">
+    - 이 순서도가 함정의 핵심 · 칠판에 그려도 좋음
+    - "카메라는 내 것이 아니다 — 트래킹 시스템의 것이다"
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 원인</div>
+  <h2>② 원인 — 왜 2차 수정이 더 나쁜가</h2>
+  <div class="analogy">
+    <p><b>기차 객실의 승객</b> : 승객(Main Camera)은 객실 안에서 자유롭게 고개를 돌림 · 다른 역으로 가려면 <b>기차(XR Origin)를 움직임</b> · 승객 머리를 잡아끌어 옮기면 → 승객은 버티고(덮어쓰기) · 억지로 고정하면 고개를 못 돌림(트래킹 상실)</p>
+  </div>
+  <table style="font-size:.66em">
+    <tr><th>AI 의 시도</th><th>결과</th><th>지각 결과</th></tr>
+    <tr><td>Tracked Pose Driver 끄기</td><td>머리 회전·이동이 화면에 반영 안 됨</td><td class="trap-txt">세상이 얼굴에 붙어 따라 돎 → 전정계는 회전, 눈은 정지 → 최악의 감각 충돌</td></tr>
+    <tr><td>Tracking Type = Rotation Only</td><td>위치 트래킹 소실 (3DoF 로 강등)</td><td class="trap-txt">몸을 숙여도 시점 고정 · 운동 시차 소실</td></tr>
+    <tr><td>LateUpdate 에서 덮어쓰기</td><td>덮어쓰기 경쟁</td><td class="trap-txt">프레임마다 값이 오락가락 → 떨림</td></tr>
+  </table>
+  <p class="small">AI 가 이렇게 하는 이유 : 학습 데이터 대부분 = <b>모니터용 1인칭 카메라 코드</b> (카메라를 직접 움직이는 것이 정상) → XR 리그 구조를 요청에 넣지 않으면 모니터 방식 그대로</p>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 진단</div>
+  <h2>③ 진단 절차</h2>
+  <table style="font-size:.66em">
+    <tr><th>확인</th><th>방법</th><th>판정</th></tr>
+    <tr><td>스크립트가 쓰는 대상</td><td>코드에서 <code>Camera.main.transform</code> · <code>mainCamera.transform.position =</code> 검색</td><td>카메라에 쓰기 = 함정</td></tr>
+    <tr><td>덮어쓰기 확인</td><td>Update 에서 쓴 값과 <b>다음 프레임 시작</b> 값을 로그로 비교</td><td>둘이 다름 = 덮어쓰기 중</td></tr>
+    <tr><td>트래킹 상태</td><td>Main Camera 의 Tracked Pose Driver 활성 여부 · Tracking Type</td><td>꺼짐·Rotation Only = 2차 함정</td></tr>
+    <tr><td>체감 비교</td><td>리그 이동 버전과 같은 경로를 헤드셋에서 비교</td><td>고개 돌림이 자연스러운 쪽 = 정답</td></tr>
+  </table>
+  <pre style="font-size:.6em"><code class="language-csharp" data-trim>void Update() {
+    if (wrote) Debug.Log($"지난 프레임에 쓴 값 {written} → 이번 프레임 시작 값 {cam.localPosition}");
+    cam.position = target;  written = cam.localPosition;  wrote = true;
+}
+// LateUpdate 에서는 아직 같은 값으로 보임 → 덮어쓰기는 그 뒤(렌더 직전)에 일어나기 때문</code></pre>
+  <aside class="notes">
+    - 로그 비교는 starters/w11/Trap_CameraDirectMove.cs 에 포함
+    - 헤드셋 빌드 로그는 adb logcat 또는 Unity 의 Android Logcat 패키지로 확인
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 수정</div>
+  <h2>④ 수정 — 카메라 말고 리그를 옮긴다</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>AI 가 내놓는 코드</h4>
+      var cam = Camera.main.transform;<br>
+      cam.position = spot.position<br>
+      &nbsp;&nbsp;+ Vector3.up * 1.6f;<br>
+      cam.rotation = spot.rotation;<br><br>
+      <span style="color:#ff5a4d">// 트래킹이 매 프레임 덮어씀<br>
+      // 눈높이 1.6 을 코드에 박음</span>
+    </div>
+    <div class="good">
+      <h4>학생이 요구할 코드</h4>
+      teleport.QueueTeleportRequest(<br>
+      &nbsp;&nbsp;new TeleportRequest {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;destinationPosition = spot.position,<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;destinationRotation = spot.rotation,<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;matchOrientation =<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MatchOrientation.TargetUpAndForward });<br><br>
+      <span style="color:#a8e05f">// 리그 루트가 이동 · 카메라는 트래킹이 담당<br>
+      // 눈높이 = 실제 측정값 (Floor 모드)</span>
+    </div>
+  </div>
+  <div class="key lab" style="margin-top:.8em">
+    <p class="small">규칙 한 줄 : <b>Main Camera 의 Transform 은 읽기 전용</b>으로 취급 · 이동·회전은 XR Origin(또는 그 이동 담당자 Teleportation Provider · Snap Turn Provider)에 요청</p>
+  </div>
+  <aside class="notes">
+    - TeleportationProvider 는 XRI 3.x 에서 Locomotion Mediator 를 거쳐 리그를 옮김 → 다른 이동 기능과 충돌 없음
+    - 간단한 프로젝트라면 XROrigin.MoveCameraToWorldLocation 도 가능 — starters/w11/README 참고
+  </aside>
+</section>
+
+<!-- ========================================================= PART II -->
+<section class="divider part-ii">
+  <div class="kicker">Part II · 25분</div>
+  <div class="rule"></div>
+  <h1>XR 리그는 왜<br><em>그렇게</em> 생겼나</h1>
+  <p class="sub">XR Origin · 트래킹 원점 · 텔레포트 · 스냅 턴 · 입력 — LaValle Ch.9 · 10.2</p>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>XR 리그<small>XR Rig</small></dt><dd>헤드셋·컨트롤러를 씬에 연결하는 <b>오브젝트 묶음</b> — Unity 에서는 XR Origin 프리팹</dd>
+    <dt>XR Origin<small>XR Origin</small></dt><dd>리그의 뿌리 · <b>내 플레이 구역 전체</b>가 가상 세계 어디에 놓일지 정하는 노드</dd>
+    <dt>Tracked Pose Driver<small>Input System</small></dt><dd>헤드셋·컨트롤러 자세를 매 프레임 Transform 에 기록하는 컴포넌트</dd>
+    <dt>트래킹 원점<small>Tracking origin mode</small></dt><dd>트래킹 좌표의 0 점을 <b>바닥(Floor)</b>에 둘지 <b>시작 시 헤드셋 위치(Device)</b>에 둘지</dd>
+    <dt>이동 기법<small>Locomotion</small></dt><dd>실제로 걷지 않고 가상 공간을 이동하는 방법 — 텔레포트 · 스냅 턴 · 연속 이동</dd>
+    <dt>벡션<small>Vection</small></dt><dd>몸은 가만히 있는데 <b>시야 흐름만으로 내가 움직인다고 느끼는 착각</b> (7주)</dd>
+    <dt>햅틱<small>Haptics</small></dt><dd>컨트롤러 진동으로 주는 촉각 피드백</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">리그 · 1 ★</div>
+  <h3 style="margin-bottom:.3em">XR Origin 리그의 구조 — 노드마다 책임 하나</h3>
+  <svg class="fig" viewBox="0 0 1100 450" role="img" aria-label="XR Origin, Camera Offset, Main Camera, 컨트롤러, Locomotion 계층과 2주차 좌표 체인 대응">
+    <rect x="0" y="0" width="1100" height="450" rx="14" fill="#0f1218"/>
+    <!-- 계층선 -->
+    <g stroke="#5f6980" stroke-width="2.5" fill="none">
+      <path d="M60,124 L60,198 L92,198"/>
+      <path d="M120,244 L120,328 L152,328"/>
+      <path d="M120,286 L560,286 L560,328"/>
+      <path d="M60,146 L560,146 L560,124"/>
+    </g>
+    <!-- XR Origin -->
+    <rect x="24" y="24" width="380" height="100" rx="12" fill="#21330f" stroke="#a8e05f" stroke-width="2.5"/>
+    <text x="44" y="56" fill="#a8e05f" font-size="22" font-weight="700">XR Origin (XR Rig)</text>
+    <text x="44" y="84" fill="#e8ecf4" font-size="17">플레이 구역 전체의 월드 위치·방향</text>
+    <text x="44" y="110" fill="#a8e05f" font-size="17" font-weight="700">→ 이동 코드가 움직이는 곳</text>
+    <!-- Locomotion -->
+    <rect x="440" y="24" width="300" height="100" rx="12" fill="#171b25" stroke="#a8e05f" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="460" y="56" fill="#a8e05f" font-size="20" font-weight="700">Locomotion</text>
+    <text x="460" y="84" fill="#e8ecf4" font-size="17">Teleportation · Turn · Move</text>
+    <text x="460" y="110" fill="#9aa4b8" font-size="17">리그를 옮기는 담당자</text>
+    <!-- Camera Offset -->
+    <rect x="92" y="168" width="350" height="76" rx="12" fill="#3a2d0e" stroke="#ffc44d" stroke-width="2.5"/>
+    <text x="112" y="200" fill="#ffc44d" font-size="21" font-weight="700">Camera Offset</text>
+    <text x="112" y="228" fill="#e8ecf4" font-size="17">높이 보정 · Floor 0 m / Device 1.1176 m</text>
+    <!-- Main Camera -->
+    <rect x="152" y="300" width="300" height="118" rx="12" fill="#0e3a42" stroke="#35d6e6" stroke-width="2.5"/>
+    <text x="172" y="334" fill="#35d6e6" font-size="21" font-weight="700">Main Camera</text>
+    <text x="172" y="362" fill="#e8ecf4" font-size="17">Tracked Pose Driver 가</text>
+    <text x="172" y="386" fill="#e8ecf4" font-size="17">매 프레임 머리 자세로 덮어씀</text>
+    <text x="172" y="408" fill="#ff5a4d" font-size="17" font-weight="700">→ 코드로 쓰지 않음</text>
+    <!-- Controllers -->
+    <rect x="470" y="328" width="300" height="90" rx="12" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
+    <text x="490" y="360" fill="#ff5fa2" font-size="20" font-weight="700">Left / Right Controller</text>
+    <text x="490" y="388" fill="#e8ecf4" font-size="17">손 자세 + 레이·텔레포트 인터랙터</text>
+    <!-- 오른쪽 : 2주차 체인 -->
+    <g>
+      <text x="960" y="160" fill="#9aa4b8" font-size="18" text-anchor="middle">2주차 체인</text>
+      <rect x="880" y="176" width="160" height="40" rx="8" fill="#171b25" stroke="#2a3040"/>
+      <text x="960" y="203" fill="#e8ecf4" font-size="18" text-anchor="middle">World</text>
+      <rect x="880" y="236" width="160" height="40" rx="8" fill="#171b25" stroke="#a8e05f"/>
+      <text x="960" y="263" fill="#a8e05f" font-size="18" text-anchor="middle">Play Area</text>
+      <rect x="880" y="296" width="160" height="40" rx="8" fill="#171b25" stroke="#35d6e6"/>
+      <text x="960" y="323" fill="#35d6e6" font-size="18" text-anchor="middle">HMD</text>
+      <rect x="880" y="356" width="160" height="40" rx="8" fill="#171b25" stroke="#2a3040"/>
+      <text x="960" y="383" fill="#e8ecf4" font-size="18" text-anchor="middle">Eye (좌·우)</text>
+      <g stroke="#5f6980" stroke-width="2"><line x1="960" y1="216" x2="960" y2="236"/><line x1="960" y1="276" x2="960" y2="296"/><line x1="960" y1="336" x2="960" y2="356"/></g>
+      <path d="M404,112 C560,170 820,170 876,252" fill="none" stroke="#a8e05f" stroke-width="1.6" stroke-dasharray="4 5"/>
+      <path d="M452,340 C640,250 800,320 876,316" fill="none" stroke="#35d6e6" stroke-width="1.6" stroke-dasharray="4 5"/>
+      <text x="960" y="430" fill="#9aa4b8" font-size="16" text-anchor="middle">Eye 분리는 렌더러가 IPD 로 처리</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    - 위에서 아래로 : 이동 담당(XR Origin) · 높이 담당(Camera Offset) · 머리 담당(Main Camera, 트래킹 전용)
+    - 2주차 체인과 1:1 대응 : Play Area = XR Origin · HMD = Main Camera
+    - 실제 Starter Assets 프리팹에는 손 트래킹·Poke 인터랙터 등 더 많은 자식 존재 — 뼈대만 그림
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">리그 · 2</div>
+  <h2>왜 노드를 셋으로 나눴나 — 책임 분리</h2>
+  <table style="font-size:.68em">
+    <tr><th>노드</th><th>누가 값을 쓰나</th><th>무엇을 위해</th></tr>
+    <tr><td class="lab-txt"><b>XR Origin</b></td><td>내 코드 · 이동 담당자</td><td>텔레포트 · 스냅 턴 · 씬 시작 위치</td></tr>
+    <tr><td style="color:#ffc44d"><b>Camera Offset</b></td><td>XR Origin 컴포넌트 (원점 모드에 따라 자동)</td><td>트래킹 0점과 바닥 높이 맞추기</td></tr>
+    <tr><td class="gfx-txt"><b>Main Camera</b></td><td><b>트래킹 시스템만</b></td><td>실제 머리 움직임 1:1 반영</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">한 노드에 두 주인이 있으면 → 덮어쓰기 경쟁 (함정 #8) · 노드를 나눔 → <b>각 값의 주인이 하나</b> → 최종 카메라 위치 = 세 노드 변환의 곱 (2주차 부모-자식 체인)</p>
+  </div>
+  <div class="math-block">\[ M_{\text{camera}}^{\text{world}} = M_{\text{Origin}} \cdot M_{\text{Offset}} \cdot M_{\text{tracked}} \]</div>
+  <p class="small"><b>손계산</b> : Origin (5, 0, 3) · Offset y = 0 · 트래킹 로컬 (0.2, 1.6, −0.1) → 카메라 월드 = <b>(5.2, 1.6, 2.9)</b> · 텔레포트로 Origin 만 (8, 0, 3) → 카메라 (8.2, 1.6, 2.9) · 트래킹 값은 손대지 않음</p>
+  <aside class="notes">
+    - 회전이 없는 경우라 단순 덧셈 · 회전이 있으면 2주차 행렬 곱 그대로
+    - "값마다 주인은 하나" 를 반복
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">리그 · 3 ★</div>
+  <h3 style="margin-bottom:.4em">리그 계층 실험 — 함정과 정답 비교</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="xr-rig">
+      <div class="demo-badge">드래그로 시점 회전 · 흰 머리 = Main Camera</div>
+      <div class="demo-alert"></div>
+    </div>
+    <div class="demo-ui">
+      <button data-rig-move>정답 : 리그 1 m 앞으로</button>
+      <button data-rig-turn>정답 : 스냅 턴 45°</button>
+      <button data-cam-move style="border-color:#6e2a24">함정 : 카메라 직접 1 m</button>
+      <button data-tpd>Tracked Pose Driver 켬</button>
+      <button data-mode>원점 모드 : Floor</button>
+      <button data-reset>처음으로</button>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <aside class="notes">
+    - ① 함정 버튼 → 빨간 유령이 1 m 앞에 잠깐 나타났다 사라짐 · 머리는 그대로 (덮어쓰기)
+    - ② Tracked Pose Driver 끔 → 함정 버튼이 «먹힘» · 대신 분홍 철사 머리(실제 머리)와 흰 머리가 어긋남 → 하단 회전 차이 숫자 = 감각 충돌의 크기
+    - ③ 처음으로 → 정답 버튼 : 초록 플레이 구역째 이동 · 머리 흔들림 유지
+    - ④ 스냅 턴 : 머리 위치를 축으로 회전 (XROrigin.RotateAroundCameraUsingOriginUp 과 같은 일)
+    - ⑤ 원점 모드 Device → 눈높이 1.12 m 로 떨어짐 → 다음 장
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">리그 · 4</div>
+  <h2>트래킹 원점 모드 — Floor 와 Device</h2>
+  <div class="cols">
+    <div class="card lab">
+      <h4>Floor (바닥 기준)</h4>
+      <p class="small">트래킹 0 점 = <b>가디언에서 설정한 실제 바닥</b> → 카메라 로컬 y = 실제 눈높이 (예 1.6 m) · Camera Offset = 0<br>
+      서서 하는 경험 · <b>수업 기본값</b></p>
+    </div>
+    <div class="card">
+      <h4>Device (시작 위치 기준)</h4>
+      <p class="small">트래킹 0 점 = <b>앱 시작 순간의 헤드셋 위치</b> → 카메라 로컬 y ≈ 0 · Camera Offset 의 <b>Camera Y Offset (기본 1.1176 m)</b> 을 더해 높이를 흉내<br>
+      앉아서 하는 경험 · 바닥 정보 없는 기기</p>
+    </div>
+  </div>
+  <p class="small"><b>손계산</b> : 키 175 cm 학생 · 실제 눈높이 약 1.63 m — Floor : 카메라 y = 1.63 · Device : 카메라 y ≈ 0 + 1.1176 = <b>1.12 m</b> → 가상 공간에서 <b>약 50 cm 낮게</b> 서 있는 느낌 · 책상이 가슴 높이로 보임</p>
+  <div class="analogy">
+    <p><b>키 재는 기준</b> : Floor = 발바닥부터 잰 키 · Device = «지금 서 있는 자리 = 0» 으로 두고 평균 키를 더해 둔 추정값</p>
+  </div>
+  <aside class="notes">
+    - 2주차 Play Area 노드의 0점이 어디인가의 문제
+    - 오늘 실기 점검 항목 : XR Origin 컴포넌트의 Tracking Origin Mode = Floor 확인
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">리그 · 5</div>
+  <h2>스케일 — 1 unit = 1 m 가 왜 VR 에서 결정적인가</h2>
+  <ul class="small">
+    <li>모니터 : 씬 전체가 10배 커도 카메라만 멀리 두면 똑같아 보임 → 스케일 오류가 숨음</li>
+    <li>VR : 내 눈 사이 간격(IPD, 약 6.3 cm)과 실제 눈높이가 <b>1 m 단위의 자로 측정되어 들어옴</b> → 씬이 그 자와 다르면 → 내가 거인 또는 소인으로 느껴짐</li>
+  </ul>
+  <p class="small"><b>손계산</b> : cm 단위 모델을 변환 없이 가져온 책상 — 높이 75 → Unity 에서 75 unit = <b>75 m</b> · 내 눈높이 1.6 m → 책상이 내 키의 약 47배 → 개미가 된 느낌</p>
+  <div class="analogy">
+    <p><b>미니어처 마을 사진</b> : 실제 마을도 카메라 렌즈 간격·초점을 장난감 크기에 맞춰 찍으면 장난감처럼 보임 → 크기 감각은 <b>관찰자의 자</b>(눈 간격·눈높이)에 대한 상대값</p>
+  </div>
+  <div class="key vr">
+    <p class="small">점검 : 높이 1 m 기준 큐브 1개를 씬에 두고 헤드셋에서 자기 허리 높이 근처인지 확인 · 문 약 2 m · 책상 약 0.75 m</p>
+  </div>
+  <aside class="notes">
+    - 5주차 «VR 거리 과소추정(약 74%)» 과 구분 : 그건 지각의 왜곡, 이건 데이터 단위 오류
+    - FBX 임포트 시 Scale Factor · Convert Units 설정 확인
+  </aside>
+</section>
+
+<!-- ---------------------------------------------------- 이동 -->
+<section>
+  <div class="tag vr">이동 · 1 ★</div>
+  <h3 style="margin-bottom:.3em">이동 방식 비교 — 시야 흐름의 양</h3>
+  <svg class="fig" viewBox="0 0 1100 440" role="img" aria-label="텔레포트, 스냅 턴, 연속 이동의 시야 흐름과 벡션 노출 비교">
+    <rect x="0" y="0" width="1100" height="440" rx="14" fill="#0f1218"/>
+    <defs>
+      <marker id="ar11b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#a8e05f"/>
+      </marker>
+    </defs>
+    <!-- 텔레포트 -->
+    <text x="183" y="44" fill="#a8e05f" font-size="23" font-weight="700" text-anchor="middle">텔레포트</text>
+    <circle cx="90" cy="170" r="16" fill="#a8e05f"/>
+    <path d="M90,170 Q183,40 276,170" fill="none" stroke="#a8e05f" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#ar11b)"/>
+    <circle cx="276" cy="170" r="16" fill="none" stroke="#a8e05f" stroke-width="3"/>
+    <text x="183" y="212" fill="#9aa4b8" font-size="17" text-anchor="middle">조준 → 순간 이동 (중간 장면 없음)</text>
+    <!-- 스냅 턴 -->
+    <text x="550" y="44" fill="#ffc44d" font-size="23" font-weight="700" text-anchor="middle">스냅 턴</text>
+    <circle cx="550" cy="140" r="16" fill="#ffc44d"/>
+    <g stroke="#ffc44d" stroke-width="3">
+      <line x1="550" y1="140" x2="550" y2="70"/>
+      <line x1="550" y1="140" x2="600" y2="90" stroke-dasharray="6 5"/>
+      <line x1="550" y1="140" x2="620" y2="140" stroke-dasharray="6 5"/>
+    </g>
+    <text x="625" y="96" fill="#ffc44d" font-size="17">45°</text>
+    <text x="628" y="146" fill="#ffc44d" font-size="17">90°</text>
+    <text x="550" y="212" fill="#9aa4b8" font-size="17" text-anchor="middle">한 번에 정해진 각도만큼 순간 회전</text>
+    <!-- 연속 -->
+    <text x="917" y="44" fill="#ff5a4d" font-size="23" font-weight="700" text-anchor="middle">연속 이동 · 회전</text>
+    <g stroke="#ff5a4d" stroke-width="3">
+      <line x1="830" y1="170" x2="1004" y2="170"/>
+      <line x1="840" y1="150" x2="880" y2="150" opacity=".5"/><line x1="900" y1="150" x2="940" y2="150" opacity=".5"/><line x1="960" y1="150" x2="1000" y2="150" opacity=".5"/>
+      <line x1="840" y1="190" x2="880" y2="190" opacity=".5"/><line x1="900" y1="190" x2="940" y2="190" opacity=".5"/><line x1="960" y1="190" x2="1000" y2="190" opacity=".5"/>
+    </g>
+    <circle cx="830" cy="170" r="16" fill="#ff5a4d"/>
+    <text x="917" y="212" fill="#9aa4b8" font-size="17" text-anchor="middle">스틱을 미는 동안 시야가 계속 흐름</text>
+    <!-- 비교 표 -->
+    <g font-size="18">
+      <line x1="30" y1="246" x2="1070" y2="246" stroke="#2a3040" stroke-width="2"/>
+      <text x="40" y="284" fill="#9aa4b8">시야 흐름</text>
+      <text x="213" y="284" fill="#e8ecf4" text-anchor="middle">없음 (순간 전환)</text>
+      <text x="550" y="284" fill="#e8ecf4" text-anchor="middle">회전 흐름 없음</text>
+      <text x="917" y="284" fill="#e8ecf4" text-anchor="middle">연속 흐름 (주변시 전체)</text>
+      <text x="40" y="330" fill="#9aa4b8">벡션 노출</text>
+      <rect x="193" y="314" width="40" height="20" rx="4" fill="#a8e05f"/>
+      <rect x="507" y="314" width="70" height="20" rx="4" fill="#ffc44d"/>
+      <rect x="840" y="314" width="160" height="20" rx="4" fill="#ff5a4d"/>
+      <text x="40" y="376" fill="#9aa4b8">대가</text>
+      <text x="213" y="376" fill="#e8ecf4" text-anchor="middle">경로 감각·탐색 속도 저하</text>
+      <text x="550" y="376" fill="#e8ecf4" text-anchor="middle">방향 감각 약간 저하</text>
+      <text x="917" y="376" fill="#e8ecf4" text-anchor="middle">멀미 위험 최대 (12주)</text>
+      <line x1="30" y1="398" x2="1070" y2="398" stroke="#2a3040" stroke-width="2"/>
+      <text x="40" y="426" fill="#5f6980" font-size="15">막대 = 상대 비교 개념도 · Farmani &amp; Teather (GI 2018) · 미로 탐색 비교 연구 (Scientific Reports 2025)</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    - 7주 벡션 복습 : 시야 흐름 → 몸이 움직인다는 착각 → 전정계는 정지 → 충돌
+    - 텔레포트가 표준이 된 이유 = 벡션을 만드는 «흐르는 장면» 자체를 없앰
+    - 대가도 반드시 말할 것 : 길 찾기·공간 기억에는 불리
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">이동 · 2</div>
+  <h2>텔레포트 — 흐르는 장면을 잘라 냄</h2>
+  <ol class="small">
+    <li>스틱을 밀면 컨트롤러에서 <b>포물선 레이</b> 발사 → 바닥에 착지 표시</li>
+    <li>유효한 곳(<span class="t">Teleportation Area</span> · <span class="t">Teleportation Anchor</span>)이면 초록 · 아니면 무효</li>
+    <li>스틱을 놓으면 → Teleportation Provider 가 <b>XR Origin 을 순간 이동</b> (선택적으로 짧은 페이드)</li>
+  </ol>
+  <div class="analogy">
+    <p><b>영화의 컷 편집</b> : 주인공이 집을 나서고 → 다음 컷에 회사 → 관객은 이동 과정을 안 봐도 멀미 없이 이해 · 반대로 핸드헬드 카메라로 이동 과정을 길게 보여 주면 어지러움</p>
+    <p>비유의 한계 : 영화는 관객이 멈춰 있음 · VR 은 착지 직후 «내가 어디 있지» 재파악 비용 발생</p>
+  </div>
+  <p class="small">근거 : 연속 이동 대비 텔레포트에서 방향감각·안구운동 증상 점수 낮음 · 대신 경로 기억·탐색 속도 저하 (미로 탐색 비교 연구, Scientific Reports 2025)</p>
+  <p class="small"><b>포물선을 쓰는 이유</b> : 직선 레이는 먼 바닥을 낮은 각도로 맞혀야 함 → 조준 흔들림 확대 · 포물선은 위로 쏴도 바닥에 떨어짐 → 먼 곳도 편한 손목 각도로 조준</p>
+</section>
+
+<section>
+  <div class="tag vr">이동 · 3</div>
+  <h2>스냅 턴 — 회전도 «컷»으로</h2>
+  <ul class="small">
+    <li>스틱을 좌·우로 튕기면 → 정해진 각도만큼 <b>순간 회전</b> · 회전 중심 = 내 머리 위치 (리그 원점이 아님)</li>
+    <li>XRI Snap Turn Provider 기본값 <b>45°</b> · 연구에서 자주 쓰는 값 22.5°</li>
+    <li>필요한 이유 : 서서 하는 경험도 케이블·좁은 공간·앉은 자세 때문에 몸 전체를 못 돌리는 경우 존재</li>
+  </ul>
+  <p class="small"><b>손계산</b> : 뒤로 돌기 180° → 45° 단위면 <b>4번</b> · 22.5° 단위면 8번 → 각도가 작을수록 방향 감각 유지 · 대신 조작 횟수 증가</p>
+  <div class="analogy">
+    <p><b>슬라이드 넘기기 vs 동영상 되감기</b> : 다음 장으로 «탁» 넘기면 어지럽지 않음 · 영상을 빨리 감으며 장면이 흐르면 어지러움</p>
+  </div>
+  <div class="key vr">
+    <p class="small">근거 : 시점 스냅(회전 임계 25°/s · 점프 22.5°) 조건에서 SSQ 회전 −40% · 병진 −50% · 프레즌스·과제 수행 차이 없음 → 12주 컴포트 설계에서 상세</p>
+  </div>
+  <p class="note">Farmani &amp; Teather, Graphics Interface 2018 · 단일 연구</p>
+</section>
+
+<!-- ---------------------------------------------------- 입력 -->
+<section>
+  <div class="tag vr">입력 · 1</div>
+  <h2>컨트롤러 입력 — 버튼이 아니라 «액션»에 연결</h2>
+  <ul class="small">
+    <li>10주 Input System 복습 : 코드는 <b>액션</b>(«텔레포트 조준», «스냅 턴») 만 앎 · 어느 버튼인지는 <b>바인딩</b>이 결정</li>
+    <li>XRI Starter Assets 의 <b>XRI Default Input Actions</b> : 머리·왼손·오른손별 Interaction · Locomotion 액션 맵 제공</li>
+    <li>예 : 스틱 앞으로 = 텔레포트 조준 · 스틱 좌우 = 스냅 턴 · 그립 = 잡기 (기본 배치 · 버전마다 다름 → 에셋에서 확인)</li>
+  </ul>
+  <div class="cols">
+    <div>
+      <pre style="font-size:.6em"><code class="language-csharp" data-trim>[SerializeField] InputActionReference next;  // 액션 참조
+void OnEnable() =&gt; next.action.Enable();
+void Update() {
+    if (next.action.WasPressedThisFrame()) Go();
+}</code></pre>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>식당 주문서</b> : 손님은 «김치찌개» 만 적음(액션) · 어느 화구에서 누가 끓일지는 주방 배치표(바인딩)가 결정 → 화구가 바뀌어도 주문서는 그대로</p>
+      </div>
+    </div>
+  </div>
+  <p class="small">이점 : Quest Touch Plus · 다른 헤드셋 컨트롤러 · 손 트래킹 · 에디터 시뮬레이터 → <b>바인딩만 추가</b>하면 같은 코드로 동작</p>
+</section>
+
+<section>
+  <div class="tag vr">입력 · 2</div>
+  <h2>햅틱 — 손으로 받는 «확인 도장»</h2>
+  <ul class="small">
+    <li>VR 버튼은 눌러도 손끝에 저항이 없음 → 눌렸는지 눈으로만 확인 → 오조작 · 반복 누름</li>
+    <li>짧은 진동 = <b>«처리됨»</b> 신호 → 시선을 돌리지 않고도 확인</li>
+    <li>XRI 3.x : 컨트롤러의 <b>Haptic Impulse Player</b> 로 진동 전송 · <b>Simple Haptic Feedback</b> 컴포넌트로 호버·선택 이벤트에 진동 지정 (Starter Assets 컨트롤러에 포함 · 버전마다 이름 확인)</li>
+  </ul>
+  <pre style="font-size:.6em"><code class="language-csharp" data-trim>[SerializeField] HapticImpulsePlayer haptics;   // 컨트롤러 오브젝트에 있음
+void OnTeleported() => haptics.SendHapticImpulse(0.3f, 0.08f); // 세기 0~1 · 시간(초)</code></pre>
+  <div class="analogy">
+    <p><b>스마트폰 키보드의 진동</b> : 화면 키는 물리 키가 아니지만 «톡» 진동 덕분에 눌렀다는 확신 → 오타 감소</p>
+  </div>
+  <div class="key vr">
+    <p class="small">원칙 : 짧고 약하게 (예 : 세기 0.2~0.4 · 0.05~0.1 초) · 계속 울리는 진동 → 피로 · 의미 없는 신호로 전락</p>
+  </div>
+</section>
+
+<!-- ========================================================= PART III -->
+<section class="divider part-iii">
+  <div class="kicker">Part III · VR 실기 90분</div>
+  <div class="rule"></div>
+  <h1>내 실험실에<br>내가 들어간다</h1>
+  <p class="sub">2인 1조 · 착용자 + 스포터 · 세션 최대 10분 교대 · 체크리스트 <span class="mono">labs/w11/VR-실기-체크리스트.md</span></p>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 1</div>
+  <h2>90분 운영표</h2>
+  <table style="font-size:.66em">
+    <tr><th>시간</th><th>단계</th><th>완료 기준</th></tr>
+    <tr><td>15:30–15:40</td><td>안전·위생 브리핑 · 장비 수령 · 가디언 설정</td><td>위생 커버 착용 · 가디언 2 m × 2 m</td></tr>
+    <tr><td class="lab-txt">15:40–16:00</td><td><b>① XR 세팅 → 테스트 빌드</b> (큐브 하나 씬)</td><td>헤드셋에서 큐브가 보임</td></tr>
+    <tr><td class="lab-txt">16:00–16:25</td><td><b>② 실험실 씬 포팅</b> · 스케일·눈높이 점검 · 착용 세션 A</td><td>1 m 큐브 = 허리 근처 · 눈높이 실측</td></tr>
+    <tr><td class="lab-txt">16:25–16:45</td><td><b>③ 텔레포트·스냅 턴 장착</b> · <b>④ 10주 UI 두 벌 비교</b> · 착용 세션 B</td><td>바닥 텔레포트 · 45° 회전 · UI 비교 기록</td></tr>
+    <tr><td>16:45–16:55</td><td>1분 소감 메모 · 헤드셋 반납·세척</td><td>메모 제출 · 세척 확인</td></tr>
+    <tr><td>16:55–17:00</td><td>브리핑 · 12주 안내</td><td>—</td></tr>
+  </table>
+  <div class="key lab">
+    <p class="small">조 운영 : 두 사람 모두 자기 노트북으로 빌드 진행 → 먼저 빌드된 사람이 착용 · 다른 사람이 스포터 → 10분 후 교대</p>
+  </div>
+  <aside class="notes">
+    - ①이 16:00 까지 안 되는 조 → 교수·조교 지원 · 최악의 경우 Link / Play to Device 스트리밍으로 ② 진행 (성능 측정은 불가)
+    - 빌드 1회 3~6분 → 빌드 중에는 상대방 착용 시간으로 활용
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 2</div>
+  <h2>안전 규칙 — 착용 전 반드시</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>플레이 구역 <b>1인 2 m × 2 m</b> · 가디언(경계) 설정 후 착용</li>
+        <li><b>2인 1조</b> : 착용자 1명 · <b>스포터</b> 1명 (주변 안전 · 케이블 · 구두 안내)</li>
+        <li>세션 길이 <b>최대 10분</b> → 헤드셋 벗고 휴식</li>
+        <li>어지러움 호소 시 <b>즉시 중단</b></li>
+        <li>렌즈를 <b>직사광선</b>에 두지 않음 (렌즈가 햇빛을 모아 화면 손상) · 내려놓을 때 렌즈를 아래로</li>
+      </ul>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>수영장의 짝 수영(버디)</b> : 물속에 있는 사람은 주변을 못 봄 → 밖의 짝이 대신 봐 줌 · 헤드셋 착용자 = 물속, 스포터 = 물 밖</p>
+      </div>
+      <div class="key trap">
+        <p class="small">스포터의 말 : «오른쪽에 책상 있어요» 처럼 <b>방향 + 물체</b> · 착용자 몸을 잡아끌지 않음 (갑작스러운 접촉 = 놀람·넘어짐)</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    - 실제 가디언 설정 과정을 교수 기기로 한 번 시연
+    - 안경 착용자 : 안경 스페이서 사용 여부 확인 (렌즈 긁힘 방지)
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 3</div>
+  <h2>위생 · 교대 · 멀미 대응</h2>
+  <div class="cols">
+    <div>
+      <h4 style="color:var(--lab)">위생 · 교대</h4>
+      <ul class="small">
+        <li>위생 커버 <b>1인 1매</b></li>
+        <li>교대·반납 시 알코올 티슈로 <b>페이스 인터페이스 세척</b> (렌즈는 마른 극세사 천만)</li>
+        <li>교대 순서 : 벗기 → 세척 → 다음 사람 커버 → 착용 → 가디언 확인</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:var(--trap)">멀미 대응 (요약)</h4>
+      <table style="font-size:.66em">
+        <tr><th>신호</th><th>조치</th></tr>
+        <tr><td>미열감 · 침 분비 증가</td><td>이동 중단 · 정지 상태 유지</td></tr>
+        <tr><td>어지러움 · 두통</td><td>헤드셋 해제 · 착석 · 창밖 먼 곳 응시</td></tr>
+        <tr><td>메스꺼움</td><td>세션 종료 · <b>당일 재체험 금지</b></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="key lab">
+    <p class="small">오늘의 이동 = 텔레포트 + 스냅 턴만 · <b>연속 이동(스틱으로 미끄러지듯 이동) 켜지 않음</b> → 12주 동의 후 실습에서만</p>
+  </div>
+  <aside class="notes">
+    - 멀미는 참는 것이 아니라 보고하는 것 — "벗어도 감점 없음" 명확히
+    - 증상 기록은 1분 소감 메모에 같이
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 4</div>
+  <h2>① 빌드 반입 경로와 순서</h2>
+  <table style="font-size:.64em">
+    <tr><th>경로</th><th>조건</th><th>소요</th><th>오늘의 용도</th></tr>
+    <tr><td class="lab-txt"><b>Build and Run (USB)</b></td><td>Oculus ADB Drivers (Windows) · 개발자 모드 · 데이터 전송 케이블</td><td>3~6분</td><td><b>기본 경로</b></td></tr>
+    <tr><td>Meta Quest Developer Hub</td><td>앱 설치 · APK 드래그</td><td>2~4분</td><td>보조</td></tr>
+    <tr><td>무선 디버깅 (adb connect)</td><td>같은 네트워크 · 실습실 방화벽 확인 필요</td><td>최초 5분</td><td>사용 안 함</td></tr>
+    <tr><td>Link · Play to Device</td><td>빌드 없이 PC 화면 스트리밍</td><td>즉시</td><td>디버깅 전용 · 성능 측정 불가</td></tr>
+  </table>
+  <ol class="small check" style="margin-top:.4em">
+    <li>헤드셋 USB 연결 → 헤드셋 안에서 <b>«USB 디버깅 허용»</b> 수락 (항상 허용 체크)</li>
+    <li>File → <b>Build Profiles</b> → Android → (처음이면) Switch Platform</li>
+    <li>Scene List 에 테스트 씬만 체크 → Run Device 에서 Quest 선택 → <b>Build and Run</b></li>
+  </ol>
+  <aside class="notes">
+    - Unity 6 에서는 Build Settings 대신 Build Profiles 창
+    - 케이블이 충전 전용이면 기기가 안 잡힘 → 예비 데이터 케이블 준비
+    - macOS 는 ADB 드라이버 불필요
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 5</div>
+  <h2>① XR 세팅 체크리스트 (Unity 6 · OpenXR)</h2>
+  <ol class="small check">
+    <li>Package Manager : <b>XR Plugin Management</b> · <b>OpenXR Plugin</b> · <b>XR Interaction Toolkit 3.x</b> 설치 → XRI 의 Samples 에서 <b>Starter Assets</b> Import</li>
+    <li>Project Settings → XR Plug-in Management → <b>Android 탭</b> → OpenXR 체크 → <b>Meta Quest</b> 기능 그룹 체크</li>
+    <li>OpenXR → Interaction Profiles : <b>Oculus Touch</b> 또는 <b>Meta Quest Touch Plus</b> 컨트롤러 프로필 추가</li>
+    <li>Project Validation 창 → <b>Fix All</b> (IL2CPP · ARM64 · 최소 API 레벨 등 자동 수정)</li>
+    <li>Player : Color Space <b>Linear</b> 확인 (5주) · Active Input Handling = Input System 포함</li>
+  </ol>
+  <div class="key lab">
+    <p class="small">처음 빌드는 <b>빈 씬 + 큐브 1개 + XR Origin</b> 으로 → 파이프라인 문제와 씬 문제를 분리 (원인을 한 번에 하나만)</p>
+  </div>
+  <p class="note">메뉴 이름은 패키지 버전에 따라 조금씩 다를 수 있음 — 상세 절차 : starters/w11/README.md</p>
+  <aside class="notes">
+    - Oculus XR Plugin 경로도 가능하지만 수업은 OpenXR 로 통일
+    - Fix All 후에도 경고가 남으면 조교 호출 — 무시하고 빌드하면 시간 더 듦
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 6</div>
+  <h2>② 실험실 씬 포팅 — 순서와 점검</h2>
+  <ol class="small">
+    <li>실험실 씬 복제 (<code>Lab_VR.unity</code>) → 원본은 보존</li>
+    <li>기존 Main Camera · 카메라 조작 스크립트 <b>삭제</b> (카메라 2대 · Audio Listener 2개 방지)</li>
+    <li>Starter Assets 의 <b>XR Origin (XR Rig)</b> 프리팹 배치 → 바닥 위 y = 0 · 관찰 시작 지점</li>
+    <li>XR Origin 컴포넌트 : <b>Tracking Origin Mode = Floor</b></li>
+    <li>기준 큐브 1 m 배치 → 헤드셋에서 <b>허리 근처</b>인지 · 문 약 2 m · 책상 약 0.75 m</li>
+    <li>헤드셋 안에서 눈높이 확인 : 서서 정면 벽의 1.6 m 표시선이 눈높이 근처인지</li>
+  </ol>
+  <div class="key lab">
+    <p class="small">5주 깊이 단서 스위치 · 4주 near 설정 · 6주 밉맵 → <b>헤드셋 안에서 다시 관찰</b> · 모니터와 달라 보인 것 하나 이상 기록</p>
+  </div>
+  <aside class="notes">
+    - 학기의 정점 — 처음 들어가는 순간 사진 한 장씩 (스포터가 촬영, 본인 동의)
+    - 씬이 너무 무거우면 일단 일부 오브젝트 비활성화 후 반입 → 12주 최적화의 재료
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 7</div>
+  <h2>③ 텔레포트 · 스냅 턴 장착 순서 (XRI 3.x)</h2>
+  <ol class="small">
+    <li>XR Origin (XR Rig) 의 자식 <b>Locomotion</b> 확인 → Locomotion Mediator · Teleportation · Turn 존재</li>
+    <li>바닥 오브젝트(Collider 필요)에 <b>Teleportation Area</b> 추가 → Interaction Layer Mask = <b>Teleport</b></li>
+    <li>관찰 지점에는 <b>Teleportation Anchor</b> (도착 방향까지 지정)</li>
+    <li>회전 : <b>Snap Turn Provider</b> 사용 · 연속 회전 끔 (Starter Assets 의 Controller Input Action Manager → Smooth Turn Enabled 해제)</li>
+    <li>연속 이동 끔 : 같은 곳의 Smooth Motion Enabled 해제 → 오늘은 텔레포트 전용</li>
+    <li>빌드 → 바닥 텔레포트 · 앵커 도착 방향 · 45° 회전 확인</li>
+  </ol>
+  <div class="key trap">
+    <p class="small">흔한 실패 : 레이가 바닥을 무시 → Interaction Layer 불일치 · 텔레포트 후 바닥에 묻힘 → 바닥 Collider 와 XR Origin y 확인</p>
+  </div>
+  <p class="note">컴포넌트·옵션 이름은 XRI 3.x 기준 · 버전에 따라 차이 — starters/w11/README.md</p>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 8</div>
+  <h2>이번 주 명세 예시 — AI 에게 이동 기능 요청</h2>
+  <pre style="font-size:.6em"><code data-trim>[목표]
+실험실 씬에서 오른손 A 버튼을 누르면 다음 관찰 지점(Transform 배열)으로 순간 이동한다.
+
+[제약]
+- Main Camera 의 Transform 에 쓰지 않는다 (Tracked Pose Driver 전용)
+- XRI 3.x 의 TeleportationProvider.QueueTeleportRequest 로 XR Origin 을 이동한다
+- 보간·가속 없이 순간 이동 · 도착 방향 = 관찰 지점의 forward
+- 입력은 InputActionReference 로 받고, 버튼 하드코딩 금지
+- 눈높이 숫자(1.6 등)를 코드에 쓰지 않는다 (Tracking Origin = Floor)
+
+[검증 조건]
+- 이동 전후 Main Camera 의 localPosition 을 로그 → 이동 순간에도 연속(튐 없음)
+- 헤드셋에서 이동 직후 고개 돌림이 정상 반영
+- 도착 후 카메라 월드 y = 실제 눈높이 ± 5 cm
+
+[비목표]
+- 연속 이동 · 손 트래킹 · UI</code></pre>
+  <aside class="notes">
+    - 함정 #8 이 명세의 [제약] 1~2번으로 원천 차단되는 구조
+    - 검증 조건이 "잘 움직인다" 가 아니라 "카메라 로컬값 연속" 이라는 점 강조
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 9</div>
+  <h2>측정 — 헤드셋 안의 숫자</h2>
+  <table style="font-size:.66em">
+    <tr><th>항목 (Quest 3 · URP)</th><th>목표</th><th>경고</th><th>확인 도구</th></tr>
+    <tr><td>프레임률</td><td>90Hz 고정 (11.1 ms)</td><td class="trap-txt">72Hz 강등 시 재설계</td><td>OVR Metrics Tool</td></tr>
+    <tr><td>드로우콜</td><td>씬당 150 이하</td><td class="trap-txt">300 초과</td><td>Frame Debugger · Stats</td></tr>
+    <tr><td>삼각형</td><td>프레임당 50만 이하</td><td class="trap-txt">100만 초과</td><td>Stats</td></tr>
+    <tr><td>실시간 그림자</td><td>0~1개 광원</td><td class="trap-txt">2개 이상</td><td>Light 일괄 확인 (5주)</td></tr>
+    <tr><td>텍스처</td><td>2048 이하 · 밉맵 켬</td><td class="trap-txt">4096 다수</td><td>Inspector (6주)</td></tr>
+  </table>
+  <pre style="font-size:.58em"><code class="language-csharp" data-trim>// 함정 #8 검증 : 카메라 로컬값이 이동 순간에도 연속인가
+Vector3 prev;
+void LateUpdate() {
+    var lp = cam.localPosition;
+    if ((lp - prev).magnitude &gt; 0.05f) Debug.LogWarning($"카메라 로컬 튐 {(lp - prev).magnitude:F3} m");
+    prev = lp;
+}</code></pre>
+  <aside class="notes">
+    - 기준선은 학기 계획서 1-5 와 동일 · 오늘은 기록만, 최적화는 12주
+    - 0.05 m 는 1프레임 사이 머리 이동으로는 드문 크기 → 튐 판정 기준 (예시값)
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 10</div>
+  <h2>④ 10주 UI 비교 + 1분 소감 메모</h2>
+  <div class="cols">
+    <div>
+      <h4 style="color:var(--lab)">UI 두 벌 비교</h4>
+      <ul class="small">
+        <li>Overlay 판 : 헤드셋에서 보이는가? 보이면 어디에?</li>
+        <li>World Space 판 : 거리 0.5 / 1.2 / 2 m 로 옮기며 <b>읽기 편한 거리</b> 기록</li>
+        <li>0.3 m 까지 당기면 두 눈 상이 겹쳐지는가 (10주 VAC)</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:var(--vr)">1분 소감 메모 (헤드셋 벗은 직후)</h4>
+      <ul class="small">
+        <li><b>놀란 점</b> 1개 — 모니터와 가장 달랐던 것</li>
+        <li><b>불편한 점</b> 1개 — 어지러움·눈 피로·크기 이상 등</li>
+        <li>불편 정도 0~3 (0 없음 · 3 중단)</li>
+      </ul>
+      <div class="key vr">
+        <p class="small">이 메모 = <b>12주 컴포트 설계의 입력 데이터</b> · 기억이 사라지기 전 1분 안에</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    - 메모 양식은 체크리스트 문서 마지막 절 · 종이 또는 LMS
+    - 착용자가 말하고 스포터가 받아 적는 방식도 허용
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 11</div>
+  <h2>지각 실험실 누적 — 학기의 정점</h2>
+  <div class="cols">
+    <div>
+      <p class="small">2~8주 동안 화면 속에서 검증한 것 → 오늘 <b>몸으로 재검증</b></p>
+      <ul class="small">
+        <li>2주 좌표계 체인 → 리그 계층으로 실물화</li>
+        <li>3주 프레임 독립성 → 90Hz 헤드셋에서 끊김 여부</li>
+        <li>4주 near 설정 → 손을 가까이 댈 때 잘림</li>
+        <li>5주 깊이 단서 스위치 → 헤드셋에서 거리감 변화</li>
+        <li>6주 밉맵 → 바닥 격자 지글거림</li>
+      </ul>
+    </div>
+    <div>
+      <div class="key lab">
+        <p class="small">오늘 추가할 장치 : <b>관찰 지점 Teleportation Anchor 3곳</b> · 1 m 기준 큐브 · 바닥 Teleportation Area</p>
+      </div>
+      <div class="key vr">
+        <p class="small">12주 : 같은 씬에 <b>일부러 멀미를 유발하는 이동</b>을 넣고 → 완화 기법 비교 (동의자 한정)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= 정리 -->
+<section>
+  <div class="tag lab">브리핑</div>
+  <h2>과제 · 다음 주 준비</h2>
+  <ul class="small">
+    <li><b>제출</b> : 1분 소감 메모 · 실기 체크리스트 체크 결과 (오늘 수업 안)</li>
+    <li><b>지각 실험실</b> : 관찰 지점 앵커 3곳 · 텔레포트·스냅 턴 장착본 유지 → 12주에 그대로 사용</li>
+    <li><b>프롬프트 기록</b> : 이동 기능 명세(4칸)와 AI 결과 · 함정 #8 발견 여부 → 다음 주 크리틱 자료</li>
+    <li><b>12주 안내</b> : 멀미 유발 실습은 <b>본인 동의 후 참여</b> · 대체 과제 제공 · 체험 전후 SSQ 설문 기록</li>
+  </ul>
+  <div class="key trap">
+    <p class="small">오늘 어지러움 3 단계(메스꺼움)까지 간 학생 → 12주 멀미 실습은 대체 과제 권장 · 개별 상담</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table style="font-size:.6em">
+    <tr><th>개념</th><th>핵심</th></tr>
+    <tr><td>3DoF · 6DoF</td><td>회전만 vs 회전+이동 · 회전만이면 운동 시차 소실</td></tr>
+    <tr><td><b class="gfx-txt">자이로 드리프트</b></td><td>바이어스 × 시간 · <b>0.01 °/s × 600 s = 6°</b> · 걸음 수로 위치 추측</td></tr>
+    <tr><td>가속도계 · 자력계</td><td>중력 = 기울기 기준 (수평계) · yaw 는 자력계·카메라 · 위치는 카메라 필수</td></tr>
+    <tr><td><b class="gfx-txt">센서 융합</b></td><td>상보 필터 α : 손목시계 + 시보 · 칼만 = 신뢰도 따라 α 자동</td></tr>
+    <tr><td>SLAM</td><td>지도 그리며 내 위치 찾기 · 어두움·흰 벽·거울에 취약</td></tr>
+    <tr><td><b class="gfx-txt">예측</b></td><td>θ + ωΔt · 200 °/s × 20 ms = 4° · 과예측 → 멈출 때 오버슈트</td></tr>
+    <tr><td>motion-to-photon</td><td>센서→융합→CPU→GPU→스캔아웃→점등 · 개인차 큼 (3.2~55.6 ms)</td></tr>
+    <tr><td><b class="trap-txt">AI 함정 #8</b></td><td>카메라 Transform 직접 조작 → 덮어쓰기 · 트래킹 끄기는 더 나쁨 → <b>리그 루트 이동</b></td></tr>
+    <tr><td><b class="vr-txt">XR 리그</b></td><td>Origin(이동) → Offset(높이) → Camera(트래킹 전용) · Floor 모드 · 1 unit = 1 m</td></tr>
+    <tr><td><b class="vr-txt">이동</b></td><td>텔레포트 = 컷 편집 · 스냅 턴 45° · 벡션 노출 최소화</td></tr>
+  </table>
+</section>
+
+<section class="divider part-ii">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>VR 인터랙션 <em>심화</em></h1>
+  <p class="sub">이번 주 : 내 씬에 <b>들어가고 이동</b>하는 법<br>
+  다음 주 : 그 안에서 <b>잡고 · 가리키고 · 오래 머물러도 괜찮게</b> 만드는 법<br>
+  Grab · Ray · 성능 예산 · 멀미 유발 씬 만들고 고치기</p>
+  <div class="note">AI 함정 #9 — 부드러운 가속 이동</div>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/math/math.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="../_shared/demos/_stage.js"></script>
+<script src="../_shared/demos/w03.js"></script>
+<script src="../_shared/demos/w11.js"></script>
+<script src="../_shared/deck.js"></script>
+</body>
+</html>

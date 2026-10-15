@@ -13,6 +13,7 @@
   .reveal svg.fig7 { display:block; margin:.2em auto 0; width:100%; height:auto; max-height:470px; }
   .reveal svg.fig7 text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
   .reveal .demo-ui input[type=range] { width: 96px; }
+  .reveal section.divider.next-week::after { content: none; }  /* 다음 주 예고엔 파트 번호 없음 */
 </style>
 </head>
 <body>
@@ -61,11 +62,11 @@
       <p class="small">선형·이징·베지어 보간값과 <b>오일러·세미암시적·베를레 적분</b> 한 스텝을 숫자로 직접 계산 → 어느 쪽이 왜 틀리는지 설명</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정 진단</h4>
+      <h4><span class="step">2</span> 함정 진단</h4>
       <p class="small">AI 이동 코드에서 <b><code>transform.position</code> 대입</b>을 찾아 벽 통과·떨림의 원인을 설명 → <code>linearVelocity</code> · <code>MovePosition</code> · CCD 로 수정</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> 멀미 예측</h4>
+      <h4><span class="step">3</span> 멀미 예측</h4>
       <p class="small">카메라 이동 설계를 보고 <b>광학 흐름 · 가속 · 시야각</b> 기준으로 멀미 위험을 미리 판정 → 12주 컴포트 설계의 근거로 사용</p>
     </div>
   </div>
@@ -101,7 +102,7 @@
       <h4>통과 못 한 명세</h4>
       "바닥 텍스처가 지글거려.<br>
       예쁘게 고쳐 줘."<br><br>
-      <span style="color:#ff5a4d">// 원인 단어(밉맵·필터링) 없음<br>
+      <span style="color:var(--trap)">// 원인 단어(밉맵·필터링) 없음<br>
       // AI : 텍스처 해상도만 4096 으로 올림<br>
       // → 지글거림 그대로 · 용량만 증가</span>
     </div>
@@ -111,7 +112,7 @@
       Filter Mode = Trilinear, Aniso 4.<br>
       검증 : 카메라 10 m 후진 시<br>
       격자 반짝임 없음 · 스크린샷 2장"<br><br>
-      <span style="color:#a8e05f">// 원인 개념 + 설정 이름 + 측정 조건</span>
+      <span style="color:var(--lab)">// 원인 개념 + 설정 이름 + 측정 조건</span>
     </div>
   </div>
   <div class="key lab" style="margin-top:.8em">
@@ -159,20 +160,83 @@
 
 <section>
   <div class="tag gfx">Part I 용어</div>
-  <h2>이번 파트 용어 미리보기 — 애니메이션</h2>
+  <h2>용어 미리보기 — 애니메이션 (1/3)</h2>
   <dl class="terms">
-    <dt>키프레임<small>Keyframe</small></dt><dd>«이 시각에는 이 값» 이라고 사람이 직접 찍어 둔 기준점</dd>
-    <dt>보간<small>Interpolation</small></dt><dd>두 키프레임 사이의 값을 계산으로 채우는 일 — 중간 그림 그리기</dd>
-    <dt>이징<small>Easing</small></dt><dd>출발·도착 근처에서 속도를 줄여 «부드럽게» 만드는 보간 방식</dd>
-    <dt>접선<small>Tangent</small></dt><dd>키프레임에서 곡선이 출발하는 <b>기울기</b> = 그 순간의 속도</dd>
-    <dt>본 · 스켈레톤<small>Bone · Skeleton</small></dt><dd>캐릭터 속 뼈대 — 부모-자식으로 이어진 Transform 계층 (2주차 변환 체인)</dd>
-    <dt>스키닝<small>Skinning</small></dt><dd>뼈가 움직일 때 피부(메시 정점)를 따라 움직이게 하는 계산</dd>
-    <dt>블렌드 트리<small>Blend Tree</small></dt><dd>여러 동작(걷기·뛰기)을 비율로 섞어 중간 동작을 만드는 장치</dd>
-    <dt>타임라인<small>Timeline</small></dt><dd>여러 물체의 움직임·소리·카메라를 하나의 시간표에 배치하는 Unity 도구</dd>
+    <dt>키프레임<small>Keyframe</small></dt>
+    <dd>
+      <p>«이 시각에는 이 값» 이라고 사람이 직접 찍어 둔 기준점 — 만화의 원화 한 장</p>
+      <p class="ex">문 회전 0초 = 0° · 1초 = 90° → 키 2개로 1초짜리 문 열림 완성</p>
+      <p class="why">키 사이는 컴퓨터가 채움 → 키가 너무 적으면 원하는 동작이 안 나오고, 너무 많으면 수정이 어려움</p>
+      <p class="where">Unity : Window → Animation → Animation 창 · 빨간 녹화 버튼 · 시간 막대 위 마름모 표시</p>
+    </dd>
+    <dt>보간<small>Interpolation</small></dt>
+    <dd>
+      <p>두 키프레임 사이의 값을 계산으로 채우는 일 — 원화 사이에 동화 그려 넣기</p>
+      <p class="ex">0° 키와 90° 키 사이 0.5초 지점 → 직선으로 이으면 45°</p>
+      <p class="why">같은 키라도 잇는 방식에 따라 기계적 · 부드러움 · 탄력으로 느낌이 갈림</p>
+      <p class="where">Animation 창 하단 Curves 탭의 곡선 모양 = 보간 결과</p>
+    </dd>
+    <dt>이징<small>Easing</small></dt>
+    <dd>
+      <p>출발·도착 근처에서 속도를 줄여 «부드럽게» 만드는 보간 방식 — 살살 출발하는 버스</p>
+      <p class="ex">문 열림 0.25초 시점 : 직선 22.5° vs 이징 약 14°</p>
+      <p class="why">없으면 출발·정지 순간 «쿵» → 로봇 같은 움직임 · 단 VR 카메라엔 오히려 해로움 (Part II)</p>
+      <p class="where">Unity 키 우클릭 → Flat · Figma · After Effects 의 Ease In/Out · CSS <code>ease-in-out</code></p>
+    </dd>
   </dl>
   <aside class="notes">
     - 물리 용어는 물리 파트 시작에 별도 미리보기
+    - 디자인 툴 경험(Figma·AE 이징)과 연결하며 빠르게 훑기 · 자세한 건 각 장에서
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>용어 미리보기 — 애니메이션 (2/3)</h2>
+  <dl class="terms">
+    <dt>접선<small>Tangent</small></dt>
+    <dd>
+      <p>키프레임에서 곡선이 출발하는 <b>기울기</b> = 그 순간의 속도 — 비탈길의 경사</p>
+      <p class="ex">접선 0 = 키에서 멈춘 상태 · 접선 20 = 키에서 초당 20 씩 변하며 출발</p>
+      <p class="why">모르면 «키마다 멈칫» 하는 움직임의 원인(전부 Flat 접선)을 못 찾음</p>
+      <p class="where">Curves 탭에서 키 선택 시 양쪽 핸들 · 우클릭 → Free Smooth · Broken</p>
+    </dd>
+    <dt>본 · 스켈레톤<small>Bone · Skeleton</small></dt>
+    <dd>
+      <p>캐릭터 속 뼈대 — 어깨 → 위팔 → 아래팔 → 손처럼 부모-자식으로 이어진 Transform 줄</p>
+      <p class="ex">어깨를 30° 돌리면 위팔·아래팔·손이 함께 30° 돌아감 (2주차 변환 체인)</p>
+      <p class="why">정점 수만 개 대신 뼈 수십 개만 움직이면 됨 → 캐릭터 애니메이션이 가능한 이유</p>
+      <p class="where">Hierarchy 에서 캐릭터를 펼치면 보이는 Hips · Spine · LeftUpperArm … 오브젝트</p>
+    </dd>
+    <dt>스키닝<small>Skinning</small></dt>
+    <dd>
+      <p>뼈가 움직일 때 피부(메시 정점)가 따라 움직이게 하는 계산 — 철사 인형 위에 씌운 천</p>
+      <p class="ex">팔꿈치 정점 = 위팔 결과 50% + 아래팔 결과 50% 를 섞어 위치 결정</p>
+      <p class="why">섞는 방식 때문에 관절을 크게 꺾으면 부피가 줄어 쭈그러짐 (뒤 손계산 0.71)</p>
+      <p class="where">Skinned Mesh Renderer 컴포넌트 · Project Settings → Quality → Skin Weights</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>용어 미리보기 — 애니메이션 (3/3)</h2>
+  <dl class="terms">
+    <dt>블렌드 트리<small>Blend Tree</small></dt>
+    <dd>
+      <p>여러 동작(걷기·뛰기)을 비율로 섞어 중간 동작을 만드는 장치 — DJ 크로스페이더</p>
+      <p class="ex">Speed 3.0 → 걷기 57% + 뛰기 43% = «빠른 걸음» 자동 생성</p>
+      <p class="why">없으면 속도마다 동작을 따로 만들어야 함 · 전환 순간 동작이 툭 끊김</p>
+      <p class="where">Animator 창 빈 곳 우클릭 → Create State → From New Blend Tree</p>
+    </dd>
+    <dt>타임라인<small>Timeline</small></dt>
+    <dd>
+      <p>여러 물체의 움직임·소리·카메라를 하나의 시간표에 배치하는 Unity 도구 — 영상 편집기 트랙</p>
+      <p class="ex">0초 조명 켜짐 → 2초 문 열림 → 3초 안내 음성 = 전시 오프닝 한 편</p>
+      <p class="why">카메라(사용자 시점) 트랙 = 사용자 의사와 무관한 이동 → VR 멀미 원인</p>
+      <p class="where">Window → Sequencing → Timeline · Playable Director 컴포넌트</p>
+    </dd>
+  </dl>
 </section>
 
 <!-- ---------------------------------------------------- 키프레임 -->
@@ -232,32 +296,32 @@
   <div class="tag gfx">보간 · 3 ★</div>
   <h3>이징 곡선 네 가지 — 위치 그래프의 기울기 = 속도</h3>
   <svg class="fig7" viewBox="0 0 1100 340" role="img" aria-label="선형, 이즈 인, 이즈 아웃, 이즈 인아웃 곡선 비교">
-    <g font-size="19" fill="#9aa4b8">
+    <g font-size="19" fill="#4a463e">
       <!-- 4 개 축 -->
-      <g stroke="#2a3040" stroke-width="2" fill="none">
+      <g stroke="#8a8476" stroke-width="2" fill="none">
         <path d="M50,70 V250 H250"/><path d="M315,70 V250 H515"/><path d="M580,70 V250 H780"/><path d="M845,70 V250 H1045"/>
       </g>
-      <g stroke="#2a3040" stroke-dasharray="4 5" fill="none">
+      <g stroke="#cfc6b2" stroke-dasharray="4 5" fill="none">
         <path d="M50,70 H250 V250"/><path d="M315,70 H515 V250"/><path d="M580,70 H780 V250"/><path d="M845,70 H1045 V250"/>
       </g>
-      <path fill="none" stroke="#9aa4b8" stroke-width="4" d="M50.0,250.0 L250.0,70.0"/>
-      <path fill="none" stroke="#ffc44d" stroke-width="4" d="M315.0,250.0 L325.0,249.6 L335.0,248.2 L345.0,245.9 L355.0,242.8 L365.0,238.8 L375.0,233.8 L385.0,227.9 L395.0,221.2 L405.0,213.6 L415.0,205.0 L425.0,195.5 L435.0,185.2 L445.0,173.9 L455.0,161.8 L465.0,148.8 L475.0,134.8 L485.0,120.0 L495.0,104.2 L505.0,87.6 L515.0,70.0"/>
-      <path fill="none" stroke="#ff5fa2" stroke-width="4" d="M580.0,250.0 L590.0,232.4 L600.0,215.8 L610.0,200.0 L620.0,185.2 L630.0,171.2 L640.0,158.2 L650.0,146.1 L660.0,134.8 L670.0,124.5 L680.0,115.0 L690.0,106.4 L700.0,98.8 L710.0,92.0 L720.0,86.2 L730.0,81.2 L740.0,77.2 L750.0,74.0 L760.0,71.8 L770.0,70.5 L780.0,70.0"/>
-      <path fill="none" stroke="#35d6e6" stroke-width="4" d="M845.0,250.0 L855.0,248.7 L865.0,245.0 L875.0,239.1 L885.0,231.3 L895.0,221.9 L905.0,211.1 L915.0,199.3 L925.0,186.6 L935.0,173.5 L945.0,160.0 L955.0,146.5 L965.0,133.4 L975.0,120.7 L985.0,108.9 L995.0,98.1 L1005.0,88.7 L1015.0,80.9 L1025.0,75.0 L1035.0,71.3 L1045.0,70.0"/>
+      <path fill="none" stroke="#4a463e" stroke-width="4" d="M50.0,250.0 L250.0,70.0"/>
+      <path fill="none" stroke="#a8701a" stroke-width="4" d="M315.0,250.0 L325.0,249.6 L335.0,248.2 L345.0,245.9 L355.0,242.8 L365.0,238.8 L375.0,233.8 L385.0,227.9 L395.0,221.2 L405.0,213.6 L415.0,205.0 L425.0,195.5 L435.0,185.2 L445.0,173.9 L455.0,161.8 L465.0,148.8 L475.0,134.8 L485.0,120.0 L495.0,104.2 L505.0,87.6 L515.0,70.0"/>
+      <path fill="none" stroke="#a3245e" stroke-width="4" d="M580.0,250.0 L590.0,232.4 L600.0,215.8 L610.0,200.0 L620.0,185.2 L630.0,171.2 L640.0,158.2 L650.0,146.1 L660.0,134.8 L670.0,124.5 L680.0,115.0 L690.0,106.4 L700.0,98.8 L710.0,92.0 L720.0,86.2 L730.0,81.2 L740.0,77.2 L750.0,74.0 L760.0,71.8 L770.0,70.5 L780.0,70.0"/>
+      <path fill="none" stroke="#0d6b78" stroke-width="4" d="M845.0,250.0 L855.0,248.7 L865.0,245.0 L875.0,239.1 L885.0,231.3 L895.0,221.9 L905.0,211.1 L915.0,199.3 L925.0,186.6 L935.0,173.5 L945.0,160.0 L955.0,146.5 L965.0,133.4 L975.0,120.7 L985.0,108.9 L995.0,98.1 L1005.0,88.7 L1015.0,80.9 L1025.0,75.0 L1035.0,71.3 L1045.0,70.0"/>
       <g font-size="22" font-weight="700">
-        <text x="150" y="44" text-anchor="middle" fill="#e8ecf4">선형</text>
-        <text x="415" y="44" text-anchor="middle" fill="#ffc44d">이즈 인 \(t^2\)</text>
-        <text x="680" y="44" text-anchor="middle" fill="#ff5fa2">이즈 아웃</text>
-        <text x="945" y="44" text-anchor="middle" fill="#35d6e6">이즈 인·아웃</text>
+        <text x="150" y="44" text-anchor="middle" fill="#1b1a17">선형</text>
+        <text x="415" y="44" text-anchor="middle" fill="#a8701a">이즈 인 t²</text>
+        <text x="680" y="44" text-anchor="middle" fill="#a3245e">이즈 아웃</text>
+        <text x="945" y="44" text-anchor="middle" fill="#0d6b78">이즈 인·아웃</text>
       </g>
       <text x="150" y="285" text-anchor="middle">출발 속도 1 · 도착 1</text>
       <text x="415" y="285" text-anchor="middle">출발 0 · 도착 2</text>
       <text x="680" y="285" text-anchor="middle">출발 2 · 도착 0</text>
       <text x="945" y="285" text-anchor="middle">출발 0 · 도착 0</text>
-      <text x="150" y="318" text-anchor="middle" fill="#ff5a4d">양 끝 급출발·급정지</text>
+      <text x="150" y="318" text-anchor="middle" fill="#c2401d">양 끝 급출발·급정지</text>
       <text x="415" y="318" text-anchor="middle">천천히 출발 · 쿵 도착</text>
       <text x="680" y="318" text-anchor="middle">휙 출발 · 살며시 도착</text>
-      <text x="945" y="318" text-anchor="middle" fill="#a8e05f">양 끝 부드러움</text>
+      <text x="945" y="318" text-anchor="middle" fill="#4f7a16">양 끝 부드러움</text>
       <text x="36" y="76" text-anchor="end" font-size="16">1</text>
       <text x="36" y="254" text-anchor="end" font-size="16">0</text>
     </g>
@@ -368,16 +432,41 @@
       </div>
     </div>
   </div>
+  <p class="small muted">관련 Unity 부품 · 용어 → 다음 장 «용어 풀이»</p>
+</section>
+
+<section>
+  <div class="tag gfx">스켈레톤 · 용어 풀이</div>
+  <h2>뼈와 피부를 잇는 부품들</h2>
   <dl class="terms">
-    <dt>Skinned Mesh Renderer</dt><dd>뼈를 따라 정점을 움직여 그리는 Unity 컴포넌트</dd>
-    <dt>Avatar · Humanoid</dt><dd>뼈 이름을 Unity 표준 인체 구조에 대응시킨 지도 → 다른 캐릭터끼리 동작 재사용(리타기팅)</dd>
+    <dt>Skinned Mesh<br>Renderer</dt>
+    <dd>
+      <p>뼈를 따라 정점을 움직여 그리는 Unity 컴포넌트 — 보통 Mesh Renderer 의 «뼈 따라가는» 버전</p>
+      <p class="ex">FBX 캐릭터를 씬에 넣으면 몸 메시 오브젝트에 자동으로 붙음 · Root Bone · Bones 목록 보유</p>
+      <p class="why">일반 Mesh Renderer 로 바꾸면 뼈가 움직여도 몸은 굳은 채 제자리</p>
+      <p class="where">캐릭터의 몸 메시 오브젝트 Inspector</p>
+    </dd>
+    <dt>가중치<small>Skin weight</small></dt>
+    <dd>
+      <p>정점 하나가 각 뼈를 «몇 % 따라갈지» 적어 둔 숫자 · 합은 항상 100%</p>
+      <p class="ex">팔꿈치 정점 = 위팔 0.5 + 아래팔 0.5 · 손등 정점 = 손 1.0</p>
+      <p class="why">잘못 칠하면 팔을 들 때 옆구리 살이 같이 끌려 올라감</p>
+      <p class="where">Blender Weight Paint 모드에서 칠함 · Unity 는 Quality → Skin Weights 로 정점당 뼈 수 제한</p>
+    </dd>
+    <dt>Avatar<small>Humanoid 리그</small></dt>
+    <dd>
+      <p>캐릭터 뼈 이름을 Unity 표준 인체 지도(엉덩이·척추·팔·다리)에 대응시킨 연결표</p>
+      <p class="ex">내 캐릭터의 «mixamorig:LeftArm» → 표준 칸 «Left Upper Arm» 에 연결</p>
+      <p class="why">체형이 다른 캐릭터에 동작을 옮겨 입힘 = <b>리타기팅</b> (Mixamo 춤 → 내 캐릭터)</p>
+      <p class="where">모델 Import Settings → Rig 탭 → Animation Type = Humanoid → Configure</p>
+    </dd>
   </dl>
 </section>
 
 <section>
   <div class="tag gfx">스켈레톤 · 2</div>
   <h2>스키닝 손계산 — 관절이 홀쭉해지는 이유</h2>
-  <div class="math-block">\[ \mathbf{v}' = \sum_i w_i\,M_i\,\mathbf{v} \qquad \textstyle\sum_i w_i = 1 \]</div>
+  <div class="math-block" style="margin:.1em 0 .2em">\[ \mathbf{v}' = \textstyle\sum_i w_i\,M_i\,\mathbf{v} \qquad \sum_i w_i = 1 \]</div>
   <p class="small">\(w_i\) : 뼈 i 를 따르는 비율 (가중치) · \(M_i\) : 뼈 i 의 이동·회전 · 결과 = 뼈별 결과의 <b>가중 평균</b></p>
   <div class="cols">
     <div>
@@ -405,12 +494,14 @@
   <h2>Animator Controller — 동작 사이를 오가는 지도</h2>
   <div class="cols">
     <div>
-      <dl class="terms">
-        <dt>State<small>상태</small></dt><dd>지금 재생 중인 동작 하나 (Idle · Walk · Jump)</dd>
-        <dt>Transition<small>전이</small></dt><dd>상태에서 상태로 넘어가는 화살표 · 넘어가는 동안 두 동작을 섞음</dd>
-        <dt>Parameter<small>매개변수</small></dt><dd>코드가 넣어 주는 신호 — Float · Int · Bool · Trigger</dd>
-        <dt>Has Exit Time</dt><dd>켜면 동작이 끝날 때까지 기다린 뒤 전이 → 입력 반응이 늦어지는 흔한 원인</dd>
-      </dl>
+      <table style="font-size:.7em">
+        <tr><th>부품</th><th>한 줄 뜻</th></tr>
+        <tr><td style="white-space:nowrap"><b>State</b> 상태</td><td>지금 재생 중인 동작 하나 (Idle · Walk · Jump)</td></tr>
+        <tr><td style="white-space:nowrap"><b>Transition</b> 전이</td><td>상태 → 상태 화살표 · 넘어가는 동안 두 동작을 섞음</td></tr>
+        <tr><td style="white-space:nowrap"><b>Parameter</b></td><td>코드가 넣어 주는 신호 — Float · Int · Bool · Trigger</td></tr>
+        <tr><td style="white-space:nowrap"><b>Has Exit Time</b></td><td>켜면 동작이 끝날 때까지 기다린 뒤 전이</td></tr>
+      </table>
+      <p class="small muted">자세한 풀이 → 다음 두 장</p>
     </div>
     <div>
       <div class="analogy">
@@ -421,6 +512,62 @@ animator.SetTrigger("Jump");</code></pre>
     </div>
   </div>
   <p class="small">이 구조의 이름 = <span class="t">상태 기계</span> (State machine : 한 번에 한 상태만 활성 · 조건으로 전환) — 10주차 인터랙션 설계에서 재등장</p>
+</section>
+
+<section>
+  <div class="tag gfx">Animator · 용어 풀이 (1/2)</div>
+  <h2>상태 · 전이 · 파라미터</h2>
+  <dl class="terms">
+    <dt>State<small>상태</small></dt>
+    <dd>
+      <p>지금 재생 중인 동작 하나 — 노선도의 역 하나</p>
+      <p class="ex">Idle(가만히) · Walk · Jump 가 각각 상자 하나 · 한 번에 하나만 켜짐</p>
+      <p class="why">상태의 Motion 칸에 클립을 연결하지 않으면 그 상태에선 아무 동작도 안 나옴</p>
+      <p class="where">Animator 창 (Window → Animation → Animator) 의 상자 · 기본 상태는 주황색</p>
+    </dd>
+    <dt>Transition<small>전이</small></dt>
+    <dd>
+      <p>상태에서 상태로 넘어가는 화살표 · 넘어가는 동안 두 동작을 잠깐 섞음</p>
+      <p class="ex">Idle → Walk 화살표 · Transition Duration 0.25 = 0.25초 동안 섞으며 바뀜</p>
+      <p class="why">화살표가 없으면 그 동작으로 절대 못 감 · 섞는 시간이 길면 반응이 굼뜸</p>
+      <p class="where">상태 우클릭 → Make Transition · 화살표 선택 → Inspector 의 Conditions</p>
+    </dd>
+    <dt>Parameter<small>매개변수</small></dt>
+    <dd>
+      <p>코드가 Animator 에 넣어 주는 신호 — Float(소수) · Int(정수) · Bool(참/거짓) · Trigger(한 번 누름)</p>
+      <p class="ex"><code>SetFloat("Speed", 3f)</code> → «Speed &gt; 0.1 이면 Walk 로» 조건 충족</p>
+      <p class="why">코드의 이름과 Animator 쪽 이름이 한 글자만 달라도 동작 안 함 (Console 에 경고만)</p>
+      <p class="where">Animator 창 왼쪽 위 Parameters 탭 → + 버튼</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Animator · 용어 풀이 (2/2)</div>
+  <h2>Exit Time · 상태 기계 · 클립</h2>
+  <dl class="terms">
+    <dt>Has Exit Time</dt>
+    <dd>
+      <p>켜면 현재 동작이 정해진 지점까지 재생된 뒤에야 전이 — 지금 곡이 끝나야 다음 곡을 트는 DJ</p>
+      <p class="ex">Exit Time 0.9 = 동작의 90% 재생 후 전환 → 1초짜리 동작이면 최대 약 0.9초 대기</p>
+      <p class="why">«점프 버튼 반응이 늦다» 의 흔한 원인 → 즉시 반응해야 하는 전이는 끔</p>
+      <p class="where">전이 화살표 선택 → Inspector → Has Exit Time 체크 · Settings 펼침의 Exit Time</p>
+    </dd>
+    <dt>상태 기계<small>State machine</small></dt>
+    <dd>
+      <p>한 번에 한 상태만 켜져 있고, 조건이 맞을 때만 다른 상태로 넘어가는 구조</p>
+      <p class="ex">신호등 : 초록 → 노랑 → 빨강 · 두 색이 동시에 켜지는 일 없음</p>
+      <p class="why">10주차 인터랙션(문 잠김·열림, 화면 전환)도 같은 구조로 설계 → 엉킨 조건문 방지</p>
+      <p class="where">Animator Controller 전체 · 코드에서는 <code>enum</code> + <code>switch</code> 로도 구현</p>
+    </dd>
+    <dt>Animation Clip<small>애니메이션 클립</small></dt>
+    <dd>
+      <p>움직임 한 편을 담은 파일 — 키프레임과 곡선 묶음</p>
+      <p class="ex"><code>Door_Open.anim</code> (1초 · 키 2개) · FBX 안에 함께 들어 있는 Walk 클립</p>
+      <p class="why">Loop Time 을 안 켜면 걷기가 한 번만 재생되고 멈춤</p>
+      <p class="where">Project 창의 .anim 파일 · 클립 Inspector 의 Loop Time · Animation 창 왼쪽 위 클립 목록</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -485,16 +632,78 @@ animator.SetTrigger("Jump");</code></pre>
 <!-- ---------------------------------------------------- 물리 -->
 <section>
   <div class="tag gfx">Part I 용어 · 물리</div>
-  <h2>용어 미리보기 — 물리 엔진</h2>
+  <h2>용어 미리보기 — 물리 엔진 (1/3)</h2>
   <dl class="terms">
-    <dt>강체<small>Rigid body</small></dt><dd>힘을 받아도 모양이 변하지 않는다고 가정한 물체 — 위치·회전만 변함</dd>
-    <dt>Rigidbody</dt><dd>물체를 물리 엔진의 관리 대상으로 등록하는 Unity 컴포넌트 · 질량·속도 보유</dd>
-    <dt>Collider<small>충돌체</small></dt><dd>충돌 판정용 보이지 않는 모양 (상자·구·캡슐·메시)</dd>
-    <dt>수치 적분<small>Numerical integration</small></dt><dd>«속도 × 짧은 시간» 을 계속 더해 다음 위치를 구하는 계산</dd>
-    <dt>타임스텝<small>Timestep, dt</small></dt><dd>물리 계산 한 번의 간격 — Unity 기본 0.02초</dd>
-    <dt>터널링<small>Tunneling</small></dt><dd>빠른 물체가 한 스텝 사이에 얇은 벽을 건너뛰는 현상</dd>
-    <dt>CCD<small>Continuous Collision Detection</small></dt><dd>이동 «경로 전체» 를 검사하는 연속 충돌 판정</dd>
-    <dt>광역·정밀 판정<small>Broad · Narrow phase</small></dt><dd>충돌 후보를 대충 거르는 단계 · 후보만 정확히 검사하는 단계</dd>
+    <dt>강체<small>Rigid body</small></dt>
+    <dd>
+      <p>힘을 받아도 모양이 변하지 않는다고 가정한 물체 — 위치·회전만 바뀌는 쇳덩이</p>
+      <p class="ex">바닥에 떨어진 상자 : 굴러가고 튕기지만 찌그러지지는 않음</p>
+      <p class="why">찌그러짐을 빼서 계산이 빠름 → 천·젤리처럼 휘는 물체는 별도 기법 필요</p>
+      <p class="where">Unity 기본 3D 물리(PhysX) = 강체 · 천은 Cloth 컴포넌트</p>
+    </dd>
+    <dt>Rigidbody</dt>
+    <dd>
+      <p>물체를 물리 엔진의 관리 대상으로 등록하는 Unity 컴포넌트 — 물리 엔진 출석부에 이름 올리기</p>
+      <p class="ex">큐브에 추가 후 Play → 바로 중력으로 떨어짐 · Mass 1 = 1 kg</p>
+      <p class="why">없으면 Collider 가 있어도 «움직이지 않는 벽» 취급 → 힘·속도 개념 자체가 없음</p>
+      <p class="where">Add Component → Physics → Rigidbody · Mass · Linear Damping · Is Kinematic</p>
+    </dd>
+    <dt>Collider<small>충돌체</small></dt>
+    <dd>
+      <p>충돌 판정용 보이지 않는 모양 — 옷 속 보호대</p>
+      <p class="ex">사람 = Capsule 1개 · 벽·상자 = Box · 공 = Sphere</p>
+      <p class="why">겉모습(메시)과 무관하게 Collider 모양으로만 부딪힘 → 없으면 바닥을 뚫고 추락</p>
+      <p class="where">Add Component → Physics → Box · Sphere · Capsule · Mesh Collider · Scene 뷰의 초록 선</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어 · 물리</div>
+  <h2>용어 미리보기 — 물리 엔진 (2/3)</h2>
+  <dl class="terms">
+    <dt>수치 적분<small>Numerical integration</small></dt>
+    <dd>
+      <p>«속도 × 짧은 시간» 을 계속 더해 다음 위치를 구하는 계산 — 배의 추측항법</p>
+      <p class="ex">위치 0 m · 속도 5 m/s → 0.02초 뒤 0 + 5 × 0.02 = 0.1 m</p>
+      <p class="why">매 스텝 조금씩 오차 → 순서를 잘못 짜면 흔들림이 점점 커져 폭발</p>
+      <p class="where">엔진 내부에서 자동 · AI 에게 «물리 직접 구현» 을 시키면 코드에 등장</p>
+    </dd>
+    <dt>타임스텝<small>Timestep, Δt</small></dt>
+    <dd>
+      <p>물리 계산 한 번의 간격 — 메트로놈 박자</p>
+      <p class="ex">Unity 기본 0.02초 = 초당 50번 · 90Hz 화면에 맞추면 1/90 ≈ 0.0111초</p>
+      <p class="why">크면 벽 통과·적분 오차 증가 · 작으면 물리 계산량 증가</p>
+      <p class="where">Project Settings → Time → Fixed Timestep · 코드 <code>Time.fixedDeltaTime</code></p>
+    </dd>
+    <dt>터널링<small>Tunneling</small></dt>
+    <dd>
+      <p>빠른 물체가 한 스텝 사이에 얇은 벽을 건너뛰는 현상 — 개울보다 큰 보폭의 징검다리</p>
+      <p class="ex">30 m/s × 0.02초 = 한 번에 0.6 m 순간이동 → 벽 0.2 m + 공 0.2 m 를 통째로 건너뜀</p>
+      <p class="why">시작 위치에 따라 됐다 안 됐다 하는 «운에 맡긴 버그» → 한 번 테스트로는 못 찾음</p>
+      <p class="where">던진 물체 · 총알 · 대시 이동 · 빠르게 휘두른 컨트롤러</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어 · 물리</div>
+  <h2>용어 미리보기 — 물리 엔진 (3/3)</h2>
+  <dl class="terms">
+    <dt>CCD<small>Continuous Collision<br>Detection</small></dt>
+    <dd>
+      <p>도착 자리만 보지 않고 이동 «경로 전체» 를 검사하는 연속 충돌 판정</p>
+      <p class="ex">같은 30 m/s 공도 CCD 를 켜면 벽 앞에서 정지 (터널링 실험실)</p>
+      <p class="why">모든 물체에 켜면 계산 비용 증가 → 빠른 물체에만 선택적으로</p>
+      <p class="where">Rigidbody → Collision Detection → Continuous · Continuous Dynamic · Continuous Speculative</p>
+    </dd>
+    <dt>광역·정밀 판정<small>Broad · Narrow phase</small></dt>
+    <dd>
+      <p>후보를 대충 거르는 단계(광역) → 후보만 정확히 검사하는 단계(정밀) — 공항 문형 탐지기 → 몸수색</p>
+      <p class="ex">물체 1,000개 = 499,500쌍 → 광역에서 대부분 탈락 · 소수 후보만 정밀 검사</p>
+      <p class="why">전부 정밀 검사하면 0.02초 안에 못 끝남 → 물체가 많을수록 프레임 저하</p>
+      <p class="where">Project Settings → Physics → Broadphase Type (메뉴 위치는 버전마다 다름)</p>
+    </dd>
   </dl>
 </section>
 
@@ -603,9 +812,9 @@ animator.SetTrigger("Jump");</code></pre>
   <div class="tag gfx">적분 · 3 ★</div>
   <h3>손계산 — 정지 상태에서 떨어뜨린 공 · Δt = 1초 · 중력 10</h3>
   <svg class="fig7" viewBox="0 0 1100 430" role="img" aria-label="자유낙하를 세 적분기로 계산한 결과 비교">
-    <g font-size="18" fill="#9aa4b8">
-      <g stroke="#2a3040" stroke-width="2"><path d="M120,40 V380 M120,60 H660"/></g>
-      <g stroke="#2a3040" stroke-dasharray="4 6">
+    <g font-size="18" fill="#4a463e">
+      <g stroke="#8a8476" stroke-width="2"><path d="M120,40 V380 M120,60 H660"/></g>
+      <g stroke="#cfc6b2" stroke-dasharray="4 6">
         <path d="M120,160 H660 M120,260 H660 M120,360 H660 M370,60 V375 M620,60 V375"/>
       </g>
       <text x="108" y="66" text-anchor="end">0 m</text>
@@ -615,29 +824,29 @@ animator.SetTrigger("Jump");</code></pre>
       <text x="120" y="404" text-anchor="middle">0초</text>
       <text x="370" y="404" text-anchor="middle">1초</text>
       <text x="620" y="404" text-anchor="middle">2초</text>
-      <path fill="none" stroke="#e8ecf4" stroke-width="3" stroke-dasharray="7 6" d="M120.0,60.0 L145.0,60.5 L170.0,62.0 L195.0,64.5 L220.0,68.0 L245.0,72.5 L270.0,78.0 L295.0,84.5 L320.0,92.0 L345.0,100.5 L370.0,110.0 L395.0,120.5 L420.0,132.0 L445.0,144.5 L470.0,158.0 L495.0,172.5 L520.0,188.0 L545.0,204.5 L570.0,222.0 L595.0,240.5 L620.0,260.0"/>
-      <polyline fill="none" stroke="#ff5a4d" stroke-width="4" points="120,60 370,60 620,160"/>
-      <polyline fill="none" stroke="#35d6e6" stroke-width="4" points="120,60 370,160 620,360"/>
-      <polyline fill="none" stroke="#a8e05f" stroke-width="4" points="120,60 370,110 620,260"/>
-      <g><circle cx="620" cy="160" r="8" fill="#ff5a4d"/><circle cx="620" cy="360" r="8" fill="#35d6e6"/><circle cx="620" cy="260" r="9" fill="#a8e05f"/><circle cx="370" cy="110" r="7" fill="#a8e05f"/><circle cx="370" cy="160" r="7" fill="#35d6e6"/><circle cx="370" cy="60" r="7" fill="#ff5a4d"/></g>
+      <path fill="none" stroke="#1b1a17" stroke-width="3" stroke-dasharray="7 6" d="M120.0,60.0 L145.0,60.5 L170.0,62.0 L195.0,64.5 L220.0,68.0 L245.0,72.5 L270.0,78.0 L295.0,84.5 L320.0,92.0 L345.0,100.5 L370.0,110.0 L395.0,120.5 L420.0,132.0 L445.0,144.5 L470.0,158.0 L495.0,172.5 L520.0,188.0 L545.0,204.5 L570.0,222.0 L595.0,240.5 L620.0,260.0"/>
+      <polyline fill="none" stroke="#c2401d" stroke-width="4" points="120,60 370,60 620,160"/>
+      <polyline fill="none" stroke="#0d6b78" stroke-width="4" points="120,60 370,160 620,360"/>
+      <polyline fill="none" stroke="#4f7a16" stroke-width="4" points="120,60 370,110 620,260"/>
+      <g><circle cx="620" cy="160" r="8" fill="#c2401d"/><circle cx="620" cy="360" r="8" fill="#0d6b78"/><circle cx="620" cy="260" r="9" fill="#4f7a16"/><circle cx="370" cy="110" r="7" fill="#4f7a16"/><circle cx="370" cy="160" r="7" fill="#0d6b78"/><circle cx="370" cy="60" r="7" fill="#c2401d"/></g>
       <g font-size="20" font-weight="700">
-        <text x="640" y="150" fill="#ff5a4d">오일러 −10</text>
-        <text x="640" y="355" fill="#35d6e6">세미암시적 −30</text>
-        <text x="640" y="252" fill="#a8e05f">베를레 −20 = 정답</text>
+        <text x="640" y="150" fill="#c2401d">오일러 −10</text>
+        <text x="640" y="355" fill="#0d6b78">세미암시적 −30</text>
+        <text x="640" y="252" fill="#4f7a16">베를레 −20 = 정답</text>
       </g>
       <g font-size="19">
-        <text x="830" y="70" fill="#e8ecf4" font-weight="700">정답 \(x = -5t^2\)</text>
+        <text x="830" y="70" fill="#1b1a17" font-weight="700">정답 x = −5t²</text>
         <text x="830" y="100">2초 후 −20 m</text>
-        <text x="830" y="150" fill="#ff5a4d" font-weight="700">오일러</text>
+        <text x="830" y="150" fill="#c2401d" font-weight="700">오일러</text>
         <text x="830" y="176">1초 : 위치 0 (옛 속도 0)</text>
         <text x="830" y="200">2초 : 0 + (−10) = −10</text>
-        <text x="830" y="248" fill="#35d6e6" font-weight="700">세미암시적</text>
+        <text x="830" y="248" fill="#0d6b78" font-weight="700">세미암시적</text>
         <text x="830" y="274">1초 : 속도 −10 먼저 → −10</text>
         <text x="830" y="298">2초 : −10 + (−20) = −30</text>
-        <text x="830" y="346" fill="#a8e05f" font-weight="700">베를레</text>
+        <text x="830" y="346" fill="#4f7a16" font-weight="700">베를레</text>
         <text x="830" y="372">2(−5) − 0 + (−10) = −20</text>
       </g>
-      <text x="390" y="40" fill="#e8ecf4" font-size="17">점선 = 실제 곡선</text>
+      <text x="390" y="40" fill="#1b1a17" font-size="17">점선 = 실제 곡선</text>
     </g>
   </svg>
   <aside class="notes">
@@ -706,41 +915,41 @@ animator.SetTrigger("Jump");</code></pre>
   <div class="tag gfx">고정 타임스텝 · 1 ★</div>
   <h3>90Hz 화면 · 50Hz 물리 — 떨림(judder)이 생기는 이유</h3>
   <svg class="fig7" style="max-height:390px" viewBox="0 0 1100 380" role="img" aria-label="90Hz 화면 프레임과 50Hz 물리 스텝의 엇갈림">
-    <g font-size="18" fill="#9aa4b8">
-      <text x="20" y="78" fill="#35d6e6" font-weight="700" font-size="20">화면 90Hz</text>
+    <g font-size="18" fill="#4a463e">
+      <text x="20" y="78" fill="#0d6b78" font-weight="700" font-size="20">화면 90Hz</text>
       <text x="20" y="96" font-size="15">11.1 ms 마다</text>
-      <text x="20" y="178" fill="#a8e05f" font-weight="700" font-size="20">물리 50Hz</text>
+      <text x="20" y="178" fill="#4f7a16" font-weight="700" font-size="20">물리 50Hz</text>
       <text x="20" y="196" font-size="15">20 ms 마다</text>
-      <g stroke="#2a3040" stroke-width="2"><path d="M160,120 H1060"/></g>
+      <g stroke="#8a8476" stroke-width="2"><path d="M160,120 H1060"/></g>
       <!-- 화면 프레임 : 0~100ms → 160 ~ 1060 (9px/ms) -->
-      <g fill="#0e3a42" stroke="#35d6e6" stroke-width="2">
-        <rect x="162" y="58" width="96" height="44" rx="5"/><rect x="262" y="58" width="96" height="44" rx="5"/>
-        <rect x="362" y="58" width="96" height="44" rx="5"/><rect x="462" y="58" width="96" height="44" rx="5"/>
-        <rect x="562" y="58" width="96" height="44" rx="5"/><rect x="662" y="58" width="96" height="44" rx="5"/>
-        <rect x="762" y="58" width="96" height="44" rx="5"/><rect x="862" y="58" width="96" height="44" rx="5"/>
-        <rect x="962" y="58" width="96" height="44" rx="5"/>
+      <g fill="#dcebec" stroke="#0d6b78" stroke-width="2">
+        <rect x="162" y="58" width="96" height="44" rx="0"/><rect x="262" y="58" width="96" height="44" rx="0"/>
+        <rect x="362" y="58" width="96" height="44" rx="0"/><rect x="462" y="58" width="96" height="44" rx="0"/>
+        <rect x="562" y="58" width="96" height="44" rx="0"/><rect x="662" y="58" width="96" height="44" rx="0"/>
+        <rect x="762" y="58" width="96" height="44" rx="0"/><rect x="862" y="58" width="96" height="44" rx="0"/>
+        <rect x="962" y="58" width="96" height="44" rx="0"/>
       </g>
-      <g fill="#e8ecf4" font-size="17" text-anchor="middle">
+      <g fill="#1b1a17" font-size="17" text-anchor="middle">
         <text x="210" y="86">F1</text><text x="310" y="86">F2</text><text x="410" y="86">F3</text><text x="510" y="86">F4</text>
         <text x="610" y="86">F5</text><text x="710" y="86">F6</text><text x="810" y="86">F7</text><text x="910" y="86">F8</text><text x="1010" y="86">F9</text>
       </g>
       <!-- 물리 스텝 : 20, 40, 60, 80, 100 ms → x = 160 + ms*9 -->
-      <g fill="#a8e05f">
+      <g fill="#4f7a16">
         <circle cx="340" cy="170" r="11"/><circle cx="520" cy="170" r="11"/><circle cx="700" cy="170" r="11"/><circle cx="880" cy="170" r="11"/><circle cx="1060" cy="170" r="11"/>
       </g>
-      <g stroke="#a8e05f" stroke-dasharray="3 4" stroke-width="2">
+      <g stroke="#4f7a16" stroke-dasharray="3 4" stroke-width="2">
         <path d="M340,158 V104 M520,158 V104 M700,158 V104 M880,158 V104 M1060,158 V104"/>
       </g>
       <g font-size="15" text-anchor="middle">
         <text x="340" y="205">20</text><text x="520" y="205">40</text><text x="700" y="205">60</text><text x="880" y="205">80</text><text x="1050" y="205">100 ms</text>
       </g>
-      <text x="20" y="258" fill="#ffc44d" font-weight="700" font-size="20">프레임당 이동</text>
-      <g font-size="22" font-weight="700" text-anchor="middle" fill="#ffc44d">
+      <text x="20" y="258" fill="#a8701a" font-weight="700" font-size="20">프레임당 이동</text>
+      <g font-size="22" font-weight="700" text-anchor="middle" fill="#a8701a">
         <text x="210" y="258">0</text><text x="310" y="258">1</text><text x="410" y="258">0</text><text x="510" y="258">1</text>
         <text x="610" y="258">0</text><text x="710" y="258">1</text><text x="810" y="258">0</text><text x="910" y="258">1</text><text x="1010" y="258">1</text>
       </g>
-      <text x="160" y="310" fill="#e8ecf4" font-size="20">각 화면 프레임 사이에 물리 스텝이 0번 또는 1번 → 화면 속 물체가 <tspan fill="#ff5a4d" font-weight="700">멈춤·이동·멈춤·이동</tspan></text>
-      <text x="160" y="345" fill="#9aa4b8" font-size="18">일정 속도로 움직이는 물체가 «덜컥덜컥» → VR 에서는 시야 전체의 미세 진동으로 지각</text>
+      <text x="160" y="310" fill="#1b1a17" font-size="20">각 화면 프레임 사이에 물리 스텝이 0번 또는 1번 → 화면 속 물체가 <tspan fill="#c2401d" font-weight="700">멈춤·이동·멈춤·이동</tspan></text>
+      <text x="160" y="345" fill="#4a463e" font-size="18">일정 속도로 움직이는 물체가 «덜컥덜컥» → VR 에서는 시야 전체의 미세 진동으로 지각</text>
     </g>
   </svg>
   <div class="analogy">
@@ -802,32 +1011,32 @@ animator.SetTrigger("Jump");</code></pre>
   <div class="tag gfx">충돌 · 2 ★</div>
   <h3>AABB — 축에 나란한 겉 상자로 후보 거르기</h3>
   <svg class="fig7" viewBox="0 0 1100 420" role="img" aria-label="광역 판정 AABB 와 정밀 판정 비교">
-    <g font-size="18" fill="#9aa4b8">
-      <text x="270" y="30" text-anchor="middle" fill="#e8ecf4" font-weight="700" font-size="22">① 광역 판정 : 겉 상자만 비교</text>
-      <text x="830" y="30" text-anchor="middle" fill="#e8ecf4" font-weight="700" font-size="22">② 정밀 판정 : 후보 쌍만 실제 모양</text>
-      <rect x="20" y="50" width="500" height="320" rx="12" fill="none" stroke="#2a3040" stroke-width="2"/>
-      <rect x="580" y="50" width="500" height="320" rx="12" fill="none" stroke="#2a3040" stroke-width="2"/>
+    <g font-size="18" fill="#4a463e">
+      <text x="270" y="30" text-anchor="middle" fill="#1b1a17" font-weight="700" font-size="22">① 광역 판정 : 겉 상자만 비교</text>
+      <text x="830" y="30" text-anchor="middle" fill="#1b1a17" font-weight="700" font-size="22">② 정밀 판정 : 후보 쌍만 실제 모양</text>
+      <rect x="20" y="50" width="500" height="320" rx="0" fill="none" stroke="#8a8476" stroke-width="2"/>
+      <rect x="580" y="50" width="500" height="320" rx="0" fill="none" stroke="#8a8476" stroke-width="2"/>
       <!-- 물체들 -->
-      <circle cx="120" cy="140" r="45" fill="#0e3a42" stroke="#35d6e6" stroke-width="3"/>
-      <rect x="75" y="95" width="90" height="90" fill="none" stroke="#9aa4b8" stroke-dasharray="6 5" stroke-width="2"/>
-      <polygon points="200,170 290,130 300,210 230,235" fill="#3a2d0e" stroke="#ffc44d" stroke-width="3"/>
-      <rect x="200" y="130" width="100" height="105" fill="none" stroke="#ff5a4d" stroke-dasharray="6 5" stroke-width="3"/>
-      <circle cx="330" cy="250" r="40" fill="#421229" stroke="#ff5fa2" stroke-width="3"/>
-      <rect x="290" y="210" width="80" height="80" fill="none" stroke="#ff5a4d" stroke-dasharray="6 5" stroke-width="3"/>
-      <rect x="400" y="80" width="70" height="50" fill="#21330f" stroke="#a8e05f" stroke-width="3"/>
-      <rect x="400" y="80" width="70" height="50" fill="none" stroke="#9aa4b8" stroke-dasharray="6 5" stroke-width="2"/>
-      <text x="270" y="330" text-anchor="middle" fill="#ff5a4d" font-size="19">빨간 점선 상자끼리 겹침 → 후보 1쌍</text>
+      <circle cx="120" cy="140" r="45" fill="#dcebec" stroke="#0d6b78" stroke-width="3"/>
+      <rect x="75" y="95" width="90" height="90" fill="none" stroke="#4a463e" stroke-dasharray="6 5" stroke-width="2"/>
+      <polygon points="200,170 290,130 300,210 230,235" fill="#f3e7cf" stroke="#a8701a" stroke-width="3"/>
+      <rect x="200" y="130" width="100" height="105" fill="none" stroke="#c2401d" stroke-dasharray="6 5" stroke-width="3"/>
+      <circle cx="330" cy="250" r="40" fill="#f1dde6" stroke="#a3245e" stroke-width="3"/>
+      <rect x="290" y="210" width="80" height="80" fill="none" stroke="#c2401d" stroke-dasharray="6 5" stroke-width="3"/>
+      <rect x="400" y="80" width="70" height="50" fill="#e3ecd3" stroke="#4f7a16" stroke-width="3"/>
+      <rect x="400" y="80" width="70" height="50" fill="none" stroke="#4a463e" stroke-dasharray="6 5" stroke-width="2"/>
+      <text x="270" y="330" text-anchor="middle" fill="#c2401d" font-size="19">빨간 점선 상자끼리 겹침 → 후보 1쌍</text>
       <text x="270" y="356" text-anchor="middle" font-size="17">나머지 쌍은 여기서 탈락 (검사 끝)</text>
       <!-- 정밀 -->
-      <polygon points="680,190 830,123 847,257 730,298" fill="#3a2d0e" stroke="#ffc44d" stroke-width="3"/>
-      <circle cx="875" cy="322" r="36" fill="#421229" stroke="#ff5fa2" stroke-width="3"/>
-      <rect x="680" y="123" width="167" height="175" fill="none" stroke="#ff5a4d" stroke-dasharray="6 5" stroke-width="2"/>
-      <rect x="839" y="286" width="72" height="72" fill="none" stroke="#ff5a4d" stroke-dasharray="6 5" stroke-width="2"/>
-      <line x1="847" y1="257" x2="862" y2="289" stroke="#a8e05f" stroke-width="2" stroke-dasharray="3 4"/>
-      <text x="830" y="80" text-anchor="middle" fill="#a8e05f" font-size="19">겉 상자(빨간 점선)는 겹침 · 실제 모양은 떨어짐</text>
-      <text x="830" y="106" text-anchor="middle" fill="#e8ecf4" font-size="19">→ 충돌 아님 · 비싼 계산은 이 쌍에만</text>
-      <text x="868" y="266" fill="#a8e05f" font-size="17">틈</text>
-      <text x="550" y="404" text-anchor="middle" fill="#9aa4b8" font-size="17">AABB = Axis-Aligned Bounding Box · 회전해도 축에 나란하게 다시 계산한 겉 상자</text>
+      <polygon points="680,190 830,123 847,257 730,298" fill="#f3e7cf" stroke="#a8701a" stroke-width="3"/>
+      <circle cx="875" cy="322" r="36" fill="#f1dde6" stroke="#a3245e" stroke-width="3"/>
+      <rect x="680" y="123" width="167" height="175" fill="none" stroke="#c2401d" stroke-dasharray="6 5" stroke-width="2"/>
+      <rect x="839" y="286" width="72" height="72" fill="none" stroke="#c2401d" stroke-dasharray="6 5" stroke-width="2"/>
+      <line x1="847" y1="257" x2="862" y2="289" stroke="#4f7a16" stroke-width="2" stroke-dasharray="3 4"/>
+      <text x="830" y="80" text-anchor="middle" fill="#4f7a16" font-size="19">겉 상자(빨간 점선)는 겹침 · 실제 모양은 떨어짐</text>
+      <text x="830" y="106" text-anchor="middle" fill="#1b1a17" font-size="19">→ 충돌 아님 · 비싼 계산은 이 쌍에만</text>
+      <text x="868" y="266" fill="#4f7a16" font-size="17">틈</text>
+      <text x="550" y="404" text-anchor="middle" fill="#4a463e" font-size="17">AABB = Axis-Aligned Bounding Box · 회전해도 축에 나란하게 다시 계산한 겉 상자</text>
     </g>
   </svg>
   <aside class="notes">
@@ -844,8 +1053,8 @@ animator.SetTrigger("Jump");</code></pre>
       <h4>AABB 겹침 (광역)</h4>
       <p class="small">모든 축에서 «구간이 겹치면» 충돌 후보<br>
       A : x 0~2, y 0~2 · B : x 1.5~3, y 1~4<br>
-      x : 0~2 와 1.5~3 → 겹침 ✔<br>
-      y : 0~2 와 1~4 → 겹침 ✔<br>
+      x : 0~2 와 1.5~3 → <b>겹침</b><br>
+      y : 0~2 와 1~4 → <b>겹침</b><br>
       → <b>후보</b> · 한 축이라도 안 겹치면 즉시 탈락</p>
     </div>
     <div class="card lab">
@@ -859,6 +1068,14 @@ animator.SetTrigger("Jump");</code></pre>
   <div class="analogy">
     <p><b>도서관 책 찾기</b> (구역 나누기) : 모든 책장을 뒤지지 않고 «층 → 구역 → 서가 → 칸» 순서로 좁힘 · 물리 엔진도 공간을 상자 계층(BVH)·정렬 목록(Sweep and Prune)으로 나눠 후보를 빨리 찾음</p>
   </div>
+  <dl class="terms">
+    <dt>AABB<small>Axis-Aligned Bounding Box</small></dt>
+    <dd>
+      <p>물체를 감싸는, x·y·z 축에 나란한 가장 작은 상자 — 물건 크기에 맞춘 택배 상자</p>
+      <p class="ex">반지름 0.5 공 → 중심 ±0.5 의 1 × 1 × 1 상자 · 비스듬히 누운 막대는 상자가 훨씬 커짐</p>
+      <p class="why">비교가 «구간 겹침» 숫자 비교뿐이라 아주 빠름 · 대신 실제보다 커서 거짓 후보 발생</p>
+    </dd>
+  </dl>
   <aside class="notes">
     - 구가 가장 싼 Collider 인 이유 : 정밀 판정이 거리 1번 계산으로 끝남
     - 파고든 깊이(0.1) → 엔진이 그만큼 밀어냄 = «침투 해소» · 함정 #6 의 떨림과 연결
@@ -995,6 +1212,15 @@ void Update() {
       </div>
     </div>
   </div>
+  <dl class="terms">
+    <dt>침투 해소<small>Depenetration</small></dt>
+    <dd>
+      <p>이미 겹쳐 버린 두 물체를 엔진이 가장 가까운 바깥쪽으로 밀어내는 처리</p>
+      <p class="ex">공이 벽에 0.067 m 파고듦 → 다음 물리 스텝에서 0.067 m 밀려 나옴</p>
+      <p class="why">파고든 깊이가 크면 «가장 가까운 바깥» 이 벽 뒤 → 벽 통과로 이어짐</p>
+      <p class="where">Project Settings → Physics → Default Max Depenetration Velocity (밀어내는 최대 속도)</p>
+    </dd>
+  </dl>
   <aside class="notes">
     - 앞 «충돌 · 3» 의 침투 해소(파고든 만큼 밀어냄)가 여기서 등장
     - 반대편으로 밀려나는 경우 : 중심이 벽 중앙선을 넘으면 엔진 입장에선 그쪽이 더 가까운 출구
@@ -1029,19 +1255,19 @@ void Update() {
       }<br><br>
       Collision Detection : Discrete<br>
       Interpolate : None<br><br>
-      <span style="color:#ff5a4d">// 속도 0 · 순간이동 · 경로 검사 없음</span>
+      <span style="color:var(--trap)">// 속도 0 · 순간이동 · 경로 검사 없음</span>
     </div>
     <div class="good">
       <h4>학생이 요구할 코드</h4>
       void Update() { input = ReadMove(); }<br>
       void <b>FixedUpdate</b>() {<br>
       &nbsp;&nbsp;var v = dir * speed;<br>
-      &nbsp;&nbsp;v.y = rb.linearVelocity.y; <span style="color:#5f6980">// 중력 유지</span><br>
+      &nbsp;&nbsp;v.y = rb.linearVelocity.y; <span style="color:var(--ink-3)">// 중력 유지</span><br>
       &nbsp;&nbsp;rb.<b>linearVelocity</b> = v;<br>
       }<br>
       Collision Detection : <b>Continuous Dynamic</b><br>
       Interpolate : <b>Interpolate</b><br>
-      <span style="color:#a8e05f">// 속도로 움직임 → 엔진이 경로·충돌 계산</span>
+      <span style="color:var(--lab)">// 속도로 움직임 → 엔진이 경로·충돌 계산</span>
     </div>
   </div>
   <p class="small" style="margin-top:.7em">입력은 <code>Update</code> 에서 읽기 (키 누름을 놓치지 않게) · 물리 적용은 <code>FixedUpdate</code> 에서 — 3주차 실행 순서</p>
@@ -1077,16 +1303,76 @@ void Update() {
 
 <section>
   <div class="tag vr">Part II 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>용어 미리보기 — 지각 (1/3)</h2>
   <dl class="terms">
-    <dt>광학 흐름<small>Optic flow</small></dt><dd>내가 움직일 때 눈에 맺힌 장면 전체가 흘러가는 패턴</dd>
-    <dt>확장 초점<small>FOE</small></dt><dd>앞으로 나아갈 때 흐름이 뿜어져 나오는 한 점 = 진행 방향</dd>
-    <dt>벡션<small>Vection</small></dt><dd>몸은 가만한데 <b>보이는 흐름만으로</b> 내가 움직인다고 느끼는 착각</dd>
-    <dt>전정계<small>Vestibular system</small></dt><dd>속귀 안의 균형·움직임 감지 기관 (2주차)</dd>
-    <dt>반고리관<small>Semicircular canals</small></dt><dd>회전 가속을 감지하는 고리 3개 · 서로 직각</dd>
-    <dt>이석기관<small>Otolith organs</small></dt><dd>직선 가속과 중력(머리 기울기)을 감지</dd>
-    <dt>감각 충돌<small>Sensory conflict</small></dt><dd>눈이 보고하는 움직임과 전정계가 보고하는 움직임의 불일치</dd>
-    <dt>자세 불안정<small>Postural instability</small></dt><dd>몸의 균형 제어가 흔들리는 상태 — 멀미를 설명하는 다른 이론</dd>
+    <dt>광학 흐름<small>Optic flow</small></dt>
+    <dd>
+      <p>내가 움직일 때 눈에 비친 장면 전체가 흘러가는 패턴 — 달리는 차 앞유리 너머 풍경의 흐름</p>
+      <p class="ex">걷기 1.4 m/s · 옆 벽 2 m → 벽이 눈에서 초당 약 40° 흘러감</p>
+      <p class="why">뇌가 «내가 움직인다» 를 판단하는 주 단서 → VR 멀미의 출발점</p>
+      <p class="where">VR 스틱 이동·카메라 이동 때 시야 전체 · 오늘 벡션 실험실</p>
+    </dd>
+    <dt>확장 초점<small>FOE · Focus of Expansion</small></dt>
+    <dd>
+      <p>앞으로 나아갈 때 흐름이 뿜어져 나오는 한 점 = 진행 방향</p>
+      <p class="ex">고속도로 운전 : 도로 끝 한 점은 거의 정지 · 가장자리 가드레일은 휙휙</p>
+      <p class="why">뇌가 «어디로 가고 있나» 를 아는 단서 → 이 점이 흔들리면 진행 방향 판단도 흔들림</p>
+      <p class="where">벡션 실험실 «정속» 모드의 화면 가운데 + 부근</p>
+    </dd>
+    <dt>벡션<small>Vection</small></dt>
+    <dd>
+      <p>몸은 가만한데 <b>보이는 흐름만으로</b> 내가 움직인다고 느끼는 착각</p>
+      <p class="ex">정차한 기차에서 옆 기차가 출발하면 내 기차가 뒤로 가는 느낌</p>
+      <p class="why">시각 유발 멀미의 선행 조건 · HMD 에서 평균 4.4초 만에 시작 (모니터 6.2초)</p>
+      <p class="where">VR 스틱 이동 · 롤러코스터 콘텐츠 · 360° 이동 영상</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>용어 미리보기 — 지각 (2/3)</h2>
+  <dl class="terms">
+    <dt>전정계<small>Vestibular system</small></dt>
+    <dd>
+      <p>속귀 안의 균형·움직임 감지 기관 — 몸 안의 가속도 센서 (2주차)</p>
+      <p class="ex">엘리베이터 출발 때 «쑥» · 일정한 속도로 올라가는 중엔 아무 느낌 없음</p>
+      <p class="why">속도가 아니라 가속만 감지 → VR 에서 눈이 본 가속과 어긋나면 멀미</p>
+      <p class="where">Quest 헤드셋 속 IMU 가 같은 역할 — 머리 회전·가속 측정</p>
+    </dd>
+    <dt>반고리관<small>Semicircular canals</small></dt>
+    <dd>
+      <p>회전 가속을 감지하는 액체 든 고리 3개 · 서로 직각 — 세 방향 회전을 각각 담당</p>
+      <p class="ex">제자리에서 빙글빙글 돌다 멈추면 세상이 계속 도는 느낌 = 고리 속 액체가 아직 흐르는 중</p>
+      <p class="why">VR 스틱 회전 = 눈만 돌고 반고리관은 정지 → 임계 약 27°/s 로 가장 민감</p>
+      <p class="where">대응 설정 : XRI 의 Snap Turn Provider (스냅턴) · Continuous Turn 대신 사용</p>
+    </dd>
+    <dt>이석기관<small>Otolith organs</small></dt>
+    <dd>
+      <p>직선 가속과 중력(머리 기울기)을 감지하는 기관 — 젤리 위에 얹힌 작은 돌 알갱이</p>
+      <p class="ex">버스 급출발 때 몸이 뒤로 쏠리는 느낌 · 고속도로 정속 주행 중엔 무감각</p>
+      <p class="why">가속과 기울기를 구분 못 함 → 화면 속 전진 가속이 «몸이 기운다» 로 해석되기도</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>용어 미리보기 — 지각 (3/3)</h2>
+  <dl class="terms">
+    <dt>감각 충돌<small>Sensory conflict</small></dt>
+    <dd>
+      <p>눈이 보고하는 움직임과 전정계가 보고하는 움직임이 서로 다른 상태</p>
+      <p class="ex">VR 에서 스틱으로 전진 : 눈은 «가속 중» · 속귀는 «정지»</p>
+      <p class="why">멀미의 대표 설명 (Reason &amp; Brand) → 불일치 줄이기 = 컴포트 설계의 기본</p>
+      <p class="where">스틱 이동 · 카메라 흔들기 · 컷신 카메라 이동 (11·12주 함정)</p>
+    </dd>
+    <dt>자세 불안정<small>Postural instability</small></dt>
+    <dd>
+      <p>몸의 균형 제어가 흔들리는 상태 — 멀미를 설명하는 또 하나의 이론</p>
+      <p class="ex">멀미가 난 사람은 증상 <b>이전</b>부터 몸의 흔들림이 커짐 (Smart et al. 2002)</p>
+      <p class="why">서서 하는 VR 에서 시야 흔들기 = 균형 교란 → 앉은 자세·고정 기준점이 도움</p>
+    </dd>
   </dl>
 </section>
 
@@ -1095,15 +1381,15 @@ void Update() {
   <h3>광학 흐름 — 전진은 방사형, 회전은 평행 흐름</h3>
   <svg class="fig7" viewBox="0 0 1100 400" role="img" aria-label="전진 시 방사형 광학 흐름과 회전 시 평행 흐름">
     <defs>
-      <marker id="ah7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#35d6e6"/></marker>
-      <marker id="ah7v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5fa2"/></marker>
+      <marker id="ah7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0d6b78"/></marker>
+      <marker id="ah7v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a3245e"/></marker>
     </defs>
-    <g font-size="19" fill="#9aa4b8">
-      <rect x="20" y="40" width="500" height="290" rx="12" fill="none" stroke="#2a3040" stroke-width="2"/>
-      <rect x="580" y="40" width="500" height="290" rx="12" fill="none" stroke="#2a3040" stroke-width="2"/>
-      <text x="270" y="28" text-anchor="middle" fill="#35d6e6" font-weight="700" font-size="22">앞으로 걷기 (병진)</text>
-      <text x="830" y="28" text-anchor="middle" fill="#ff5fa2" font-weight="700" font-size="22">제자리 고개 돌리기 (요 회전)</text>
-      <g stroke="#35d6e6" stroke-width="3" marker-end="url(#ah7)">
+    <g font-size="19" fill="#4a463e">
+      <rect x="20" y="40" width="500" height="290" rx="0" fill="none" stroke="#8a8476" stroke-width="2"/>
+      <rect x="580" y="40" width="500" height="290" rx="0" fill="none" stroke="#8a8476" stroke-width="2"/>
+      <text x="270" y="28" text-anchor="middle" fill="#0d6b78" font-weight="700" font-size="22">앞으로 걷기 (병진)</text>
+      <text x="830" y="28" text-anchor="middle" fill="#a3245e" font-weight="700" font-size="22">제자리 고개 돌리기 (요 회전)</text>
+      <g stroke="#0d6b78" stroke-width="3" marker-end="url(#ah7)">
         <line x1="290" y1="185" x2="306" y2="185"/><line x1="250" y1="185" x2="234" y2="185"/>
         <line x1="270" y1="165" x2="270" y2="152"/><line x1="270" y1="205" x2="270" y2="218"/>
         <line x1="340" y1="185" x2="392" y2="185"/><line x1="200" y1="185" x2="148" y2="185"/>
@@ -1113,16 +1399,16 @@ void Update() {
         <line x1="400" y1="90" x2="470" y2="56"/><line x1="140" y1="90" x2="70" y2="56"/>
         <line x1="400" y1="280" x2="470" y2="314"/><line x1="140" y1="280" x2="70" y2="314"/>
       </g>
-      <circle cx="270" cy="185" r="8" fill="#ffc44d"/>
-      <text x="270" y="302" text-anchor="middle" fill="#ffc44d" font-size="18">● 확장 초점 = 진행 방향</text>
-      <g stroke="#ff5fa2" stroke-width="3" marker-end="url(#ah7v)">
+      <circle cx="270" cy="185" r="8" fill="#a8701a"/>
+      <text x="270" y="302" text-anchor="middle" fill="#a8701a" font-size="18">● 확장 초점 = 진행 방향</text>
+      <g stroke="#a3245e" stroke-width="3" marker-end="url(#ah7v)">
         <line x1="640" y1="90" x2="700" y2="90"/><line x1="780" y1="90" x2="840" y2="90"/><line x1="920" y1="90" x2="980" y2="90"/>
         <line x1="640" y1="185" x2="700" y2="185"/><line x1="780" y1="185" x2="840" y2="185"/><line x1="920" y1="185" x2="980" y2="185"/>
         <line x1="640" y1="280" x2="700" y2="280"/><line x1="780" y1="280" x2="840" y2="280"/><line x1="920" y1="280" x2="980" y2="280"/>
       </g>
-      <text x="830" y="232" text-anchor="middle" fill="#9aa4b8" font-size="17">거리와 무관하게 시야 전체가 같은 속도</text>
-      <text x="270" y="365" text-anchor="middle" fill="#e8ecf4" font-size="19">가장자리 · 가까운 물체일수록 긴 화살표</text>
-      <text x="830" y="365" text-anchor="middle" fill="#e8ecf4" font-size="19">불편 임계가 병진보다 낮음 (뒤 장 수치)</text>
+      <text x="830" y="232" text-anchor="middle" fill="#4a463e" font-size="17">거리와 무관하게 시야 전체가 같은 속도</text>
+      <text x="270" y="365" text-anchor="middle" fill="#1b1a17" font-size="19">가장자리 · 가까운 물체일수록 긴 화살표</text>
+      <text x="830" y="365" text-anchor="middle" fill="#1b1a17" font-size="19">불편 임계가 병진보다 낮음 (뒤 장 수치)</text>
     </g>
   </svg>
   <aside class="notes">
@@ -1231,12 +1517,12 @@ void Update() {
   <h2>전정계 — 속귀의 가속도 센서 (2주차 재등장)</h2>
   <div class="cols">
     <div>
-      <img src="../../figures/out/w02-vestibular-imu.png" class="fig" style="max-height:200px" alt="속귀 전정계와 IMU 센서 비교">
       <table style="font-size:.64em">
         <tr><th>기관</th><th>감지</th><th>못 느끼는 것</th></tr>
         <tr><td>반고리관 ×3</td><td>회전 가속</td><td>일정한 속도의 회전 (수십 초 후)</td></tr>
         <tr><td>이석기관 ×2</td><td>직선 가속 + 중력</td><td><b>일정한 속도의 직선 이동</b></td></tr>
       </table>
+      <p class="small muted">속귀 구조 · 헤드셋 IMU 와의 대응 → 다음 장 도해</p>
     </div>
     <div>
       <div class="analogy">
@@ -1246,6 +1532,16 @@ void Update() {
     </div>
   </div>
   <p class="note">LaValle 8.1~8.2 Velocities and Accelerations · The Vestibular System</p>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 6 · 도해</div>
+  <h3>속귀 전정계 ↔ 헤드셋 IMU — 같은 일을 하는 두 센서</h3>
+  <img src="../../figures/out/w02-vestibular-imu.png" class="fig" alt="속귀 전정계(반고리관·이석기관)와 IMU(자이로·가속도계) 대응 비교">
+  <aside class="notes">
+    - 반고리관 ↔ 자이로(회전) · 이석기관 ↔ 가속도계(직선 가속 + 중력)
+    - 둘 다 «속도» 가 아니라 «변화» 를 잼 → 등속은 못 느낌 (앞 장)
+  </aside>
 </section>
 
 <section>
@@ -1276,25 +1572,25 @@ void Update() {
   <div class="tag vr">지각 · 8 ★</div>
   <h3>가속 vs 등속 — 불일치는 가속 구간에서 생김</h3>
   <svg class="fig7" viewBox="0 0 1100 420" role="img" aria-label="속도, 시각 가속, 전정 신호 그래프">
-    <g font-size="18" fill="#9aa4b8">
-      <text x="20" y="80" fill="#35d6e6" font-weight="700" font-size="20">화면 속 속도</text>
-      <text x="20" y="200" fill="#ffc44d" font-weight="700" font-size="20">눈이 보는 가속</text>
-      <text x="20" y="318" fill="#ff5fa2" font-weight="700" font-size="20">전정계 신호</text>
+    <g font-size="18" fill="#4a463e">
+      <text x="20" y="80" fill="#0d6b78" font-weight="700" font-size="20">화면 속 속도</text>
+      <text x="20" y="200" fill="#a8701a" font-weight="700" font-size="20">눈이 보는 가속</text>
+      <text x="20" y="318" fill="#a3245e" font-weight="700" font-size="20">전정계 신호</text>
       <text x="20" y="338" font-size="15">(의자에 앉아 있음)</text>
       <!-- 구간 배경 -->
-      <rect x="220" y="30" width="200" height="330" fill="rgba(255,90,77,0.10)"/>
-      <rect x="760" y="30" width="200" height="330" fill="rgba(255,90,77,0.10)"/>
+      <rect x="220" y="30" width="200" height="330" fill="#f6e0d6"/>
+      <rect x="760" y="30" width="200" height="330" fill="#f6e0d6"/>
       <!-- 속도 -->
-      <path d="M200,110 H220 L420,50 H760 L960,110 H1080" fill="none" stroke="#35d6e6" stroke-width="4"/>
-      <path d="M200,112 H1080" stroke="#2a3040" stroke-width="2"/>
+      <path d="M200,110 H220 L420,50 H760 L960,110 H1080" fill="none" stroke="#0d6b78" stroke-width="4"/>
+      <path d="M200,112 H1080" stroke="#8a8476" stroke-width="2"/>
       <!-- 가속 -->
-      <path d="M200,200 H1080" stroke="#2a3040" stroke-width="2"/>
-      <path d="M200,200 H220 V160 H420 V200 H760 V240 H960 V200 H1080" fill="none" stroke="#ffc44d" stroke-width="4"/>
+      <path d="M200,200 H1080" stroke="#8a8476" stroke-width="2"/>
+      <path d="M200,200 H220 V160 H420 V200 H760 V240 H960 V200 H1080" fill="none" stroke="#a8701a" stroke-width="4"/>
       <!-- 전정 -->
-      <path d="M200,312 H1080" stroke="#ff5fa2" stroke-width="4"/>
-      <text x="320" y="390" text-anchor="middle" fill="#ff5a4d" font-weight="700" font-size="20">불일치 ↑</text>
-      <text x="590" y="390" text-anchor="middle" fill="#a8e05f" font-weight="700" font-size="20">가속 불일치 없음</text>
-      <text x="860" y="390" text-anchor="middle" fill="#ff5a4d" font-weight="700" font-size="20">불일치 ↑</text>
+      <path d="M200,312 H1080" stroke="#a3245e" stroke-width="4"/>
+      <text x="320" y="390" text-anchor="middle" fill="#c2401d" font-weight="700" font-size="20">불일치 ↑</text>
+      <text x="590" y="390" text-anchor="middle" fill="#4f7a16" font-weight="700" font-size="20">가속 불일치 없음</text>
+      <text x="860" y="390" text-anchor="middle" fill="#c2401d" font-weight="700" font-size="20">불일치 ↑</text>
       <text x="320" y="415" text-anchor="middle" font-size="16">출발 (가속)</text>
       <text x="590" y="415" text-anchor="middle" font-size="16">정속 : 눈도 가속 0 · 전정도 0</text>
       <text x="860" y="415" text-anchor="middle" font-size="16">정지 (감속)</text>
@@ -1543,7 +1839,7 @@ void FixedUpdate() {
   </table>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next-week next">
   <div class="kicker">다음 주</div>
   <div class="rule"></div>
   <h1>중간고사 — <em>구술 방어</em></h1>

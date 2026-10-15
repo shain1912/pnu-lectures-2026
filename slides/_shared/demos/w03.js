@@ -223,7 +223,7 @@
       out.innerHTML =
         '<b class="gfx-txt">실제 머리</b> ' + (a * 180 / Math.PI).toFixed(1) + "°" +
         '　<b class="vr-txt">화면</b> ' + (shownA * 180 / Math.PI).toFixed(1) + "°" +
-        '　<b style="color:' + (bad ? "#ff5a4d" : "#a8e05f") + '">어긋남 ' +
+        '　<b style="color:' + (bad ? "#c2401d" : "#4f7a16") + '">어긋남 ' +
         errDeg.toFixed(1) + "°</b>" +
         (bad ? '　<span class="trap-txt">← 전정계가 감지하는 어긋남</span>' : "");
 

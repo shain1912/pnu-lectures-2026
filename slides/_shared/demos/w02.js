@@ -20,7 +20,7 @@
     opt = opt || {};
     if (typeof THREE === "undefined") {
       host.innerHTML =
-        '<div style="padding:2em;color:#5f6980;font-family:monospace;font-size:.5em">' +
+        '<div style="padding:2em;color:#8a8476;font-family:monospace;font-size:.5em">' +
         "three.js 로드 실패 · 인터넷 연결 확인 필요</div>";
       return null;
     }
@@ -183,8 +183,8 @@
       out.innerHTML =
         '<b class="gfx-txt">a·b</b> = ' + dot.toFixed(3) +
         '　<b class="muted">각</b> = ' + ang.toFixed(1) + "°" +
-        '　<b style="color:#ffc44d">|a×b|</b> = ' + crossLen.toFixed(3) +
-        '　→ <b style="color:' + (inFov ? "#a8e05f" : "#5f6980") + '">' +
+        '　<b style="color:#a8701a">|a×b|</b> = ' + crossLen.toFixed(3) +
+        '　→ <b style="color:' + (inFov ? "#4f7a16" : "#8a8476") + '">' +
         (inFov ? "시야 안 (a·b > cos30° = 0.866)" : "시야 밖") + "</b>";
     }
     az.addEventListener("input", update);
@@ -268,7 +268,7 @@
         p1.x.toFixed(2) + ", " + p1.y.toFixed(2) + ", " + p1.z.toFixed(2) + ")" +
         '　<b class="vr-txt">T·R</b> (회전→이동) = (' +
         p2.x.toFixed(2) + ", " + p2.y.toFixed(2) + ", " + p2.z.toFixed(2) + ")" +
-        '　<b style="color:' + (gap > 0.02 ? "#ff5a4d" : "#5f6980") + '">차이 ' +
+        '　<b style="color:' + (gap > 0.02 ? "#c2401d" : "#8a8476") + '">차이 ' +
         gap.toFixed(2) + "</b>";
     }
     dS.addEventListener("input", update);

@@ -19,7 +19,7 @@
     opt = opt || {};
     if (typeof THREE === "undefined") {
       host.innerHTML =
-        '<div style="padding:2em;color:#5f6980;font-family:monospace;font-size:.5em">' +
+        '<div style="padding:2em;color:#8a8476;font-family:monospace;font-size:.5em">' +
         "three.js 로드 실패 · 인터넷 연결 확인</div>";
       return null;
     }

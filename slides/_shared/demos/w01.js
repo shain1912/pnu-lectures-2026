@@ -215,8 +215,8 @@
       if (bShadow) bShadow.textContent = state.shadow ? "그림자 원기둥 치우기" : "그림자 원기둥 놓기";
       [[bMask, state.mask], [bBridge, state.bridge], [bShadow, !state.shadow]].forEach(function (p) {
         if (!p[0]) return;
-        p[0].style.borderColor = p[1] ? "#ff5fa2" : "";
-        p[0].style.color = p[1] ? "#ff5fa2" : "";
+        p[0].style.borderColor = p[1] ? "#a3245e" : "";
+        p[0].style.color = p[1] ? "#a3245e" : "";
       });
       if (!out) return;
       var msg;

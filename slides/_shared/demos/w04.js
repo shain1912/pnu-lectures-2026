@@ -271,7 +271,7 @@
       if (q < 0.5) { verdict = "깨끗함"; }
       else if (q < 2) { verdict = "깜빡임"; }
       else { verdict = "심각"; }
-      var color = q < 0.5 ? "#a8e05f" : (q < 2 ? "#ffc44d" : "#ff5a4d");
+      var color = q < 0.5 ? "#4f7a16" : (q < 2 ? "#a8701a" : "#c2401d");
 
       out.innerHTML =
         '<b class="gfx-txt">far / near</b> ' + comma(f / n) + " : 1" +

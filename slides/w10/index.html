@@ -15,10 +15,11 @@
   .reveal svg.fig10 text { font-family: Pretendard, "Pretendard Variable", "Malgun Gothic", sans-serif; }
   .reveal .demo-ui select {
     font-family: var(--mono); font-size: 1em; background: var(--bg-card); color: var(--fg);
-    border: 1px solid var(--line); border-radius: 7px; padding: .2em .4em;
+    border: 1px solid var(--ink); border-radius: 0; padding: .2em .4em;
   }
   .reveal .demo-ui input[type=range] { width: 92px; }
   .reveal .quiz td:first-child { white-space: nowrap; }
+  .reveal .trap-txt b, .reveal .lab-txt b, .reveal .gfx-txt b, .reveal .vr-txt b { color: inherit; }
 </style>
 </head>
 <body>
@@ -69,11 +70,11 @@
       <p class="small">키보드·게임패드·Quest 컨트롤러를 <b>하나의 액션</b>으로 묶는 Input System 구성 · 이벤트와 상태 기계로 UI 흐름 설계</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정 진단</h4>
+      <h4><span class="step">2</span> 함정 진단</h4>
       <p class="small">AI 가 만든 UI 에서 <b>Canvas Render Mode · 레이캐스터 · 입력 모듈</b> 세 가지 점검 → 헤드셋 UI 소실 원인 찾기</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> 공간 UI 배치</h4>
+      <h4><span class="step">3</span> 공간 UI 배치</h4>
       <p class="small">UI 의 <b>거리 · 시야 각도 · 각크기(°)</b> 를 손계산 → 편안한 배치 구간 안에 패널 배치</p>
     </div>
   </div>
@@ -142,21 +143,90 @@
 
 <section>
   <div class="tag gfx">Part I 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>이번 파트 용어 미리보기 (1/3)</h2>
   <dl class="terms">
-    <dt>액션<small>Action</small></dt><dd>«점프» «이동» 처럼 <b>기기와 무관한 의도</b> 하나 — 어떤 버튼인지는 따로 연결</dd>
-    <dt>바인딩<small>Binding</small></dt><dd>실제 버튼·스틱을 액션에 잇는 연결선 — 액션 하나에 여러 개 가능</dd>
-    <dt>액션 맵<small>Action Map</small></dt><dd>상황별 액션 묶음 — 게임 중 «Player» · 메뉴 중 «UI»</dd>
-    <dt>폴링<small>Polling</small></dt><dd>매 프레임 «눌렸나?» 를 직접 물어보는 방식</dd>
-    <dt>이벤트<small>Event</small></dt><dd>«눌렸다» 는 일이 생겼을 때 <b>알림을 받는</b> 방식</dd>
-    <dt>콜백<small>Callback</small></dt><dd>알림이 오면 대신 실행되도록 미리 등록해 둔 함수</dd>
-    <dt>상태 기계<small>State machine</small></dt><dd>«지금 어떤 상태인가» 와 «무엇이 오면 어디로 넘어가나» 만으로 동작을 정하는 설계</dd>
-    <dt>캔버스<small>Canvas</small></dt><dd>Unity UI 요소(버튼·글자·이미지)를 올려 두는 바탕판 — <b>어디에 그릴지</b> 를 Render Mode 로 결정</dd>
+    <dt>입력 추상화<small>Input abstraction</small></dt>
+    <dd>
+      <p>게임 코드는 «무엇을 하려는가» 만 알고, «어떤 버튼이었나» 는 설정 파일이 맡는 설계</p>
+      <p class="ex">TV 리모컨 · 휴대폰 앱 · 본체 버튼 → TV 는 «채널 올림» 명령 하나만 받음</p>
+      <p class="why">다음 주 Quest 컨트롤러로 옮길 때 코드 수정 0 · 바인딩만 추가</p>
+      <p class="where">Unity : Input System 패키지 (Unity 6 새 프로젝트 기본값)</p>
+    </dd>
+    <dt>액션<small>Action</small></dt>
+    <dd>
+      <p>«점프» «이동» 처럼 <b>기기와 무관한 의도</b> 하나 — 어떤 버튼인지는 따로 연결</p>
+      <p class="ex">«Jump» 액션 하나 = 키보드 Space · 게임패드 South · Quest A 버튼 모두</p>
+      <p class="why">버튼 이름으로 코드를 쓰면 기기를 바꿀 때마다 코드 수정 · 누락된 기기는 먹통</p>
+      <p class="where">Unity : <code>.inputactions</code> 에셋 더블클릭 → 가운데 Actions 열</p>
+    </dd>
+    <dt>바인딩<small>Binding</small></dt>
+    <dd>
+      <p>실제 버튼·스틱을 액션에 잇는 연결선 — 액션 하나에 여러 개 가능</p>
+      <p class="ex">Jump ← <code>&lt;Keyboard&gt;/space</code> · <code>&lt;Gamepad&gt;/buttonSouth</code> 두 줄</p>
+      <p class="why">새 기기 지원 = 바인딩 한 줄 추가 · 게임 코드는 그대로</p>
+      <p class="where">Unity : 액션 에셋 창 → 액션 옆 <b>+</b> → Add Binding → Path 선택</p>
+    </dd>
   </dl>
   <aside class="notes">
     - 다 외울 필요 없음 · 슬라이드마다 다시 풀어 줌
     - 오늘 끝까지 가져갈 단어 두 개 : 액션 · World Space
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기 (2/3)</h2>
+  <dl class="terms">
+    <dt>액션 맵<small>Action Map</small></dt>
+    <dd>
+      <p>상황별 액션 묶음 — 통째로 켜고 끄는 서랍 하나</p>
+      <p class="ex">게임 중 «Player» 맵 (Move · Jump) · 메뉴 중 «UI» 맵 (Navigate · Submit)</p>
+      <p class="why">전환을 빼먹으면 메뉴를 고르는 동안 캐릭터도 같이 걷고 점프</p>
+      <p class="where">Unity : 액션 에셋 창 왼쪽 Action Maps 열 · 코드 <code>FindActionMap("UI").Enable()</code></p>
+    </dd>
+    <dt>폴링<small>Polling</small></dt>
+    <dd>
+      <p>매 프레임 «눌렸나?» 를 직접 물어보는 방식 — 1분마다 현관문 열어 보기</p>
+      <p class="ex">90 Hz 에서 1분 = 5,400번 확인 · 실제 눌림 1번이어도 동일</p>
+      <p class="why">스틱처럼 매 프레임 값이 필요한 입력엔 적합 · 버튼에 쓰면 Update 가 뒤엉킴</p>
+      <p class="where">코드 : <code>Update()</code> 안 <code>move.ReadValue&lt;Vector2&gt;()</code></p>
+    </dd>
+    <dt>이벤트<small>Event</small></dt>
+    <dd>
+      <p>«눌렸다» 는 일이 생겼을 때 <b>알림을 받는</b> 방식 — 초인종이 울리면 나가기</p>
+      <p class="ex">1분에 1번 눌림 → 알림 1번 · 확인 코드 5,400번 → 0번</p>
+      <p class="why">«무슨 일이 생기면 무엇을 한다» 가 한 곳에 모임 → 기능을 붙이고 떼기 쉬움</p>
+      <p class="where">Unity : Button 인스펙터 <b>On Click ()</b> 칸 · 코드 <code>jump.performed += …</code></p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기 (3/3)</h2>
+  <dl class="terms">
+    <dt>콜백<small>Callback</small></dt>
+    <dd>
+      <p>알림이 오면 대신 실행되도록 미리 맡겨 둔 함수 — «도착하면 이 번호로 전화 주세요»</p>
+      <p class="ex"><code>OnJump</code> 함수를 등록 → 점프 버튼이 눌릴 때마다 Unity 가 대신 호출</p>
+      <p class="why">등록(+=)만 하고 해제(−=)를 빼먹으면 같은 함수가 두세 번씩 실행</p>
+      <p class="where">코드 : <code>+=</code> 로 등록 · <code>-=</code> 로 해제 · OnEnable / OnDisable 짝</p>
+    </dd>
+    <dt>상태 기계<small>State machine</small></dt>
+    <dd>
+      <p>«지금 어떤 상태인가» 와 «무엇이 오면 어디로 넘어가나» 만으로 동작을 정하는 설계 — 자판기</p>
+      <p class="ex">Menu → (시작) → Playing → (Esc) → Paused → (Esc) → Playing</p>
+      <p class="why">bool 플래그 여러 개로 짜면 말이 안 되는 조합(죽었는데 일시정지)이 생김</p>
+      <p class="where">코드 : <code>enum GameState</code> · Unity Animator 창의 상자·화살표도 같은 구조</p>
+    </dd>
+    <dt>캔버스<small>Canvas</small></dt>
+    <dd>
+      <p>Unity UI 요소(버튼·글자·이미지)를 올려 두는 바탕판 — <b>어디에 그릴지</b> 를 Render Mode 로 결정</p>
+      <p class="ex">Overlay = 화면 유리 위 스티커 · World Space = 방 벽의 포스터</p>
+      <p class="why">헤드셋에서 UI 가 사라지는 함정 #7 의 원인이 바로 이 설정</p>
+      <p class="where">Unity : Hierarchy → UI → Canvas · 인스펙터 Canvas 컴포넌트 → <b>Render Mode</b></p>
+    </dd>
+  </dl>
 </section>
 
 <!-- ---------------------------------------------------- 입력 -->
@@ -211,46 +281,45 @@
   <div class="tag gfx">입력 · 3 ★</div>
   <h2>액션 · 바인딩 · 액션 맵의 구조</h2>
   <svg class="fig10" viewBox="0 0 1000 400" role="img" aria-label="여러 기기의 버튼이 바인딩을 거쳐 하나의 액션으로 모이고 코드는 액션만 구독">
-    <rect x="0" y="0" width="1000" height="400" rx="14" fill="#0e1118"/>
     <!-- action map box -->
-    <rect x="330" y="30" width="330" height="240" rx="14" fill="none" stroke="#35d6e6" stroke-dasharray="6 5" stroke-width="2"/>
-    <text x="345" y="58" fill="#35d6e6" font-size="18" font-weight="700">Action Map : Player</text>
+    <rect x="330" y="30" width="330" height="240" fill="none" stroke="#0d6b78" stroke-dasharray="6 5" stroke-width="2"/>
+    <text x="345" y="58" fill="#0d6b78" font-size="18" font-weight="700">Action Map : Player</text>
     <!-- devices -->
-    <g font-size="18" fill="#e8ecf4">
-      <rect x="30" y="70" width="230" height="52" rx="10" fill="#171b25" stroke="#2a3040"/>
+    <g font-size="18" fill="#1b1a17">
+      <rect x="30" y="70" width="230" height="52" fill="#fbf8f1" stroke="#cfc6b2"/>
       <text x="48" y="103">키보드 · Space</text>
-      <rect x="30" y="140" width="230" height="52" rx="10" fill="#171b25" stroke="#2a3040"/>
+      <rect x="30" y="140" width="230" height="52" fill="#fbf8f1" stroke="#cfc6b2"/>
       <text x="48" y="173">게임패드 · South 버튼</text>
-      <rect x="30" y="210" width="230" height="52" rx="10" fill="#171b25" stroke="#2a3040"/>
+      <rect x="30" y="210" width="230" height="52" fill="#fbf8f1" stroke="#cfc6b2"/>
       <text x="48" y="243">Quest 오른손 · A 버튼</text>
     </g>
-    <text x="30" y="56" fill="#9aa4b8" font-size="17">실제 기기 (Device)</text>
+    <text x="30" y="56" fill="#4a463e" font-size="17" font-weight="700">실제 기기 (Device)</text>
     <!-- binding lines -->
-    <g stroke="#9aa4b8" stroke-width="2" fill="none">
+    <g stroke="#4a463e" stroke-width="2" fill="none">
       <path d="M260 96 C 320 96, 330 150, 380 160"/>
       <path d="M260 166 L 380 166"/>
       <path d="M260 236 C 320 236, 330 180, 380 172"/>
     </g>
-    <text x="268" y="292" fill="#9aa4b8" font-size="17">바인딩 (Binding) 3개</text>
+    <text x="268" y="292" fill="#4a463e" font-size="17">바인딩 (Binding) 3개</text>
     <!-- action -->
-    <rect x="380" y="128" width="240" height="76" rx="12" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-    <text x="500" y="160" fill="#35d6e6" font-size="22" font-weight="700" text-anchor="middle">Jump</text>
-    <text x="500" y="188" fill="#e8ecf4" font-size="17" text-anchor="middle">액션 · Button 타입</text>
-    <rect x="380" y="214" width="240" height="40" rx="10" fill="#171b25" stroke="#2a3040"/>
-    <text x="500" y="240" fill="#9aa4b8" font-size="17" text-anchor="middle">Move · Value(Vector2)</text>
+    <rect x="380" y="128" width="240" height="76" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+    <text x="500" y="160" fill="#0d6b78" font-size="22" font-weight="700" text-anchor="middle">Jump</text>
+    <text x="500" y="188" fill="#1b1a17" font-size="17" text-anchor="middle">액션 · Button 타입</text>
+    <rect x="380" y="214" width="240" height="40" fill="#fbf8f1" stroke="#cfc6b2"/>
+    <text x="500" y="240" fill="#4a463e" font-size="17" text-anchor="middle">Move · Value(Vector2)</text>
     <!-- arrow to code -->
-    <path d="M620 166 L 700 166" stroke="#a8e05f" stroke-width="3" fill="none"/>
-    <path d="M700 158 L 714 166 L 700 174 Z" fill="#a8e05f"/>
-    <rect x="718" y="118" width="256" height="96" rx="12" fill="#101a10" stroke="#3c5220"/>
-    <text x="732" y="150" fill="#a8e05f" font-size="17" font-weight="700">게임 코드</text>
-    <text x="732" y="178" fill="#e8ecf4" font-size="16" font-family="Consolas, monospace">jump.performed</text>
-    <text x="732" y="200" fill="#e8ecf4" font-size="16" font-family="Consolas, monospace">  += OnJump;</text>
-    <text x="732" y="246" fill="#9aa4b8" font-size="16">어떤 버튼인지 모름</text>
+    <path d="M620 166 L 700 166" stroke="#4f7a16" stroke-width="3" fill="none"/>
+    <path d="M700 158 L 714 166 L 700 174 Z" fill="#4f7a16"/>
+    <rect x="718" y="118" width="256" height="96" fill="#e3ecd3" stroke="#4f7a16"/>
+    <text x="732" y="150" fill="#4f7a16" font-size="17" font-weight="700">게임 코드</text>
+    <text x="732" y="178" fill="#1b1a17" font-size="16" font-family="Consolas, monospace">jump.performed</text>
+    <text x="732" y="200" fill="#1b1a17" font-size="16" font-family="Consolas, monospace">  += OnJump;</text>
+    <text x="732" y="246" fill="#4a463e" font-size="16">어떤 버튼인지 모름</text>
     <!-- second map -->
-    <rect x="330" y="300" width="330" height="80" rx="14" fill="none" stroke="#5f6980" stroke-dasharray="6 5" stroke-width="2"/>
-    <text x="345" y="328" fill="#9aa4b8" font-size="18" font-weight="700">Action Map : UI</text>
-    <text x="345" y="358" fill="#9aa4b8" font-size="16">Navigate · Submit · Cancel · Point · Click</text>
-    <text x="690" y="350" fill="#ffc44d" font-size="17">메뉴가 열리면 Player 끄고 UI 켬</text>
+    <rect x="330" y="300" width="330" height="80" fill="none" stroke="#8a8476" stroke-dasharray="6 5" stroke-width="2"/>
+    <text x="345" y="328" fill="#4a463e" font-size="18" font-weight="700">Action Map : UI</text>
+    <text x="345" y="358" fill="#4a463e" font-size="16">Navigate · Submit · Cancel · Point · Click</text>
+    <text x="690" y="350" fill="#a8701a" font-size="17" font-weight="700">메뉴가 열리면 Player 끄고 UI 켬</text>
   </svg>
   <aside class="notes">
     - 왼쪽에서 오른쪽으로 읽기 : 기기 → 바인딩 → 액션 → 코드
@@ -268,24 +337,42 @@
     <tr><td class="gfx-txt"><b>Value</b></td><td>연속값 (float · Vector2) — 가장 크게 움직인 입력 하나만</td><td>스틱 이동 · 트리거 당긴 정도</td></tr>
     <tr><td class="gfx-txt"><b>Pass Through</b></td><td>모든 입력의 값을 걸러내지 않고 전달</td><td>여러 기기 동시 입력 기록</td></tr>
   </table>
-  <div class="cols">
-    <div>
-      <dl class="terms" style="margin-top:.2em">
-        <dt>started</dt><dd>입력이 막 시작됨 (버튼 닿음)</dd>
-        <dt>performed</dt><dd>조건 충족 → <b>액션 성립</b></dd>
-        <dt>canceled</dt><dd>입력 종료 · 또는 조건 미달로 취소</dd>
-      </dl>
-    </div>
-    <div>
-      <div class="analogy" style="margin-top:.3em">
-        <p><b>엘리베이터 «열림» 버튼 꾹 누르기</b> : 손가락이 닿음(started) → 문이 열림(performed) → 손을 뗌(canceled) · 대부분의 코드는 performed 하나만 구독</p>
-      </div>
-    </div>
+  <p class="small" style="margin-top:.6em">콜백 세 단계 : <b>started → performed → canceled</b> · 상세는 다음 장 용어 풀이</p>
+  <div class="analogy" style="margin-top:.6em">
+    <p><b>엘리베이터 «열림» 버튼 꾹 누르기</b> : 손가락이 닿음(started) → 문이 열림(performed) → 손을 뗌(canceled) · 대부분의 코드는 performed 하나만 구독</p>
   </div>
   <aside class="notes">
     - Value 타입의 "가장 크게 움직인 입력 하나" = 컨트롤 분쟁 해결(disambiguation)
     - 단순 버튼은 started 와 performed 가 같은 프레임에 일어남 → 다음 장 Hold 에서 차이가 드러남
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">입력 · 4 용어 풀이</div>
+  <h2>콜백 세 단계 — started · performed · canceled</h2>
+  <dl class="terms">
+    <dt>started<small>시작됨</small></dt>
+    <dd>
+      <p>입력이 막 시작된 순간 — 손가락이 버튼에 닿음</p>
+      <p class="ex">Hold(0.4초) 액션 : 버튼을 누른 0초 시점에 started</p>
+      <p class="why">«누르는 중» 게이지·진동 같은 즉시 반응을 여기서 시작</p>
+      <p class="where">코드 : <code>jump.started += …</code> · Input Debugger 의 Phase 열 «Started»</p>
+    </dd>
+    <dt>performed<small>성립함</small></dt>
+    <dd>
+      <p>정해 둔 조건이 다 채워져 <b>액션이 성립</b>한 순간 — 실제 «점프» 를 실행할 때</p>
+      <p class="ex">Hold(0.4초) : 0.4초가 지난 시점 · 단순 Button : started 와 같은 프레임</p>
+      <p class="why">대부분의 코드가 구독하는 단계 · started 에 걸면 꾹 누르기 판정이 무시됨</p>
+      <p class="where">코드 : <code>jump.performed += OnJump</code> · 폴링형 <code>WasPerformedThisFrame()</code></p>
+    </dd>
+    <dt>canceled<small>취소·종료</small></dt>
+    <dd>
+      <p>입력이 끝났거나 조건을 못 채우고 그만둔 순간 — 손을 뗌</p>
+      <p class="ex">Hold(0.4초) 를 0.2초 만에 떼면 performed 없이 바로 canceled</p>
+      <p class="why">«누르는 동안만 달리기» 처럼 떼는 순간을 알아야 하는 동작의 끝 처리</p>
+      <p class="where">코드 : <code>sprint.canceled += …</code> · 값 타입은 이때 값이 0 으로 돌아옴</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -318,12 +405,35 @@ public class JumpInput : MonoBehaviour
 
 <section>
   <div class="tag gfx">입력 · 6</div>
-  <h2>Interaction 과 Processor — 손계산</h2>
+  <h2>Interaction 과 Processor</h2>
   <dl class="terms">
-    <dt>Interaction<small>상호작용 조건</small></dt><dd>«언제 performed 로 칠지» 규칙 — Hold (기본 0.4초 이상 누름) · Tap · Multi Tap</dd>
-    <dt>Processor<small>값 가공</small></dt><dd>값을 코드에 넘기기 전 손질 — Stick Deadzone · Invert · Scale</dd>
-    <dt>데드존<small>Deadzone</small></dt><dd>스틱이 살짝 기울어진 잡음 구간을 0 으로 무시하는 범위</dd>
+    <dt>Interaction<small>상호작용 조건</small></dt>
+    <dd>
+      <p>«언제 performed 로 칠지» 정하는 규칙 — 그냥 누름인지, 꾹 누름인지, 두 번 누름인지</p>
+      <p class="ex">Hold : 기본 0.4초 이상 누름 · Tap : 짧게 눌렀다 뗌 · Multi Tap : 연속 두 번</p>
+      <p class="why">«꾹 눌러 확인» 같은 실수 방지 버튼을 코드 없이 설정만으로 구현</p>
+      <p class="where">Unity : 액션 에셋 창 → 액션(또는 바인딩) 선택 → 오른쪽 <b>Interactions +</b></p>
+    </dd>
+    <dt>Processor<small>값 가공</small></dt>
+    <dd>
+      <p>입력 값을 코드에 넘기기 전에 손질하는 필터 — 정수기 필터처럼 중간에서 거름</p>
+      <p class="ex">Invert : 위아래 뒤집기 (1 → −1) · Scale 2 : 0.3 → 0.6 · Stick Deadzone</p>
+      <p class="why">기기마다 다른 감도·방향을 코드가 아닌 설정에서 맞춤 → 코드는 깨끗한 값만 받음</p>
+      <p class="where">Unity : 액션 에셋 창 → 바인딩 선택 → 오른쪽 <b>Processors +</b></p>
+    </dd>
+    <dt>데드존<small>Deadzone</small></dt>
+    <dd>
+      <p>스틱이 살짝 기울어진 잡음 구간을 0 으로 무시하는 범위 — 수도꼭지의 헐거운 구간</p>
+      <p class="ex">기본 min 0.125 · max 0.925 → 0.10 기울기 = 0 · 0.95 기울기 = 1</p>
+      <p class="why">없으면 손을 떼도 낡은 스틱의 0.05~0.1 기울기 때문에 캐릭터가 저절로 미끄러짐</p>
+      <p class="where">Unity : Processors → Stick Deadzone · 기본값은 Project Settings → Input System Package</p>
+    </dd>
   </dl>
+</section>
+
+<section>
+  <div class="tag gfx">입력 · 6 손계산</div>
+  <h2>Stick Deadzone — 손계산</h2>
   <div class="cols">
     <div>
       <p class="small"><b>Stick Deadzone</b> 기본값 min 0.125 · max 0.925</p>
@@ -412,61 +522,130 @@ void TakeDamage(int d) {
 player.HealthChanged += hp =&gt; bar.fillAmount = hp / 100f;</code></pre>
     </div>
     <div>
-      <dl class="terms" style="margin-top:0">
-        <dt>발행자<small>Publisher</small></dt><dd>일이 생기면 알림을 보내는 쪽 — 누가 듣는지 모름</dd>
-        <dt>구독자<small>Subscriber</small></dt><dd>알림을 받겠다고 등록한 쪽</dd>
-        <dt>UnityEvent</dt><dd>인스펙터에서 구독자를 끌어다 연결하는 이벤트 — Button 의 <code>onClick</code></dd>
-      </dl>
+      <div class="analogy" style="margin-top:.2em">
+        <p><b>유튜브 구독 알림</b> : 채널은 새 영상을 올릴 뿐 구독자 명단을 들여다보지 않음 · 구독자가 늘거나 줄어도 채널 운영 방식은 그대로</p>
+      </div>
+      <p class="small">이유 사슬 : 체력 코드가 UI 를 모름 → UI 를 World Space 패널로 바꾸거나 소리·진동을 추가해도 <b>체력 코드 수정 0</b></p>
     </div>
   </div>
-  <div class="analogy">
-    <p><b>유튜브 구독 알림</b> : 채널은 새 영상을 올릴 뿐 구독자 명단을 들여다보지 않음 · 구독자가 늘거나 줄어도 채널 운영 방식은 그대로</p>
-  </div>
-  <p class="small">이유 사슬 : 체력 코드가 UI 를 모름 → UI 를 World Space 패널로 바꾸거나 소리·진동을 추가해도 <b>체력 코드 수정 0</b></p>
+</section>
+
+<section>
+  <div class="tag gfx">이벤트 · 2 용어 풀이</div>
+  <h2>발행자 · 구독자 · UnityEvent</h2>
+  <dl class="terms">
+    <dt>발행자<small>Publisher</small></dt>
+    <dd>
+      <p>일이 생기면 알림을 보내는 쪽 — 누가 듣는지 모르고, 알 필요도 없음</p>
+      <p class="ex">체력 코드 : 맞으면 <code>HealthChanged?.Invoke(hp)</code> 한 줄로 «체력 바뀜» 방송</p>
+      <p class="why">발행자가 UI·소리를 직접 부르면 UI 를 바꿀 때마다 체력 코드도 수정</p>
+      <p class="where">코드 : <code>public event System.Action&lt;int&gt; …</code> 선언한 클래스</p>
+    </dd>
+    <dt>구독자<small>Subscriber</small></dt>
+    <dd>
+      <p>알림을 받겠다고 등록한 쪽 — 여러 명 가능 · 각자 할 일을 따로 함</p>
+      <p class="ex">체력바(채우기 비율 변경) · 효과음(피격음) · 컨트롤러(진동) 셋이 같은 알림 구독</p>
+      <p class="why">구독자를 늘리거나 빼도 발행자 수정 0 · 단, 해제(−=) 누락 시 중복 실행</p>
+      <p class="where">코드 : <code>player.HealthChanged += …</code> 를 쓴 쪽</p>
+    </dd>
+    <dt>UnityEvent<small>인스펙터 이벤트</small></dt>
+    <dd>
+      <p>코드 대신 인스펙터에서 구독자를 끌어다 연결하는 이벤트 — 디자이너용 배선판</p>
+      <p class="ex">Button 의 <code>onClick</code> : 오브젝트를 끌어 놓고 함수 이름 선택 → 클릭 시 실행</p>
+      <p class="why">인스펙터 연결은 코드 검색에 안 잡힘 → «누가 이 함수를 부르나» 추적이 어려움</p>
+      <p class="where">Unity : Button 인스펙터 맨 아래 <b>On Click ()</b> 목록 → <b>+</b></p>
+    </dd>
+  </dl>
 </section>
 
 <section>
   <div class="tag gfx">이벤트 · 3 ★</div>
   <h2>Unity EventSystem — 클릭이 버튼에 닿기까지</h2>
   <svg class="fig10" viewBox="0 0 1000 360" role="img" aria-label="입력 모듈, 레이캐스터, 대상, 핸들러 순서로 전달되는 UI 이벤트">
-    <rect x="0" y="0" width="1000" height="360" rx="14" fill="#0e1118"/>
     <g font-size="18">
-      <rect x="24" y="70" width="210" height="120" rx="12" fill="#171b25" stroke="#2a3040"/>
-      <text x="129" y="104" fill="#35d6e6" font-weight="700" text-anchor="middle">① 입력 모듈</text>
-      <text x="129" y="134" fill="#e8ecf4" font-size="16" text-anchor="middle">마우스·컨트롤러</text>
-      <text x="129" y="158" fill="#e8ecf4" font-size="16" text-anchor="middle">입력을 포인터로 변환</text>
-      <rect x="270" y="70" width="210" height="120" rx="12" fill="#171b25" stroke="#2a3040"/>
-      <text x="375" y="104" fill="#35d6e6" font-weight="700" text-anchor="middle">② 레이캐스터</text>
-      <text x="375" y="134" fill="#e8ecf4" font-size="16" text-anchor="middle">포인터가 가리키는</text>
-      <text x="375" y="158" fill="#e8ecf4" font-size="16" text-anchor="middle">UI 요소 찾기</text>
-      <rect x="516" y="70" width="210" height="120" rx="12" fill="#171b25" stroke="#2a3040"/>
-      <text x="621" y="104" fill="#35d6e6" font-weight="700" text-anchor="middle">③ 맞은 대상</text>
-      <text x="621" y="134" fill="#e8ecf4" font-size="16" text-anchor="middle">가장 앞의 Button</text>
-      <text x="621" y="158" fill="#e8ecf4" font-size="16" text-anchor="middle">(정렬 순서 기준)</text>
-      <rect x="762" y="70" width="214" height="120" rx="12" fill="#101a10" stroke="#3c5220"/>
-      <text x="869" y="104" fill="#a8e05f" font-weight="700" text-anchor="middle">④ 핸들러 실행</text>
-      <text x="869" y="134" fill="#e8ecf4" font-size="16" text-anchor="middle">OnPointerClick</text>
-      <text x="869" y="158" fill="#e8ecf4" font-size="16" text-anchor="middle">→ onClick 구독자</text>
+      <rect x="24" y="70" width="210" height="120" fill="#fbf8f1" stroke="#cfc6b2"/>
+      <rect x="24" y="70" width="210" height="4" fill="#0d6b78"/>
+      <text x="129" y="104" fill="#0d6b78" font-weight="700" text-anchor="middle">① 입력 모듈</text>
+      <text x="129" y="134" fill="#1b1a17" font-size="16" text-anchor="middle">마우스·컨트롤러</text>
+      <text x="129" y="158" fill="#1b1a17" font-size="16" text-anchor="middle">입력을 포인터로 변환</text>
+      <rect x="270" y="70" width="210" height="120" fill="#fbf8f1" stroke="#cfc6b2"/>
+      <rect x="270" y="70" width="210" height="4" fill="#0d6b78"/>
+      <text x="375" y="104" fill="#0d6b78" font-weight="700" text-anchor="middle">② 레이캐스터</text>
+      <text x="375" y="134" fill="#1b1a17" font-size="16" text-anchor="middle">포인터가 가리키는</text>
+      <text x="375" y="158" fill="#1b1a17" font-size="16" text-anchor="middle">UI 요소 찾기</text>
+      <rect x="516" y="70" width="210" height="120" fill="#fbf8f1" stroke="#cfc6b2"/>
+      <rect x="516" y="70" width="210" height="4" fill="#0d6b78"/>
+      <text x="621" y="104" fill="#0d6b78" font-weight="700" text-anchor="middle">③ 맞은 대상</text>
+      <text x="621" y="134" fill="#1b1a17" font-size="16" text-anchor="middle">가장 앞의 Button</text>
+      <text x="621" y="158" fill="#1b1a17" font-size="16" text-anchor="middle">(정렬 순서 기준)</text>
+      <rect x="762" y="70" width="214" height="120" fill="#e3ecd3" stroke="#4f7a16"/>
+      <rect x="762" y="70" width="214" height="4" fill="#4f7a16"/>
+      <text x="869" y="104" fill="#4f7a16" font-weight="700" text-anchor="middle">④ 핸들러 실행</text>
+      <text x="869" y="134" fill="#1b1a17" font-size="16" text-anchor="middle">OnPointerClick</text>
+      <text x="869" y="158" fill="#1b1a17" font-size="16" text-anchor="middle">→ onClick 구독자</text>
     </g>
-    <g fill="#9aa4b8">
+    <g fill="#1b1a17">
       <path d="M236 124 l18 6 l-18 6 z"/><path d="M482 124 l18 6 l-18 6 z"/><path d="M728 124 l18 6 l-18 6 z"/>
     </g>
     <!-- monitor vs xr rows -->
-    <text x="24" y="238" fill="#9aa4b8" font-size="17" font-weight="700">모니터</text>
-    <text x="24" y="270" fill="#e8ecf4" font-size="16">InputSystemUIInputModule</text>
-    <text x="270" y="270" fill="#e8ecf4" font-size="16">Graphic Raycaster</text>
-    <text x="270" y="292" fill="#9aa4b8" font-size="15">(화면 좌표 2D 판정)</text>
-    <text x="24" y="320" fill="#ff5fa2" font-size="17" font-weight="700">VR (XRI 3.x)</text>
-    <text x="24" y="346" fill="#e8ecf4" font-size="16">XR UI Input Module</text>
-    <text x="270" y="346" fill="#e8ecf4" font-size="16">Tracked Device Graphic Raycaster</text>
-    <text x="620" y="346" fill="#ff5fa2" font-size="16">(컨트롤러 광선 3D 판정)</text>
-    <line x1="24" y1="300" x2="976" y2="300" stroke="#2a3040"/>
-    <text x="516" y="238" fill="#ffc44d" font-size="16">EventSystem : 씬에 1개 · ①~④ 를 매 프레임 진행</text>
+    <line x1="24" y1="212" x2="976" y2="212" stroke="#1b1a17"/>
+    <text x="24" y="238" fill="#4a463e" font-size="17" font-weight="700">모니터</text>
+    <text x="24" y="270" fill="#1b1a17" font-size="16">InputSystemUIInputModule</text>
+    <text x="270" y="270" fill="#1b1a17" font-size="16">Graphic Raycaster</text>
+    <text x="270" y="292" fill="#4a463e" font-size="15">(화면 좌표 2D 판정)</text>
+    <text x="24" y="320" fill="#a3245e" font-size="17" font-weight="700">VR (XRI 3.x)</text>
+    <text x="24" y="346" fill="#1b1a17" font-size="16">XR UI Input Module</text>
+    <text x="270" y="346" fill="#1b1a17" font-size="16">Tracked Device Graphic Raycaster</text>
+    <text x="620" y="346" fill="#a3245e" font-size="16">(컨트롤러 광선 3D 판정)</text>
+    <line x1="24" y1="300" x2="976" y2="300" stroke="#cfc6b2"/>
+    <text x="516" y="238" fill="#a8701a" font-size="16" font-weight="700">EventSystem : 씬에 1개 · ①~④ 를 매 프레임 진행</text>
   </svg>
   <aside class="notes">
     - 우체국 비유 다음 장 · 여기서는 4단계 이름만
     - 아래 두 줄이 함정 #7 진단의 단서 : VR 에서는 ① ② 의 부품이 바뀜
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">이벤트 · 3 용어 풀이</div>
+  <h2>EventSystem 의 부품 (1/2)</h2>
+  <dl class="terms">
+    <dt>EventSystem<small>이벤트 시스템</small></dt>
+    <dd>
+      <p>UI 클릭·선택을 총괄하는 관제탑 — 매 프레임 ①~④ 를 돌리는 오브젝트 하나</p>
+      <p class="ex">Canvas 를 처음 만들면 Hierarchy 에 «EventSystem» 이 자동으로 함께 생김</p>
+      <p class="why">없으면 버튼이 보이기만 하고 아무것도 눌리지 않음 · 2개 이상이면 경고</p>
+      <p class="where">Unity : Hierarchy → UI → Event System · XR 용은 GameObject → XR → UI EventSystem</p>
+    </dd>
+    <dt>입력 모듈<small>Input Module</small></dt>
+    <dd>
+      <p>마우스·컨트롤러 입력을 «포인터가 여기를 눌렀다» 로 번역하는 통역사</p>
+      <p class="ex">모니터 = InputSystemUIInputModule · VR = XR UI Input Module</p>
+      <p class="why">모니터용만 있으면 컨트롤러 버튼이 UI 에 전달되지 않음</p>
+      <p class="where">Unity : EventSystem 오브젝트의 인스펙터 컴포넌트 목록</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">이벤트 · 3 용어 풀이</div>
+  <h2>EventSystem 의 부품 (2/2)</h2>
+  <dl class="terms">
+    <dt>레이캐스터<small>Raycaster</small></dt>
+    <dd>
+      <p>포인터에서 보이지 않는 선(광선)을 쏴 어느 UI 를 맞혔는지 찾는 부품 — 주소 판독기</p>
+      <p class="ex">Graphic Raycaster = 화면 2D 점으로 판정 · Tracked Device Graphic Raycaster = 3D 광선으로 판정</p>
+      <p class="why">VR 에서 2D 용만 붙어 있으면 컨트롤러 광선이 버튼을 그냥 통과</p>
+      <p class="where">Unity : Canvas 오브젝트의 인스펙터 컴포넌트 목록 (Canvas 마다 1개)</p>
+    </dd>
+    <dt>핸들러<small>Handler</small></dt>
+    <dd>
+      <p>맞은 UI 가 «클릭됐다» 를 받아 실제로 처리하는 함수 — 편지의 수취인</p>
+      <p class="ex">Button 안의 <code>OnPointerClick</code> → On Click () 에 연결된 함수 실행</p>
+      <p class="why">직접 만든 UI 는 <code>IPointerClickHandler</code> 를 구현해야 클릭을 받음</p>
+      <p class="where">코드 : <code>using UnityEngine.EventSystems;</code> 의 <code>IPointer…Handler</code> 인터페이스</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -530,10 +709,31 @@ player.HealthChanged += hp =&gt; bar.fillAmount = hp / 100f;</code></pre>
       한 번에 <b>하나만</b> 참 · 가능한 상태 5개 = 코드에 적힌 그대로</p>
     </div>
   </div>
+  <p class="small muted">상태 · 전이의 상세 → 다음 장 용어 풀이</p>
+</section>
+
+<section>
+  <div class="tag gfx">상태 기계 · 1 용어 풀이</div>
+  <h2>상태와 전이</h2>
   <dl class="terms">
-    <dt>상태<small>State</small></dt><dd>지금 시스템이 놓인 상황 하나</dd>
-    <dt>전이<small>Transition</small></dt><dd>어떤 사건(이벤트)이 오면 다른 상태로 넘어가는 규칙</dd>
+    <dt>상태<small>State</small></dt>
+    <dd>
+      <p>지금 시스템이 놓인 상황 하나 — 한 번에 딱 하나만 참</p>
+      <p class="ex">자판기 «대기» · «금액 투입» · «배출» / 게임 Menu · Playing · Paused</p>
+      <p class="why">같은 버튼이라도 상태에 따라 결과가 달라짐 → 상태를 모르면 버그 재현 불가</p>
+      <p class="where">코드 : <code>enum GameState { … }</code> 변수 하나 · Unity Animator 창의 네모 상자</p>
+    </dd>
+    <dt>전이<small>Transition</small></dt>
+    <dd>
+      <p>어떤 사건(이벤트)이 오면 다른 상태로 넘어가는 규칙 — «A 에서 X 가 오면 B 로»</p>
+      <p class="ex">Playing 에서 Esc → Paused · Paused 에서 Esc → Playing · Menu 에서 Esc → 변화 없음</p>
+      <p class="why">규칙에 없는 전이는 일어나지 않음 → «죽었는데 일시정지 메뉴가 뜨는» 조합 차단</p>
+      <p class="where">코드 : <code>SetState(next)</code> 함수 하나 · Animator 창의 상자 사이 화살표</p>
+    </dd>
   </dl>
+  <div class="key">
+    <p class="small">bool 4개 = 16 조합 중 11개가 잠재 버그 · enum 상태 5개 = 코드에 적힌 5개가 전부</p>
+  </div>
 </section>
 
 <section>
@@ -593,40 +793,39 @@ public void SetState(GameState next)
   <div class="tag gfx">캔버스 · 1 ★</div>
   <h2>Canvas Render Mode 세 가지</h2>
   <svg class="fig10" viewBox="0 0 1000 400" role="img" aria-label="Overlay, Screen Space Camera, World Space 세 모드의 위치 비교">
-    <rect x="0" y="0" width="1000" height="400" rx="14" fill="#0e1118"/>
     <!-- Overlay -->
-    <text x="165" y="40" fill="#e8ecf4" font-size="20" font-weight="700" text-anchor="middle">Screen Space – Overlay</text>
-    <rect x="55" y="80" width="220" height="140" rx="6" fill="#171b25" stroke="#9aa4b8" stroke-width="2"/>
-    <rect x="65" y="92" width="200" height="26" rx="4" fill="#ff5fa2" opacity=".85"/>
-    <text x="165" y="111" fill="#0b0d12" font-size="15" font-weight="700" text-anchor="middle">HUD · 화면 유리 위</text>
-    <text x="165" y="175" fill="#5f6980" font-size="15" text-anchor="middle">3D 장면</text>
-    <text x="165" y="256" fill="#9aa4b8" font-size="16" text-anchor="middle">카메라와 무관 · 최종 화면 위</text>
-    <text x="165" y="280" fill="#9aa4b8" font-size="16" text-anchor="middle">픽셀 좌표로 덧그림</text>
+    <text x="165" y="40" fill="#1b1a17" font-size="20" font-weight="700" text-anchor="middle" font-family="'Noto Serif KR', serif">Screen Space – Overlay</text>
+    <rect x="55" y="80" width="220" height="140" fill="#ece6d8" stroke="#1b1a17" stroke-width="2"/>
+    <rect x="65" y="92" width="200" height="26" fill="#a3245e"/>
+    <text x="165" y="111" style="fill:#f5f1e8" font-size="15" font-weight="700" text-anchor="middle">HUD · 화면 유리 위</text>
+    <text x="165" y="175" fill="#4a463e" font-size="15" text-anchor="middle">3D 장면</text>
+    <text x="165" y="256" fill="#4a463e" font-size="16" text-anchor="middle">카메라와 무관 · 최종 화면 위</text>
+    <text x="165" y="280" fill="#4a463e" font-size="16" text-anchor="middle">픽셀 좌표로 덧그림</text>
     <!-- Screen Space Camera -->
-    <text x="500" y="40" fill="#e8ecf4" font-size="20" font-weight="700" text-anchor="middle">Screen Space – Camera</text>
-    <circle cx="400" cy="150" r="14" fill="#35d6e6"/>
-    <path d="M414 150 L 600 80 M414 150 L 600 220" stroke="#35d6e6" stroke-width="2" fill="none" opacity=".7"/>
-    <line x1="520" y1="105" x2="520" y2="195" stroke="#ff5fa2" stroke-width="6"/>
-    <text x="528" y="100" fill="#ff5fa2" font-size="15">UI 판</text>
-    <path d="M414 236 L 520 236" stroke="#ffc44d" stroke-width="2"/>
-    <text x="467" y="228" fill="#ffc44d" font-size="15" text-anchor="middle">Plane Distance</text>
-    <text x="500" y="280" fill="#9aa4b8" font-size="16" text-anchor="middle">카메라 앞 일정 거리에 매달림</text>
-    <text x="500" y="256" fill="#9aa4b8" font-size="16" text-anchor="middle">카메라가 돌면 함께 돎</text>
+    <text x="500" y="40" fill="#1b1a17" font-size="20" font-weight="700" text-anchor="middle" font-family="'Noto Serif KR', serif">Screen Space – Camera</text>
+    <circle cx="400" cy="150" r="14" fill="#0d6b78"/>
+    <path d="M414 150 L 600 80 M414 150 L 600 220" stroke="#0d6b78" stroke-width="2" fill="none"/>
+    <line x1="520" y1="105" x2="520" y2="195" stroke="#a3245e" stroke-width="6"/>
+    <text x="528" y="100" fill="#a3245e" font-size="15" font-weight="700">UI 판</text>
+    <path d="M414 236 L 520 236" stroke="#a8701a" stroke-width="2"/>
+    <text x="467" y="228" fill="#a8701a" font-size="15" text-anchor="middle" font-weight="700">Plane Distance</text>
+    <text x="500" y="280" fill="#4a463e" font-size="16" text-anchor="middle">카메라 앞 일정 거리에 매달림</text>
+    <text x="500" y="256" fill="#4a463e" font-size="16" text-anchor="middle">카메라가 돌면 함께 돎</text>
     <!-- World Space -->
-    <text x="835" y="40" fill="#e8ecf4" font-size="20" font-weight="700" text-anchor="middle">World Space</text>
-    <rect x="740" y="70" width="190" height="160" fill="none" stroke="#2a3040" stroke-width="2"/>
-    <line x1="760" y1="110" x2="760" y2="190" stroke="#a8e05f" stroke-width="6"/>
-    <text x="772" y="108" fill="#a8e05f" font-size="15">벽에 고정된 UI 판</text>
-    <circle cx="870" cy="170" r="14" fill="#35d6e6"/>
-    <path d="M856 170 L 770 150" stroke="#35d6e6" stroke-width="2" stroke-dasharray="5 4"/>
-    <text x="835" y="256" fill="#9aa4b8" font-size="16" text-anchor="middle">씬 안의 물체 하나</text>
-    <text x="835" y="280" fill="#9aa4b8" font-size="16" text-anchor="middle">위치·크기 = 미터 단위</text>
+    <text x="835" y="40" fill="#1b1a17" font-size="20" font-weight="700" text-anchor="middle" font-family="'Noto Serif KR', serif">World Space</text>
+    <rect x="740" y="70" width="190" height="160" fill="#ece6d8" stroke="#8a8476" stroke-width="2"/>
+    <line x1="760" y1="110" x2="760" y2="190" stroke="#4f7a16" stroke-width="6"/>
+    <text x="772" y="108" fill="#4f7a16" font-size="15" font-weight="700">벽에 고정된 UI 판</text>
+    <circle cx="870" cy="170" r="14" fill="#0d6b78"/>
+    <path d="M856 170 L 770 150" stroke="#0d6b78" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="835" y="256" fill="#4a463e" font-size="16" text-anchor="middle">씬 안의 물체 하나</text>
+    <text x="835" y="280" fill="#4a463e" font-size="16" text-anchor="middle">위치·크기 = 미터 단위</text>
     <!-- verdict -->
-    <line x1="30" y1="310" x2="970" y2="310" stroke="#2a3040"/>
-    <text x="30" y="345" fill="#9aa4b8" font-size="18" font-weight="700">헤드셋에서</text>
-    <text x="165" y="375" fill="#ff5a4d" font-size="19" font-weight="700" text-anchor="middle">✕ 렌즈 화면에 안 그려짐</text>
-    <text x="500" y="375" fill="#ffc44d" font-size="19" font-weight="700" text-anchor="middle">△ 얼굴에 들러붙음</text>
-    <text x="835" y="375" fill="#a8e05f" font-size="19" font-weight="700" text-anchor="middle">○ VR 표준</text>
+    <line x1="30" y1="310" x2="970" y2="310" stroke="#1b1a17"/>
+    <text x="30" y="345" fill="#4a463e" font-size="18" font-weight="700">헤드셋에서</text>
+    <text x="165" y="375" fill="#c2401d" font-size="19" font-weight="700" text-anchor="middle">✕ 렌즈 화면에 안 그려짐</text>
+    <text x="500" y="375" fill="#a8701a" font-size="19" font-weight="700" text-anchor="middle">△ 얼굴에 들러붙음</text>
+    <text x="835" y="375" fill="#4f7a16" font-size="19" font-weight="700" text-anchor="middle">○ VR 표준</text>
   </svg>
   <aside class="notes">
     - 세 그림 좌→우 : 유리 위 스티커 / 카메라에 매단 판 / 방 안 물체
@@ -770,19 +969,19 @@ public void SetState(GameState next)
       &nbsp;Graphic Raycaster<br>
       EventSystem<br>
       &nbsp;Input System UI Input Module<br><br>
-      <span style="color:#ff5a4d">// 헤드셋 : 표시 안 됨<br>
+      <span style="color:var(--trap)">// 헤드셋 : 표시 안 됨<br>
       // 고쳐도 : 헤드락 · 광선 통과</span>
     </div>
     <div class="good">
       <h4>학생이 요구할 구성</h4>
-      <span style="color:#e8ecf4">"World Space 캔버스, 눈높이,<br>
+      <span style="color:var(--ink);font-weight:700">"World Space 캔버스, 눈높이,<br>
       1.5 m 앞, 폭 0.6 m"</span><br><br>
       Render Mode : <b>World Space</b><br>
       Scale 0.001 · 600×360 → 0.6×0.36 m<br>
       Position : (0, 1.5, 1.5) · 약간 아래로 기울임<br>
       Tracked Device Graphic Raycaster<br>
       EventSystem : <b>XR UI Input Module</b><br><br>
-      <span style="color:#a8e05f">// 계속 필요한 정보 → 손목 · Lazy Follow</span>
+      <span style="color:var(--lab)">// 계속 필요한 정보 → 손목 · Lazy Follow</span>
     </div>
   </div>
   <div class="key lab" style="margin-top:.6em">
@@ -804,16 +1003,85 @@ public void SetState(GameState next)
 
 <section>
   <div class="tag vr">Part II 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>이번 파트 용어 미리보기 (1/3)</h2>
   <dl class="terms">
-    <dt>수렴<small>Vergence</small></dt><dd>가까운 것을 볼수록 두 눈이 안쪽으로 모이는 움직임 (5주차)</dd>
-    <dt>조절<small>Accommodation</small></dt><dd>거리에 맞춰 수정체 두께를 바꿔 초점을 맞추는 작용 (5주차)</dd>
-    <dt>조절-수렴 충돌<small>VAC</small></dt><dd>Vergence-Accommodation Conflict — 두 눈은 «가깝다» 로 모이는데 초점은 «다른 거리» 에 고정된 어긋남</dd>
-    <dt>디옵터<small>Diopter, D</small></dt><dd>초점 거리의 역수 \(1/\text{m}\) — 안경 도수와 같은 단위 · 0.5 m = 2 D</dd>
-    <dt>헤드락 / 월드락<small>Head-locked / World-locked</small></dt><dd>머리에 붙어 같이 움직이는 UI / 세상에 고정되어 제자리에 있는 UI</dd>
-    <dt>각크기<small>Angular size</small></dt><dd>물체가 눈에서 차지하는 각도(°) — 실제 크기와 거리를 함께 반영</dd>
-    <dt>DMM<small>Distance-independent mm</small></dt><dd>«1 m 거리에서의 mm» 로 환산한 크기 — 2 m 에서 2 mm = 1 DMM</dd>
-    <dt>VOR<small>전정안구반사</small></dt><dd>머리가 돌면 눈이 반대로 자동 회전해 세상을 고정해 보는 반사 (2주차 전정계)</dd>
+    <dt>수렴<small>Vergence</small></dt>
+    <dd>
+      <p>가까운 것을 볼수록 두 눈이 안쪽으로 모이는 움직임 — 코끝을 보면 사팔눈이 되는 동작 (5주차)</p>
+      <p class="ex">2 m 를 볼 때 두 시선 사이 약 1.8° · 30 cm 에서는 약 12°</p>
+      <p class="why">뇌는 이 각도로 «얼마나 가까운가» 를 판단 → VR 깊이감의 핵심 단서</p>
+      <p class="where">Unity : 두 눈 카메라를 IPD 만큼 벌려 따로 렌더 → 자동으로 생김 (XR 설정)</p>
+    </dd>
+    <dt>조절<small>Accommodation</small></dt>
+    <dd>
+      <p>거리에 맞춰 수정체 두께를 바꿔 초점을 맞추는 작용 — 카메라 초점 링 돌리기 (5주차)</p>
+      <p class="ex">책(30 cm)을 보다 창밖(10 m)을 보면 잠깐 흐렸다가 선명해지는 순간</p>
+      <p class="why">HMD 에서는 렌즈가 초점 거리를 하나로 고정 → 이 작용이 «멈춤»</p>
+      <p class="where">Quest : 조절 불가 · 초점 고정 거리는 기기마다 다름 (공식 수치 미공개 많음)</p>
+    </dd>
+    <dt>조절-수렴 충돌<small>VAC</small></dt>
+    <dd>
+      <p>Vergence-Accommodation Conflict — 두 눈은 «가깝다» 로 모이는데 초점은 «다른 거리» 에 고정된 어긋남</p>
+      <p class="ex">UI 0.5 m · 초점 고정면 1.5 m (가정) → 어긋남 1.33 D</p>
+      <p class="why">눈 피로 · 흐림 · 두통 → «UI 를 몇 m 에 둘까» 의 근거</p>
+      <p class="where">Unity : 캔버스 Position 과 카메라 사이 거리로 결정 · 0.5 m 미만 금지</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기 (2/3)</h2>
+  <dl class="terms">
+    <dt>디옵터<small>Diopter, D</small></dt>
+    <dd>
+      <p>초점 거리의 역수 \(1/\text{m}\) — 안경 도수와 같은 단위 · 가까울수록 숫자가 커짐</p>
+      <p class="ex">0.5 m = 2 D · 1 m = 1 D · 2 m = 0.5 D · 무한히 먼 곳 = 0 D</p>
+      <p class="why">눈의 초점 «노력» 은 거리가 아니라 디옵터에 비례 → 3 m ↔ 6 m 차이는 작고 0.3 m ↔ 0.6 m 차이는 큼</p>
+      <p class="where">안경 처방전 «−2.00» · VR 렌즈 삽입물(도수 렌즈) 표기</p>
+    </dd>
+    <dt>헤드락 / 월드락<small>Head- / World-locked</small></dt>
+    <dd>
+      <p>머리에 붙어 같이 움직이는 UI / 세상에 고정되어 제자리에 있는 UI</p>
+      <p class="ex">헤드락 = 안경알의 얼룩 · 월드락 = 방 벽의 시계</p>
+      <p class="why">헤드락은 VOR 과 어긋나 «나와 함께 움직이는 물체» 로 보임 → 불편 · 멀미</p>
+      <p class="where">Unity : 캔버스를 Main Camera 의 자식으로 두면 헤드락 · 씬 루트에 두면 월드락</p>
+    </dd>
+    <dt>Lazy Follow<small>느린 따라오기</small></dt>
+    <dd>
+      <p>머리를 따라오되 늦게, 일정 각도 이상 벗어날 때만 움직이는 방식 — 헤드락과 월드락의 중간</p>
+      <p class="ex">고개를 20° 돌려도 그대로 · 더 돌리면 패널이 부드럽게 시야 안으로 돌아옴</p>
+      <p class="why">계속 필요한 정보(점수·안내)를 헤드락의 불편 없이 시야 안에 유지</p>
+      <p class="where">XRI 3.x : 컴포넌트 <b>Lazy Follow</b> (Add Component 검색) · 세부 옵션은 버전마다 다름</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기 (3/3)</h2>
+  <dl class="terms">
+    <dt>각크기<small>Angular size</small></dt>
+    <dd>
+      <p>물체가 눈에서 차지하는 각도(°) — 실제 크기와 거리를 함께 반영한 «보이는 크기»</p>
+      <p class="ex">폭 0.6 m 패널 · 1.5 m → 약 22.6° · 같은 패널 3 m → 약 11.4°</p>
+      <p class="why">«0.6 m» 만 적으면 거리에 따라 크게도 작게도 보임 → 명세에 각도를 함께</p>
+      <p class="where">Unity : 직접 표시 안 됨 · 실습의 각크기 로거로 계산해 Console 에 출력</p>
+    </dd>
+    <dt>DMM<small>Distance-independent mm</small></dt>
+    <dd>
+      <p>«1 m 거리에서의 mm» 로 환산한 크기 — 거리와 상관없이 글자 크기를 비교하는 자</p>
+      <p class="ex">2 m 에서 2 mm = 1 DMM · 1.5 m 의 4 cm 글자 = 40 ÷ 1.5 ≈ 27 DMM</p>
+      <p class="why">본문 글자 권고 24 DMM 미만 → 헤드셋에서 읽기 힘든 글자</p>
+      <p class="where">Google Daydream 디자인 가이드 단위 · Unity 에서는 Font Size × Scale ÷ 거리로 계산</p>
+    </dd>
+    <dt>VOR<small>전정안구반사</small></dt>
+    <dd>
+      <p>머리가 돌면 눈이 반대로 자동 회전해 세상을 고정해 보는 반사 — 몸에 내장된 손떨림 방지 (2주차 전정계)</p>
+      <p class="ex">책을 읽으며 고개를 좌우로 흔들어도 글자가 흔들리지 않는 현상</p>
+      <p class="why">헤드락 UI 는 이 반사와 반대로 움직임 → 시선이 UI 에 닿지 못하고 불편</p>
+      <p class="where">Unity 설정 없음 · 헤드셋 안에서 몸으로만 확인 (11주 실기)</p>
+    </dd>
   </dl>
 </section>
 
@@ -911,35 +1179,35 @@ public void SetState(GameState next)
   <div class="tag vr">지각 · 5 ★</div>
   <h2>조절-수렴 충돌 (VAC)</h2>
   <svg class="fig10" viewBox="0 0 1000 380" role="img" aria-label="현실에서는 수렴과 초점 거리가 같고 HMD 에서는 초점이 가상 이미지 거리에 고정되어 어긋남">
-    <rect x="0" y="0" width="1000" height="380" rx="14" fill="#0e1118"/>
     <!-- Real -->
-    <text x="30" y="40" fill="#a8e05f" font-size="20" font-weight="700">현실</text>
-    <circle cx="70" cy="95" r="12" fill="#e8ecf4"/><circle cx="70" cy="145" r="12" fill="#e8ecf4"/>
-    <path d="M82 95 L 300 120 M82 145 L 300 120" stroke="#35d6e6" stroke-width="2.5"/>
-    <circle cx="300" cy="120" r="10" fill="#a8e05f"/>
-    <text x="300" y="168" fill="#e8ecf4" font-size="16" text-anchor="middle">물체 0.5 m</text>
-    <line x1="300" y1="70" x2="300" y2="100" stroke="#ffc44d" stroke-width="3"/>
-    <text x="320" y="82" fill="#ffc44d" font-size="16">초점도 0.5 m</text>
-    <text x="30" y="210" fill="#a8e05f" font-size="17">수렴 거리 = 초점 거리 → 편안</text>
+    <text x="30" y="40" fill="#4f7a16" font-size="20" font-weight="700" font-family="'Noto Serif KR', serif">현실</text>
+    <circle cx="70" cy="95" r="12" fill="#1b1a17"/><circle cx="70" cy="145" r="12" fill="#1b1a17"/>
+    <path d="M82 95 L 300 120 M82 145 L 300 120" stroke="#0d6b78" stroke-width="2.5"/>
+    <circle cx="300" cy="120" r="10" fill="#4f7a16"/>
+    <text x="300" y="168" fill="#1b1a17" font-size="16" text-anchor="middle">물체 0.5 m</text>
+    <line x1="300" y1="70" x2="300" y2="100" stroke="#a8701a" stroke-width="3"/>
+    <text x="320" y="82" fill="#a8701a" font-size="16" font-weight="700">초점도 0.5 m</text>
+    <text x="30" y="210" fill="#4f7a16" font-size="17" font-weight="700">수렴 거리 = 초점 거리 → 편안</text>
     <!-- HMD -->
-    <text x="500" y="40" fill="#ff5fa2" font-size="20" font-weight="700">HMD</text>
-    <circle cx="540" cy="95" r="12" fill="#e8ecf4"/><circle cx="540" cy="145" r="12" fill="#e8ecf4"/>
-    <rect x="566" y="78" width="10" height="84" rx="3" fill="#9aa4b8"/>
-    <text x="571" y="185" fill="#9aa4b8" font-size="15" text-anchor="middle">렌즈·패널</text>
-    <path d="M552 95 L 720 120 M552 145 L 720 120" stroke="#35d6e6" stroke-width="2.5"/>
-    <circle cx="720" cy="120" r="10" fill="#ff5fa2"/>
-    <text x="720" y="168" fill="#e8ecf4" font-size="16" text-anchor="middle">가상 물체 0.5 m</text>
-    <line x1="930" y1="60" x2="930" y2="180" stroke="#ffc44d" stroke-width="3" stroke-dasharray="7 5"/>
-    <text x="930" y="52" fill="#ffc44d" font-size="16" text-anchor="middle">초점 고정면</text>
-    <text x="930" y="200" fill="#ffc44d" font-size="16" text-anchor="middle">(가정 1.5 m)</text>
-    <path d="M720 225 L 930 225" stroke="#ff5a4d" stroke-width="2"/>
-    <path d="M720 218 L 720 232 M930 218 L 930 232" stroke="#ff5a4d" stroke-width="2"/>
-    <text x="825" y="252" fill="#ff5a4d" font-size="17" text-anchor="middle" font-weight="700">어긋남 = VAC</text>
-    <text x="500" y="210" fill="#ff5fa2" font-size="17">수렴은 0.5 m · 초점은 1.5 m</text>
+    <line x1="470" y1="20" x2="470" y2="265" stroke="#cfc6b2"/>
+    <text x="500" y="40" fill="#a3245e" font-size="20" font-weight="700" font-family="'Noto Serif KR', serif">HMD</text>
+    <circle cx="540" cy="95" r="12" fill="#1b1a17"/><circle cx="540" cy="145" r="12" fill="#1b1a17"/>
+    <rect x="566" y="78" width="10" height="84" fill="#8a8476"/>
+    <text x="571" y="185" fill="#4a463e" font-size="15" text-anchor="middle">렌즈·패널</text>
+    <path d="M552 95 L 720 120 M552 145 L 720 120" stroke="#0d6b78" stroke-width="2.5"/>
+    <circle cx="720" cy="120" r="10" fill="#a3245e"/>
+    <text x="720" y="168" fill="#1b1a17" font-size="16" text-anchor="middle">가상 물체 0.5 m</text>
+    <line x1="930" y1="60" x2="930" y2="180" stroke="#a8701a" stroke-width="3" stroke-dasharray="7 5"/>
+    <text x="930" y="52" fill="#a8701a" font-size="16" text-anchor="middle" font-weight="700">초점 고정면</text>
+    <text x="930" y="200" fill="#a8701a" font-size="16" text-anchor="middle">(가정 1.5 m)</text>
+    <path d="M720 225 L 930 225" stroke="#c2401d" stroke-width="2"/>
+    <path d="M720 218 L 720 232 M930 218 L 930 232" stroke="#c2401d" stroke-width="2"/>
+    <text x="825" y="252" fill="#c2401d" font-size="17" text-anchor="middle" font-weight="700">어긋남 = VAC</text>
+    <text x="500" y="210" fill="#a3245e" font-size="17" font-weight="700">수렴은 0.5 m · 초점은 1.5 m</text>
     <!-- bottom -->
-    <line x1="30" y1="285" x2="970" y2="285" stroke="#2a3040"/>
-    <text x="30" y="320" fill="#e8ecf4" font-size="18">결과 : 한 손잡이로 묶인 두 동작을 따로 움직여야 함 → 눈 피로 · 흐림 · 두통 (개인차 큼)</text>
-    <text x="30" y="352" fill="#9aa4b8" font-size="16">가상 물체가 초점 고정면에 가까울수록 어긋남 감소 → «UI 를 어디에 둘까» 의 근거</text>
+    <line x1="30" y1="285" x2="970" y2="285" stroke="#1b1a17"/>
+    <text x="30" y="320" fill="#1b1a17" font-size="18">결과 : 한 손잡이로 묶인 두 동작을 따로 움직여야 함 → 눈 피로 · 흐림 · 두통 (개인차 큼)</text>
+    <text x="30" y="352" fill="#4a463e" font-size="16">가상 물체가 초점 고정면에 가까울수록 어긋남 감소 → «UI 를 어디에 둘까» 의 근거</text>
   </svg>
   <aside class="notes">
     - 현실 : 파란 시선 두 줄과 노란 초점선이 같은 점
@@ -978,51 +1246,49 @@ public void SetState(GameState next)
   <div class="tag vr">지각 · 7 ★</div>
   <h2>공간 UI 배치 구간 — 위에서 내려다본 그림</h2>
   <svg class="fig10" viewBox="0 0 1000 420" role="img" aria-label="머리를 중심으로 0.5 m, 1 m, 2 m 반원과 시야 중심 ±30도 부채꼴">
-    <rect x="0" y="0" width="1000" height="420" rx="14" fill="#0e1118"/>
     <!-- head at (380,390), 1 m = 160 px -->
-    <!-- >2 m zone -->
-    <path d="M380 390 L 380 30" stroke="#2a3040"/>
+    <path d="M380 390 L 380 30" stroke="#cfc6b2"/>
     <!-- wedge ±30 out to 2.25m (360px) -->
-    <path d="M380 390 L 200 78 A 360 360 0 0 1 560 78 Z" fill="#35d6e6" opacity=".07"/>
-    <!-- annulus 1-2 m within wedge: green -->
-    <path d="M300 251.4 L 220 112.9 A 320 320 0 0 1 540 112.9 L 460 251.4 A 160 160 0 0 0 300 251.4 Z" fill="#a8e05f" opacity=".28"/>
-    <!-- 0.5-1 m within wedge: yellow -->
-    <path d="M340 320.7 L 300 251.4 A 160 160 0 0 1 460 251.4 L 420 320.7 A 80 80 0 0 0 340 320.7 Z" fill="#ffc44d" opacity=".25"/>
-    <!-- <0.5 red -->
-    <path d="M380 390 L 340 320.7 A 80 80 0 0 1 420 320.7 Z" fill="#ff5a4d" opacity=".35"/>
+    <path d="M380 390 L 200 78 A 360 360 0 0 1 560 78 Z" fill="#dcebec"/>
+    <!-- annulus 1-2 m within wedge -->
+    <path d="M300 251.4 L 220 112.9 A 320 320 0 0 1 540 112.9 L 460 251.4 A 160 160 0 0 0 300 251.4 Z" fill="#c9dbab"/>
+    <!-- 0.5-1 m within wedge -->
+    <path d="M340 320.7 L 300 251.4 A 160 160 0 0 1 460 251.4 L 420 320.7 A 80 80 0 0 0 340 320.7 Z" fill="#ead3a6"/>
+    <!-- < 0.5 m -->
+    <path d="M380 390 L 340 320.7 A 80 80 0 0 1 420 320.7 Z" fill="#e9b9a6"/>
     <!-- arcs -->
-    <g fill="none" stroke="#9aa4b8" stroke-width="1.5" stroke-dasharray="5 5">
+    <g fill="none" stroke="#4a463e" stroke-width="1.5" stroke-dasharray="5 5">
       <path d="M300 390 A 80 80 0 0 1 460 390"/>
       <path d="M220 390 A 160 160 0 0 1 540 390"/>
       <path d="M60 390 A 320 320 0 0 1 700 390"/>
     </g>
     <!-- wedge edges -->
-    <path d="M380 390 L 200 78 M380 390 L 560 78" stroke="#35d6e6" stroke-width="2"/>
-    <text x="568" y="86" fill="#35d6e6" font-size="17">+30°</text>
-    <text x="150" y="86" fill="#35d6e6" font-size="17">−30°</text>
+    <path d="M380 390 L 200 78 M380 390 L 560 78" stroke="#0d6b78" stroke-width="2"/>
+    <text x="568" y="86" fill="#0d6b78" font-size="17" font-weight="700">+30°</text>
+    <text x="150" y="86" fill="#0d6b78" font-size="17" font-weight="700">−30°</text>
     <!-- distance labels -->
-    <text x="468" y="384" fill="#9aa4b8" font-size="15">0.5 m</text>
-    <text x="548" y="384" fill="#9aa4b8" font-size="15">1 m</text>
-    <text x="708" y="384" fill="#9aa4b8" font-size="15">2 m</text>
+    <text x="468" y="384" fill="#4a463e" font-size="15">0.5 m</text>
+    <text x="548" y="384" fill="#4a463e" font-size="15">1 m</text>
+    <text x="708" y="384" fill="#4a463e" font-size="15">2 m</text>
     <!-- head -->
-    <circle cx="380" cy="390" r="14" fill="#e8ecf4"/>
-    <path d="M374 377 L 380 366 L 386 377 Z" fill="#e8ecf4"/>
+    <circle cx="380" cy="390" r="14" fill="#1b1a17"/>
+    <path d="M374 377 L 380 366 L 386 377 Z" fill="#1b1a17"/>
     <!-- legend -->
     <g font-size="17">
-      <rect x="740" y="60" width="22" height="22" fill="#ff5a4d" opacity=".6"/>
-      <text x="772" y="78" fill="#e8ecf4">0.5 m 미만 : 금지</text>
-      <text x="772" y="100" fill="#9aa4b8" font-size="15">VAC 큼 · 이중상</text>
-      <rect x="740" y="125" width="22" height="22" fill="#ffc44d" opacity=".55"/>
-      <text x="772" y="143" fill="#e8ecf4">0.5~1 m : 손 터치용</text>
-      <text x="772" y="165" fill="#9aa4b8" font-size="15">짧게 누르는 버튼</text>
-      <rect x="740" y="190" width="22" height="22" fill="#a8e05f" opacity=".6"/>
-      <text x="772" y="208" fill="#e8ecf4">1~2 m : 읽는 패널</text>
-      <text x="772" y="230" fill="#9aa4b8" font-size="15">메뉴 · 설명문</text>
-      <rect x="740" y="255" width="22" height="22" fill="none" stroke="#9aa4b8"/>
-      <text x="772" y="273" fill="#e8ecf4">2 m 초과 : 가독성 손실</text>
-      <text x="772" y="295" fill="#9aa4b8" font-size="15">글자를 키워야 함</text>
-      <text x="740" y="330" fill="#35d6e6">±30° : 시야 중심 구간</text>
-      <text x="740" y="352" fill="#9aa4b8" font-size="15">밖은 목을 돌려야 보임</text>
+      <rect x="740" y="60" width="22" height="22" fill="#e9b9a6" stroke="#c2401d"/>
+      <text x="772" y="78" fill="#1b1a17" font-weight="700">0.5 m 미만 : 금지</text>
+      <text x="772" y="100" fill="#4a463e" font-size="15">VAC 큼 · 이중상</text>
+      <rect x="740" y="125" width="22" height="22" fill="#ead3a6" stroke="#a8701a"/>
+      <text x="772" y="143" fill="#1b1a17" font-weight="700">0.5~1 m : 손 터치용</text>
+      <text x="772" y="165" fill="#4a463e" font-size="15">짧게 누르는 버튼</text>
+      <rect x="740" y="190" width="22" height="22" fill="#c9dbab" stroke="#4f7a16"/>
+      <text x="772" y="208" fill="#1b1a17" font-weight="700">1~2 m : 읽는 패널</text>
+      <text x="772" y="230" fill="#4a463e" font-size="15">메뉴 · 설명문</text>
+      <rect x="740" y="255" width="22" height="22" fill="none" stroke="#4a463e"/>
+      <text x="772" y="273" fill="#1b1a17" font-weight="700">2 m 초과 : 가독성 손실</text>
+      <text x="772" y="295" fill="#4a463e" font-size="15">글자를 키워야 함</text>
+      <text x="740" y="330" fill="#0d6b78" font-weight="700">±30° : 시야 중심 구간</text>
+      <text x="740" y="352" fill="#4a463e" font-size="15">밖은 목을 돌려야 보임</text>
     </g>
   </svg>
   <aside class="notes">
@@ -1075,7 +1341,7 @@ public void SetState(GameState next)
         <option value="camera">Screen Space Camera</option>
         <option value="overlay">Screen Space Overlay</option>
       </select></label>
-      <span data-out style="flex:1 1 100%;color:#e8ecf4"></span>
+      <span data-out style="flex:1 1 100%;color:var(--ink)"></span>
     </div>
   </div>
   <aside class="notes">
@@ -1126,28 +1392,31 @@ public void SetState(GameState next)
   <div class="tag vr">지각 · 12 ★</div>
   <h2>인터랙션 분류 — 네 가지 일</h2>
   <svg class="fig10" viewBox="0 0 1000 380" role="img" aria-label="이동, 조작, 시스템 제어, 사회적 상호작용 네 분류">
-    <rect x="0" y="0" width="1000" height="380" rx="14" fill="#0e1118"/>
     <g font-size="17">
-      <rect x="24" y="24" width="466" height="160" rx="14" fill="#171b25" stroke="#ff5fa2"/>
-      <text x="44" y="60" fill="#ff5fa2" font-size="22" font-weight="700">이동 · Locomotion</text>
-      <text x="44" y="92" fill="#e8ecf4">내 시점이 공간 안에서 옮겨감</text>
-      <text x="44" y="120" fill="#9aa4b8">예 : 텔레포트 · 스냅 턴 · 스틱 이동</text>
-      <text x="44" y="150" fill="#ffc44d">지각 위험 : 벡션 · 전정-시각 충돌 → 11·12주</text>
-      <rect x="510" y="24" width="466" height="160" rx="14" fill="#171b25" stroke="#35d6e6"/>
-      <text x="530" y="60" fill="#35d6e6" font-size="22" font-weight="700">조작 · Manipulation</text>
-      <text x="530" y="92" fill="#e8ecf4">물체를 고르고 · 잡고 · 옮기고 · 돌림</text>
-      <text x="530" y="120" fill="#9aa4b8">예 : Grab · Ray 선택 · 크기 조절</text>
-      <text x="530" y="150" fill="#ffc44d">지각 위험 : 손-눈 어긋남 · 팔 피로 → 12주</text>
-      <rect x="24" y="200" width="466" height="160" rx="14" fill="#171b25" stroke="#a8e05f"/>
-      <text x="44" y="236" fill="#a8e05f" font-size="22" font-weight="700">시스템 제어 · System control</text>
-      <text x="44" y="268" fill="#e8ecf4">설정·모드·메뉴를 바꾸는 명령</text>
-      <text x="44" y="296" fill="#9aa4b8">예 : 손목 메뉴 · 일시정지 패널 · 음량</text>
-      <text x="44" y="326" fill="#ffc44d">지각 위험 : 화면 고정 UI · VAC → 오늘</text>
-      <rect x="510" y="200" width="466" height="160" rx="14" fill="#171b25" stroke="#9aa4b8"/>
-      <text x="530" y="236" fill="#e8ecf4" font-size="22" font-weight="700">사회적 · Social</text>
-      <text x="530" y="268" fill="#e8ecf4">다른 사람(아바타)과의 상호작용</text>
-      <text x="530" y="296" fill="#9aa4b8">예 : 손 흔들기 · 시선 맞추기 · 대화</text>
-      <text x="530" y="326" fill="#ffc44d">지각 위험 : 개인 공간 침범감 → 13주 기획</text>
+      <rect x="24" y="24" width="466" height="160" fill="#fbf8f1" stroke="#cfc6b2"/>
+      <rect x="24" y="24" width="466" height="4" fill="#a3245e"/>
+      <text x="44" y="62" fill="#a3245e" font-size="22" font-weight="700" font-family="'Noto Serif KR', serif">이동 · Locomotion</text>
+      <text x="44" y="92" fill="#1b1a17">내 시점이 공간 안에서 옮겨감</text>
+      <text x="44" y="120" fill="#4a463e">예 : 텔레포트 · 스냅 턴 · 스틱 이동</text>
+      <text x="44" y="150" fill="#a8701a" font-weight="700">지각 위험 : 벡션 · 전정-시각 충돌 → 11·12주</text>
+      <rect x="510" y="24" width="466" height="160" fill="#fbf8f1" stroke="#cfc6b2"/>
+      <rect x="510" y="24" width="466" height="4" fill="#0d6b78"/>
+      <text x="530" y="62" fill="#0d6b78" font-size="22" font-weight="700" font-family="'Noto Serif KR', serif">조작 · Manipulation</text>
+      <text x="530" y="92" fill="#1b1a17">물체를 고르고 · 잡고 · 옮기고 · 돌림</text>
+      <text x="530" y="120" fill="#4a463e">예 : Grab · Ray 선택 · 크기 조절</text>
+      <text x="530" y="150" fill="#a8701a" font-weight="700">지각 위험 : 손-눈 어긋남 · 팔 피로 → 12주</text>
+      <rect x="24" y="200" width="466" height="160" fill="#fbf8f1" stroke="#cfc6b2"/>
+      <rect x="24" y="200" width="466" height="4" fill="#4f7a16"/>
+      <text x="44" y="238" fill="#4f7a16" font-size="22" font-weight="700" font-family="'Noto Serif KR', serif">시스템 제어 · System control</text>
+      <text x="44" y="268" fill="#1b1a17">설정·모드·메뉴를 바꾸는 명령</text>
+      <text x="44" y="296" fill="#4a463e">예 : 손목 메뉴 · 일시정지 패널 · 음량</text>
+      <text x="44" y="326" fill="#a8701a" font-weight="700">지각 위험 : 화면 고정 UI · VAC → 오늘</text>
+      <rect x="510" y="200" width="466" height="160" fill="#fbf8f1" stroke="#cfc6b2"/>
+      <rect x="510" y="200" width="466" height="4" fill="#1b1a17"/>
+      <text x="530" y="238" fill="#1b1a17" font-size="22" font-weight="700" font-family="'Noto Serif KR', serif">사회적 · Social</text>
+      <text x="530" y="268" fill="#1b1a17">다른 사람(아바타)과의 상호작용</text>
+      <text x="530" y="296" fill="#4a463e">예 : 손 흔들기 · 시선 맞추기 · 대화</text>
+      <text x="530" y="326" fill="#a8701a" font-weight="700">지각 위험 : 개인 공간 침범감 → 13주 기획</text>
     </g>
   </svg>
   <div class="note">LaValle Ch.10.2~10.4 (Locomotion · Manipulation · Social) · 시스템 제어 분류는 Bowman et al. 『3D User Interfaces』</div>
@@ -1204,7 +1473,7 @@ public void SetState(GameState next)
 <section>
   <div class="tag lab">실습 · 1</div>
   <h2>이번 주 명세 예시</h2>
-  <pre style="font-size:.6em"><code data-trim>[목표]
+  <pre style="font-size:.6em"><code class="language-plaintext" data-trim>[목표]
 점수 표시와 일시정지 버튼이 있는 메뉴 UI 를 World Space 캔버스로 만든다.
 일시정지 버튼은 GameState(Menu/Playing/Paused) 상태 기계를 전환한다.
 
@@ -1326,7 +1595,7 @@ Debug.Log($"거리 {d:F2} m · 폭 {deg:F1}° · 정면에서 {yaw:F0}° · 글�
   </table>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">다음 주 ★</div>
   <div class="rule"></div>
   <h1>내 실험실에 <em>들어가기</em></h1>

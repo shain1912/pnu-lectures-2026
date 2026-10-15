@@ -15,7 +15,7 @@
   .reveal svg.fig2 text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
   .reveal .demo-ui select {
     font-family: var(--mono); font-size: 1em; background: var(--bg-card); color: var(--fg);
-    border: 1px solid var(--line); border-radius: 6px; padding: 0.15em 0.3em;
+    border: 1px solid var(--ink); border-radius: 0; padding: 0.15em 0.3em;
   }
   .reveal .tight li { margin-bottom: 0.25em; }
 </style>
@@ -65,11 +65,11 @@
       <p class="small">프로파일러 수치로 <b>CPU 병목 · GPU 병목</b> 판정 → 드로우콜·오버드로·해상도 중 무엇을 줄일지 근거와 함께 선택</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 멀미 원인 설명</h4>
+      <h4><span class="step">2</span> 멀미 원인 설명</h4>
       <p class="small">멀미 장면을 보고 <b>유발 요인 6개</b> 중 무엇이 작동했는지 지목 · 감각 충돌로 이유 설명 · 완화 기법 3종 적용</p>
     </div>
     <div class="card lab">
-      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> SSQ 로 측정</h4>
+      <h4><span class="step">3</span> SSQ 로 측정</h4>
       <p class="small">체험 전후 <b>SSQ 16문항</b> 기록 → 하위척도 점수 손계산 → 완화 전후 비교표 작성</p>
     </div>
   </div>
@@ -163,20 +163,89 @@ void Update() {
 
 <section>
   <div class="tag gfx">Part I 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>이번 파트 용어 미리보기 (1/3)</h2>
   <dl class="terms">
-    <dt>프레임 예산<small>Frame budget</small></dt><dd>한 장면을 그리는 데 쓸 수 있는 <b>최대 시간</b> — 90Hz 면 11.1 ms</dd>
-    <dt>드로우콜<small>Draw call</small></dt><dd>CPU 가 GPU 에게 «이 물체를 이 재질로 그려라» 라고 보내는 <b>주문서 한 장</b></dd>
-    <dt>배칭<small>Batching</small></dt><dd>여러 물체를 묶어 주문서 수를 줄이는 기법</dd>
-    <dt>SRP Batcher</dt><dd>URP 기본 기능 — 같은 셰이더를 쓰는 물체 사이의 <b>재질 준비 비용</b>을 줄임</dd>
-    <dt>오버드로<small>Overdraw</small></dt><dd>같은 픽셀을 한 프레임에 여러 번 칠하는 낭비</dd>
-    <dt>포비티드 렌더링<small>Foveated rendering</small></dt><dd>시야 가장자리를 낮은 해상도로 그려 계산을 아끼는 기법</dd>
-    <dt>재투영<small>Reprojection</small></dt><dd>마감을 놓쳤을 때 이전 프레임을 머리 움직임에 맞춰 <b>비틀어 재사용</b>하는 응급 처치</dd>
-    <dt>프로파일러<small>Profiler</small></dt><dd>어디에 몇 ms 를 썼는지 재는 측정 도구</dd>
+    <dt>프레임 예산<small>Frame budget</small></dt>
+    <dd>
+      <p>그림 한 장을 완성하는 데 쓸 수 있는 <b>최대 시간</b> — 시험 한 문제에 주어진 제한 시간</p>
+      <p class="ex">90 Hz → 1000 ÷ 90 ≈ 11.1 ms · 72 Hz → 13.9 ms · 120 Hz → 8.3 ms</p>
+      <p class="why">한 번이라도 넘기면 같은 그림이 두 번 나감 → 화면 튐(저더) → 멀미 위험</p>
+      <p class="where">헤드셋 OVR Metrics Tool 의 프레임 시간 · Unity Profiler CPU/GPU ms</p>
+    </dd>
+    <dt>드로우콜<small>Draw call</small></dt>
+    <dd>
+      <p>CPU 가 GPU 에게 «이 물체를 이 재질로 그려라» 라고 보내는 <b>주문서 한 장</b></p>
+      <p class="ex">재질이 모두 다른 의자 40개 → 주문서 약 40장 · 묶으면 1~수 장</p>
+      <p class="why">물체가 가벼워도 장마다 준비 비용 → 장수가 많으면 CPU 가 먼저 마감을 놓침</p>
+      <p class="where">Game 뷰 우상단 <code>Stats</code> → <code>Batches</code> · <code>SetPass calls</code></p>
+    </dd>
+    <dt>배칭<small>Batching</small></dt>
+    <dd>
+      <p>여러 물체를 한 묶음으로 보내 <b>주문서 수를 줄이는</b> 기법 — 택배를 큰 상자 하나에 합포장</p>
+      <p class="ex">벽·바닥 120개를 Static 으로 합치면 주문서 수십 장 → 몇 장</p>
+      <p class="why">조건(같은 재질 · 움직이지 않음)을 모르면 체크만 하고 효과는 0</p>
+      <p class="where">Inspector 우상단 <code>Static</code> 체크 · 재질의 <code>Enable GPU Instancing</code></p>
+    </dd>
   </dl>
   <aside class="notes">
     - 3주차 프레임타임 · 4주차 timewarp · 5주차 그림자 비용 · 6주차 중심와가 전부 오늘 다시 나옴
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기 (2/3)</h2>
+  <dl class="terms">
+    <dt>SRP Batcher</dt>
+    <dd>
+      <p>같은 셰이더를 쓰는 물체끼리 재질 정보를 미리 올려 두어 <b>주문서 한 장 쓰는 시간</b>을 줄이는 URP 기능</p>
+      <p class="ex">주문서 장수 150 은 그대로 · 장당 준비 시간만 짧아짐</p>
+      <p class="why">«Batches 숫자가 안 줄었다 → 효과 없음» 오판 방지</p>
+      <p class="where">URP Asset Inspector 의 <code>SRP Batcher</code> 항목 (기본 켬 · 버전마다 위치 다름) · Frame Debugger 의 «SRP Batch»</p>
+    </dd>
+    <dt>오버드로<small>Overdraw</small></dt>
+    <dd>
+      <p>같은 픽셀을 한 프레임에 <b>여러 번 덧칠</b>하는 낭비 — 보이는 건 마지막 한 겹뿐</p>
+      <p class="ex">화면 전체 연기 파티클 3겹 → 픽셀 칠하기 약 3배 추가</p>
+      <p class="why">GPU 병목의 대표 원인 · 특히 Quest 같은 모바일 GPU 에서 반투명이 비쌈</p>
+      <p class="where">Window → Analysis → <code>Rendering Debugger</code> → Overdraw 표시 (URP · 버전마다 이름 다름)</p>
+    </dd>
+    <dt>포비티드 렌더링<small>Foveated rendering</small></dt>
+    <dd>
+      <p>시야 <b>가장자리를 덜 꼼꼼히</b> 그려 계산을 아끼는 기법 — 사진의 배경은 대충 보정</p>
+      <p class="ex">가장자리 픽셀 2×2 를 묶어 한 번만 색 계산 → 그 영역 비용 약 1/4</p>
+      <p class="why">픽셀 수가 많은 VR 에서 GPU 시간을 크게 버는 수단 · 너무 세면 가장자리 흐림이 보임</p>
+      <p class="where">Quest : 고정 포비티드(FFR) 수준 Off~High · OpenXR Meta 기능 설정 또는 스크립트 (버전마다 다름)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기 (3/3)</h2>
+  <dl class="terms">
+    <dt>저더<small>Judder</small></dt>
+    <dd>
+      <p>고개를 돌릴 때 세상이 <b>머리에 끌려가다 툭 튀는</b> 듯한 떨림 — 같은 그림이 두 번 표시된 결과</p>
+      <p class="ex">90 Hz 에서 한 프레임 놓침 → (재투영이 없다면) 같은 그림이 22.2 ms 동안 머무름 → 그 사이 고개는 계속 회전</p>
+      <p class="why">모니터에서는 «끊김» 정도지만 VR 에서는 눈과 귀의 보고가 어긋나 멀미로 이어짐</p>
+      <p class="where">헤드셋 안에서 고개를 좌우로 빠르게 돌릴 때 체감 · OVR Metrics 놓친 프레임 수</p>
+    </dd>
+    <dt>재투영<small>Reprojection</small></dt>
+    <dd>
+      <p>마감을 놓쳤을 때 직전 그림을 머리 움직임에 맞춰 <b>비틀어 재사용</b>하는 응급 처치</p>
+      <p class="ex">고개를 2° 돌린 사이 새 그림이 없으면 → 이전 그림을 2° 돌려 표시</p>
+      <p class="why">회전은 숨겨 주지만 움직이는 물체·손은 못 숨김 → 의존하면 화면이 번지고 떨림</p>
+      <p class="where">Quest 시스템이 자동 수행 (ATW) · OVR Metrics 의 놓친 프레임 수로 간접 확인</p>
+    </dd>
+    <dt>프로파일러<small>Profiler</small></dt>
+    <dd>
+      <p>한 프레임 동안 <b>어디에 몇 ms 를 썼는지</b> 재는 측정 도구 — 가계부</p>
+      <p class="ex">CPU 6.5 ms · GPU 12.5 ms → GPU 쪽을 줄여야 함</p>
+      <p class="why">측정 없이 고치면 병목이 아닌 쪽을 줄이는 헛수고</p>
+      <p class="where">Window → Analysis → <code>Profiler</code> · 헤드셋은 Development Build 로 연결</p>
+    </dd>
+  </dl>
 </section>
 
 <!-- ---------------------------------------------------- 성능 예산 -->
@@ -215,10 +284,7 @@ void Update() {
       </table>
     </div>
     <div>
-      <dl class="terms">
-        <dt>주사율<small>Refresh rate</small></dt><dd>디스플레이가 1초에 그림을 바꾸는 횟수</dd>
-        <dt>vsync</dt><dd>디스플레이가 새 그림을 받아 가는 <b>정해진 순간</b></dd>
-      </dl>
+      <p class="small muted">주사율 · vsync 풀이는 다음 장</p>
       <div class="key">
         <p class="small">72 → 90 Hz : 예산 2.8 ms 감소 (약 20%) · 같은 씬이 72 에서는 되고 90 에서는 안 될 수 있음</p>
       </div>
@@ -232,55 +298,75 @@ void Update() {
 </section>
 
 <section>
+  <div class="tag gfx">성능 · 2 용어 풀이</div>
+  <h2>주사율과 vsync</h2>
+  <dl class="terms">
+    <dt>주사율<small>Refresh rate · Hz</small></dt>
+    <dd>
+      <p>디스플레이가 <b>1초에 그림을 몇 번 바꾸는지</b> — 플립북을 1초에 몇 장 넘기는가</p>
+      <p class="ex">Quest 3 : 72 · 90 · 120 Hz 선택 가능 · 수업 기준 90 Hz = 1초에 그림 90장</p>
+      <p class="why">주사율을 올리면 매끄러워지지만 한 장당 시간(예산)이 줄어듦 → 같은 씬이 갑자기 초과</p>
+      <p class="where">OpenXR Meta Quest 기능 설정 또는 스크립트 요청 · 실제 값은 OVR Metrics 에 표시 (버전마다 다름)</p>
+    </dd>
+    <dt>vsync<small>Vertical sync · 수직 동기화</small></dt>
+    <dd>
+      <p>디스플레이가 새 그림을 <b>받아 가는 정해진 순간</b> — 정시 출발하는 기차의 출발 시각</p>
+      <p class="ex">90 Hz → 11.1 ms · 22.2 ms · 33.3 ms … 마다 출발 · 10.9 ms 에 완성 = 탑승 · 11.4 ms = 다음 기차</p>
+      <p class="why">«조금 늦음» 이 없음 → 0.3 ms 만 늦어도 한 프레임 통째로 놓침</p>
+      <p class="where">Project Settings → Quality → <code>VSync Count</code> 는 PC 화면용 · VR 은 헤드셋 합성기가 직접 맞춤</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag gfx">성능 · 3 ★</div>
   <h3>11.1 ms 를 누가 나눠 쓰는가</h3>
   <svg class="fig2" viewBox="0 0 1100 470" role="img" aria-label="CPU 와 GPU 가 11.1ms 예산을 나눠 쓰는 막대 도해">
-    <rect x="0" y="0" width="1100" height="470" rx="14" fill="#0e1118"/>
     <!-- 눈금 : 1 ms = 72 px, 시작 x=170 -->
-    <g stroke="#2a3040" stroke-width="1">
+    <g stroke="#cfc6b2" stroke-width="1">
       <line x1="170" y1="52" x2="170" y2="370"/><line x1="530" y1="52" x2="530" y2="370"/>
       <line x1="890" y1="52" x2="890" y2="370"/>
     </g>
-    <g fill="#9aa4b8" font-size="17" text-anchor="middle">
+    <g fill="#4a463e" font-size="17" text-anchor="middle">
       <text x="170" y="40">0 ms</text><text x="530" y="40">5 ms</text><text x="890" y="40">10 ms</text>
     </g>
-    <line x1="969" y1="30" x2="969" y2="380" stroke="#ffc44d" stroke-width="3" stroke-dasharray="8 6"/>
-    <text x="969" y="405" fill="#ffc44d" font-size="18" font-weight="700" text-anchor="middle">90 Hz 마감 11.1 ms</text>
+    <line x1="969" y1="30" x2="969" y2="380" stroke="#a8701a" stroke-width="3" stroke-dasharray="8 6"/>
+    <text x="969" y="405" fill="#a8701a" font-size="18" font-weight="700" text-anchor="middle">90 Hz 마감 11.1 ms</text>
 
     <!-- CPU -->
-    <text x="20" y="96" fill="#e8ecf4" font-size="20" font-weight="700">CPU</text>
-    <text x="20" y="118" fill="#9aa4b8" font-size="16">주문 준비</text>
-    <rect x="170" y="74" width="144" height="46" rx="6" fill="#21330f" stroke="#a8e05f"/>
-    <text x="242" y="103" fill="#a8e05f" font-size="17" text-anchor="middle">게임 로직 2</text>
-    <rect x="314" y="74" width="72" height="46" rx="6" fill="#21330f" stroke="#a8e05f"/>
-    <text x="350" y="103" fill="#a8e05f" font-size="17" text-anchor="middle">물리 1</text>
-    <rect x="386" y="74" width="252" height="46" rx="6" fill="#0e3a42" stroke="#35d6e6"/>
-    <text x="512" y="103" fill="#35d6e6" font-size="17" text-anchor="middle">드로우콜 준비 3.5</text>
-    <text x="650" y="103" fill="#e8ecf4" font-size="17">= 6.5 ms</text>
+    <text x="20" y="96" fill="#1b1a17" font-size="20" font-weight="700">CPU</text>
+    <text x="20" y="118" fill="#4a463e" font-size="16">주문 준비</text>
+    <rect x="170" y="74" width="144" height="46" rx="2" fill="#e3ecd3" stroke="#4f7a16"/>
+    <text x="242" y="103" fill="#4f7a16" font-size="17" text-anchor="middle">게임 로직 2</text>
+    <rect x="314" y="74" width="72" height="46" rx="2" fill="#e3ecd3" stroke="#4f7a16"/>
+    <text x="350" y="103" fill="#4f7a16" font-size="17" text-anchor="middle">물리 1</text>
+    <rect x="386" y="74" width="252" height="46" rx="2" fill="#dcebec" stroke="#0d6b78"/>
+    <text x="512" y="103" fill="#0d6b78" font-size="17" text-anchor="middle">드로우콜 준비 3.5</text>
+    <text x="650" y="103" fill="#1b1a17" font-size="17">= 6.5 ms</text>
 
     <!-- GPU -->
-    <text x="20" y="186" fill="#e8ecf4" font-size="20" font-weight="700">GPU</text>
-    <text x="20" y="208" fill="#9aa4b8" font-size="16">실제 그리기</text>
-    <rect x="170" y="164" width="72" height="46" rx="6" fill="#2a2410" stroke="#ffc44d"/>
-    <text x="206" y="193" fill="#ffc44d" font-size="16" text-anchor="middle">그림자 1</text>
-    <rect x="242" y="164" width="468" height="46" rx="6" fill="#421229" stroke="#ff5fa2"/>
-    <text x="476" y="193" fill="#ff5fa2" font-size="17" text-anchor="middle">왼눈 + 오른눈 픽셀 칠하기 6.5</text>
-    <rect x="710" y="164" width="72" height="46" rx="6" fill="#1b2030" stroke="#9aa4b8"/>
-    <text x="746" y="193" fill="#9aa4b8" font-size="16" text-anchor="middle">합성 1</text>
-    <text x="794" y="193" fill="#e8ecf4" font-size="17">= 8.5 ms</text>
+    <text x="20" y="186" fill="#1b1a17" font-size="20" font-weight="700">GPU</text>
+    <text x="20" y="208" fill="#4a463e" font-size="16">실제 그리기</text>
+    <rect x="170" y="164" width="72" height="46" rx="2" fill="#f3e7cf" stroke="#a8701a"/>
+    <text x="206" y="193" fill="#a8701a" font-size="16" text-anchor="middle">그림자 1</text>
+    <rect x="242" y="164" width="468" height="46" rx="2" fill="#f1dde6" stroke="#a3245e"/>
+    <text x="476" y="193" fill="#a3245e" font-size="17" text-anchor="middle">왼눈 + 오른눈 픽셀 칠하기 6.5</text>
+    <rect x="710" y="164" width="72" height="46" rx="2" fill="#ece6d8" stroke="#4a463e"/>
+    <text x="746" y="193" fill="#4a463e" font-size="16" text-anchor="middle">합성 1</text>
+    <text x="794" y="193" fill="#1b1a17" font-size="17">= 8.5 ms</text>
 
     <!-- 초과 사례 -->
-    <text x="20" y="286" fill="#ff5a4d" font-size="20" font-weight="700">GPU 초과</text>
-    <text x="20" y="308" fill="#9aa4b8" font-size="16">투명 파티클 추가</text>
-    <rect x="170" y="264" width="72" height="46" rx="6" fill="#2a2410" stroke="#ffc44d"/>
-    <rect x="242" y="264" width="468" height="46" rx="6" fill="#421229" stroke="#ff5fa2"/>
-    <rect x="710" y="264" width="216" height="46" rx="6" fill="#431612" stroke="#ff5a4d"/>
-    <text x="818" y="293" fill="#ff5a4d" font-size="17" text-anchor="middle">반투명 덧칠 3</text>
-    <rect x="926" y="264" width="72" height="46" rx="6" fill="#1b2030" stroke="#9aa4b8"/>
-    <text x="1010" y="293" fill="#ff5a4d" font-size="17" font-weight="700">12.5</text>
-    <text x="170" y="350" fill="#ff5a4d" font-size="17">→ 마감 놓침 · 이번 vsync 에는 직전 프레임을 비틀어 재사용 (재투영)</text>
+    <text x="20" y="286" fill="#c2401d" font-size="20" font-weight="700">GPU 초과</text>
+    <text x="20" y="308" fill="#4a463e" font-size="16">투명 파티클 추가</text>
+    <rect x="170" y="264" width="72" height="46" rx="2" fill="#f3e7cf" stroke="#a8701a"/>
+    <rect x="242" y="264" width="468" height="46" rx="2" fill="#f1dde6" stroke="#a3245e"/>
+    <rect x="710" y="264" width="216" height="46" rx="2" fill="#f6e0d6" stroke="#c2401d"/>
+    <text x="818" y="293" fill="#c2401d" font-size="17" text-anchor="middle">반투명 덧칠 3</text>
+    <rect x="926" y="264" width="72" height="46" rx="2" fill="#ece6d8" stroke="#4a463e"/>
+    <text x="1010" y="293" fill="#c2401d" font-size="17" font-weight="700">12.5</text>
+    <text x="170" y="350" fill="#c2401d" font-size="17">→ 마감 놓침 · 이번 vsync 에는 직전 프레임을 비틀어 재사용 (재투영)</text>
 
-    <text x="20" y="445" fill="#9aa4b8" font-size="16">수치는 설명용 예시 · CPU 는 다음 프레임 준비, GPU 는 이번 프레임 그리기를 <tspan fill="#e8ecf4">동시에</tspan> 진행 → 둘 중 <tspan fill="#e8ecf4">느린 쪽</tspan>이 프레임률 결정</text>
+    <text x="20" y="445" fill="#4a463e" font-size="16">수치는 설명용 예시 · CPU 는 다음 프레임 준비, GPU 는 이번 프레임 그리기를 <tspan fill="#1b1a17">동시에</tspan> 진행 → 둘 중 <tspan fill="#1b1a17">느린 쪽</tspan>이 프레임률 결정</text>
   </svg>
   <aside class="notes">
     - 위 두 줄 : 정상 · CPU 6.5 · GPU 8.5 → 둘 다 11.1 안 → 90Hz 유지
@@ -328,9 +414,7 @@ void Update() {
       <p class="small muted">패널 해상도 기준 · 실제 렌더 해상도는 렌더 스케일 설정마다 다름</p>
     </div>
     <div>
-      <dl class="terms">
-        <dt>싱글패스 인스턴싱<small>Single Pass Instanced</small></dt><dd>두 눈을 <b>주문서 한 장</b>으로 동시에 그리는 방식 (4주차) → 드로우콜은 두 배가 되지 않음</dd>
-      </dl>
+      <p class="small"><b>싱글패스 인스턴싱</b> (4주차) : 두 눈을 주문서 한 장으로 동시에 그림 → 드로우콜은 두 배가 되지 않음 · 풀이는 다음 장</p>
       <div class="key">
         <p class="small">정리 : 두 눈 렌더링에서<br>
         CPU 쪽 (주문서 수) → 싱글패스로 <b>거의 그대로</b><br>
@@ -343,6 +427,27 @@ void Update() {
     - 그래서 VR 최적화의 대부분이 "픽셀을 덜 칠하는" 방향 (오버드로 · 포비티드 · 해상도 스케일)
     - 실제 렌더 해상도는 렌즈 왜곡 보정용으로 패널보다 크게 잡기도 함 → 정확한 값은 기기·설정 확인
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">성능 · 5 용어 풀이</div>
+  <h2>싱글패스 인스턴싱과 렌더 스케일</h2>
+  <dl class="terms">
+    <dt>싱글패스 인스턴싱<small>Single Pass Instanced</small></dt>
+    <dd>
+      <p>왼눈·오른눈 그림을 <b>주문서 한 장</b>으로 동시에 그리는 방식 — 복사지를 대고 한 번 써서 두 장 얻기</p>
+      <p class="ex">드로우콜 150 인 씬 → 눈마다 따로 그리면 약 300 · 싱글패스면 약 150 유지</p>
+      <p class="why">꺼져 있으면 CPU 부담이 두 배 → 드로우콜 기준선 150 이 사실상 75 로 줄어듦</p>
+      <p class="where">Project Settings → XR Plug-in Management → OpenXR → <code>Render Mode</code> (Single Pass Instanced / Multi-view)</p>
+    </dd>
+    <dt>렌더 스케일<small>Render scale</small></dt>
+    <dd>
+      <p>실제로 그리는 해상도를 기준 해상도의 <b>몇 배로 할지</b> 정하는 배율 — 사진 저장 크기 조절</p>
+      <p class="ex">0.8 → 가로·세로 각 0.8배 → 픽셀 수 0.8² = 0.64배 (36% 감소)</p>
+      <p class="why">GPU 병목을 가장 빨리 확인·완화하는 손잡이 · 너무 낮추면 글자가 뭉개짐</p>
+      <p class="where">URP Asset → Quality → <code>Render Scale</code> · 스크립트 <code>XRSettings.eyeTextureResolutionScale</code></p>
+    </dd>
+  </dl>
 </section>
 
 <!-- ---------------------------------------------------- 드로우콜 -->
@@ -364,57 +469,77 @@ void Update() {
 </section>
 
 <section>
+  <div class="tag gfx">드로우콜 · 1 용어 풀이</div>
+  <h2>SetPass 와 Batches — Stats 창의 두 숫자</h2>
+  <dl class="terms">
+    <dt>SetPass call<small>셰이더 상태 전환</small></dt>
+    <dd>
+      <p>GPU 의 작업대를 <b>다른 셰이더·재질용으로 통째로 다시 세팅</b>하는 일 — 요리 종류가 바뀔 때 조리대를 치우고 새 도구를 꺼내는 시간</p>
+      <p class="ex">같은 재질 의자 40개 → SetPass 1회 · 재질 40종 의자 40개 → SetPass 약 40회</p>
+      <p class="why">드로우콜 비용의 가장 비싼 부분 · 재질 종류를 줄이면 가장 크게 줄어듦</p>
+      <p class="where">Game 뷰 우상단 <code>Stats</code> → <code>SetPass calls</code> · Frame Debugger 에서 단계별 확인</p>
+    </dd>
+    <dt>Batches<small>묶음 수</small></dt>
+    <dd>
+      <p>배칭으로 묶고 난 뒤 실제로 GPU 에 보낸 <b>주문서 장수</b></p>
+      <p class="ex">벽·바닥 120개 Static + 재질 3종 → 정적 부분 Batches 약 3</p>
+      <p class="why">수업 기준선 «드로우콜 150 이하» 를 확인하는 숫자 · SRP Batcher 는 이 숫자를 줄이지 않음</p>
+      <p class="where">Game 뷰 <code>Stats</code> → <code>Batches</code> · Profiler Rendering 모듈 (PC 에디터 값은 참고용)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag gfx">드로우콜 · 2 ★</div>
   <h3>개별 그리기 vs 묶어 그리기</h3>
   <svg class="fig2" viewBox="0 0 1100 470" role="img" aria-label="의자 40개를 개별로 그릴 때와 배칭할 때의 CPU 준비 시간 비교">
-    <rect x="0" y="0" width="1100" height="470" rx="14" fill="#0e1118"/>
     <!-- 왼쪽 패널 -->
-    <text x="40" y="48" fill="#ff5a4d" font-size="21" font-weight="700">개별 그리기 · 의자 40개 · 재질 40종</text>
+    <text x="40" y="48" fill="#c2401d" font-size="21" font-weight="700">개별 그리기 · 의자 40개 · 재질 40종</text>
     <g>
       <!-- 의자 아이콘 40개 (8x5) -->
-      <g fill="#1b2030" stroke="#ff5a4d" stroke-width="1.5">
-        <rect x="40" y="70" width="40" height="34" rx="4"/><rect x="88" y="70" width="40" height="34" rx="4"/><rect x="136" y="70" width="40" height="34" rx="4"/><rect x="184" y="70" width="40" height="34" rx="4"/><rect x="232" y="70" width="40" height="34" rx="4"/><rect x="280" y="70" width="40" height="34" rx="4"/><rect x="328" y="70" width="40" height="34" rx="4"/><rect x="376" y="70" width="40" height="34" rx="4"/>
-        <rect x="40" y="112" width="40" height="34" rx="4"/><rect x="88" y="112" width="40" height="34" rx="4"/><rect x="136" y="112" width="40" height="34" rx="4"/><rect x="184" y="112" width="40" height="34" rx="4"/><rect x="232" y="112" width="40" height="34" rx="4"/><rect x="280" y="112" width="40" height="34" rx="4"/><rect x="328" y="112" width="40" height="34" rx="4"/><rect x="376" y="112" width="40" height="34" rx="4"/>
-        <rect x="40" y="154" width="40" height="34" rx="4"/><rect x="88" y="154" width="40" height="34" rx="4"/><rect x="136" y="154" width="40" height="34" rx="4"/><rect x="184" y="154" width="40" height="34" rx="4"/><rect x="232" y="154" width="40" height="34" rx="4"/><rect x="280" y="154" width="40" height="34" rx="4"/><rect x="328" y="154" width="40" height="34" rx="4"/><rect x="376" y="154" width="40" height="34" rx="4"/>
-        <rect x="40" y="196" width="40" height="34" rx="4"/><rect x="88" y="196" width="40" height="34" rx="4"/><rect x="136" y="196" width="40" height="34" rx="4"/><rect x="184" y="196" width="40" height="34" rx="4"/><rect x="232" y="196" width="40" height="34" rx="4"/><rect x="280" y="196" width="40" height="34" rx="4"/><rect x="328" y="196" width="40" height="34" rx="4"/><rect x="376" y="196" width="40" height="34" rx="4"/>
-        <rect x="40" y="238" width="40" height="34" rx="4"/><rect x="88" y="238" width="40" height="34" rx="4"/><rect x="136" y="238" width="40" height="34" rx="4"/><rect x="184" y="238" width="40" height="34" rx="4"/><rect x="232" y="238" width="40" height="34" rx="4"/><rect x="280" y="238" width="40" height="34" rx="4"/><rect x="328" y="238" width="40" height="34" rx="4"/><rect x="376" y="238" width="40" height="34" rx="4"/>
+      <g fill="#ece6d8" stroke="#c2401d" stroke-width="1.5">
+        <rect x="40" y="70" width="40" height="34" rx="2"/><rect x="88" y="70" width="40" height="34" rx="2"/><rect x="136" y="70" width="40" height="34" rx="2"/><rect x="184" y="70" width="40" height="34" rx="2"/><rect x="232" y="70" width="40" height="34" rx="2"/><rect x="280" y="70" width="40" height="34" rx="2"/><rect x="328" y="70" width="40" height="34" rx="2"/><rect x="376" y="70" width="40" height="34" rx="2"/>
+        <rect x="40" y="112" width="40" height="34" rx="2"/><rect x="88" y="112" width="40" height="34" rx="2"/><rect x="136" y="112" width="40" height="34" rx="2"/><rect x="184" y="112" width="40" height="34" rx="2"/><rect x="232" y="112" width="40" height="34" rx="2"/><rect x="280" y="112" width="40" height="34" rx="2"/><rect x="328" y="112" width="40" height="34" rx="2"/><rect x="376" y="112" width="40" height="34" rx="2"/>
+        <rect x="40" y="154" width="40" height="34" rx="2"/><rect x="88" y="154" width="40" height="34" rx="2"/><rect x="136" y="154" width="40" height="34" rx="2"/><rect x="184" y="154" width="40" height="34" rx="2"/><rect x="232" y="154" width="40" height="34" rx="2"/><rect x="280" y="154" width="40" height="34" rx="2"/><rect x="328" y="154" width="40" height="34" rx="2"/><rect x="376" y="154" width="40" height="34" rx="2"/>
+        <rect x="40" y="196" width="40" height="34" rx="2"/><rect x="88" y="196" width="40" height="34" rx="2"/><rect x="136" y="196" width="40" height="34" rx="2"/><rect x="184" y="196" width="40" height="34" rx="2"/><rect x="232" y="196" width="40" height="34" rx="2"/><rect x="280" y="196" width="40" height="34" rx="2"/><rect x="328" y="196" width="40" height="34" rx="2"/><rect x="376" y="196" width="40" height="34" rx="2"/>
+        <rect x="40" y="238" width="40" height="34" rx="2"/><rect x="88" y="238" width="40" height="34" rx="2"/><rect x="136" y="238" width="40" height="34" rx="2"/><rect x="184" y="238" width="40" height="34" rx="2"/><rect x="232" y="238" width="40" height="34" rx="2"/><rect x="280" y="238" width="40" height="34" rx="2"/><rect x="328" y="238" width="40" height="34" rx="2"/><rect x="376" y="238" width="40" height="34" rx="2"/>
       </g>
-      <text x="440" y="160" fill="#e8ecf4" font-size="19">→ 주문서</text>
-      <text x="440" y="186" fill="#ff5a4d" font-size="26" font-weight="700">40장</text>
+      <text x="440" y="160" fill="#1b1a17" font-size="19">→ 주문서</text>
+      <text x="440" y="186" fill="#c2401d" font-size="26" font-weight="700">40장</text>
     </g>
     <!-- 오른쪽 패널 -->
-    <line x1="560" y1="40" x2="560" y2="300" stroke="#2a3040" stroke-width="2"/>
-    <text x="600" y="48" fill="#a8e05f" font-size="21" font-weight="700">묶어 그리기 · 같은 재질 1종 + Static</text>
-    <rect x="600" y="70" width="376" height="202" rx="10" fill="#101a10" stroke="#a8e05f" stroke-width="2"/>
-    <text x="788" y="164" fill="#a8e05f" font-size="19" text-anchor="middle">의자 40개 = 큰 메시 하나</text>
-    <text x="788" y="192" fill="#9aa4b8" font-size="16" text-anchor="middle">(정점 데이터를 미리 합쳐 둠)</text>
-    <text x="990" y="160" fill="#e8ecf4" font-size="19">→</text>
-    <text x="990" y="186" fill="#a8e05f" font-size="26" font-weight="700">1~수 장</text>
+    <line x1="560" y1="40" x2="560" y2="300" stroke="#cfc6b2" stroke-width="2"/>
+    <text x="600" y="48" fill="#4f7a16" font-size="21" font-weight="700">묶어 그리기 · 같은 재질 1종 + Static</text>
+    <rect x="600" y="70" width="376" height="202" rx="2" fill="#e3ecd3" stroke="#4f7a16" stroke-width="2"/>
+    <text x="788" y="164" fill="#4f7a16" font-size="19" text-anchor="middle">의자 40개 = 큰 메시 하나</text>
+    <text x="788" y="192" fill="#4a463e" font-size="16" text-anchor="middle">(정점 데이터를 미리 합쳐 둠)</text>
+    <text x="990" y="160" fill="#1b1a17" font-size="19">→</text>
+    <text x="990" y="186" fill="#4f7a16" font-size="26" font-weight="700">1~수 장</text>
 
     <!-- 타임라인 -->
-    <text x="40" y="330" fill="#e8ecf4" font-size="18" font-weight="700">CPU 시간</text>
+    <text x="40" y="330" fill="#1b1a17" font-size="18" font-weight="700">CPU 시간</text>
     <g>
-      <rect x="150" y="312" width="22" height="26" fill="#ffc44d"/><rect x="172" y="312" width="6" height="26" fill="#35d6e6"/>
-      <rect x="180" y="312" width="22" height="26" fill="#ffc44d"/><rect x="202" y="312" width="6" height="26" fill="#35d6e6"/>
-      <rect x="210" y="312" width="22" height="26" fill="#ffc44d"/><rect x="232" y="312" width="6" height="26" fill="#35d6e6"/>
-      <rect x="240" y="312" width="22" height="26" fill="#ffc44d"/><rect x="262" y="312" width="6" height="26" fill="#35d6e6"/>
-      <rect x="270" y="312" width="22" height="26" fill="#ffc44d"/><rect x="292" y="312" width="6" height="26" fill="#35d6e6"/>
-      <rect x="300" y="312" width="22" height="26" fill="#ffc44d"/><rect x="322" y="312" width="6" height="26" fill="#35d6e6"/>
-      <rect x="330" y="312" width="22" height="26" fill="#ffc44d"/><rect x="352" y="312" width="6" height="26" fill="#35d6e6"/>
-      <rect x="360" y="312" width="22" height="26" fill="#ffc44d"/><rect x="382" y="312" width="6" height="26" fill="#35d6e6"/>
-      <rect x="390" y="312" width="22" height="26" fill="#ffc44d"/><rect x="412" y="312" width="6" height="26" fill="#35d6e6"/>
-      <rect x="420" y="312" width="22" height="26" fill="#ffc44d"/><rect x="442" y="312" width="6" height="26" fill="#35d6e6"/>
-      <text x="458" y="332" fill="#9aa4b8" font-size="17">… × 40</text>
+      <rect x="150" y="312" width="22" height="26" fill="#a8701a"/><rect x="172" y="312" width="6" height="26" fill="#0d6b78"/>
+      <rect x="180" y="312" width="22" height="26" fill="#a8701a"/><rect x="202" y="312" width="6" height="26" fill="#0d6b78"/>
+      <rect x="210" y="312" width="22" height="26" fill="#a8701a"/><rect x="232" y="312" width="6" height="26" fill="#0d6b78"/>
+      <rect x="240" y="312" width="22" height="26" fill="#a8701a"/><rect x="262" y="312" width="6" height="26" fill="#0d6b78"/>
+      <rect x="270" y="312" width="22" height="26" fill="#a8701a"/><rect x="292" y="312" width="6" height="26" fill="#0d6b78"/>
+      <rect x="300" y="312" width="22" height="26" fill="#a8701a"/><rect x="322" y="312" width="6" height="26" fill="#0d6b78"/>
+      <rect x="330" y="312" width="22" height="26" fill="#a8701a"/><rect x="352" y="312" width="6" height="26" fill="#0d6b78"/>
+      <rect x="360" y="312" width="22" height="26" fill="#a8701a"/><rect x="382" y="312" width="6" height="26" fill="#0d6b78"/>
+      <rect x="390" y="312" width="22" height="26" fill="#a8701a"/><rect x="412" y="312" width="6" height="26" fill="#0d6b78"/>
+      <rect x="420" y="312" width="22" height="26" fill="#a8701a"/><rect x="442" y="312" width="6" height="26" fill="#0d6b78"/>
+      <text x="458" y="332" fill="#4a463e" font-size="17">… × 40</text>
     </g>
     <g>
-      <rect x="600" y="312" width="22" height="26" fill="#ffc44d"/><rect x="622" y="312" width="40" height="26" fill="#35d6e6"/>
-      <text x="676" y="332" fill="#a8e05f" font-size="17">× 1 → 끝</text>
+      <rect x="600" y="312" width="22" height="26" fill="#a8701a"/><rect x="622" y="312" width="40" height="26" fill="#0d6b78"/>
+      <text x="676" y="332" fill="#4f7a16" font-size="17">× 1 → 끝</text>
     </g>
-    <rect x="150" y="372" width="22" height="22" fill="#ffc44d"/>
-    <text x="182" y="390" fill="#e8ecf4" font-size="17">상태 설정 (셰이더·재질·텍스처 교체) — 비쌈</text>
-    <rect x="600" y="372" width="22" height="22" fill="#35d6e6"/>
-    <text x="632" y="390" fill="#e8ecf4" font-size="17">«그려라» 명령 — 상대적으로 쌈</text>
-    <text x="40" y="445" fill="#9aa4b8" font-size="16">막대 길이는 설명용 비율 · 실제 비용은 기기·드라이버·셰이더마다 다름 → 반드시 측정</text>
+    <rect x="150" y="372" width="22" height="22" fill="#a8701a"/>
+    <text x="182" y="390" fill="#1b1a17" font-size="17">상태 설정 (셰이더·재질·텍스처 교체) — 비쌈</text>
+    <rect x="600" y="372" width="22" height="22" fill="#0d6b78"/>
+    <text x="632" y="390" fill="#1b1a17" font-size="17">«그려라» 명령 — 상대적으로 쌈</text>
+    <text x="40" y="445" fill="#4a463e" font-size="16">막대 길이는 설명용 비율 · 실제 비용은 기기·드라이버·셰이더마다 다름 → 반드시 측정</text>
   </svg>
   <aside class="notes">
     - 왼쪽 : 의자마다 다른 재질 → 의자마다 상태 설정(노랑)을 반복
@@ -491,6 +616,27 @@ void Update() {
 </section>
 
 <section>
+  <div class="tag gfx">오버드로 · 1 용어 풀이</div>
+  <h2>깊이 테스트와 타일 렌더링</h2>
+  <dl class="terms">
+    <dt>깊이 테스트<small>Depth test · Z-test</small></dt>
+    <dd>
+      <p>픽셀을 칠하기 전에 «<b>이미 더 가까운 것이 칠해져 있나?</b>» 를 확인해, 가려질 픽셀은 건너뛰는 검사 (4주차 깊이 버퍼)</p>
+      <p class="ex">벽 뒤 의자 → 벽의 깊이 2 m · 의자 5 m → 의자 픽셀 탈락 · 색 계산 생략</p>
+      <p class="why">불투명은 이 검사로 덧칠이 거의 없음 · 반투명은 뒤가 비쳐야 해서 이 절약을 못 씀</p>
+      <p class="where">URP Lit 재질 → Surface Options → <code>Surface Type</code> (Opaque / Transparent) · 셰이더의 <code>ZTest</code></p>
+    </dd>
+    <dt>타일 기반 렌더링<small>Tile-based rendering</small></dt>
+    <dd>
+      <p>화면을 <b>작은 바둑판 조각</b>으로 나눠, 조각 하나씩 칩 안의 빠른 작은 메모리에서 칠하는 모바일 GPU 방식</p>
+      <p class="ex">조각 하나를 다 칠한 뒤 결과만 큰 메모리로 한 번 옮김 → 메모리 왕복 감소 · 전력 절약</p>
+      <p class="why">반투명 겹·후처리가 많으면 이 이점이 줄어듦 → Quest 에서 «PC 에선 괜찮던» 효과가 비싸짐</p>
+      <p class="where">Unity 메뉴에는 없음 · Quest 칩 구조 · RenderDoc 등 GPU 캡처 도구에서 간접 확인</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag gfx">오버드로 · 2</div>
   <h2>오버드로 · 셰이더 · 텍스처 — 손계산</h2>
   <div class="cols">
@@ -518,6 +664,27 @@ void Update() {
   </div>
 </section>
 
+<section>
+  <div class="tag gfx">오버드로 · 2 용어 풀이</div>
+  <h2>밉맵과 텍스처 압축</h2>
+  <dl class="terms">
+    <dt>밉맵<small>Mipmap</small></dt>
+    <dd>
+      <p>원본 텍스처를 <b>절반씩 줄인 사본</b>을 미리 여러 장 만들어 두고, 멀리 있는 물체에는 작은 사본을 쓰는 방식 (6주차)</p>
+      <p class="ex">2048² 원본 → 1024² · 512² · … · 1² 사본 · 전체 메모리 약 1/3 추가 (16 MB → 약 21 MB)</p>
+      <p class="why">끄면 멀리 있는 무늬가 반짝이며 지글거림 · 큰 텍스처를 계속 읽어 GPU 도 느려짐</p>
+      <p class="where">텍스처 Import Settings → Advanced → <code>Generate Mipmap</code> (버전마다 이름 약간 다름)</p>
+    </dd>
+    <dt>ASTC<small>텍스처 압축 형식</small></dt>
+    <dd>
+      <p>GPU 가 <b>푼 채로 바로 읽을 수 있는</b> 압축 형식 — 픽셀 덩어리(블록)마다 정해진 크기로 줄임</p>
+      <p class="ex">6×6 블록 = 36픽셀을 16바이트로 → 픽셀당 약 3.56비트 · 2048² 가 16 MB → 약 1.9 MB</p>
+      <p class="why">무압축 텍스처 몇 장이면 Quest 메모리·대역폭이 금방 바닥 → 로딩 지연 · 프레임 저하</p>
+      <p class="where">텍스처 Import Settings → Android 탭 → <code>Override</code> 체크 → Format <code>ASTC 6x6 block</code> · <code>Max Size</code> 2048</p>
+    </dd>
+  </dl>
+</section>
+
 <!-- ---------------------------------------------------- 포비티드 · 재투영 -->
 <section>
   <div class="tag gfx">포비티드 · 1</div>
@@ -538,10 +705,7 @@ void Update() {
 <section>
   <div class="tag gfx">재투영 · 1</div>
   <h2>재투영 — 응급 처치의 한계</h2>
-  <dl class="terms">
-    <dt>ATW<small>Asynchronous TimeWarp</small></dt><dd>마감 직전 최신 머리 <b>회전</b>에 맞춰 완성된 그림을 비틀어 보정 — Quest 는 항상 켜져 있음</dd>
-    <dt>ASW<small>(Application) SpaceWarp</small></dt><dd>앱은 절반 속도(예 : 45 fps)로 그리고, 사이 프레임을 <b>움직임 벡터로 예측 합성</b></dd>
-  </dl>
+  <p class="small"><b>ATW</b> = 회전 보정 (항상 켜짐) · <b>ASW</b> = 절반 속도로 그리고 사이 프레임 예측 합성 → 자세한 풀이는 다음 장</p>
   <div class="analogy">
     <p><b>어제 찍은 사진을 오늘 각도로 기울이기</b> : 고개를 돌린 만큼 사진을 돌리면 풍경은 대충 맞음 · 그 사이 지나간 자동차의 위치는 사진에 없음</p>
   </div>
@@ -557,6 +721,27 @@ void Update() {
     - 4주차 timewarp 복습 · 회전은 그림 한 장을 돌리면 되지만 위치 이동은 시차(가까운 것과 먼 것이 다르게 움직임) 때문에 그림 한 장으로 불가
     - PC Rift 의 Asynchronous SpaceWarp 와 Quest 의 Application SpaceWarp 은 이름이 비슷하지만 다른 구현
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">재투영 · 1 용어 풀이</div>
+  <h2>ATW 와 ASW — 두 가지 응급 처치</h2>
+  <dl class="terms">
+    <dt>ATW<small>Asynchronous TimeWarp</small></dt>
+    <dd>
+      <p>화면에 내보내기 직전, <b>가장 최근의 머리 회전</b>에 맞춰 완성된 그림을 살짝 돌려 맞추는 보정 — Quest 는 항상 켜져 있음</p>
+      <p class="ex">그림을 그리기 시작할 때보다 고개가 1.5° 더 돌았으면 → 그림 전체를 1.5° 밀어서 표시</p>
+      <p class="why">회전 지연은 줄여 주지만 머리 <b>위치 이동</b>·움직이는 물체는 보정 못 함 → 떨림·번짐이 남음</p>
+      <p class="where">앱에서 켜고 끄는 설정 없음 (시스템 기능) · 놓친 프레임이 많을수록 가장자리 검은 테두리·떨림으로 체감</p>
+    </dd>
+    <dt>ASW<small>Application SpaceWarp</small></dt>
+    <dd>
+      <p>앱은 <b>절반 속도</b>로만 그리고, 사이 프레임은 물체가 움직이던 방향(움직임 벡터)으로 <b>예측해 만들어</b> 채우는 기법</p>
+      <p class="ex">앱 45 fps 로 그림 + 예측 프레임 45장 → 화면은 90 Hz · GPU 예산이 약 22.2 ms 로 늘어난 효과</p>
+      <p class="why">예측이 틀리는 곳(반투명·UI 글자·가려졌다 드러나는 영역)에 번짐·떨림 → 최후 수단</p>
+      <p class="where">OpenXR Meta 기능의 SpaceWarp 항목 + URP 움직임 벡터 설정 (버전마다 다름 · 수업에서는 끈 상태가 기본)</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -644,16 +829,85 @@ void Update() {
 
 <section>
   <div class="tag vr">Part II 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>이번 파트 용어 미리보기 (1/3)</h2>
   <dl class="terms">
-    <dt>사이버멀미<small>Cybersickness · VR sickness</small></dt><dd>VR 체험 중·후의 메스꺼움·어지러움·눈 피로 등 증상 묶음</dd>
-    <dt>전정계<small>Vestibular system</small></dt><dd>귀 안쪽의 평형 기관 — 머리의 <b>가속과 기울기</b>를 감지 (7주차)</dd>
-    <dt>벡션<small>Vection</small></dt><dd>실제로는 정지했는데 <b>내가 움직인다고 느끼는</b> 착각 — 시각만으로 생김</dd>
-    <dt>광학 흐름<small>Optic flow</small></dt><dd>내가 움직일 때 시야 전체의 무늬가 흘러가는 패턴</dd>
-    <dt>감각 충돌<small>Sensory conflict</small></dt><dd>눈이 보고한 움직임과 전정계가 보고한 움직임이 서로 다른 상태</dd>
-    <dt>베그넷팅<small>Vignetting · Tunneling</small></dt><dd>이동 중에만 시야 가장자리를 어둡게 좁히는 기법</dd>
-    <dt>SSQ<small>Simulator Sickness Questionnaire</small></dt><dd>멀미 증상 16개를 0~3 으로 표시하는 표준 설문</dd>
-    <dt>컴포트 등급<small>Comfort rating</small></dt><dd>체험의 멀미 부담 표시 — Comfortable · Moderate · Intense</dd>
+    <dt>사이버멀미<small>Cybersickness · VR sickness</small></dt>
+    <dd>
+      <p>VR 체험 중·후에 생기는 <b>메스꺼움 · 어지러움 · 눈 피로</b> 같은 증상 묶음 — 차멀미의 VR 판</p>
+      <p class="ex">스틱 이동 2분 뒤 식은땀·침 분비 → 헤드셋을 벗어도 30분 넘게 남기도 함</p>
+      <p class="why">개인의 «약함» 이 아니라 설계가 만든 결과 → 설계로 줄일 수 있음</p>
+      <p class="where">체험 직후 SSQ 설문 · 실기 3단계 대응표 · 스토어 컴포트 표시</p>
+    </dd>
+    <dt>전정계<small>Vestibular system</small></dt>
+    <dd>
+      <p>귀 안쪽의 평형 기관 — 몸의 <b>가속과 기울기</b>를 느끼는 수준기 (7주차)</p>
+      <p class="ex">반고리관 3개 = 고개 돌림(회전 가속) · 이석기관 = 엘리베이터 출발(직선 가속)·기울기</p>
+      <p class="why">«속도» 가 아니라 «가속» 만 느낌 → VR 의 가속 구간에서 눈과 가장 크게 어긋남</p>
+      <p class="where">Unity 에는 없음 · 설계값으로 대응 — 이동 속도·가속, Snap Turn 의 <code>Turn Amount</code></p>
+    </dd>
+    <dt>벡션<small>Vection</small></dt>
+    <dd>
+      <p>실제로는 가만히 있는데 <b>내가 움직인다고 느끼는</b> 착각 — 눈만으로 생김</p>
+      <p class="ex">정차한 기차에서 옆 기차가 출발하면 내 기차가 뒤로 가는 느낌</p>
+      <p class="why">벡션이 강할수록 몸이 «움직임» 에 대비 → 실제 몸은 정지 → 감각 충돌</p>
+      <p class="where">넓은 시야 + 무늬가 많은 벽·바닥에서 강함 → 오늘 실습 <code>FlowCorridor</code></p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기 (2/3)</h2>
+  <dl class="terms">
+    <dt>광학 흐름<small>Optic flow</small></dt>
+    <dd>
+      <p>내가 움직일 때 <b>시야 전체 무늬가 흘러가는</b> 패턴 — 터널 운전 때 벽 조명이 뒤로 휙휙 지나가는 모습</p>
+      <p class="ex">앞으로 걸으면 가운데 한 점에서 무늬가 사방으로 퍼짐 · 가장자리일수록 빠름</p>
+      <p class="why">벡션을 만드는 원료 · 가장자리 흐름이 특히 강함 → 베그넷팅이 노리는 곳</p>
+      <p class="where">씬 설계 문제 — 줄무늬 벽·격자 바닥이 흐름을 키움 · 단색 벽은 줄임</p>
+    </dd>
+    <dt>감각 충돌<small>Sensory conflict</small></dt>
+    <dd>
+      <p>눈이 보고한 움직임과 귀 속 전정계가 보고한 움직임이 <b>서로 다른 상태</b></p>
+      <p class="ex">VR 스틱 이동 : 눈 «앞으로 빨라짐» · 전정계 «가만히 있음» → 불일치</p>
+      <p class="why">멀미 설명의 대표 이론 · 무엇을 줄여야 할지(가속·회전·흐름) 알려 줌</p>
+      <p class="where">이동 방식 설정 — 연속 이동(Continuous Move) vs 텔레포트 · 회전 방식</p>
+    </dd>
+    <dt>베그넷팅<small>Vignetting · Tunneling</small></dt>
+    <dd>
+      <p>이동하는 동안만 <b>시야 가장자리를 어둡게 좁히는</b> 기법 — 쌍안경 테두리</p>
+      <p class="ex">정지 시 시야 100% · 이동 시작 → 가장자리가 닫혀 가운데만 보임 · 멈추면 다시 열림</p>
+      <p class="why">가장자리 광학 흐름을 가려 벡션·멀미 감소 · 너무 세면 답답함</p>
+      <p class="where">XRI Starter Assets 의 <code>Tunneling Vignette</code> 프리팹 · <code>TunnelingVignetteController</code></p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기 (3/3)</h2>
+  <dl class="terms">
+    <dt>SSQ<small>Simulator Sickness Questionnaire</small></dt>
+    <dd>
+      <p>멀미 증상 16개를 <b>0 없음 ~ 3 심함</b> 으로 표시하는 표준 설문 — 몸 상태 체크리스트</p>
+      <p class="ex">체험 직전 TS 3.74 → 직후 33.66 · 변화량 +29.92</p>
+      <p class="why">«어지러웠다» 를 숫자로 바꿔 완화 전후를 비교 · 몇 점 이상이 위험이라는 기준은 없음</p>
+      <p class="where"><code>rubrics/SSQ-설문지.md</code> · 워크북 기록표</p>
+    </dd>
+    <dt>컴포트 등급<small>Comfort rating</small></dt>
+    <dd>
+      <p>앱이 사용자에게 주는 <b>멀미 부담 표시</b> — 매운맛 단계 표시</p>
+      <p class="ex">Comfortable (대부분 편함) · Moderate (일부 불편) · Intense (다수 불편)</p>
+      <p class="why">사용자가 미리 고를 수 있게 함 · 13주 기획서에서 우리 앱의 등급을 스스로 판정</p>
+      <p class="where">Meta Horizon Store 앱 상세 페이지의 컴포트 항목 (표기 방식은 시기마다 다름)</p>
+    </dd>
+    <dt>프레즌스<small>Presence</small></dt>
+    <dd>
+      <p>«<b>정말 그곳에 있다</b>» 고 느끼는 감각 — 몰입감의 핵심</p>
+      <p class="ex">가상 절벽 끝에서 발이 저절로 멈춤 · 가상 공을 피하려 몸을 숙임</p>
+      <p class="why">완화 기법이 멀미는 줄여도 프레즌스까지 깎으면 손해 → 연구에서 함께 측정</p>
+      <p class="where">설문(프레즌스 질문지)으로 측정 · Unity 설정값은 없음</p>
+    </dd>
   </dl>
 </section>
 
@@ -692,38 +946,37 @@ void Update() {
   <div class="tag vr">컴포트 · 2 ★</div>
   <h3>감각 충돌 이론 — 눈과 귀가 다른 말을 할 때</h3>
   <svg class="fig2" viewBox="0 0 1100 440" role="img" aria-label="눈은 이동을, 전정계는 정지를 보고해 뇌가 불일치를 감지하는 도해">
-    <rect x="0" y="0" width="1100" height="440" rx="14" fill="#0e1118"/>
     <!-- 눈 -->
-    <rect x="40" y="50" width="330" height="120" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-    <text x="205" y="92" fill="#35d6e6" font-size="22" font-weight="700" text-anchor="middle">눈 (시각)</text>
-    <text x="205" y="124" fill="#e8ecf4" font-size="18" text-anchor="middle">«앞으로 빨라지는 중»</text>
-    <text x="205" y="152" fill="#9aa4b8" font-size="16" text-anchor="middle">광학 흐름이 점점 빨라짐</text>
+    <rect x="40" y="50" width="330" height="120" rx="2" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+    <text x="205" y="92" fill="#0d6b78" font-size="22" font-weight="700" text-anchor="middle">눈 (시각)</text>
+    <text x="205" y="124" fill="#1b1a17" font-size="18" text-anchor="middle">«앞으로 빨라지는 중»</text>
+    <text x="205" y="152" fill="#4a463e" font-size="16" text-anchor="middle">광학 흐름이 점점 빨라짐</text>
     <!-- 귀 -->
-    <rect x="40" y="250" width="330" height="120" rx="14" fill="#21330f" stroke="#a8e05f" stroke-width="2"/>
-    <text x="205" y="292" fill="#a8e05f" font-size="22" font-weight="700" text-anchor="middle">전정계 (귀 안쪽)</text>
-    <text x="205" y="324" fill="#e8ecf4" font-size="18" text-anchor="middle">«가속 없음 · 가만히 서 있음»</text>
-    <text x="205" y="352" fill="#9aa4b8" font-size="16" text-anchor="middle">몸은 실제로 정지</text>
+    <rect x="40" y="250" width="330" height="120" rx="2" fill="#e3ecd3" stroke="#4f7a16" stroke-width="2"/>
+    <text x="205" y="292" fill="#4f7a16" font-size="22" font-weight="700" text-anchor="middle">전정계 (귀 안쪽)</text>
+    <text x="205" y="324" fill="#1b1a17" font-size="18" text-anchor="middle">«가속 없음 · 가만히 서 있음»</text>
+    <text x="205" y="352" fill="#4a463e" font-size="16" text-anchor="middle">몸은 실제로 정지</text>
     <!-- 화살표 -->
-    <path d="M370 110 L520 190" stroke="#35d6e6" stroke-width="3" fill="none" marker-end="url(#w12ah1)"/>
-    <path d="M370 310 L520 240" stroke="#a8e05f" stroke-width="3" fill="none" marker-end="url(#w12ah2)"/>
+    <path d="M370 110 L520 190" stroke="#0d6b78" stroke-width="3" fill="none" marker-end="url(#w12ah1)"/>
+    <path d="M370 310 L520 240" stroke="#4f7a16" stroke-width="3" fill="none" marker-end="url(#w12ah2)"/>
     <defs>
-      <marker id="w12ah1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#35d6e6"/></marker>
-      <marker id="w12ah2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8e05f"/></marker>
-      <marker id="w12ah3" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5a4d"/></marker>
+      <marker id="w12ah1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0d6b78"/></marker>
+      <marker id="w12ah2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f7a16"/></marker>
+      <marker id="w12ah3" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c2401d"/></marker>
     </defs>
     <!-- 뇌 -->
-    <rect x="525" y="150" width="230" height="120" rx="60" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
-    <text x="640" y="200" fill="#ff5fa2" font-size="22" font-weight="700" text-anchor="middle">뇌의 비교</text>
-    <text x="640" y="230" fill="#e8ecf4" font-size="18" text-anchor="middle">두 보고 불일치</text>
-    <path d="M755 210 L860 210" stroke="#ff5a4d" stroke-width="3" fill="none" marker-end="url(#w12ah3)"/>
+    <rect x="525" y="150" width="230" height="120" rx="2" fill="#f1dde6" stroke="#a3245e" stroke-width="2"/>
+    <text x="640" y="200" fill="#a3245e" font-size="22" font-weight="700" text-anchor="middle">뇌의 비교</text>
+    <text x="640" y="230" fill="#1b1a17" font-size="18" text-anchor="middle">두 보고 불일치</text>
+    <path d="M755 210 L860 210" stroke="#c2401d" stroke-width="3" fill="none" marker-end="url(#w12ah3)"/>
     <!-- 증상 -->
-    <rect x="865" y="140" width="205" height="140" rx="14" fill="#431612" stroke="#ff5a4d" stroke-width="2"/>
-    <text x="967" y="180" fill="#ff5a4d" font-size="21" font-weight="700" text-anchor="middle">증상</text>
-    <text x="967" y="212" fill="#e8ecf4" font-size="17" text-anchor="middle">식은땀 · 침 분비</text>
-    <text x="967" y="238" fill="#e8ecf4" font-size="17" text-anchor="middle">어지러움 · 메스꺼움</text>
-    <text x="967" y="264" fill="#e8ecf4" font-size="17" text-anchor="middle">두통</text>
+    <rect x="865" y="140" width="205" height="140" rx="2" fill="#f6e0d6" stroke="#c2401d" stroke-width="2"/>
+    <text x="967" y="180" fill="#c2401d" font-size="21" font-weight="700" text-anchor="middle">증상</text>
+    <text x="967" y="212" fill="#1b1a17" font-size="17" text-anchor="middle">식은땀 · 침 분비</text>
+    <text x="967" y="238" fill="#1b1a17" font-size="17" text-anchor="middle">어지러움 · 메스꺼움</text>
+    <text x="967" y="264" fill="#1b1a17" font-size="17" text-anchor="middle">두통</text>
     <!-- 하단 -->
-    <text x="40" y="415" fill="#9aa4b8" font-size="17">배 멀미는 정반대 : 선실 안 눈은 «정지» · 전정계는 «흔들림» → 방향은 달라도 같은 불일치 구조 · LaValle 12.3</text>
+    <text x="40" y="415" fill="#4a463e" font-size="17">배 멀미는 정반대 : 선실 안 눈은 «정지» · 전정계는 «흔들림» → 방향은 달라도 같은 불일치 구조 · LaValle 12.3</text>
   </svg>
   <aside class="notes">
     - 왼쪽 위 : 눈은 앞으로 가속 중이라고 보고 · 왼쪽 아래 : 귀 속 전정계는 가만히 있다고 보고
@@ -795,53 +1048,52 @@ void Update() {
   <div class="tag vr">유발 요인 · 1 ★</div>
   <h3>유발 요인 체크리스트 — 설계로 줄이는 여섯 손잡이</h3>
   <svg class="fig2" viewBox="0 0 1100 460" role="img" aria-label="멀미 유발 요인 여섯 가지와 각각의 설계 대응">
-    <rect x="0" y="0" width="1100" height="460" rx="14" fill="#0e1118"/>
-    <circle cx="550" cy="230" r="82" fill="#431612" stroke="#ff5a4d" stroke-width="3"/>
-    <text x="550" y="224" fill="#ff5a4d" font-size="24" font-weight="700" text-anchor="middle">멀미</text>
-    <text x="550" y="252" fill="#ff5a4d" font-size="24" font-weight="700" text-anchor="middle">위험</text>
-    <g stroke="#2a3040" stroke-width="2">
+    <circle cx="550" cy="230" r="82" fill="#f6e0d6" stroke="#c2401d" stroke-width="3"/>
+    <text x="550" y="224" fill="#c2401d" font-size="24" font-weight="700" text-anchor="middle">멀미</text>
+    <text x="550" y="252" fill="#c2401d" font-size="24" font-weight="700" text-anchor="middle">위험</text>
+    <g stroke="#cfc6b2" stroke-width="2">
       <line x1="470" y1="200" x2="360" y2="100"/><line x1="470" y1="230" x2="360" y2="230"/><line x1="470" y1="262" x2="360" y2="360"/>
       <line x1="630" y1="200" x2="740" y2="100"/><line x1="630" y1="230" x2="740" y2="230"/><line x1="630" y1="262" x2="740" y2="360"/>
     </g>
     <!-- 왼쪽 : 움직임 설계 -->
     <g>
-      <rect x="20" y="52" width="340" height="96" rx="12" fill="#421229" stroke="#ff5fa2"/>
-      <text x="40" y="86" fill="#ff5fa2" font-size="20" font-weight="700">① 가속 · 감속</text>
-      <text x="40" y="116" fill="#e8ecf4" font-size="17">→ 즉시 전환 · 텔레포트</text>
-      <text x="40" y="138" fill="#9aa4b8" font-size="16">충돌이 지속되는 시간 단축</text>
+      <rect x="20" y="52" width="340" height="96" rx="2" fill="#f1dde6" stroke="#a3245e"/>
+      <text x="40" y="86" fill="#a3245e" font-size="20" font-weight="700">① 가속 · 감속</text>
+      <text x="40" y="116" fill="#1b1a17" font-size="17">→ 즉시 전환 · 텔레포트</text>
+      <text x="40" y="138" fill="#4a463e" font-size="16">충돌이 지속되는 시간 단축</text>
     </g>
     <g>
-      <rect x="20" y="182" width="340" height="96" rx="12" fill="#421229" stroke="#ff5fa2"/>
-      <text x="40" y="216" fill="#ff5fa2" font-size="20" font-weight="700">② 회전 (특히 좌우 요)</text>
-      <text x="40" y="246" fill="#e8ecf4" font-size="17">→ 스냅 턴 · 몸으로 돌기</text>
-      <text x="40" y="268" fill="#9aa4b8" font-size="16">회전 임계가 병진보다 낮음</text>
+      <rect x="20" y="182" width="340" height="96" rx="2" fill="#f1dde6" stroke="#a3245e"/>
+      <text x="40" y="216" fill="#a3245e" font-size="20" font-weight="700">② 회전 (특히 좌우 요)</text>
+      <text x="40" y="246" fill="#1b1a17" font-size="17">→ 스냅 턴 · 몸으로 돌기</text>
+      <text x="40" y="268" fill="#4a463e" font-size="16">회전 임계가 병진보다 낮음</text>
     </g>
     <g>
-      <rect x="20" y="312" width="340" height="96" rx="12" fill="#421229" stroke="#ff5fa2"/>
-      <text x="40" y="346" fill="#ff5fa2" font-size="20" font-weight="700">③ 넓은 시야의 흐름</text>
-      <text x="40" y="376" fill="#e8ecf4" font-size="17">→ 베그넷팅 · 단순한 벽면</text>
-      <text x="40" y="398" fill="#9aa4b8" font-size="16">주변시 광학 흐름 축소</text>
+      <rect x="20" y="312" width="340" height="96" rx="2" fill="#f1dde6" stroke="#a3245e"/>
+      <text x="40" y="346" fill="#a3245e" font-size="20" font-weight="700">③ 넓은 시야의 흐름</text>
+      <text x="40" y="376" fill="#1b1a17" font-size="17">→ 베그넷팅 · 단순한 벽면</text>
+      <text x="40" y="398" fill="#4a463e" font-size="16">주변시 광학 흐름 축소</text>
     </g>
     <!-- 오른쪽 : 시스템·환경 -->
     <g>
-      <rect x="740" y="52" width="340" height="96" rx="12" fill="#0e3a42" stroke="#35d6e6"/>
-      <text x="760" y="86" fill="#35d6e6" font-size="20" font-weight="700">④ 낮거나 흔들리는 프레임률</text>
-      <text x="760" y="116" fill="#e8ecf4" font-size="17">→ Part I 성능 예산</text>
-      <text x="760" y="138" fill="#9aa4b8" font-size="16">평균보다 변동이 더 문제</text>
+      <rect x="740" y="52" width="340" height="96" rx="2" fill="#dcebec" stroke="#0d6b78"/>
+      <text x="760" y="86" fill="#0d6b78" font-size="20" font-weight="700">④ 낮거나 흔들리는 프레임률</text>
+      <text x="760" y="116" fill="#1b1a17" font-size="17">→ Part I 성능 예산</text>
+      <text x="760" y="138" fill="#4a463e" font-size="16">평균보다 변동이 더 문제</text>
     </g>
     <g>
-      <rect x="740" y="182" width="340" height="96" rx="12" fill="#0e3a42" stroke="#35d6e6"/>
-      <text x="760" y="216" fill="#35d6e6" font-size="20" font-weight="700">⑤ 지연 (motion-to-photon)</text>
-      <text x="760" y="246" fill="#e8ecf4" font-size="17">→ 예측 · 재투영 · 예산 준수</text>
-      <text x="760" y="268" fill="#9aa4b8" font-size="16">11주 트래킹</text>
+      <rect x="740" y="182" width="340" height="96" rx="2" fill="#dcebec" stroke="#0d6b78"/>
+      <text x="760" y="216" fill="#0d6b78" font-size="20" font-weight="700">⑤ 지연 (motion-to-photon)</text>
+      <text x="760" y="246" fill="#1b1a17" font-size="17">→ 예측 · 재투영 · 예산 준수</text>
+      <text x="760" y="268" fill="#4a463e" font-size="16">11주 트래킹</text>
     </g>
     <g>
-      <rect x="740" y="312" width="340" height="96" rx="12" fill="#21330f" stroke="#a8e05f"/>
-      <text x="760" y="346" fill="#a8e05f" font-size="20" font-weight="700">⑥ 고정 기준의 부재</text>
-      <text x="760" y="376" fill="#e8ecf4" font-size="17">→ 바닥 격자 · 콕핏 · 코 모형</text>
-      <text x="760" y="398" fill="#9aa4b8" font-size="16">몸이 기댈 시각 기준 제공</text>
+      <rect x="740" y="312" width="340" height="96" rx="2" fill="#e3ecd3" stroke="#4f7a16"/>
+      <text x="760" y="346" fill="#4f7a16" font-size="20" font-weight="700">⑥ 고정 기준의 부재</text>
+      <text x="760" y="376" fill="#1b1a17" font-size="17">→ 바닥 격자 · 콕핏 · 코 모형</text>
+      <text x="760" y="398" fill="#4a463e" font-size="16">몸이 기댈 시각 기준 제공</text>
     </g>
-    <text x="550" y="445" fill="#9aa4b8" font-size="16" text-anchor="middle">왼쪽 = 움직임 설계 · 오른쪽 위 = 시스템 성능 · 오른쪽 아래 = 환경 설계 · 사람 쪽 요인(개인차)은 뒤에서</text>
+    <text x="550" y="445" fill="#4a463e" font-size="16" text-anchor="middle">왼쪽 = 움직임 설계 · 오른쪽 위 = 시스템 성능 · 오른쪽 아래 = 환경 설계 · 사람 쪽 요인(개인차)은 뒤에서</text>
   </svg>
   <aside class="notes">
     - 오늘 실습 멀미 씬은 ①②③⑥ 을 일부러 켠 것 · 완화본은 ①②③ 을 끔
@@ -902,6 +1154,34 @@ void Update() {
   <div class="note">Jerald (2009) UNC TR 10-013 · Stauffert, Niebling &amp; Latoschik (2020) Frontiers in VR 리뷰 · 11주 motion-to-photon 연결</div>
 </section>
 
+<section>
+  <div class="tag vr">유발 요인 · 용어 풀이</div>
+  <h2>요 · 롤 · JND · motion-to-photon</h2>
+  <dl class="terms">
+    <dt>요 · 롤<small>Yaw · Roll</small></dt>
+    <dd>
+      <p>머리·몸 회전의 방향 이름 — <b>요</b> = 고개를 «아니» 로 젓는 좌우 회전 · <b>롤</b> = 고개를 어깨 쪽으로 갸웃하는 기울기</p>
+      <p class="ex">스틱으로 몸 돌리기 = 요 · 비행기 날개가 기울며 선회 = 롤 · (고개 끄덕임 = 피치)</p>
+      <p class="why">임계값이 축마다 다름 — 요 약 27°/s · 롤 약 21°/s → 회전이 직선 이동보다 먼저 불편해짐</p>
+      <p class="where">Transform Rotation 의 <code>Y</code> = 요 · <code>Z</code> = 롤 · <code>X</code> = 피치 · Snap Turn 은 요만 회전</p>
+    </dd>
+    <dt>JND<small>Just Noticeable Difference · 변별 역치</small></dt>
+    <dd>
+      <p>두 자극의 차이를 <b>«다르다» 고 겨우 알아챌 수 있는 최소 차이</b> — 커피 설탕 반 스푼 차이를 알아채는가</p>
+      <p class="ex">지연 평균 JND 16.9 ms → 지연 차이가 약 17 ms 를 넘으면 평균적인 사람이 구별</p>
+      <p class="why">«아무도 못 느끼는 지연» 이라는 안전선은 없음 · 예민한 사람은 3.2 ms 차이도 구별</p>
+      <p class="where">지각 실험 용어 · 우리 실습에서는 체험자 비교 기록으로만 다룸</p>
+    </dd>
+    <dt>motion-to-photon 지연<small>Motion-to-photon latency</small></dt>
+    <dd>
+      <p>머리를 움직인 순간부터 그 움직임이 반영된 빛이 <b>눈에 도달하기까지 걸린 시간</b> (11주)</p>
+      <p class="ex">센서 읽기 2 ms + 그리기 11 ms + 화면 표시 5 ms → 약 18 ms (설명용 예시)</p>
+      <p class="why">길면 고개를 돌린 뒤 세상이 늦게 따라옴 → 감각 충돌 · 프레임률만 올려선 안 줄어드는 부분이 있음</p>
+      <p class="where">Unity 에 직접 표시되는 값 없음 · 고속 카메라 측정 또는 제조사 도구 (버전마다 다름)</p>
+    </dd>
+  </dl>
+</section>
+
 <!-- ---------------------------------------------------- 완화 기법 -->
 <section>
   <div class="tag vr">완화 · 1 ★</div>
@@ -913,53 +1193,52 @@ void Update() {
         <stop offset="0.78" stop-color="#000" stop-opacity="0.85"/>
         <stop offset="1" stop-color="#000" stop-opacity="1"/>
       </radialGradient>
-      <clipPath id="w12c1"><rect x="30" y="60" width="330" height="250" rx="12"/></clipPath>
-      <clipPath id="w12c2"><rect x="390" y="60" width="330" height="250" rx="12"/></clipPath>
+      <clipPath id="w12c1"><rect x="30" y="60" width="330" height="250" rx="2"/></clipPath>
+      <clipPath id="w12c2"><rect x="390" y="60" width="330" height="250" rx="2"/></clipPath>
     </defs>
-    <rect x="0" y="0" width="1100" height="420" rx="14" fill="#0e1118"/>
-    <text x="195" y="42" fill="#e8ecf4" font-size="20" font-weight="700" text-anchor="middle">정지 : 베그넷 없음</text>
-    <text x="555" y="42" fill="#ff5fa2" font-size="20" font-weight="700" text-anchor="middle">이동 중 : 가장자리 어둡게</text>
+    <text x="195" y="42" fill="#1b1a17" font-size="20" font-weight="700" text-anchor="middle">정지 : 베그넷 없음</text>
+    <text x="555" y="42" fill="#a3245e" font-size="20" font-weight="700" text-anchor="middle">이동 중 : 가장자리 어둡게</text>
     <!-- 패널 1 : 복도 -->
     <g clip-path="url(#w12c1)">
-      <rect x="30" y="60" width="330" height="250" fill="#141a26"/>
-      <g stroke="#35d6e6" stroke-width="1.6" opacity="0.7">
+      <rect x="30" y="60" width="330" height="250" fill="#ece6d8"/>
+      <g stroke="#0d6b78" stroke-width="1.6" opacity="0.7">
         <line x1="195" y1="185" x2="30" y2="60"/><line x1="195" y1="185" x2="360" y2="60"/>
         <line x1="195" y1="185" x2="30" y2="310"/><line x1="195" y1="185" x2="360" y2="310"/>
         <line x1="195" y1="185" x2="30" y2="185"/><line x1="195" y1="185" x2="360" y2="185"/>
         <line x1="195" y1="185" x2="110" y2="310"/><line x1="195" y1="185" x2="280" y2="310"/>
       </g>
-      <rect x="170" y="165" width="50" height="40" fill="none" stroke="#9aa4b8"/>
+      <rect x="170" y="165" width="50" height="40" fill="none" stroke="#4a463e"/>
     </g>
-    <rect x="30" y="60" width="330" height="250" rx="12" fill="none" stroke="#2a3040" stroke-width="2"/>
+    <rect x="30" y="60" width="330" height="250" rx="2" fill="none" stroke="#cfc6b2" stroke-width="2"/>
     <!-- 패널 2 : 복도 + 흐름 + 베그넷 -->
     <g clip-path="url(#w12c2)">
-      <rect x="390" y="60" width="330" height="250" fill="#141a26"/>
-      <g stroke="#35d6e6" stroke-width="1.6" opacity="0.7">
+      <rect x="390" y="60" width="330" height="250" fill="#ece6d8"/>
+      <g stroke="#0d6b78" stroke-width="1.6" opacity="0.7">
         <line x1="555" y1="185" x2="390" y2="60"/><line x1="555" y1="185" x2="720" y2="60"/>
         <line x1="555" y1="185" x2="390" y2="310"/><line x1="555" y1="185" x2="720" y2="310"/>
         <line x1="555" y1="185" x2="390" y2="185"/><line x1="555" y1="185" x2="720" y2="185"/>
         <line x1="555" y1="185" x2="470" y2="310"/><line x1="555" y1="185" x2="640" y2="310"/>
       </g>
-      <g stroke="#ff5a4d" stroke-width="4" stroke-linecap="round">
+      <g stroke="#c2401d" stroke-width="4" stroke-linecap="round">
         <line x1="420" y1="90" x2="400" y2="75"/><line x1="690" y1="90" x2="710" y2="75"/>
         <line x1="420" y1="280" x2="400" y2="295"/><line x1="690" y1="280" x2="710" y2="295"/>
       </g>
-      <rect x="530" y="165" width="50" height="40" fill="none" stroke="#9aa4b8"/>
+      <rect x="530" y="165" width="50" height="40" fill="none" stroke="#4a463e"/>
       <rect x="390" y="60" width="330" height="250" fill="url(#w12vg)"/>
     </g>
-    <rect x="390" y="60" width="330" height="250" rx="12" fill="none" stroke="#ff5fa2" stroke-width="2"/>
-    <text x="195" y="340" fill="#9aa4b8" font-size="16" text-anchor="middle">시야 전체가 보임</text>
-    <text x="555" y="340" fill="#9aa4b8" font-size="16" text-anchor="middle">빨간 줄 = 가장 빠른 주변 흐름 → 가려짐</text>
+    <rect x="390" y="60" width="330" height="250" rx="2" fill="none" stroke="#a3245e" stroke-width="2"/>
+    <text x="195" y="340" fill="#4a463e" font-size="16" text-anchor="middle">시야 전체가 보임</text>
+    <text x="555" y="340" fill="#4a463e" font-size="16" text-anchor="middle">빨간 줄 = 가장 빠른 주변 흐름 → 가려짐</text>
     <!-- 패널 3 : 설명 -->
-    <text x="760" y="88" fill="#ff5fa2" font-size="20" font-weight="700">왜 효과가 있나</text>
-    <text x="760" y="124" fill="#e8ecf4" font-size="17">· 주변시 = 움직임에 가장 민감</text>
-    <text x="760" y="152" fill="#e8ecf4" font-size="17">· 가장자리 흐름이 벡션을 키움</text>
-    <text x="760" y="180" fill="#e8ecf4" font-size="17">· 이동 중에만 좁혀 흐름 축소</text>
-    <text x="760" y="226" fill="#a8e05f" font-size="20" font-weight="700">근거</text>
-    <text x="760" y="260" fill="#e8ecf4" font-size="17">· 동적 시야 제한 : 멀미 감소,</text>
-    <text x="772" y="286" fill="#e8ecf4" font-size="17">프레즌스 저하 없음 (30명)</text>
-    <text x="760" y="314" fill="#e8ecf4" font-size="17">· 메타분석 97편 효과 −0.40</text>
-    <text x="30" y="395" fill="#9aa4b8" font-size="16">Fernandes &amp; Feiner (2016) IEEE 3DUI · Visual Factors in Cybersickness 메타분석 (Multisensory Research, 온라인 선공개) · 조건에 따라 효과 방향이 바뀐 보고도 존재</text>
+    <text x="760" y="88" fill="#a3245e" font-size="20" font-weight="700">왜 효과가 있나</text>
+    <text x="760" y="124" fill="#1b1a17" font-size="17">· 주변시 = 움직임에 가장 민감</text>
+    <text x="760" y="152" fill="#1b1a17" font-size="17">· 가장자리 흐름이 벡션을 키움</text>
+    <text x="760" y="180" fill="#1b1a17" font-size="17">· 이동 중에만 좁혀 흐름 축소</text>
+    <text x="760" y="226" fill="#4f7a16" font-size="20" font-weight="700">근거</text>
+    <text x="760" y="260" fill="#1b1a17" font-size="17">· 동적 시야 제한 : 멀미 감소,</text>
+    <text x="772" y="286" fill="#1b1a17" font-size="17">프레즌스 저하 없음 (30명)</text>
+    <text x="760" y="314" fill="#1b1a17" font-size="17">· 메타분석 97편 효과 −0.40</text>
+    <text x="30" y="395" fill="#4a463e" font-size="14.5">Fernandes &amp; Feiner (2016) IEEE 3DUI · Visual Factors in Cybersickness 메타분석 (Multisensory Research, 온라인 선공개) · 조건에 따라 효과 방향이 바뀐 보고도 존재</text>
   </svg>
   <aside class="notes">
     - 동적 = 이동할 때만 · 멈추면 다시 열림 → 참가자 다수가 개입 사실을 알아채지 못함 (Fernandes & Feiner)
@@ -1076,47 +1355,46 @@ void Update() {
   <div class="tag vr">SSQ · 1 ★</div>
   <h3>SSQ — 16개 증상 · 3개 묶음</h3>
   <svg class="fig2" viewBox="0 0 1100 470" role="img" aria-label="SSQ 16문항과 오심·안구운동·방향감각 하위척도 대응표">
-    <rect x="0" y="0" width="1100" height="470" rx="14" fill="#0e1118"/>
     <g font-size="18" font-weight="700" text-anchor="middle">
-      <text x="380" y="40" fill="#ff5fa2">N</text><text x="430" y="40" fill="#35d6e6">O</text><text x="480" y="40" fill="#a8e05f">D</text>
-      <text x="930" y="40" fill="#ff5fa2">N</text><text x="980" y="40" fill="#35d6e6">O</text><text x="1030" y="40" fill="#a8e05f">D</text>
+      <text x="380" y="40" fill="#a3245e">N</text><text x="430" y="40" fill="#0d6b78">O</text><text x="480" y="40" fill="#4f7a16">D</text>
+      <text x="930" y="40" fill="#a3245e">N</text><text x="980" y="40" fill="#0d6b78">O</text><text x="1030" y="40" fill="#4f7a16">D</text>
     </g>
-    <g font-size="17" fill="#e8ecf4">
+    <g font-size="17" fill="#1b1a17">
       <text x="30" y="80">1 전반적 불편감</text><text x="30" y="118">2 피로</text><text x="30" y="156">3 두통</text><text x="30" y="194">4 눈의 피로</text>
       <text x="30" y="232">5 초점 맞추기 어려움</text><text x="30" y="270">6 침 분비 증가</text><text x="30" y="308">7 땀 흘림</text><text x="30" y="346">8 메스꺼움</text>
       <text x="580" y="80">9 집중하기 어려움</text><text x="580" y="118">10 머리가 꽉 찬 느낌</text><text x="580" y="156">11 시야 흐림</text><text x="580" y="194">12 어지러움 (눈 뜸)</text>
       <text x="580" y="232">13 어지러움 (눈 감음)</text><text x="580" y="270">14 현기증 (빙빙 돎)</text><text x="580" y="308">15 속이 거북함</text><text x="580" y="346">16 트림</text>
     </g>
-    <g font-size="14" fill="#9aa4b8">
+    <g font-size="14" fill="#4a463e">
       <text x="210" y="80">General discomfort</text><text x="210" y="118">Fatigue</text><text x="210" y="156">Headache</text><text x="210" y="194">Eyestrain</text>
       <text x="210" y="232">Difficulty focusing</text><text x="210" y="270">Salivation increasing</text><text x="210" y="308">Sweating</text><text x="210" y="346">Nausea</text>
       <text x="760" y="80">Difficulty concentrating</text><text x="760" y="118">Fullness of head</text><text x="760" y="156">Blurred vision</text><text x="760" y="194">Dizzy (eyes open)</text>
       <text x="760" y="232">Dizzy (eyes closed)</text><text x="760" y="270">Vertigo</text><text x="760" y="308">Stomach awareness</text><text x="760" y="346">Burping</text>
     </g>
-    <!-- 점 : N=#ff5fa2 x380/930, O=#35d6e6 x430/980, D=#a8e05f x480/1030 -->
+    <!-- 점 : N=#a3245e x380/930, O=#0d6b78 x430/980, D=#4f7a16 x480/1030 -->
     <g>
-      <circle cx="380" cy="74" r="9" fill="#ff5fa2"/><circle cx="430" cy="74" r="9" fill="#35d6e6"/>
-      <circle cx="430" cy="112" r="9" fill="#35d6e6"/>
-      <circle cx="430" cy="150" r="9" fill="#35d6e6"/>
-      <circle cx="430" cy="188" r="9" fill="#35d6e6"/>
-      <circle cx="430" cy="226" r="9" fill="#35d6e6"/><circle cx="480" cy="226" r="9" fill="#a8e05f"/>
-      <circle cx="380" cy="264" r="9" fill="#ff5fa2"/>
-      <circle cx="380" cy="302" r="9" fill="#ff5fa2"/>
-      <circle cx="380" cy="340" r="9" fill="#ff5fa2"/><circle cx="480" cy="340" r="9" fill="#a8e05f"/>
-      <circle cx="930" cy="74" r="9" fill="#ff5fa2"/><circle cx="980" cy="74" r="9" fill="#35d6e6"/>
-      <circle cx="1030" cy="112" r="9" fill="#a8e05f"/>
-      <circle cx="980" cy="150" r="9" fill="#35d6e6"/><circle cx="1030" cy="150" r="9" fill="#a8e05f"/>
-      <circle cx="1030" cy="188" r="9" fill="#a8e05f"/>
-      <circle cx="1030" cy="226" r="9" fill="#a8e05f"/>
-      <circle cx="1030" cy="264" r="9" fill="#a8e05f"/>
-      <circle cx="930" cy="302" r="9" fill="#ff5fa2"/>
-      <circle cx="930" cy="340" r="9" fill="#ff5fa2"/>
+      <circle cx="380" cy="74" r="9" fill="#a3245e"/><circle cx="430" cy="74" r="9" fill="#0d6b78"/>
+      <circle cx="430" cy="112" r="9" fill="#0d6b78"/>
+      <circle cx="430" cy="150" r="9" fill="#0d6b78"/>
+      <circle cx="430" cy="188" r="9" fill="#0d6b78"/>
+      <circle cx="430" cy="226" r="9" fill="#0d6b78"/><circle cx="480" cy="226" r="9" fill="#4f7a16"/>
+      <circle cx="380" cy="264" r="9" fill="#a3245e"/>
+      <circle cx="380" cy="302" r="9" fill="#a3245e"/>
+      <circle cx="380" cy="340" r="9" fill="#a3245e"/><circle cx="480" cy="340" r="9" fill="#4f7a16"/>
+      <circle cx="930" cy="74" r="9" fill="#a3245e"/><circle cx="980" cy="74" r="9" fill="#0d6b78"/>
+      <circle cx="1030" cy="112" r="9" fill="#4f7a16"/>
+      <circle cx="980" cy="150" r="9" fill="#0d6b78"/><circle cx="1030" cy="150" r="9" fill="#4f7a16"/>
+      <circle cx="1030" cy="188" r="9" fill="#4f7a16"/>
+      <circle cx="1030" cy="226" r="9" fill="#4f7a16"/>
+      <circle cx="1030" cy="264" r="9" fill="#4f7a16"/>
+      <circle cx="930" cy="302" r="9" fill="#a3245e"/>
+      <circle cx="930" cy="340" r="9" fill="#a3245e"/>
     </g>
-    <line x1="30" y1="372" x2="1070" y2="372" stroke="#2a3040" stroke-width="2"/>
-    <text x="30" y="404" fill="#ff5fa2" font-size="18" font-weight="700">N 오심 (Nausea) 7문항</text>
-    <text x="370" y="404" fill="#35d6e6" font-size="18" font-weight="700">O 안구운동 (Oculomotor) 7문항</text>
-    <text x="760" y="404" fill="#a8e05f" font-size="18" font-weight="700">D 방향감각 (Disorientation) 7문항</text>
-    <text x="30" y="444" fill="#9aa4b8" font-size="16">각 증상 0 없음 · 1 약간 · 2 보통 · 3 심함 · 문항 6개는 두 묶음에 동시 포함 (점 두 개) · Kennedy, Lane, Berbaum &amp; Lilienthal (1993) · 한국어 표기는 수업용 번역</text>
+    <line x1="30" y1="372" x2="1070" y2="372" stroke="#cfc6b2" stroke-width="2"/>
+    <text x="30" y="404" fill="#a3245e" font-size="18" font-weight="700">N 오심 (Nausea) 7문항</text>
+    <text x="370" y="404" fill="#0d6b78" font-size="18" font-weight="700">O 안구운동 (Oculomotor) 7문항</text>
+    <text x="760" y="404" fill="#4f7a16" font-size="18" font-weight="700">D 방향감각 (Disorientation) 7문항</text>
+    <text x="30" y="444" fill="#4a463e" font-size="16">각 증상 0 없음 · 1 약간 · 2 보통 · 3 심함 · 문항 6개는 두 묶음에 동시 포함 (점 두 개) · Kennedy, Lane, Berbaum &amp; Lilienthal (1993) · 한국어 표기는 수업용 번역</text>
   </svg>
   <aside class="notes">
     - 원래 비행 시뮬레이터 조종사용으로 개발 → HMD 모집단 기준 점수는 확립되지 않음
@@ -1179,6 +1457,34 @@ void Update() {
   <div class="note">LaValle 12.4 (측정 시점 · 요구 특성) · Balk et al. «SSQ Twenty Years Later»</div>
 </section>
 
+<section>
+  <div class="tag vr">SSQ · 용어 풀이</div>
+  <h2>기저선 · 순서 효과 · 요구 특성</h2>
+  <dl class="terms">
+    <dt>기저선<small>Baseline</small></dt>
+    <dd>
+      <p>실험 조건을 주기 <b>전의 원래 상태</b> 측정값 — 다이어트 전 몸무게</p>
+      <p class="ex">체험 직전 TS 7.48 (원래 약간 피곤) → 직후 41.14 → 변화량 33.66</p>
+      <p class="why">기저선 없이 직후 값만 보면 원래 있던 두통·피로까지 VR 탓으로 계산됨</p>
+      <p class="where">워크북 기록표 «직전» 칸 · 두 번째 체험 전에도 다시 측정</p>
+    </dd>
+    <dt>순서 효과<small>Order effect</small></dt>
+    <dd>
+      <p>무엇을 <b>먼저 겪었느냐</b>가 결과를 바꾸는 현상 — 매운 음식 다음 먹은 음식은 다 싱거움</p>
+      <p class="ex">유발본 → 완화본 순서만 쓰면 완화본 점수에 앞 체험의 남은 멀미가 섞임</p>
+      <p class="why">완화 효과가 실제보다 작게(또는 크게) 보임 → 조의 절반은 순서를 바꿔 상쇄</p>
+      <p class="where">실기 4단계 «절반 조는 B 먼저» · <code>ComfortModeSwitcher</code> 로 순서 전환</p>
+    </dd>
+    <dt>요구 특성<small>Demand characteristics</small></dt>
+    <dd>
+      <p>참가자가 «<b>실험자가 원하는 답</b>» 을 짐작해 거기에 맞춰 응답하는 경향</p>
+      <p class="ex">«완화본 만들었어, 해 봐» → 체험자가 친구를 위해 증상을 낮게 표시</p>
+      <p class="why">점수가 설계 효과가 아니라 «배려» 를 잴 수 있음 → 2~3명 결과는 경향으로만 기술</p>
+      <p class="where">설문 안내를 중립적으로 · 어느 버전인지 체험자에게 미리 말하지 않기</p>
+    </dd>
+  </dl>
+</section>
+
 <!-- ---------------------------------------------------- 공간 UI 지각 · 개인차 -->
 <section>
   <div class="tag vr">공간 UI · 지각</div>
@@ -1202,6 +1508,34 @@ void Update() {
     <p><b>코앞의 스마트폰 vs 창밖 간판</b> : 코앞 화면을 오래 보면 눈이 뻑뻑 · 그래도 현실에서는 초점과 모이는 각도가 함께 움직임 · VR 은 모이는 각도만 바뀌고 초점은 그대로 → 더 빨리 피로</p>
   </div>
   <div class="note">Oculus Best Practices (2014) · Meta Hands UI best practices · Shibata et al. (2011) Journal of Vision 11(8)</div>
+</section>
+
+<section>
+  <div class="tag vr">공간 UI · 용어 풀이</div>
+  <h2>조절 · 수렴 · 조절-수렴 충돌</h2>
+  <dl class="terms">
+    <dt>조절<small>Accommodation</small></dt>
+    <dd>
+      <p>눈 속 수정체 두께를 바꿔 <b>초점을 맞추는</b> 일 — 카메라 렌즈의 초점 링 돌리기</p>
+      <p class="ex">책(30 cm)을 보다가 창밖(10 m)을 보면 수정체가 얇아지며 초점 이동</p>
+      <p class="why">HMD 는 초점 거리가 고정 → 물체가 어디 있든 조절은 한 거리에 묶임</p>
+      <p class="where">기기 렌즈 설계로 정해짐 · Unity 에서 바꿀 수 없음</p>
+    </dd>
+    <dt>수렴<small>Vergence</small></dt>
+    <dd>
+      <p>두 눈이 보는 물체 쪽으로 <b>안쪽으로 모이는 각도</b> — 코끝을 보면 눈이 몰림</p>
+      <p class="ex">눈 사이 약 6.3 cm · 물체 0.3 m → 두 눈이 약 12° 모임 · 3 m → 약 1.2°</p>
+      <p class="why">VR 에서도 물체 거리에 따라 정상 작동 → 고정된 조절과 어긋나기 시작</p>
+      <p class="where">물체·UI 배치 거리로 결정 · Canvas 를 카메라에서 몇 m 에 두는지</p>
+    </dd>
+    <dt>조절-수렴 충돌<small>Vergence-accommodation conflict</small></dt>
+    <dd>
+      <p>원래 함께 움직이는 <b>초점(조절)과 모임(수렴)이 서로 다른 거리</b>를 가리키는 상태 (5주차)</p>
+      <p class="ex">초점 약 1.5 m 고정 · 글자 패널 0.3 m → 수렴은 0.3 m · 조절은 1.5 m</p>
+      <p class="why">눈 피로 · 글자 겹쳐 보임 · SSQ O 묶음 상승 → 오래 보는 UI 는 약 1 m 이상</p>
+      <p class="where">World Space Canvas 의 위치 (리그에서의 거리) · 손 메뉴는 짧게 쓰는 조작만</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -1326,17 +1660,17 @@ void Update() {
       vel = SmoothDamp(..., <b>0.8f</b>);<br>
       maxSpeed = <b>4f</b>;<br>
       rig.Rotate(0, turn * <b>90f</b> * dt, 0);<br><br>
-      <span style="color:#ff5a4d">// 가속 구간 0.8초 × 출발·정지 매번<br>
+      <span style="color:var(--trap)">// 가속 구간 0.8초 × 출발·정지 매번<br>
       // 연속 회전 · 베그넷 없음</span>
     </div>
     <div class="good">
       <h4>학생이 요구할 구성</h4>
-      <span style="color:#e8ecf4">"VR 컴포트 기준 이동.<br>
+      <span style="color:var(--ink)">"VR 컴포트 기준 이동.<br>
       가속 곡선 금지, 입력 즉시 등속"</span><br><br>
       speed = <b>1.2f</b>; // 즉시 시작·즉시 정지<br>
       snap turn <b>22.5°</b> · 쿨다운 0.25초<br>
       이동 중 베그넷 · 텔레포트 옵션<br><br>
-      <span style="color:#a8e05f">// 검증 : 로그 최대 가속 구간 ≤ 1프레임<br>
+      <span style="color:var(--lab)">// 검증 : 로그 최대 가속 구간 ≤ 1프레임<br>
       // 회전은 스냅만 (몸 회전은 허용)</span>
     </div>
   </div>
@@ -1389,21 +1723,58 @@ void Update() {
 
 <section>
   <div class="tag lab">실기 · Grab/Ray</div>
-  <h2>Grab · Ray — XR Interaction Toolkit 3.x 구성</h2>
+  <h2>Grab · Ray — XR Interaction Toolkit 3.x 구성 (1/2)</h2>
   <dl class="terms">
-    <dt>Interactor<small>상호작용 주체</small></dt><dd>손·컨트롤러 쪽 컴포넌트 — «무엇을 잡을 수 있는지» 감지</dd>
-    <dt>Interactable<small>상호작용 대상</small></dt><dd>잡히는 물체 쪽 컴포넌트 — 대표 : <code>XR Grab Interactable</code></dd>
-    <dt>Near-Far Interactor</dt><dd>XRI 3.x 기본 손 구성 — 가까우면 <b>직접 잡기</b>, 멀면 <b>광선(Ray)</b>으로 잡기를 한 컴포넌트에서 처리</dd>
-    <dt>XR Ray Interactor</dt><dd>컨트롤러에서 레이저를 쏴 먼 물체·UI 를 선택하는 전용 컴포넌트</dd>
-    <dt>Attach Transform</dt><dd>잡았을 때 손에 붙는 <b>기준점</b> — 머그컵이면 손잡이 위치</dd>
+    <dt>Interactor<small>상호작용 주체</small></dt>
+    <dd>
+      <p>손·컨트롤러 쪽에 붙어 «<b>지금 무엇을 잡거나 가리킬 수 있는지</b>» 감지하는 컴포넌트 — 손</p>
+      <p class="ex">컨트롤러 앞 10 cm 안의 컵 감지 → 그립 버튼 → 잡기 시작</p>
+      <p class="why">손 쪽에 없으면 물체 쪽 설정을 아무리 해도 잡히지 않음</p>
+      <p class="where">Hierarchy : XR Origin → Camera Offset → Left/Right Controller 아래 (Starter Assets 구성 · 버전마다 다름)</p>
+    </dd>
+    <dt>Interactable<small>상호작용 대상</small></dt>
+    <dd>
+      <p>잡히거나 눌리는 <b>물체 쪽</b> 컴포넌트 — 손잡이 · 대표 : <code>XR Grab Interactable</code></p>
+      <p class="ex">머그컵 = <code>Rigidbody</code> + <code>Collider</code> + <code>XR Grab Interactable</code> 세 개</p>
+      <p class="why">Collider 가 빠지면 손이 물체를 «못 봄» → 잡히지 않는 가장 흔한 원인</p>
+      <p class="where">물체 Inspector → Add Component → <code>XR Grab Interactable</code></p>
+    </dd>
+    <dt>Near-Far Interactor</dt>
+    <dd>
+      <p>XRI 3.x 기본 손 구성 — 가까우면 <b>직접 잡기</b>, 멀면 <b>광선(Ray)</b>으로 잡기를 한 컴포넌트에서 처리</p>
+      <p class="ex">책상 위 컵(0.4 m) = 손으로 집기 · 방 건너편 상자(3 m) = 광선으로 끌어오기</p>
+      <p class="why">예전 튜토리얼의 Direct + Ray 두 개 구성과 섞으면 중복 감지 · 동작 충돌</p>
+      <p class="where">XRI Starter Assets 의 XR Origin (XR Rig) 컨트롤러 하위 · XRI 3.0 이상</p>
+    </dd>
   </dl>
-  <div class="analogy">
-    <p><b>집게 vs 레이저 포인터</b> : 책상 위 물건은 손으로 집고 (Direct) · 칠판 위 글자는 레이저로 가리킴 (Ray) · Near-Far = 두 도구가 붙은 하나의 손</p>
-  </div>
   <aside class="notes">
     - 리그 프리팹 : XRI Starter Assets 의 XR Origin (XR Rig) 에 이미 Near-Far Interactor 포함 (버전에 따라 구성 차이)
     - 잡을 물체 : Rigidbody + Collider + XR Grab Interactable 세 개가 기본
   </aside>
+</section>
+
+<section>
+  <div class="tag lab">실기 · Grab/Ray</div>
+  <h2>Grab · Ray — XR Interaction Toolkit 3.x 구성 (2/2)</h2>
+  <dl class="terms">
+    <dt>XR Ray Interactor</dt>
+    <dd>
+      <p>컨트롤러에서 <b>레이저를 쏴</b> 먼 물체·UI 를 선택하는 전용 컴포넌트</p>
+      <p class="ex">1.2 m 앞 패널 버튼을 광선으로 가리키고 트리거 → 클릭</p>
+      <p class="why">Near-Far 가 없는 구버전·특수 구성(포인터 전용 손)에서 사용 · 둘을 함께 켜면 중복</p>
+      <p class="where">컨트롤러 오브젝트 → Add Component → <code>XR Ray Interactor</code> · <code>Max Raycast Distance</code></p>
+    </dd>
+    <dt>Attach Transform</dt>
+    <dd>
+      <p>잡았을 때 손에 붙는 <b>기준점</b> — 머그컵이면 손잡이 위치</p>
+      <p class="ex">비워 두면 물체 중심(피벗)이 손바닥에 붙음 → 컵이 손을 관통한 듯 보임</p>
+      <p class="why">잡는 자세가 어색하면 손목을 꺾게 됨 → 팔 피로 · 조작 실수</p>
+      <p class="where"><code>XR Grab Interactable</code> → <code>Attach Transform</code> 칸에 빈 자식 오브젝트 지정</p>
+    </dd>
+  </dl>
+  <div class="analogy">
+    <p><b>집게 vs 레이저 포인터</b> : 책상 위 물건은 손으로 집고 (Direct) · 칠판 위 글자는 레이저로 가리킴 (Ray) · Near-Far = 두 도구가 붙은 하나의 손</p>
+  </div>
 </section>
 
 <section>
@@ -1430,6 +1801,27 @@ void Update() {
     </div>
   </div>
   <div class="note">Meta Hands UI best practices (최소 각 타깃 약 2.5~3° · 팔꿈치 허리 높이) · XRI 3.x 문서</div>
+</section>
+
+<section>
+  <div class="tag lab">실기 · 용어 풀이</div>
+  <h2>공간 패널 UI 의 두 부품</h2>
+  <dl class="terms">
+    <dt>World Space 캔버스<small>Canvas Render Mode</small></dt>
+    <dd>
+      <p>UI 를 화면에 붙이지 않고 <b>3D 공간 속 판자</b>로 세워 두는 방식 — 벽에 붙인 게시판</p>
+      <p class="ex">패널 1.2 m 앞 · 가슴 높이 · 크기 0.6 × 0.4 m → 고개를 돌려도 제자리</p>
+      <p class="why">Screen Space 그대로 두면 VR 에서 안 보이거나 눈앞에 달라붙음 (10주 함정 #7)</p>
+      <p class="where">Canvas Inspector → <code>Render Mode</code> = World Space · Scale 0.001 전후로 크기 맞춤</p>
+    </dd>
+    <dt>Tracked Device Graphic Raycaster</dt>
+    <dd>
+      <p>컨트롤러 광선이 <b>UI 버튼에 닿았는지</b> 판정해 주는 부품 — 마우스 대신 레이저로 클릭</p>
+      <p class="ex">광선이 «시작» 버튼에 닿음 → 버튼 강조 → 트리거 → OnClick 실행</p>
+      <p class="why">빠지면 패널은 보이는데 광선 클릭이 전혀 안 먹힘 · 흔한 «UI 무반응» 원인</p>
+      <p class="where">Canvas → Add Component → <code>Tracked Device Graphic Raycaster</code> · EventSystem 에 <code>XR UI Input Module</code></p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -1556,7 +1948,7 @@ void Update() {
   </table>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">다음 주</div>
   <div class="rule"></div>
   <h1>팀 프로젝트 <em>기획</em></h1>

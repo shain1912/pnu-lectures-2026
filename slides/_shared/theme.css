@@ -1,243 +1,294 @@
 /* ============================================================
    컴퓨터그래픽스 (VF3500076) · 조성호
-   reveal.js 공통 테마
-   색 체계가 곧 교육 장치:
-     시안   = 그래픽스 이론 (PART I)
-     마젠타 = 지각 / HMD    (PART II)
-     레드   = AI 함정
-     라임   = 프롬프트 실습
+   reveal.js 공통 테마 — 에디토리얼(잡지 지면) 스타일
+
+   지면 : 미색 종이 · 먹색 본문 · 세리프 제목 · 머리카락 굵기 괘선
+   색 체계 (인쇄 잉크 톤) — 교육 장치로서의 의미는 유지
+     청록   = 그래픽스 이론 (PART I)
+     자주   = 지각 / HMD    (PART II)
+     주홍   = AI 함정
+     올리브 = 프롬프트 실습
+     황토   = 비유
    ============================================================ */
 
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
-@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/index.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap");
 
 :root {
-  --bg:        #0b0d12;
-  --bg-soft:   #12151d;
-  --bg-card:   #171b25;
-  --line:      #2a3040;
-  --fg:        #e8ecf4;
-  --fg-dim:    #9aa4b8;
-  --fg-faint:  #5f6980;
+  --paper:     #f5f1e8;   /* 지면 */
+  --paper-2:   #ece6d8;   /* 사이드바 · 조작부 */
+  --paper-3:   #e2dac8;
+  --ink:       #1b1a17;   /* 본문 먹 */
+  --ink-2:     #4a463e;   /* 보조 */
+  --ink-3:     #8a8476;   /* 캡션 · 쪽번호 */
+  --hair:      #cfc6b2;   /* 머리카락 괘선 */
+  --plate:     #16171b;   /* 데모 판 (어두운 인쇄 판) */
 
-  --gfx:       #35d6e6;   /* PART I  그래픽스 */
-  --gfx-soft:  #0e3a42;
-  --vr:        #ff5fa2;   /* PART II 지각/HMD */
-  --vr-soft:   #421229;
-  --trap:      #ff5a4d;   /* AI 함정 */
-  --trap-soft: #431612;
-  --lab:       #a8e05f;   /* 실습 */
-  --lab-soft:  #21330f;
-  --warn:      #ffc44d;
+  --gfx:       #0d6b78;
+  --gfx-soft:  #dcebec;
+  --vr:        #a3245e;
+  --vr-soft:   #f1dde6;
+  --trap:      #c2401d;
+  --trap-soft: #f6e0d6;
+  --lab:       #4f7a16;
+  --lab-soft:  #e3ecd3;
+  --analogy:   #a8701a;
+  --analogy-soft: #f3e7cf;
+  --warn:      #a8701a;
 
-  --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", "Malgun Gothic", sans-serif;
-  /* 모노 폰트에는 한글 글리프가 없음 → 한글은 Pretendard 로 글리프 단위 폴백
-     (이전 : Consolas → 시스템 굴림체로 떨어져 한글 자간이 벌어짐) */
-  --mono: "JetBrains Mono", "D2Coding", "Pretendard Variable", Pretendard, Consolas, monospace;
-  --analogy:      #ffc44d;  /* 비유 박스 */
-  --analogy-soft: #3a2d0e;
+  /* 예전 다크 테마 변수 이름 호환 (덱 내부 style 이 참조) */
+  --bg: var(--paper); --bg-soft: var(--paper-2); --bg-card: #fbf8f1;
+  --line: var(--hair); --fg: var(--ink); --fg-dim: var(--ink-2); --fg-faint: var(--ink-3);
+
+  --serif: "Noto Serif KR", "Nanum Myeongjo", "Batang", serif;
+  --sans:  "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+           "Segoe UI", "Malgun Gothic", sans-serif;
+  --mono:  "JetBrains Mono", "D2Coding", "Pretendard Variable", Pretendard, Consolas, monospace;
 }
 
-.reveal-viewport { background: var(--bg); }
+.reveal-viewport { background: var(--paper); }
 
 .reveal {
   font-family: var(--sans);
-  font-size: 32px;
-  color: var(--fg);
+  font-size: 31px;
+  color: var(--ink);
   font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
 }
 
 .reveal .slides { text-align: left; }
-.reveal .slides section { height: 100%; }
+.reveal .slides section { height: 100%; padding-top: 0.6em; box-sizing: border-box; }
 
-/* ---------- 제목 ---------- */
+/* ---------- 제목 : 세리프 ---------- */
 .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
-  font-family: var(--sans);
-  color: var(--fg);
+  font-family: var(--serif);
+  color: var(--ink);
   font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.25;
-  margin: 0 0 0.5em;
+  letter-spacing: -0.025em;
+  line-height: 1.22;
+  margin: 0 0 0.55em;
   text-transform: none;
   text-shadow: none;
 }
-.reveal h1 { font-size: 2.1em; }
-.reveal h2 { font-size: 1.5em; }
-.reveal h3 { font-size: 1.15em; }
-.reveal h4 { font-size: 0.95em; color: var(--fg-dim); font-weight: 600; }
+.reveal h1 { font-size: 2.2em; font-weight: 900; }
+.reveal h2 {
+  font-size: 1.48em;
+  padding-bottom: 0.32em;
+  border-bottom: 1px solid var(--ink);
+}
+.reveal h3 { font-size: 1.12em; }
+.reveal h4 { font-size: 0.92em; font-family: var(--sans); font-weight: 700; color: var(--ink); }
 
-.reveal p  { line-height: 1.6; margin: 0 0 0.7em; }
-.reveal strong { color: #fff; font-weight: 700; }
-.reveal em { color: var(--gfx); font-style: normal; font-weight: 600; }
+.reveal p  { line-height: 1.62; margin: 0 0 0.7em; }
+.reveal strong, .reveal b { color: var(--ink); font-weight: 700; }
+.reveal em { color: var(--gfx); font-style: normal; font-weight: 700; }
 
 /* ---------- 목록 ---------- */
 .reveal ul, .reveal ol { display: block; margin-left: 1.1em; }
-.reveal li { line-height: 1.55; margin-bottom: 0.42em; }
-.reveal ul li::marker { color: var(--fg-faint); }
-.reveal ol li::marker { color: var(--fg-faint); font-variant-numeric: tabular-nums; }
+.reveal li { line-height: 1.58; margin-bottom: 0.42em; }
+.reveal ul li::marker { color: var(--ink-3); }
+.reveal ol li::marker { color: var(--ink-3); font-family: var(--serif); font-weight: 700; }
 .reveal li ul, .reveal li ol { margin-top: 0.3em; }
-.reveal li li { font-size: 0.88em; color: var(--fg-dim); }
+.reveal li li { font-size: 0.9em; color: var(--ink-2); }
 
-/* ---------- 코드 ---------- */
+/* ---------- 코드 : 지면 위 밝은 판 ---------- */
 .reveal code { font-family: var(--mono); font-size: 0.85em; }
 .reveal :not(pre) > code {
-  background: var(--bg-card);
-  border: 1px solid var(--line);
-  border-radius: 5px;
-  padding: 0.1em 0.38em;
-  color: var(--gfx);
+  background: var(--paper-2);
+  border: 0;
+  border-radius: 3px;
+  padding: 0.08em 0.36em;
+  color: var(--ink);
 }
 .reveal pre {
   width: 100%;
   box-shadow: none;
-  font-size: 0.5em;
+  font-size: 0.52em;
   margin: 0.5em 0;
 }
-.reveal pre code {
-  background: #090b10;
-  border: 1px solid var(--line);
-  border-radius: 10px;
+.reveal pre code, .reveal pre code.hljs {
+  background: #fbf8f1;
+  color: var(--ink);
+  border: 1px solid var(--hair);
+  border-left: 3px solid var(--ink);
+  border-radius: 0;
   padding: 1em 1.2em;
   max-height: none;
-  line-height: 1.5;
+  line-height: 1.55;
   overflow-x: auto;
 }
+/* highlight.js 토큰 — monokai 를 덮어씀 */
+.reveal .hljs-comment, .reveal .hljs-quote { color: var(--ink-3); font-style: italic; }
+.reveal .hljs-keyword, .reveal .hljs-selector-tag, .reveal .hljs-built_in,
+.reveal .hljs-type, .reveal .hljs-literal { color: var(--vr); }
+.reveal .hljs-string, .reveal .hljs-attr { color: var(--lab); }
+.reveal .hljs-number, .reveal .hljs-symbol { color: var(--trap); }
+.reveal .hljs-title, .reveal .hljs-function, .reveal .hljs-title.function_,
+.reveal .hljs-title.class_ { color: var(--gfx); }
+.reveal .hljs-variable, .reveal .hljs-params, .reveal .hljs-property,
+.reveal .hljs-meta, .reveal .hljs-subst { color: var(--ink); }
 
-/* ---------- 진행 / 컨트롤 ---------- */
-.reveal .progress { color: var(--gfx); height: 3px; }
-.reveal .controls { color: var(--fg-faint); }
+/* ---------- 진행 / 컨트롤 / 쪽번호 ---------- */
+.reveal .progress { color: var(--ink); height: 2px; background: var(--hair); }
+.reveal .controls { color: var(--ink-3); }
 .reveal .slide-number {
   background: transparent;
-  color: var(--fg-faint);
-  font-family: var(--mono);
+  color: var(--ink-3);
+  font-family: var(--serif);
   font-size: 15px;
-  /* 하단 화살표와 겹치지 않도록 우상단 */
-  right: 18px; top: 14px; bottom: auto;
+  font-weight: 600;
+  right: 22px; top: 16px; bottom: auto;
 }
+.reveal .slide-number a { color: inherit; }
+
+/* 러닝헤드 — deck.js 가 <title> 로 채움 */
+.reveal .runninghead {
+  position: absolute; top: 16px; left: 22px; z-index: 30;
+  font-family: var(--sans); font-size: 13px; letter-spacing: 0.08em;
+  color: var(--ink-3); pointer-events: none;
+}
+.reveal .runninghead b { color: var(--ink-2); font-weight: 700; }
 
 /* ============================================================
    레이아웃 유틸
    ============================================================ */
 
-/* 파트 구분 표지 */
-.reveal section.divider { text-align: left; }
+/* 파트 구분 — 섹션 오프너 (이중 괘선 + 대형 세리프) */
+.reveal section.divider { text-align: left; padding-top: 2.2em; }
 .reveal .divider .kicker {
-  font-family: var(--mono);
-  font-size: 0.6em;
-  letter-spacing: 0.22em;
+  font-family: var(--sans);
+  font-size: 0.56em;
+  font-weight: 700;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   margin-bottom: 0.9em;
 }
-.reveal .divider h1 { font-size: 2.4em; margin-bottom: 0.25em; }
-.reveal .divider .sub { color: var(--fg-dim); font-size: 0.85em; max-width: 22em; }
-.reveal .divider .rule { width: 90px; height: 5px; border-radius: 3px; margin-bottom: 1.4em; }
+.reveal .divider h1 {
+  font-size: 2.6em; font-weight: 900; line-height: 1.14;
+  margin-bottom: 0.3em; border: 0;
+}
+.reveal .divider .sub { color: var(--ink-2); font-size: 0.84em; max-width: 24em; line-height: 1.6; }
+.reveal .divider .rule { width: 100%; height: 0; border-top: 4px double var(--ink); margin-bottom: 1.6em; background: none; border-radius: 0; }
 
 .divider.part-i   .kicker, .divider.part-i   h1 em { color: var(--gfx); }
-.divider.part-i   .rule { background: var(--gfx); }
 .divider.part-ii  .kicker, .divider.part-ii  h1 em { color: var(--vr); }
-.divider.part-ii  .rule { background: var(--vr); }
-.divider.part-iii .kicker { color: var(--lab); }
-.divider.part-iii .rule { background: var(--lab); }
-.divider.trap     .kicker { color: var(--trap); }
-.divider.trap     .rule { background: var(--trap); }
+.divider.part-iii .kicker, .divider.part-iii h1 em { color: var(--lab); }
+.divider.trap     .kicker, .divider.trap     h1 em { color: var(--trap); }
+.divider.part-i .rule   { border-top-color: var(--gfx); background: none; }
+.divider.part-ii .rule  { border-top-color: var(--vr); background: none; }
+.divider.part-iii .rule { border-top-color: var(--lab); background: none; }
+.divider.trap .rule     { border-top-color: var(--trap); background: none; }
 
-/* 상단 섹션 라벨 */
+/* 상단 섹션 라벨 — 잡지 키커 (작은 대문자 + 색 막대) */
 .reveal .tag {
   display: inline-block;
   font-family: var(--sans);
-  font-size: 0.5em;
-  letter-spacing: 0.04em;
+  font-size: 0.48em;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding: 0.32em 0.8em;
-  border-radius: 100px;
-  margin-bottom: 1.1em;
-  font-weight: 500;
+  padding: 0 0 0 0.75em;
+  border: 0;
+  border-left: 4px solid var(--ink);
+  border-radius: 0;
+  background: none;
+  margin-bottom: 0.7em;
+  color: var(--ink-2);
 }
-.tag.gfx  { background: var(--gfx-soft);  color: var(--gfx);  border: 1px solid #1d5a66; }
-.tag.vr   { background: var(--vr-soft);   color: var(--vr);   border: 1px solid #6e2545; }
-.tag.trap { background: var(--trap-soft); color: var(--trap); border: 1px solid #6e2a24; }
-.tag.lab  { background: var(--lab-soft);  color: var(--lab);  border: 1px solid #3c5220; }
+.reveal .tag.gfx  { border: 0; border-left: 4px solid var(--gfx);  color: var(--gfx);  background: none; }
+.reveal .tag.vr   { border: 0; border-left: 4px solid var(--vr);   color: var(--vr);   background: none; }
+.reveal .tag.trap { border: 0; border-left: 4px solid var(--trap); color: var(--trap); background: none; }
+.reveal .tag.lab  { border: 0; border-left: 4px solid var(--lab);  color: var(--lab);  background: none; }
 
-/* 2단 */
-.reveal .cols  { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5em; align-items: start; }
-.reveal .cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1em; align-items: start; }
+/* 단 나누기 */
+.reveal .cols  { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6em; align-items: start; }
+.reveal .cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2em; align-items: start; }
 .reveal .cols.wide-left  { grid-template-columns: 1.5fr 1fr; }
 .reveal .cols.wide-right { grid-template-columns: 1fr 1.5fr; }
 
-/* 카드 */
+/* 카드 — 위 굵은 괘선의 지면 박스 */
 .reveal .card {
-  background: var(--bg-card);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 0.95em 1.15em;
+  background: #fbf8f1;
+  border: 0;
+  border-top: 3px solid var(--ink);
+  border-radius: 0;
+  padding: 0.75em 0.95em 0.8em;
   font-size: 0.8em;
+  box-shadow: inset 0 0 0 1px var(--hair);
 }
-.reveal .card h4 { margin: 0 0 0.45em; font-size: 1em; color: var(--fg); font-weight: 700; }
+.reveal .card h4 { margin: 0 0 0.4em; font-size: 1em; font-family: var(--serif); color: var(--ink); font-weight: 700; }
 .reveal .card p:last-child, .reveal .card ul:last-child { margin-bottom: 0; }
-.card.gfx  { border-color: #1d5a66; }
-.card.vr   { border-color: #6e2545; }
-.card.trap { border-color: #6e2a24; background: #1a1113; }
-.card.lab  { border-color: #3c5220; }
+.reveal .card.gfx  { border-top-color: var(--gfx); }
+.reveal .card.vr   { border-top-color: var(--vr); }
+.reveal .card.trap { border-top-color: var(--trap); background: #fbf3ee; }
+.reveal .card.lab  { border-top-color: var(--lab); }
 
-/* 핵심 강조 박스 */
+/* 핵심 강조 — 풀쿼트 (세리프 · 좌측 굵은 괘선) */
 .reveal .key {
-  border-left: 5px solid var(--gfx);
-  background: rgba(53,214,230,0.08);
-  padding: 0.75em 1.1em;
-  border-radius: 0 12px 12px 0;
-  margin: 0.7em 0;
+  border-left: 4px solid var(--gfx);
+  background: none;
+  padding: 0.2em 0 0.2em 1em;
+  border-radius: 0;
+  margin: 0.8em 0;
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.55;
 }
-.reveal .key.vr   { border-left-color: var(--vr);
-  background: rgba(255,95,162,0.08); }
-.reveal .key.trap { border-left-color: var(--trap);
-  background: rgba(255,90,77,0.08); }
-.reveal .key.lab  { border-left-color: var(--lab);
-  background: rgba(168,224,95,0.08); }
+.reveal .key b, .reveal .key strong { font-weight: 900; }
+.reveal .key.vr   { border-left-color: var(--vr);   background: none; }
+.reveal .key.trap { border-left-color: var(--trap); background: none; }
+.reveal .key.lab  { border-left-color: var(--lab);  background: none; }
 .reveal .key p:last-child { margin-bottom: 0; }
 
-/* 질문 슬라이드 */
+/* 질문 슬라이드 — 큰 세리프 */
 .reveal .ask {
-  font-size: 1.5em;
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: -0.035em;
+  font-family: var(--serif);
+  font-size: 1.55em;
+  font-weight: 900;
+  line-height: 1.38;
+  letter-spacing: -0.03em;
   max-width: 20em;
+  padding-top: 0.4em;
+  border-top: 4px double var(--ink);
 }
 .reveal .ask .hl { color: var(--gfx); }
 .reveal .ask.vr .hl { color: var(--vr); }
 
-/* 표 */
-.reveal table { font-size: 0.72em; border-collapse: collapse; width: 100%; margin: 0.5em 0; }
+/* 표 — 위·아래 굵은 괘선, 사이 머리카락 괘선 */
+.reveal table {
+  font-size: 0.72em; border-collapse: collapse; width: 100%; margin: 0.5em 0;
+  border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);
+}
 .reveal table th {
   text-align: left;
-  color: var(--fg-dim);
-  font-weight: 600;
-  border-bottom: 2px solid var(--line);
+  color: var(--ink);
+  font-weight: 700;
+  border-bottom: 1px solid var(--ink);
   padding: 0.5em 0.7em;
-  font-size: 0.92em;
+  font-size: 0.86em;
+  letter-spacing: 0.04em;
+  background: none;
 }
-.reveal table td { border-bottom: 1px solid #1e2431; padding: 0.5em 0.7em; vertical-align: top; }
+.reveal table td { border-bottom: 1px solid var(--hair); padding: 0.5em 0.7em; vertical-align: top; }
 .reveal table tr:last-child td { border-bottom: none; }
 
-/* 수식 */
+/* 코드성 수식 */
 .reveal .eq {
   font-family: var(--mono);
-  background: #090b10;
-  border: 1px solid var(--line);
-  border-radius: 10px;
+  background: #fbf8f1;
+  border: 1px solid var(--hair);
+  border-left: 3px solid var(--gfx);
+  border-radius: 0;
   padding: 0.8em 1em;
   font-size: 0.72em;
   line-height: 1.8;
-  color: var(--gfx);
+  color: var(--ink);
   overflow-x: auto;
   white-space: pre;
 }
-.reveal .eq .cm { color: var(--fg-faint); }
+.reveal .eq .cm { color: var(--ink-3); }
 
-/* 도해 이미지 — 슬라이드(1280×720) 안에 반드시 들어오도록 높이로 제한한다.
-   너비로만 잡으면 세로로 긴 도해가 아래로 넘쳐 하단 캡션이 잘린다. */
+/* 도해 이미지 — 슬라이드(1280×720) 안에 반드시 들어오도록 높이로 제한 */
 .reveal section img.fig {
   display: block;
   margin: 0.15em auto 0;
@@ -245,26 +296,26 @@
   height: auto;
   max-width: 100%;
   max-height: 478px;
-  border-radius: 12px;
+  border-radius: 0;
 }
-/* 제목이 h3 한 줄뿐인 슬라이드는 더 크게 쓸 수 있다 */
 .reveal section:has(> h3) img.fig { max-height: 520px; }
 
 /* 각주 / 출처 */
 .reveal .note {
   position: absolute;
   bottom: 0.2em; left: 0;
-  font-size: 0.5em;
-  color: var(--fg-dim);
+  font-size: 0.48em;
+  color: var(--ink-3);
   font-family: var(--sans);
+  padding-top: 0.3em;
+  border-top: 1px solid var(--hair);
 }
 
-/* 데모 컨테이너 — .demo(캔버스) 와 .demo-ui(조작부) 를 감싼다.
-   demos/*.js 는 컨트롤을 host.parentNode 에서 찾으므로 반드시 형제로 둔다. */
+/* 데모 — 어두운 인쇄 판(plate) 위 캔버스, 아래 조작부는 지면 */
 .reveal .demo-wrap {
-  background: #06070a;
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  background: var(--plate);
+  border: 1px solid var(--ink);
+  border-radius: 0;
   overflow: hidden;
   position: relative;
 }
@@ -272,75 +323,81 @@
 .reveal .demo canvas { display: block; width: 100%; }
 .reveal .demo-ui {
   display: flex; flex-wrap: wrap; gap: 0.55em 1.1em;
-  padding: 0.7em 0.9em;
-  border-top: 1px solid var(--line);
-  background: var(--bg-soft);
+  padding: 0.65em 0.9em;
+  border-top: 1px solid var(--ink);
+  background: var(--paper-2);
+  color: var(--ink);
   font-size: 0.5em;
-  font-family: var(--mono);
+  font-family: var(--sans);
   align-items: center;
 }
-.reveal .demo-ui label { display: flex; align-items: center; gap: 0.5em; color: var(--fg-dim); }
-.reveal .demo-ui input[type=range] { width: 110px; accent-color: var(--gfx); }
-.reveal .demo-ui .val { color: var(--gfx); min-width: 3.4em; display: inline-block; text-align: right; }
+.reveal .demo-ui label { display: flex; align-items: center; gap: 0.5em; color: var(--ink-2); }
+.reveal .demo-ui input[type=range] { width: 110px; accent-color: var(--ink); }
+.reveal .demo-ui .val { color: var(--gfx); font-family: var(--mono); min-width: 3.4em; display: inline-block; text-align: right; }
 .reveal .demo-ui button {
-  font-family: var(--mono); font-size: 1em;
-  background: var(--bg-card); color: var(--fg);
-  border: 1px solid var(--line); border-radius: 7px;
-  padding: 0.32em 0.75em; cursor: pointer;
+  font-family: var(--sans); font-size: 1em; font-weight: 600;
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--ink); border-radius: 0;
+  padding: 0.3em 0.75em; cursor: pointer;
 }
-.reveal .demo-ui button:hover { border-color: var(--gfx); color: var(--gfx); }
+.reveal .demo-ui button:hover { background: var(--ink); color: var(--paper); }
 .reveal .demo-badge {
   position: absolute; top: 10px; left: 12px;
-  font-family: var(--mono); font-size: 0.42em;
-  color: var(--fg-faint); letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 0.42em; font-weight: 700;
+  color: #b9b3a5; letter-spacing: 0.12em; text-transform: uppercase;
   pointer-events: none;
 }
 .reveal .demo-alert {
   position: absolute; top: 12px; right: 14px;
-  font-family: var(--mono); font-size: 0.5em; font-weight: 700;
-  color: #0b0d12; background: var(--warn);
-  padding: 0.34em 0.8em; border-radius: 7px;
+  font-family: var(--sans); font-size: 0.5em; font-weight: 700;
+  color: var(--ink); background: #f2c14e;
+  padding: 0.34em 0.8em; border-radius: 0;
   letter-spacing: 0.03em; white-space: nowrap;
   opacity: 0; transition: opacity 0.18s;
   pointer-events: none;
 }
 .reveal .demo-alert.on { opacity: 1; }
 
-/* 좋은/나쁜 프롬프트 대조 */
-.reveal .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1em; }
+/* 나쁜/좋은 대조 */
+.reveal .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; }
 .reveal .vs .bad, .reveal .vs .good {
-  border-radius: 12px; padding: 0.85em 1em; font-size: 0.62em; line-height: 1.55;
-  font-family: var(--mono);
+  border-radius: 0; padding: 0.8em 1em; font-size: 0.62em; line-height: 1.6;
+  font-family: var(--mono); color: var(--ink);
 }
-.reveal .vs .bad  { background: #1a1113; border: 1px solid #6e2a24; }
-.reveal .vs .good { background: #101a10; border: 1px solid #3c5220; }
-.reveal .vs h4 { font-family: var(--sans); font-size: 1.15em; margin-bottom: 0.5em; }
+.reveal .vs .bad  { background: #fbf3ee; border: 0; border-top: 3px solid var(--trap); box-shadow: inset 0 0 0 1px var(--hair); }
+.reveal .vs .good { background: #f4f7ec; border: 0; border-top: 3px solid var(--lab);  box-shadow: inset 0 0 0 1px var(--hair); }
+.reveal .vs h4 { font-family: var(--serif); font-size: 1.2em; margin-bottom: 0.5em; }
 .reveal .vs .bad h4  { color: var(--trap); }
 .reveal .vs .good h4 { color: var(--lab); }
 
-/* 타이틀 슬라이드 */
+/* 표지 — 잡지 표지 */
+.reveal section.cover { padding-top: 1.6em; }
 .reveal .cover .week {
-  font-family: var(--mono); color: var(--gfx);
-  letter-spacing: 0.3em; font-size: 0.55em; text-transform: uppercase;
-  margin-bottom: 1.2em;
+  display: inline-block;
+  font-family: var(--sans); font-weight: 700; color: var(--ink);
+  letter-spacing: 0.3em; font-size: 0.52em; text-transform: uppercase;
+  padding: 0.35em 0; border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink);
+  margin-bottom: 1.4em; min-width: 14em;
 }
-.reveal .cover h1 { font-size: 2.5em; line-height: 1.15; margin-bottom: 0.35em; }
+.reveal .cover h1 { font-size: 3em; font-weight: 900; line-height: 1.08; margin-bottom: 0.3em; letter-spacing: -0.04em; }
+.reveal .cover > p { font-family: var(--serif); color: var(--ink-2) !important; }
 .reveal .cover .meta {
-  color: var(--fg-dim); font-size: 0.6em; font-family: var(--sans);
-  margin-top: 2.2em; line-height: 1.9;
+  color: var(--ink-2); font-size: 0.56em; font-family: var(--sans);
+  margin-top: 2.4em; line-height: 1.9; padding-top: 0.8em;
+  border-top: 1px solid var(--ink); max-width: 30em;
 }
 
-/* 순서 배지 */
+/* 순서 배지 — 세리프 숫자 */
 .reveal .step {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 1.7em; height: 1.7em; border-radius: 50%;
-  background: var(--gfx-soft); color: var(--gfx);
-  border: 1px solid #1d5a66;
-  font-family: var(--mono); font-size: 0.8em; font-weight: 700;
+  width: 1.6em; height: 1.6em; border-radius: 50%;
+  background: none !important; color: var(--ink) !important;
+  border: 1.5px solid var(--ink) !important;
+  font-family: var(--serif); font-size: 0.8em; font-weight: 900;
   margin-right: 0.5em; flex: none;
 }
 
-.reveal .muted { color: var(--fg-dim); }
+.reveal .muted { color: var(--ink-2); }
 .reveal .small { font-size: 0.8em; }
 .reveal .xs    { font-size: 0.68em; }
 .reveal .center { text-align: center; }
@@ -354,58 +411,136 @@
    쉬운 설명 장치 — 비유 · 용어 · 수식
    ============================================================ */
 
-/* 비유 박스 : 개념을 일상 경험에 대응
-   <div class="analogy"><p>…</p></div>  → 좌상단에 «비유» 라벨 자동 표시 */
+/* 비유 — 잡지 사이드바 (황토 띠 + 세리프 라벨) */
 .reveal .analogy {
   position: relative;
-  border: 1px solid #5a4618;
-  background: rgba(255,196,77,0.07);
-  border-radius: 12px;
-  padding: 1.05em 1.1em 0.7em;
-  margin: 0.9em 0 0.6em;
+  border: 0;
+  border-top: 2px solid var(--analogy);
+  background: var(--analogy-soft);
+  border-radius: 0;
+  padding: 0.95em 1.05em 0.6em;
+  margin: 1em 0 0.6em;
   font-size: 0.8em;
 }
 .reveal .analogy::before {
   content: "비유";
-  position: absolute; top: -0.75em; left: 0.9em;
-  background: var(--analogy); color: #1a1405;
-  font-size: 0.68em; font-weight: 700;
-  padding: 0.12em 0.7em; border-radius: 100px;
+  position: absolute; top: -0.78em; left: 0.9em;
+  background: var(--analogy); color: #fff;
+  font-family: var(--serif);
+  font-size: 0.7em; font-weight: 700; letter-spacing: 0.1em;
+  padding: 0.1em 0.7em; border-radius: 0;
 }
-.reveal .analogy p { margin-bottom: 0.35em; line-height: 1.55; }
+.reveal .analogy p { margin-bottom: 0.35em; line-height: 1.6; }
 .reveal .analogy b { color: var(--analogy); }
 
-/* 용어 설명 : 처음 나오는 용어를 그 자리에서 풀이
-   <dl class="terms"><dt>법선<small>Normal</small></dt><dd>면이 바라보는 방향의 화살표</dd>…</dl> */
+/* 용어 설명 — 사전 항목 형식
+   <dl class="terms">
+     <dt>법선<small>Normal</small></dt>
+     <dd>
+       <p>쉬운 뜻 — 한두 문장</p>
+       <p class="ex">구체적 숫자·장면 예시</p>
+       <p class="why">왜 중요한가 — 모르면 무엇이 틀어지는가</p>
+       <p class="where">Unity·Quest 어디서 보이는가 (메뉴·프로퍼티 이름)</p>
+     </dd>
+   </dl>
+   .ex .why .where 는 각각 «예 / 왜 / 어디서» 라벨이 자동으로 붙음 · 한 줄 dd 도 동작 */
 .reveal dl.terms {
   display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 0.45em 1.1em;
-  margin: 0.7em 0;
-  font-size: 0.74em;
-  background: var(--bg-soft);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 0.8em 1.1em;
+  grid-template-columns: minmax(6.5em, max-content) 1fr;
+  gap: 0;
+  margin: 0.6em 0;
+  font-size: 0.72em;
+  background: none;
+  border: 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  border-radius: 0;
+  padding: 0;
 }
-.reveal dl.terms dt { font-weight: 700; color: var(--fg); margin: 0; }
+.reveal dl.terms dt, .reveal dl.terms dd {
+  margin: 0; padding: 0.5em 0.4em;
+  border-bottom: 1px solid var(--hair);
+}
+.reveal dl.terms dt:last-of-type, .reveal dl.terms dd:last-of-type { border-bottom: 0; }
+.reveal dl.terms dt {
+  font-family: var(--serif); font-weight: 900; color: var(--ink);
+  padding-right: 1.1em; font-size: 1.05em; line-height: 1.35;
+}
 .reveal dl.terms dt small {
-  display: block; font-size: 0.72em; font-weight: 500;
-  color: var(--fg-faint); font-family: var(--mono);
+  display: block; margin-top: 0.15em;
+  font-family: var(--sans); font-size: 0.66em; font-weight: 600;
+  letter-spacing: 0.04em; color: var(--ink-3);
 }
-.reveal dl.terms dd { margin: 0; color: var(--fg-dim); line-height: 1.5; }
-.reveal dl.terms dd b { color: var(--fg); }
+.reveal dl.terms dd { color: var(--ink); line-height: 1.55; }
+.reveal dl.terms dd p { margin: 0 0 0.18em; line-height: 1.5; }
+.reveal dl.terms dd p:last-child { margin-bottom: 0; }
+.reveal dl.terms dd .ex, .reveal dl.terms dd .why, .reveal dl.terms dd .where {
+  font-size: 0.9em; color: var(--ink-2);
+}
+.reveal dl.terms dd .ex::before    { content: "예  ";     font-family: var(--serif); font-weight: 900; color: var(--gfx); }
+.reveal dl.terms dd .why::before   { content: "왜  ";     font-family: var(--serif); font-weight: 900; color: var(--vr); }
+.reveal dl.terms dd .where::before { content: "어디서  "; font-family: var(--serif); font-weight: 900; color: var(--lab); }
+.reveal dl.terms dd b { color: var(--ink); }
 
-/* 본문 속 용어 : 점선 밑줄 + 괄호 풀이 */
-.reveal .t { border-bottom: 1px dotted var(--fg-dim); }
-.reveal .t + .gloss { color: var(--fg-dim); font-size: 0.85em; }
+/* 용어 2단 배치 — <dl class="terms two"> (짧은 정의 여러 개를 한 장에) */
+.reveal dl.terms.two {
+  grid-template-columns: minmax(5.5em, max-content) 1fr minmax(5.5em, max-content) 1fr;
+}
+.reveal dl.terms.two dd { padding-right: 1.2em; }
+.reveal dl.terms.two dt:nth-of-type(even) { padding-left: 1em; border-left: 1px solid var(--hair); }
 
-/* KaTeX 수식 크기 */
-.reveal .katex { font-size: 1.05em; }
+/* 본문 속 용어 */
+.reveal .t { border-bottom: 1px dotted var(--ink-2); }
+.reveal .t + .gloss { color: var(--ink-2); font-size: 0.85em; }
+
+/* KaTeX 수식 */
+.reveal .katex { font-size: 1.05em; color: var(--ink); }
 .reveal .math-block { margin: 0.6em 0; text-align: center; font-size: 1.1em; }
+
+/* 인라인 SVG 도해 — 다크 팔레트로 그려진 도해를 지면 팔레트로 재매핑 (안전망)
+   새 도해는 처음부터 지면 팔레트로 그릴 것 */
+.reveal section svg [fill="#e8ecf4" i], .reveal section svg [fill="#fff" i], .reveal section svg [fill="#ffffff" i] { fill: var(--ink); }
+.reveal section svg [stroke="#e8ecf4" i], .reveal section svg [stroke="#fff" i], .reveal section svg [stroke="#ffffff" i] { stroke: var(--ink); }
+.reveal section svg [fill="#9aa4b8" i] { fill: var(--ink-2); }
+.reveal section svg [stroke="#9aa4b8" i] { stroke: var(--ink-2); }
+.reveal section svg [fill="#5f6980" i] { fill: var(--ink-3); }
+.reveal section svg [stroke="#5f6980" i] { stroke: var(--ink-3); }
+.reveal section svg [stroke="#2a3040" i], .reveal section svg [stroke="#1e2431" i], .reveal section svg [stroke="#232a38" i], .reveal section svg [stroke="#323b4d" i] { stroke: var(--hair); }
+.reveal section svg [fill="#0b0d12" i], .reveal section svg [fill="#06070a" i], .reveal section svg [fill="#090b10" i] { fill: var(--paper); }
+.reveal section svg [fill="#12151d" i], .reveal section svg [fill="#171b25" i] { fill: var(--paper-2); }
+.reveal section svg [fill="#35d6e6" i] { fill: var(--gfx); }
+.reveal section svg [stroke="#35d6e6" i] { stroke: var(--gfx); }
+.reveal section svg [fill="#ff5fa2" i] { fill: var(--vr); }
+.reveal section svg [stroke="#ff5fa2" i] { stroke: var(--vr); }
+.reveal section svg [fill="#ff5a4d" i] { fill: var(--trap); }
+.reveal section svg [stroke="#ff5a4d" i] { stroke: var(--trap); }
+.reveal section svg [fill="#a8e05f" i] { fill: var(--lab); }
+.reveal section svg [stroke="#a8e05f" i] { stroke: var(--lab); }
+.reveal section svg [fill="#ffc44d" i] { fill: var(--analogy); }
+.reveal section svg [stroke="#ffc44d" i] { stroke: var(--analogy); }
 
 /* 인쇄(PDF) */
 @media print {
-  :root { --bg: #0b0d12; }
   .reveal .demo-ui { display: none; }
 }
+
+/* 섹션 오프너 우하단 대형 로마 숫자 — 잡지 섹션 번호 */
+.reveal section.divider::after {
+  position: absolute; right: 0.12em; top: 0.85em;
+  font-family: var(--serif); font-weight: 900; font-size: 7.5em; line-height: 1;
+  color: var(--paper-3); letter-spacing: -0.04em; pointer-events: none; z-index: -1;
+}
+.reveal section.divider.part-i::after   { content: "I"; }
+.reveal section.divider.part-ii::after  { content: "II"; }
+.reveal section.divider.part-iii::after { content: "III"; }
+.reveal section.divider.trap::after     { content: "!"; color: var(--trap-soft); }
+
+/* 제목 바로 아래 용어표 — 괘선 겹침 방지 */
+.reveal h2 + dl.terms { border-top-width: 0; }
+/* 마지막 «다음 주» 장은 섹션 오프너가 아님 → 로마 숫자 숨김 */
+.reveal .slides > section.divider:last-child::after { content: none; }
+/* 색 클래스와 파트 번호가 다를 때 — 번호를 명시 (예 : class="divider part-ii no-1") */
+.reveal section.divider.no-1::after { content: "I"; color: var(--paper-3); }
+.reveal section.divider.no-2::after { content: "II"; color: var(--paper-3); }
+.reveal section.divider.no-3::after { content: "III"; color: var(--paper-3); }
+.reveal section.divider.next::after { content: none; }

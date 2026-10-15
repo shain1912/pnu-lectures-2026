@@ -60,6 +60,17 @@
       /* 수식 : 슬라이드에 math.min.js 를 넣은 경우에만 KaTeX 사용 — \( … \) · \[ … \] */
       plugins: [RevealNotes, RevealHighlight].concat(window.RevealMath ? [RevealMath.KaTeX] : [])
     }).then(function () {
+      /* 러닝헤드 : «5주차 · 조명과 재질 — 컴퓨터그래픽스» → 좌상단 «컴퓨터그래픽스 | 5주차 · 조명과 재질» */
+      var parts = document.title.split("—");
+      var rh = document.createElement("div");
+      rh.className = "runninghead";
+      rh.innerHTML = "<b>" + (parts[1] || "").trim() + "</b>&ensp;" + parts[0].trim();
+      Reveal.getRevealElement().appendChild(rh);
+      var syncHead = function (s) {
+        rh.style.visibility = s && (s.classList.contains("cover") || s.classList.contains("divider")) ? "hidden" : "visible";
+      };
+      syncHead(Reveal.getCurrentSlide());
+      Reveal.on("slidechanged", function (e) { syncHead(e.currentSlide); });
       activate(Reveal.getCurrentSlide());
     });
 

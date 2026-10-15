@@ -137,7 +137,7 @@ def fig_frustum():
 
     ax.add_patch(Polygon([(near, near * t), (far, far * t),
                           (far, -far * t), (near, -near * t)],
-                         facecolor=GFX, alpha=0.10, edgecolor=GFX, lw=2.2,
+                         facecolor=tint(GFX, 0.10), edgecolor=GFX, lw=2.2,
                          zorder=2))
 
     for xv, name in ((near, "near\n0.3"), (far, "far\n1000")):
@@ -156,7 +156,7 @@ def fig_frustum():
 
     inside = [((4.6, -0.6), 0.42), ((5.8, 0.95), 0.50)]
     for (cx, cy), r in inside:
-        ax.add_patch(Circle((cx, cy), r, facecolor=LAB, alpha=0.30,
+        ax.add_patch(Circle((cx, cy), r, facecolor=tint(LAB, 0.30),
                             edgecolor=LAB, lw=2.0, zorder=5))
 
     outside = [((0.85, 0.0), 0.30), ((8.9, 0.15), 0.45), ((4.2, 2.35), 0.45)]
@@ -188,7 +188,7 @@ def fig_frustum():
     # ---------------------------------------------------- 오른쪽: 근평면의 얼굴
     ax = axes[1]; clean(ax); ax.set_aspect("equal")
     w, h = 1.60, 0.90
-    ax.add_patch(Rectangle((-w / 2, -h / 2), w, h, facecolor=GFX, alpha=0.12,
+    ax.add_patch(Rectangle((-w / 2, -h / 2), w, h, facecolor=tint(GFX, 0.12),
                            edgecolor=GFX, lw=2.2))
     ax.annotate("", xy=(-w / 2 - 0.14, h / 2), xytext=(-w / 2 - 0.14, -h / 2),
                 arrowprops=dict(arrowstyle="<->", color=WARN, lw=1.6))
@@ -236,14 +236,14 @@ def fig_projection_squash():
     # ---------------------------------------------------- 왼쪽: 뷰 공간
     ax = axL; clean(ax); ax.set_aspect("equal")
     ax.add_patch(Polygon([(n, n * t), (f, f * t), (f, -f * t), (n, -n * t)],
-                         facecolor=GFX, alpha=0.09, edgecolor=GFX, lw=2.0))
+                         facecolor=tint(GFX, 0.09), edgecolor=tint(GFX, 0.3), lw=2.0))
     ax.plot([0, 6.6], [0, 6.6 * t], color=FAINT, lw=1.1, ls=(0, (5, 4)))
     ax.plot([0, 6.6], [0, -6.6 * t], color=FAINT, lw=1.1, ls=(0, (5, 4)))
     ax.add_patch(Circle((0, 0), 0.13, facecolor=FG, edgecolor="none", zorder=8))
 
     for z, c in bars:
         ax.add_patch(Rectangle((z - 0.07, -half), 0.14, 2 * half,
-                               facecolor=c, alpha=0.85, edgecolor=c, lw=1.5,
+                               facecolor=tint(c, 0.85), edgecolor=c, lw=1.5,
                                zorder=6))
         ax.plot([0, z], [0, half], color=FAINT, lw=0.9, ls=(0, (2, 3)), zorder=3)
         ax.plot([0, z], [0, -half], color=FAINT, lw=0.9, ls=(0, (2, 3)), zorder=3)
@@ -269,7 +269,7 @@ def fig_projection_squash():
 
     # ---------------------------------------------------- 오른쪽: NDC
     ax = axR; clean(ax); ax.set_aspect("equal")
-    ax.add_patch(Rectangle((-1, -1), 2, 2, facecolor=LAB, alpha=0.09,
+    ax.add_patch(Rectangle((-1, -1), 2, 2, facecolor=tint(LAB, 0.09),
                            edgecolor=LAB, lw=2.2))
 
     def zndc(z):
@@ -289,9 +289,13 @@ def fig_projection_squash():
         zz = zndc(z)
         hh = half / (t * z)
         ax.add_patch(Rectangle((zz - 0.030, -hh), 0.06, 2 * hh,
-                               facecolor=c, alpha=0.9, edgecolor=c, lw=1.4,
+                               facecolor=tint(c, 0.9), edgecolor=c, lw=1.4,
                                zorder=6))
         last = z == bars[-1][0]
+        if hh > 0.7:     # 1.5m 막대는 상자 윗변 근처까지 차므로 라벨을 막대 오른쪽 안에
+            ax.text(zz + 0.06, hh - 0.04, f"{z}m", color=LAB, fontsize=11,
+                    ha="left", va="top", family=CODE, zorder=7)
+            continue
         ax.text(zz + (0.03 if last else 0.0), hh + 0.05, f"{z}m", color=LAB,
                 fontsize=11, ha="right" if last else "center",
                 va="bottom", family=CODE, zorder=7)
@@ -400,7 +404,7 @@ def fig_cull_clip():
     ax = axes[0]; clean(ax); ax.set_aspect("equal")
     tt, FARY = 0.70, 5.0
     ax.add_patch(Polygon([(0, 0), (-tt * FARY, FARY), (tt * FARY, FARY)],
-                         facecolor=GFX, alpha=0.10, edgecolor=GFX, lw=2.0))
+                         facecolor=tint(GFX, 0.10), edgecolor=GFX, lw=2.0))
     ax.plot([-tt * FARY, tt * FARY], [FARY, FARY], color=GFX, lw=2.0)
     ax.add_patch(Circle((0, 0), 0.13, facecolor=FG, edgecolor="none", zorder=8))
     ax.text(0.24, -0.05, "카메라", color=FG, fontsize=12, va="top")
@@ -410,7 +414,7 @@ def fig_cull_clip():
     for cx, cy, r in keep:
         ax.add_patch(Rectangle((cx - r, cy - r), 2 * r, 2 * r, facecolor="none",
                                edgecolor=LAB, lw=1.2, ls=(0, (3, 3))))
-        ax.add_patch(Circle((cx, cy), r * 0.82, facecolor=LAB, alpha=0.32,
+        ax.add_patch(Circle((cx, cy), r * 0.82, facecolor=tint(LAB, 0.32),
                             edgecolor=LAB, lw=1.8))
     for cx, cy, r in drop:
         ax.add_patch(Circle((cx, cy), r * 0.82, facecolor="none",
@@ -432,9 +436,9 @@ def fig_cull_clip():
     ax = axes[1]; clean(ax); ax.set_aspect("equal")
     A, B, C = (-2.4, 0.8), (3.2, 2.0), (1.2, 5.2)
     p1, p2 = (0.0, 1.3143), (0.0, 3.7333)
-    ax.add_patch(Polygon([A, p1, p2], facecolor=TRAP, alpha=0.14,
+    ax.add_patch(Polygon([A, p1, p2], facecolor=tint(TRAP, 0.14),
                          edgecolor=TRAP, lw=1.6, ls=(0, (4, 3)), zorder=3))
-    ax.add_patch(Polygon([p1, B, C, p2], facecolor=LAB, alpha=0.26,
+    ax.add_patch(Polygon([p1, B, C, p2], facecolor=tint(LAB, 0.26),
                          edgecolor=LAB, lw=2.2, zorder=4))
     ax.plot([p1[0], C[0]], [p1[1], C[1]], color=LAB, lw=1.2, ls=(0, (3, 3)),
             zorder=5)
@@ -566,9 +570,9 @@ def fig_barrel_distortion():
             ax.plot(X, Y, color=color, lw=1.15, alpha=0.9, zorder=4)
 
         if idx == 1:
-            for p, cc, lbl in ((0.13, "#ff5a4d", "R"),
-                               (0.17, "#a8e05f", "G"),
-                               (0.21, "#4d9cff", "B")):
+            for p, cc, lbl in ((0.13, AX_X, "R"),
+                               (0.17, AX_Y, "G"),
+                               (0.21, AX_Z, "B")):
                 bx = np.concatenate([np.linspace(-1, 1, 200),
                                      np.full(200, 1.0),
                                      np.linspace(1, -1, 200),
@@ -644,7 +648,7 @@ def fig_stereo_frustum():
         x_out = sx - sgn * T_OUT * D
         geo[name] = (x_in, x_out)
         ax.add_patch(Polygon([(sx, 0), (x_out, D), (x_in, D)],
-                             facecolor=c, alpha=0.11, edgecolor=c, lw=2.0,
+                             facecolor=tint(c, 0.11), edgecolor=tint(c, 0.35), lw=2.0,
                              zorder=3))
         ax.plot([sx, sx], [0, 0.20], color=FAINT, lw=1.0, ls=(0, (2, 4)),
                 zorder=4)
@@ -657,16 +661,22 @@ def fig_stereo_frustum():
     ycross = ex / T_IN
     xin_l = -ex + T_IN * D
     ax.add_patch(Polygon([(0, ycross), (-xin_l, D), (xin_l, D)],
-                         facecolor=WARN, alpha=0.11, edgecolor=WARN, lw=1.6,
+                         facecolor=tint(WARN, 0.11), edgecolor=tint(WARN, 0.35), lw=1.6,
                          ls=(0, (5, 4)), zorder=5))
     ax.text(0, 0.345, "양안 융합 영역", color=WARN, fontsize=12.5,
             ha="center", fontweight="bold")
     ax.text(0, 0.298, "깊이 지각 가능", color=WARN, fontsize=11.6,
             ha="center")
-    ax.text(-0.43, 0.25, "왼쪽 눈에만\n보이는 주변부", color=GFX, fontsize=11.6,
-            ha="center", va="center", linespacing=1.5)
-    ax.text(0.43, 0.25, "오른쪽 눈에만\n보이는 주변부", color=VR, fontsize=11.6,
-            ha="center", va="center", linespacing=1.5)
+    # 한쪽 눈 전용 영역은 귀쪽 경계와 평행한 좁은 띠(폭 2·ex) — 라벨을 띠 방향으로
+    # 눕혀 띠 한가운데에 두어야 경계선과 겹치지 않는다.
+    ang = np.degrees(np.arctan2(1.0, T_OUT))          # 띠 기울기 (약 41°)
+    ym = 0.275
+    ax.text(-T_OUT * ym, ym, "왼쪽 눈에만 보이는 주변부", color=GFX,
+            fontsize=11.6, ha="center", va="center", rotation=-ang,
+            rotation_mode="anchor", zorder=7)
+    ax.text(T_OUT * ym, ym, "오른쪽 눈에만 보이는 주변부", color=VR,
+            fontsize=11.6, ha="center", va="center", rotation=ang,
+            rotation_mode="anchor", zorder=7)
 
     # ------------------------------------------------ 디스플레이 패널
     ax.plot([-0.64, 0.64], [D, D], color=LINE, lw=1.3)

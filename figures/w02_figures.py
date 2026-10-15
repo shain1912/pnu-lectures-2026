@@ -82,7 +82,7 @@ def fig_cross_product():
 
     quad = np.array([[0, 0, 0], a, a + b, b])
     ax.add_collection3d(Poly3DCollection(
-        [quad], facecolor=GFX, alpha=0.16, edgecolor=GFX, linewidth=1.4))
+        [quad], facecolor=tint(GFX, 0.16), edgecolor=GFX, linewidth=1.4))
 
     for v, col, lab in ((a, GFX, "a"), (b, VR, "b"), (cn, WARN, "a × b")):
         ax.quiver(0, 0, 0, *v, color=col, lw=3.0, arrow_length_ratio=0.13)
@@ -103,8 +103,8 @@ def fig_cross_product():
     ax.set_xlim(0, L); ax.set_ylim(0, L); ax.set_zlim(0, L)
     ax.set_box_aspect((1, 1, 1))
     for pane, axis in ((ax.xaxis, "x"), (ax.yaxis, "y"), (ax.zaxis, "z")):
-        pane.set_pane_color((0.043, 0.051, 0.071, 1.0))
-        pane._axinfo["grid"]["color"] = (0.12, 0.14, 0.19, 1.0)
+        pane.set_pane_color(BG)
+        pane._axinfo["grid"]["color"] = GRID
     # 눈금 숫자는 의미가 없어 숨긴다 (작은 글자 + 하단 문구와 겹침)
     ax.set_xticklabels([]); ax.set_yticklabels([]); ax.set_zticklabels([])
     ax.tick_params(length=0)
@@ -129,11 +129,11 @@ def fig_basis_rotation():
         ax = clean(fig.add_subplot(gs[k_]))
         i, j = M[:, 0], M[:, 1]
         sq = np.array([[0, 0], i, i + j, j])
-        ax.add_patch(Polygon(sq, closed=True, facecolor=GFX, alpha=0.13,
+        ax.add_patch(Polygon(sq, closed=True, facecolor=tint(GFX, 0.13),
                              edgecolor=GFX, lw=1.3))
         for k in range(-1, 3):
-            ax.plot([-1.4, 2.4], [k, k], color="#1a1f2b", lw=0.8, zorder=0)
-            ax.plot([k, k], [-1.4, 2.4], color="#1a1f2b", lw=0.8, zorder=0)
+            ax.plot([-1.4, 2.4], [k, k], color=GRID, lw=0.8, zorder=0)
+            ax.plot([k, k], [-1.4, 2.4], color=GRID, lw=0.8, zorder=0)
         vec(ax, (0, 0), i, AX_X, "i", label_off=(0.1, -0.28), fs=17)
         vec(ax, (0, 0), j, AX_Y, "j", label_off=(-0.3, 0.1), fs=17)
         ax.set_xlim(-1.0, 1.95); ax.set_ylim(-0.75, 1.95)
@@ -171,14 +171,14 @@ def fig_homogeneous():
     # --- A : 2D 에서의 문제
     clean(axA)
     for k in range(-1, 4):
-        axA.plot([-1.3, 3.6], [k, k], color="#1a1f2b", lw=0.8, zorder=0)
-        axA.plot([k, k], [-1.3, 3.3], color="#1a1f2b", lw=0.8, zorder=0)
+        axA.plot([-1.3, 3.6], [k, k], color=GRID, lw=0.8, zorder=0)
+        axA.plot([k, k], [-1.3, 3.3], color=GRID, lw=0.8, zorder=0)
 
     tri = np.array([[0.2, 0.2], [1.5, 0.35], [0.75, 1.5]])
-    axA.add_patch(Polygon(tri, closed=True, facecolor=GFX, alpha=0.2,
+    axA.add_patch(Polygon(tri, closed=True, facecolor=tint(GFX, 0.2),
                           edgecolor=GFX, lw=1.5))
     axA.add_patch(Polygon(tri + np.array([1.7, 1.3]), closed=True,
-                          facecolor=VR, alpha=0.2, edgecolor=VR, lw=1.5, ls="--"))
+                          facecolor=tint(VR, 0.2), edgecolor=VR, lw=1.5, ls="--"))
     axA.plot(0, 0, "o", color=WARN, ms=11, zorder=9)
     note(axA, 0.12, -0.55, "원점", color=WARN, fs=12)
     axA.annotate("", xy=(2.4, 1.8), xytext=(0.8, 0.6),
@@ -196,13 +196,13 @@ def fig_homogeneous():
     fig.patch.set_facecolor(BG); axB.set_facecolor(BG)
     W = 3.2
     plane = np.array([[0, 0, 1], [W, 0, 1], [W, W, 1], [0, W, 1]])
-    axB.add_collection3d(Poly3DCollection([plane], facecolor=GFX, alpha=0.10,
+    axB.add_collection3d(Poly3DCollection([plane], facecolor=tint(GFX, 0.10),
                                           edgecolor=GFX, linewidth=1.2))
     tri3 = np.hstack([tri, np.ones((3, 1))])
-    axB.add_collection3d(Poly3DCollection([tri3], facecolor=GFX, alpha=0.45,
+    axB.add_collection3d(Poly3DCollection([tri3], facecolor=tint(GFX, 0.45),
                                           edgecolor=GFX, linewidth=1.4))
     tri3b = tri3 + np.array([1.7, 1.3, 0])
-    axB.add_collection3d(Poly3DCollection([tri3b], facecolor=VR, alpha=0.45,
+    axB.add_collection3d(Poly3DCollection([tri3b], facecolor=tint(VR, 0.45),
                                           edgecolor=VR, linewidth=1.4))
     axB.quiver(0, 0, 0, 0, 0, 1.9, color=WARN, lw=2.4, arrow_length_ratio=0.14)
     axB.text(0.1, 0.1, 2.05, "w", color=WARN, fontsize=14, fontweight="bold")
@@ -217,8 +217,8 @@ def fig_homogeneous():
     axB.set_xlim(0, W); axB.set_ylim(0, W); axB.set_zlim(0, 2.2)
     axB.set_box_aspect((1, 1, 0.72))
     for pane in (axB.xaxis, axB.yaxis, axB.zaxis):
-        pane.set_pane_color((0.043, 0.051, 0.071, 1.0))
-        pane._axinfo["grid"]["color"] = (0.12, 0.14, 0.19, 1.0)
+        pane.set_pane_color(BG)
+        pane._axinfo["grid"]["color"] = GRID
     axB.set_xticklabels([]); axB.set_yticklabels([]); axB.set_zticklabels([])
     axB.tick_params(length=0)
     axB.view_init(elev=17, azim=-58)
@@ -245,20 +245,20 @@ def fig_order_matters():
     for ax in axes:
         clean(ax)
         for k in range(-4, 5):
-            ax.plot([-4.2, 4.2], [k, k], color="#161b25", lw=0.7, zorder=0)
-            ax.plot([k, k], [-2.2, 3.6], color="#161b25", lw=0.7, zorder=0)
+            ax.plot([-4.2, 4.2], [k, k], color=GRID, lw=0.7, zorder=0)
+            ax.plot([k, k], [-2.2, 3.6], color=GRID, lw=0.7, zorder=0)
         ax.plot(0, 0, "o", color=WARN, ms=9, zorder=9)
         ax.set_xlim(-1.6, 4.3); ax.set_ylim(-1.5, 2.95)
         ax.set_aspect("equal")
 
     # --- 왼쪽 : R · T  (이동 먼저 → 원점 기준으로 회전)
     ax = axes[0]
-    ax.add_patch(Polygon(unit_square((0, 0), 0), facecolor=FAINT, alpha=0.22,
+    ax.add_patch(Polygon(unit_square((0, 0), 0), facecolor=tint(FAINT, 0.22),
                          edgecolor=FAINT, lw=1.2))
-    ax.add_patch(Polygon(unit_square((d, 0), 0), facecolor=GFX, alpha=0.18,
+    ax.add_patch(Polygon(unit_square((d, 0), 0), facecolor=tint(GFX, 0.18),
                          edgecolor=GFX, lw=1.3, ls="--"))
     p = (d * np.cos(th), d * np.sin(th))
-    ax.add_patch(Polygon(unit_square(p, th), facecolor=GFX, alpha=0.55,
+    ax.add_patch(Polygon(unit_square(p, th), facecolor=tint(GFX, 0.55),
                          edgecolor=GFX, lw=1.8))
     arc = np.linspace(0, th, 60)
     ax.plot(d * np.cos(arc), d * np.sin(arc), color=GFX, ls=(0, (3, 3)), lw=1.6)
@@ -268,11 +268,11 @@ def fig_order_matters():
 
     # --- 오른쪽 : T · R  (회전 먼저 → 그 다음 이동)
     ax = axes[1]
-    ax.add_patch(Polygon(unit_square((0, 0), 0), facecolor=FAINT, alpha=0.22,
+    ax.add_patch(Polygon(unit_square((0, 0), 0), facecolor=tint(FAINT, 0.22),
                          edgecolor=FAINT, lw=1.2))
-    ax.add_patch(Polygon(unit_square((0, 0), th), facecolor=VR, alpha=0.18,
+    ax.add_patch(Polygon(unit_square((0, 0), th), facecolor=tint(VR, 0.18),
                          edgecolor=VR, lw=1.3, ls="--"))
-    ax.add_patch(Polygon(unit_square((d, 0), th), facecolor=VR, alpha=0.55,
+    ax.add_patch(Polygon(unit_square((d, 0), th), facecolor=tint(VR, 0.55),
                          edgecolor=VR, lw=1.8))
     ax.annotate("", xy=(d - 0.5, 0), xytext=(0.6, 0),
                 arrowprops=dict(arrowstyle="-|>", color=VR, lw=2.2))
@@ -318,10 +318,10 @@ def _draw_triad(ax, M, title, sub=None):
     for k in np.linspace(-G, G, 5):
         for a_, b_ in (([k, gy, -G], [k, gy, G]), ([-G, gy, k], [G, gy, k])):
             p = _u2p(np.array([a_, b_]))
-            ax.plot(p[:, 0], p[:, 1], p[:, 2], color="#1e2431", lw=0.9)
+            ax.plot(p[:, 0], p[:, 1], p[:, 2], color=GRID, lw=0.9)
     for v in (np.eye(3) * 1.75):
         p = _u2p(np.array([-v, v]))
-        ax.plot(p[:, 0], p[:, 1], p[:, 2], color="#2a3040", lw=1.0,
+        ax.plot(p[:, 0], p[:, 1], p[:, 2], color=LINE, lw=1.0,
                 ls=(0, (3, 3)))
 
     # 방향을 알아볼 수 있는 납작한 판 (비행기처럼 XZ 평면, 앞=Z 로 길쭉)
@@ -538,12 +538,147 @@ def fig_neck_model():
 
 
 # =====================================================================
+# 10. 전정계 ↔ IMU — 몸에 달린 관성 센서
+# =====================================================================
+def fig_vestibular_imu():
+    from matplotlib.patches import Ellipse, Circle as _C, Arc as _Arc
+
+    fig = plt.figure(figsize=(12.0, 4.6))
+    ax = fig.add_axes([0, 0, 1, 1]); clean(ax); ax.set_aspect("equal")
+    ax.set_xlim(0, 24.0); ax.set_ylim(0, 9.2)
+
+    # ------------------------------------------------ 왼쪽 : 속귀 (단순화)
+    def tube(cx, cy, w, h, ang, col=GFX, z=3):
+        """관 모양 고리 — 굵은 선 위에 지면색 선을 겹쳐 속이 빈 관처럼."""
+        ax.add_patch(Ellipse((cx, cy), w, h, angle=ang, facecolor="none",
+                             edgecolor=col, lw=9, zorder=z))
+        ax.add_patch(Ellipse((cx, cy), w, h, angle=ang, facecolor="none",
+                             edgecolor=BG, lw=5, zorder=z + 0.1))
+
+    VX, VY = 5.0, 3.55                       # 전정(난형낭·구형낭) 중심
+    tube(4.75, 6.05, 1.75, 2.75, -12)        # 앞(위) 반고리관 — 세로면
+    tube(2.85, 4.75, 1.45, 2.85, 58)         # 뒤 반고리관 — 비스듬한 세로면
+    tube(3.35, 3.85, 3.2, 1.05, 4)           # 가쪽(수평) 반고리관 — 거의 수평
+    # 팽대부 (반고리관 끝의 볼록한 부분 — 털세포가 있는 곳)
+    for (x, y) in ((5.35, 4.85), (4.05, 4.55), (4.55, 3.15)):
+        ax.add_patch(_C((x, y), 0.26, facecolor=tint(GFX, 0.35),
+                        edgecolor=GFX, lw=1.6, zorder=5))
+
+    # 전정 — 난형낭(수평 판) · 구형낭(수직 판)
+    ax.add_patch(Ellipse((VX, VY), 2.1, 1.75, facecolor=BG_SOFT,
+                         edgecolor=VR, lw=2.0, zorder=6))
+    ax.add_patch(Ellipse((VX + 0.05, VY + 0.38), 1.25, 0.5, facecolor=tint(VR, 0.18),
+                         edgecolor=VR, lw=1.4, zorder=7))
+    ax.add_patch(Ellipse((VX + 0.15, VY - 0.42), 0.55, 0.62, facecolor=tint(VR, 0.18),
+                         edgecolor=VR, lw=1.4, zorder=7))
+    rng = np.random.default_rng(3)           # 이석(탄산칼슘 결정) 알갱이
+    for _ in range(9):
+        ax.plot(VX + 0.05 + rng.uniform(-0.45, 0.45), VY + 0.4 + rng.uniform(-0.12, 0.12),
+                "o", color=VR, ms=2.6, zorder=8)
+    for _ in range(5):
+        ax.plot(VX + 0.15 + rng.uniform(-0.15, 0.15), VY - 0.42 + rng.uniform(-0.2, 0.2),
+                "o", color=VR, ms=2.6, zorder=8)
+
+    # 달팽이관 — 청각 기관 (전정계 아님, 흐리게)
+    th = np.linspace(0, 4.6 * np.pi, 400)
+    rr = 1.05 * np.exp(-0.105 * th)
+    ax.plot(7.15 + rr * np.cos(th + np.pi), 2.05 + rr * np.sin(th + np.pi),
+            color=FAINT, lw=2.0, zorder=2)
+    ax.plot([VX + 0.85, 6.15], [VY - 0.65, 2.05], color=FAINT, lw=2.0, zorder=2)
+    ax.text(8.55, 2.05, "달팽이관\n청각 — 전정계와 별개", color=FAINT,
+            fontsize=14.5, ha="left", va="center", linespacing=1.5)
+
+    # 왼쪽 라벨
+    ax.text(0.2, 9.15, "반고리관 × 3", color=GFX, fontsize=16.5,
+            fontweight="bold", va="top")
+    ax.text(0.2, 8.35, "서로 직각인 세 평면 → 회전 감지 (각가속도)", color=FG,
+            fontsize=15, va="top")
+    ax.text(0.2, 1.75, "이석기관  (난형낭 · 구형낭)", color=VR, fontsize=16.5,
+            fontweight="bold", va="top")
+    ax.text(0.2, 0.95, "직선 가속 · 중력 → 머리 기울기", color=FG,
+            fontsize=15, va="top")
+    ax.annotate("", xy=(VX - 0.35, VY - 0.55), xytext=(2.2, 1.85),
+                arrowprops=dict(arrowstyle="-", color=VR, lw=1.2,
+                                connectionstyle="arc3,rad=-0.2"))
+
+    # ------------------------------------------------ 오른쪽 : MEMS IMU 칩
+    CX0, CX1, CY0, CY1 = 13.6, 23.8, 0.35, 8.85
+    ax.add_patch(FancyBboxPatch((CX0, CY0), CX1 - CX0, CY1 - CY0,
+                                boxstyle="round,pad=0,rounding_size=0.3",
+                                facecolor=CARD, edgecolor=FG, lw=1.8, zorder=2))
+    for i in range(9):                       # 칩 다리
+        x = CX0 + 0.8 + i * (CX1 - CX0 - 1.6) / 8
+        for y0, y1 in ((CY1, CY1 + 0.22), (CY0 - 0.22, CY0)):
+            ax.plot([x, x], [y0, y1], color=FAINT, lw=2.4, zorder=1)
+    ax.text(CX0 + 0.4, CY1 - 0.3, "MEMS IMU 칩  (HMD 안)", color=FG,
+            fontsize=16.5, fontweight="bold", va="top")
+
+    def block(y0, h, col):
+        ax.add_patch(FancyBboxPatch((CX0 + 0.35, y0), CX1 - CX0 - 0.7, h,
+                                    boxstyle="round,pad=0,rounding_size=0.2",
+                                    facecolor=tint(col, 0.08), edgecolor=col, lw=1.6,
+                                    zorder=3))
+
+    # 자이로스코프 — 3축 회전 아이콘
+    GY0, GH = 4.55, 2.95
+    block(GY0, GH, GFX)
+    for k, (lab, cx) in enumerate((("x", 14.75), ("y", 15.85), ("z", 16.95))):
+        cy = GY0 + GH / 2 - 0.15
+        ax.add_patch(_Arc((cx, cy), 0.85, 0.85, theta1=40, theta2=320,
+                          color=GFX, lw=2.0, zorder=5))
+        a = np.radians(320)
+        ax.annotate("", xy=(cx + 0.425 * np.cos(a) + 0.06, cy + 0.425 * np.sin(a) + 0.09),
+                    xytext=(cx + 0.425 * np.cos(a), cy + 0.425 * np.sin(a)),
+                    arrowprops=dict(arrowstyle="-|>,head_width=0.25,head_length=0.4",
+                                    color=GFX, lw=1.4), zorder=6)
+        ax.text(cx, cy, lab, color=GFX, fontsize=15, ha="center", va="center",
+                family=CODE, fontweight="bold", zorder=6)
+    ax.text(17.85, GY0 + GH - 0.4, "자이로스코프", color=GFX, fontsize=16.5,
+            fontweight="bold", va="top")
+    ax.text(17.85, GY0 + GH - 1.25, "각속도 ω — 3축\n단위 °/s", color=FG,
+            fontsize=15, va="top", linespacing=1.55)
+
+    # 가속도계 — 스프링에 매달린 질량
+    AY0, AH = 0.85, 3.3
+    block(AY0, AH, VR)
+    my = AY0 + AH / 2 - 0.1
+    ax.add_patch(plt.Rectangle((15.4, my - 0.45), 0.95, 0.9,
+                               facecolor=tint(VR, 0.35), edgecolor=VR,
+                               lw=1.6, zorder=6))
+    for xa, xb in ((14.35, 15.4), (16.35, 17.4)):
+        xs = np.linspace(xa, xb, 13)
+        ys = my + np.array([0] + [0.16 * (-1) ** i for i in range(11)] + [0])
+        ax.plot(xs, ys, color=VR, lw=1.6, zorder=5)
+    for xw in (14.35, 17.4):
+        ax.plot([xw, xw], [my - 0.6, my + 0.6], color=FG, lw=2.4, zorder=5)
+    ax.text(15.875, my, "m", color=VR, fontsize=15, ha="center", va="center",
+            family=CODE, fontweight="bold", zorder=7)
+    ax.text(17.85, AY0 + AH - 0.4, "가속도계", color=VR, fontsize=16.5,
+            fontweight="bold", va="top")
+    ax.text(17.85, AY0 + AH - 1.25, "선가속도 + 중력 — 3축\n단위 m/s²", color=FG,
+            fontsize=15, va="top", linespacing=1.55)
+
+    # ------------------------------------------------ 대응 화살표
+    for (x0, y0), (x1, y1), col, lab in (
+            ((6.0, 6.5), (CX0 + 0.3, GY0 + GH / 2), GFX, "회전"),
+            ((6.35, 3.6), (CX0 + 0.3, AY0 + AH / 2 + 0.2), VR, "직선 가속 · 중력")):
+        ax.annotate("", xy=(x1, y1), xytext=(x0, y0),
+                    arrowprops=dict(arrowstyle="<|-|>,head_width=0.3,head_length=0.55",
+                                    color=col, lw=1.8, ls=(0, (5, 3))), zorder=4)
+        ax.text((x0 + x1) / 2, (y0 + y1) / 2 + 0.3, lab, color=col, fontsize=15,
+                fontweight="bold", ha="center", va="bottom", zorder=6,
+                bbox=dict(boxstyle="round,pad=0.2", fc=BG, ec="none"))
+
+    return save(fig, "w02-vestibular-imu", pad=0.25)
+
+
+# =====================================================================
 if __name__ == "__main__":
     import sys
     figs = [
         fig_dot_product, fig_cross_product, fig_basis_rotation,
         fig_homogeneous, fig_order_matters, fig_euler_order,
-        fig_gimbal_dof, fig_vr_chain, fig_neck_model,
+        fig_gimbal_dof, fig_vr_chain, fig_neck_model, fig_vestibular_imu,
     ]
     only = sys.argv[1] if len(sys.argv) > 1 else None
     for f in figs:

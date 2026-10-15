@@ -61,11 +61,11 @@
       <p class="small">내 씬에서 2~7주 개념이 <b>어디에 들어 있는지</b> 스위치를 켜고 끄며 보여 주기</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 구술 방어</h4>
+      <h4><span class="step" style="color:var(--trap);border-color:var(--trap)">2</span> 구술 방어</h4>
       <p class="small">AI 가 쓴 코드 한 줄을 <b>증상 → 원인 개념 → 확인 방법</b> 순서로 설명</p>
     </div>
     <div class="card lab">
-      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 근거 있는 크리틱</h4>
+      <h4><span class="step" style="color:var(--lab);border-color:var(--lab)">3</span> 근거 있는 크리틱</h4>
       <p class="small">동료 씬을 보고 <b>관찰 · 근거 · 제안</b> 세 칸으로 된 크리틱 1건 작성</p>
     </div>
   </div>
@@ -76,15 +76,63 @@
 
 <section>
   <div class="tag gfx">용어</div>
-  <h2>오늘 쓰는 말 미리보기</h2>
+  <h2>용어 미리보기 (1/2) — 평가 방식</h2>
   <dl class="terms">
-    <dt>구술 방어<small>Oral defense</small></dt><dd>만든 것에 대한 질문에 <b>말로 답해 근거를 증명</b>하는 평가 — 논문 심사에서 온 말</dd>
-    <dt>코드 리뷰<small>Code review</small></dt><dd>다른 사람(또는 AI)이 쓴 코드를 읽고 문제·개선점을 찾는 검토</dd>
-    <dt>프롬프트 로그<small>Prompt log</small></dt><dd>AI 에게 보낸 요청과 받은 응답을 <b>순서대로 빠짐없이</b> 남긴 기록</dd>
-    <dt>검증 리포트<small>Verification report</small></dt><dd>«이 코드가 맞다» 를 <b>측정값</b>(ms · 각도 · 거리)으로 보인 문서</dd>
-    <dt>지각 실험실<small>Perception Lab</small></dt><dd>2주부터 각자 키워 온 씬 — 작품이 아니라 <b>개념 검증용 실험대</b></dd>
-    <dt>크리틱<small>Critique</small></dt><dd>작업을 근거와 함께 평가·제안하는 디자인 수업식 피드백</dd>
-    <dt>재현<small>Reproduce</small></dt><dd>같은 조건에서 같은 현상을 <b>다시 일으켜 보이기</b> — 함정 증명의 기본</dd>
+    <dt>구술 방어<small>Oral defense</small></dt>
+    <dd>
+      <p>만든 것에 대한 질문에 <b>말로 답해서</b> 직접 이해했음을 보이는 평가 — 논문 심사에서 온 말</p>
+      <p class="ex">«이 줄을 지우면 무엇이 무너지나?» → «120fps PC 에서 4배 빨라짐, fps 제한으로 확인함»</p>
+      <p class="why">AI 가 짠 코드는 «작동» 만으로는 이해 여부 판별 불가 → 말로 이유를 이어야 내 실력으로 인정</p>
+    </dd>
+    <dt>코드 리뷰<small>Code review</small></dt>
+    <dd>
+      <p>남(또는 AI)이 쓴 코드를 한 줄씩 읽으며 문제·개선점을 찾는 검토 — 글의 교정 보기와 같은 일</p>
+      <p class="ex">Update 안에 <code>Time.deltaTime</code> 이 빠진 이동 코드 발견 → «프레임마다 속도 다름» 지적</p>
+      <p class="where">오늘 : 발표자 코드를 화면에 띄우고 교수·동료가 줄을 짚으며 질문</p>
+    </dd>
+    <dt>크리틱<small>Critique</small></dt>
+    <dd>
+      <p>작업을 <b>관찰 · 근거 · 제안</b> 세 칸으로 평가하는 디자인 수업식 피드백 — 칭찬·비난이 아닌 고칠 방향</p>
+      <p class="ex">«먼 바닥 지글거림 (관찰) — 밉맵 꺼짐 추정 (근거) — Generate Mip Maps 켜기 (제안)»</p>
+      <p class="why">«멋있어요 / 어색해요» 는 발표자가 다음에 바꿀 것이 없음</p>
+    </dd>
+    <dt>재현<small>Reproduce</small></dt>
+    <dd>
+      <p>같은 조건을 만들어 같은 문제를 <b>일부러 다시 일으켜 보이기</b> — «어제 고장 났어요» 대신 지금 눈앞에서 고장 내기</p>
+      <p class="ex">fps 를 30 으로 고정 → 이동 속도가 느려지는 장면을 시연 중 다시 보여 줌</p>
+      <p class="why">재현 못 하는 문제는 고쳤는지도 확인 불가 → 함정 증명의 출발점</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">용어</div>
+  <h2>용어 미리보기 (2/2) — 제출물과 씬</h2>
+  <dl class="terms">
+    <dt>프롬프트 로그<small>Prompt log</small></dt>
+    <dd>
+      <p>AI 에게 보낸 요청 · 받은 답 · 내 판단을 <b>순서대로 빠짐없이</b> 남긴 기록 — 실험 노트와 같은 것</p>
+      <p class="ex">«이동 코드 요청 → 벽 통과 → Rigidbody 로 다시 요청한 이유» 까지 한 줄씩</p>
+      <p class="why">실패한 요청을 지우면 판단 과정이 사라짐 → 실패 기록도 점수 대상</p>
+    </dd>
+    <dt>검증 리포트<small>Verification report</small></dt>
+    <dd>
+      <p>«이 코드가 맞다» 를 말이 아닌 <b>측정값</b>으로 보인 문서 — 체중계 숫자처럼 누가 봐도 같은 결과</p>
+      <p class="ex">«30fps · 120fps 에서 10초 이동 거리 모두 50.0 m» · «피치 89~91° 회전 튐 0회»</p>
+      <p class="where">Unity : Console 로그 · Stats 창(Game 뷰 오른쪽 위) · Profiler 의 ms 값</p>
+    </dd>
+    <dt>지각 실험실<small>Perception Lab</small></dt>
+    <dd>
+      <p>2주부터 각자 키워 온 씬 — 예쁜 작품이 아니라 <b>개념을 하나씩 켜고 끄며 확인하는 실험대</b></p>
+      <p class="ex">한 씬 안에 부모-자식 회전 · 그림자 · 밉맵 바닥 · 이동 스크립트 2종</p>
+      <p class="why">11주차에 이 씬을 Quest 3 로 옮겨 직접 들어감 → 오늘이 VR 진입 전 점검</p>
+    </dd>
+    <dt>실험실 스위치<small>Toggle</small></dt>
+    <dd>
+      <p>개념 하나를 <b>켰다 껐다</b> 할 수 있게 만든 장치 — 전등 스위치처럼 차이를 바로 비교</p>
+      <p class="ex">접촉 그림자 끄기 → 공이 바닥에서 떠 보임 · 다시 켜기 → 붙어 보임</p>
+      <p class="where">Unity : Inspector 의 컴포넌트 체크박스 · 키 입력으로 <code>enabled</code> 전환</p>
+    </dd>
   </dl>
 </section>
 
@@ -93,20 +141,24 @@
   <div class="tag lab">운영 · 1</div>
   <h2>한 사람 15분의 구조</h2>
   <svg class="dia" viewBox="0 0 1160 420" role="img" aria-label="시연 5분, 구술 방어 5분, 상호 크리틱 5분의 타임라인">
-    <rect x="20" y="40" width="370" height="120" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-    <rect x="395" y="40" width="370" height="120" rx="14" fill="#431612" stroke="#ff5a4d" stroke-width="2"/>
-    <rect x="770" y="40" width="370" height="120" rx="14" fill="#21330f" stroke="#a8e05f" stroke-width="2"/>
-    <text x="205" y="92" text-anchor="middle" fill="#35d6e6" font-size="30" font-weight="700">① 시연 5분</text>
-    <text x="205" y="132" text-anchor="middle" fill="#e8ecf4" font-size="20">발표자가 씬을 조작</text>
-    <text x="580" y="92" text-anchor="middle" fill="#ff5a4d" font-size="30" font-weight="700">② 구술 방어 5분</text>
-    <text x="580" y="132" text-anchor="middle" fill="#e8ecf4" font-size="20">교수 질문 2개 · 추첨</text>
-    <text x="955" y="92" text-anchor="middle" fill="#a8e05f" font-size="30" font-weight="700">③ 상호 크리틱 5분</text>
-    <text x="955" y="132" text-anchor="middle" fill="#e8ecf4" font-size="20">지정 동료 1명 + 청중</text>
-    <line x1="20" y1="200" x2="1140" y2="200" stroke="#2a3040" stroke-width="3"/>
-    <g fill="#9aa4b8" font-size="20" text-anchor="middle">
-      <text x="20" y="232">0′</text><text x="392" y="232">5′</text><text x="767" y="232">10′</text><text x="1140" y="232">15′</text>
+    <rect x="20" y="40" width="370" height="120" fill="#dcebec"/>
+    <rect x="20" y="40" width="370" height="5" fill="#0d6b78"/>
+    <rect x="395" y="40" width="370" height="120" fill="#f6e0d6"/>
+    <rect x="395" y="40" width="370" height="5" fill="#c2401d"/>
+    <rect x="770" y="40" width="370" height="120" fill="#e3ecd3"/>
+    <rect x="770" y="40" width="370" height="5" fill="#4f7a16"/>
+    <text x="205" y="94" text-anchor="middle" fill="#0d6b78" font-size="30" font-weight="900" style="font-family:'Noto Serif KR',serif">① 시연 5분</text>
+    <text x="205" y="132" text-anchor="middle" fill="#1b1a17" font-size="20">발표자가 씬을 조작</text>
+    <text x="580" y="94" text-anchor="middle" fill="#c2401d" font-size="30" font-weight="900" style="font-family:'Noto Serif KR',serif">② 구술 방어 5분</text>
+    <text x="580" y="132" text-anchor="middle" fill="#1b1a17" font-size="20">교수 질문 2개 · 추첨</text>
+    <text x="955" y="94" text-anchor="middle" fill="#4f7a16" font-size="30" font-weight="900" style="font-family:'Noto Serif KR',serif">③ 상호 크리틱 5분</text>
+    <text x="955" y="132" text-anchor="middle" fill="#1b1a17" font-size="20">지정 동료 1명 + 청중</text>
+    <line x1="20" y1="200" x2="1140" y2="200" stroke="#1b1a17" stroke-width="2"/>
+    <g stroke="#1b1a17" stroke-width="2"><line x1="20" y1="192" x2="20" y2="208"/><line x1="392" y1="192" x2="392" y2="208"/><line x1="767" y1="192" x2="767" y2="208"/><line x1="1140" y1="192" x2="1140" y2="208"/></g>
+    <g fill="#4a463e" font-size="20" text-anchor="middle">
+      <text x="20" y="234">0′</text><text x="392" y="234">5′</text><text x="767" y="234">10′</text><text x="1130" y="234">15′</text>
     </g>
-    <g font-size="19" fill="#9aa4b8">
+    <g font-size="19" fill="#4a463e">
       <text x="30" y="290">· 실험실 스위치 켜고 끄기</text>
       <text x="30" y="322">· 함정 1개 재현 → 수정본</text>
       <text x="30" y="354">· 측정값 1개 화면에 띄우기</text>
@@ -117,7 +169,7 @@
       <text x="780" y="322">· 발표자 응답 1분</text>
       <text x="780" y="354">· 청중 질문 2분</text>
     </g>
-    <text x="580" y="405" text-anchor="middle" fill="#ffc44d" font-size="20">교대 1분 포함 → 1인 약 16분 · 시간 초과 시 타이머로 끊음</text>
+    <text x="580" y="405" text-anchor="middle" fill="#a8701a" font-size="20" font-weight="700">교대 1분 포함 → 1인 약 16분 · 시간 초과 시 타이머로 끊음</text>
   </svg>
   <aside class="notes">
     - 타이머는 화면 구석에 크게 · 5분 종이 울리면 문장만 마치고 다음 단계
@@ -151,26 +203,29 @@
   <h2>발표 순서와 역할 교대</h2>
   <svg class="dia" viewBox="0 0 1160 300" role="img" aria-label="발표자, 크리틱 담당, 준비 학생이 한 칸씩 이동하는 교대">
     <g font-size="22" text-anchor="middle">
-      <rect x="40" y="40" width="300" height="110" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-      <text x="190" y="88" fill="#35d6e6" font-weight="700">발표자 k번</text>
-      <text x="190" y="122" fill="#e8ecf4" font-size="19">시연 · 구술</text>
-      <rect x="430" y="40" width="300" height="110" rx="14" fill="#21330f" stroke="#a8e05f" stroke-width="2"/>
-      <text x="580" y="88" fill="#a8e05f" font-weight="700">크리틱 담당 k+1번</text>
-      <text x="580" y="122" fill="#e8ecf4" font-size="19">k번 씬 관찰 · 양식 작성</text>
-      <rect x="820" y="40" width="300" height="110" rx="14" fill="#171b25" stroke="#9aa4b8" stroke-width="2"/>
-      <text x="970" y="88" fill="#e8ecf4" font-weight="700">준비 k+2번</text>
-      <text x="970" y="122" fill="#9aa4b8" font-size="19">노트북 연결 · 씬 열기</text>
+      <rect x="40" y="40" width="300" height="110" fill="#dcebec" stroke="#0d6b78" stroke-width="1.5"/>
+      <rect x="40" y="40" width="300" height="5" fill="#0d6b78"/>
+      <text x="190" y="90" fill="#0d6b78" font-weight="900" style="font-family:'Noto Serif KR',serif">발표자 k번</text>
+      <text x="190" y="124" fill="#1b1a17" font-size="19">시연 · 구술</text>
+      <rect x="430" y="40" width="300" height="110" fill="#e3ecd3" stroke="#4f7a16" stroke-width="1.5"/>
+      <rect x="430" y="40" width="300" height="5" fill="#4f7a16"/>
+      <text x="580" y="90" fill="#4f7a16" font-weight="900" style="font-family:'Noto Serif KR',serif">크리틱 담당 k+1번</text>
+      <text x="580" y="124" fill="#1b1a17" font-size="19">k번 씬 관찰 · 양식 작성</text>
+      <rect x="820" y="40" width="300" height="110" fill="#ece6d8" stroke="#8a8476" stroke-width="1.5"/>
+      <rect x="820" y="40" width="300" height="5" fill="#4a463e"/>
+      <text x="970" y="90" fill="#1b1a17" font-weight="900" style="font-family:'Noto Serif KR',serif">준비 k+2번</text>
+      <text x="970" y="124" fill="#4a463e" font-size="19">노트북 연결 · 씬 열기</text>
     </g>
-    <g stroke="#ffc44d" stroke-width="3" fill="none">
+    <g stroke="#a8701a" stroke-width="2.5" fill="none">
       <path d="M 560 190 L 230 190" marker-end="url(#ar8)"/>
       <path d="M 950 190 L 620 190" marker-end="url(#ar8)"/>
     </g>
-    <g fill="#ffc44d" font-size="18" text-anchor="middle">
+    <g fill="#a8701a" font-size="18" font-weight="700" text-anchor="middle">
       <text x="395" y="225">다음 발표자로</text>
       <text x="785" y="225">다음 크리틱 담당으로</text>
     </g>
-    <defs><marker id="ar8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker></defs>
-    <text x="580" y="280" text-anchor="middle" fill="#ffc44d" font-size="20">한 명 끝날 때마다 세 역할이 왼쪽으로 한 칸씩 이동 · 마지막 발표자의 크리틱 담당 = 1번</text>
+    <defs><marker id="ar8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8701a"/></marker></defs>
+    <text x="580" y="280" text-anchor="middle" fill="#1b1a17" font-size="20">한 명 끝날 때마다 세 역할이 왼쪽으로 한 칸씩 이동 · 마지막 발표자의 크리틱 담당 = 1번</text>
   </svg>
   <p class="small">순서 : 시작 전 <b>추첨</b> · 크리틱 담당은 «내 다음 순서» 로 자동 결정 → 모든 학생이 크리틱 1건씩 작성</p>
   <aside class="notes">
@@ -264,12 +319,12 @@
       <p class="small muted">예 : 피치를 90° 근처로 올리면 좌우 회전과 기울이기가 같은 움직임</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 원인 개념</h4>
+      <h4><span class="step" style="color:var(--trap);border-color:var(--trap)">2</span> 원인 개념</h4>
       <p class="small">그 증상을 만드는 <b>그래픽스 개념</b>을 정확한 용어로</p>
       <p class="small muted">예 : 오일러각의 회전축 두 개가 겹침 → 자유도 3 → 2 (짐벌락)</p>
     </div>
     <div class="card lab">
-      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 확인 · 수정</h4>
+      <h4><span class="step" style="color:var(--lab);border-color:var(--lab)">3</span> 확인 · 수정</h4>
       <p class="small">무엇을 <b>측정</b>해서 판정하나 · AI 에게 무엇을 요구하나</p>
       <p class="small muted">예 : Quaternion 누적 요구 · 피치 89~91° 구간에서 회전 튐 0 확인</p>
     </div>
@@ -305,21 +360,21 @@
   <div class="vs">
     <div class="bad">
       <h4>약한 답</h4>
-      <span style="color:#e8ecf4">"AI 가 deltaTime 을 넣어 줘서<br>
+      <span>"AI 가 deltaTime 을 넣어 줘서<br>
       괜찮습니다."</span><br><br>
-      <span style="color:#5f6980">// 증상 없음<br>
+      <span style="color:var(--ink-3)">// 증상 없음<br>
       // 원인 개념 없음<br>
       // 확인 방법 없음</span><br><br>
-      <span style="color:#ff5a4d">// 코드를 «믿음» · 설명 아님</span>
+      <span style="color:var(--trap);font-weight:700">// 코드를 «믿음» · 설명 아님</span>
     </div>
     <div class="good">
       <h4>강한 답</h4>
-      <span style="color:#e8ecf4">"deltaTime 이 없으면<br>
+      <span>"deltaTime 이 없으면<br>
       프레임마다 speed 만큼 이동해서<br>
       120fps PC 가 30fps 보다 4배 멀리 갑니다.<br>
       fps 를 30·120 으로 제한하고<br>
       10초 이동 거리를 비교해 확인했습니다."</span><br><br>
-      <span style="color:#a8e05f">// 증상 · 원인 · 측정 모두 포함</span>
+      <span style="color:var(--lab);font-weight:700">// 증상 · 원인 · 측정 모두 포함</span>
     </div>
   </div>
   <p class="small" style="margin-top:.6em">강한 답의 특징 : <b>숫자</b>(4배 · 10초)가 들어 있음 → 수업에서 직접 재 본 사람만 말할 수 있는 숫자</p>
@@ -387,14 +442,14 @@
       "멋있어요."<br><br>
       "좀 어색해요."<br><br>
       "코드가 별로인 것 같아요."<br><br>
-      <span style="color:#5f6980">// 무엇을 · 왜 · 어떻게 고칠지<br>// 하나도 없음</span>
+      <span style="color:var(--ink-3)">// 무엇을 · 왜 · 어떻게 고칠지<br>// 하나도 없음</span>
     </div>
     <div class="good">
       <h4>바꾼 문장</h4>
-      <span style="color:#e8ecf4">"공이 떨어질 때 바닥을 1프레임<br>뚫었다 튀어나옴 (관찰)<br>
+      <span>"공이 떨어질 때 바닥을 1프레임<br>뚫었다 튀어나옴 (관찰)<br>
       → 빠른 물체 + 이산 충돌 판정 (근거 · 7주)<br>
       → Collision Detection 을<br>Continuous 로 바꿔 비교 (제안)"</span><br><br>
-      <span style="color:#a8e05f">// 발표자가 내일 바로 시도 가능</span>
+      <span style="color:var(--lab);font-weight:700">// 발표자가 내일 바로 시도 가능</span>
     </div>
   </div>
   <div class="key lab" style="margin-top:.8em">
@@ -475,7 +530,7 @@
   </aside>
 </section>
 
-<section class="divider part-ii">
+<section class="divider part-ii next">
   <div class="kicker">예고 · VR</div>
   <div class="rule"></div>
   <h1>이 씬 안으로<br><em>들어갈</em> 차례</h1>

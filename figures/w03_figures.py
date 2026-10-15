@@ -197,7 +197,7 @@ def fig_fixed_timestep():
         n = int(T / dt)
         for i in range(n):
             ax.add_patch(Rectangle((i * dt, y), dt * 0.93, 0.62,
-                                   facecolor=c, alpha=0.22, edgecolor=c, lw=1.4))
+                                   facecolor=tint(c, 0.22), edgecolor=c, lw=1.4))
             ax.text(i * dt + dt * 0.46, y + 0.31, "U", color=c, fontsize=11,
                     ha="center", va="center", family=CODE, fontweight="bold")
         ax.text(-0.004, y + 0.31, label, color=c, fontsize=12, ha="right",
@@ -207,7 +207,7 @@ def fig_fixed_timestep():
     n = int(T / fix)
     for i in range(n):
         ax.add_patch(Rectangle((i * fix, y), fix * 0.93, 0.62,
-                               facecolor=LAB, alpha=0.25, edgecolor=LAB, lw=1.4))
+                               facecolor=tint(LAB, 0.25), edgecolor=LAB, lw=1.4))
         ax.text(i * fix + fix * 0.46, y + 0.31, "F", color=LAB, fontsize=11,
                 ha="center", va="center", family=CODE, fontweight="bold")
     ax.text(-0.004, y + 0.31, "FixedUpdate", color=LAB, fontsize=12, ha="right",
@@ -276,17 +276,17 @@ def fig_motion_to_photon():
     fig, ax = plt.subplots(figsize=(13.4, 4.4)); clean(ax)
 
     parts = [
-        ("센서 샘플링",   2.0, "#4d9cff"),
+        ("센서 샘플링",   2.0, AX_Z),
         ("센서 융합·예측", 2.5, GFX),
         ("게임 로직",     4.0, LAB),
         ("렌더링",       6.0, VR),
         ("전송·왜곡보정", 2.5, WARN),
-        ("디스플레이 점등", 3.0, "#b07dff"),
+        ("디스플레이 점등", 3.0, PURPLE),
     ]
     x = 0.0
     Y, H = 1.5, 0.9
     for name, ms, c in parts:
-        ax.add_patch(Rectangle((x, Y), ms - 0.08, H, facecolor=c, alpha=0.28,
+        ax.add_patch(Rectangle((x, Y), ms - 0.08, H, facecolor=tint(c, 0.28),
                                edgecolor=c, lw=1.8, zorder=4))
         ax.text(x + (ms - 0.08) / 2, Y + H * 0.58, name, color=c, fontsize=10.5,
                 fontweight="bold", ha="center", va="center", zorder=6)
@@ -327,7 +327,7 @@ def fig_frame_budget():
         ("VR 90 Hz",        11.1, 2, VR,  1.6),
     ]
     for label, budget, eyes, c, y in rows:
-        ax.add_patch(Rectangle((0, y), budget, 0.85, facecolor=c, alpha=0.18,
+        ax.add_patch(Rectangle((0, y), budget, 0.85, facecolor=tint(c, 0.18),
                                edgecolor=c, lw=2.0))
         ax.text(-0.35, y + 0.42, label, color=c, fontsize=12.5, ha="right",
                 va="center", fontweight="bold")

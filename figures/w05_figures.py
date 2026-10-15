@@ -12,6 +12,10 @@ from matplotlib.patches import (FancyBboxPatch, Rectangle, FancyArrowPatch,
                                 Circle, Polygon, Wedge)
 
 from _style import *   # noqa: F403
+from matplotlib.colors import LinearSegmentedColormap
+
+# 음영 구: 먹 → 지면색 (미색 지면 위에서 'bone' 의 푸른 기 대신 인쇄 톤)
+_INK_CMAP = LinearSegmentedColormap.from_list("ink", [FG, FAINT, CARD])
 
 
 def _box(ax, x, y, w, h, label, color, sub=None, fs=11.5, lw=1.8, fill=None):
@@ -27,7 +31,8 @@ def _box(ax, x, y, w, h, label, color, sub=None, fs=11.5, lw=1.8, fill=None):
 
 def _panel_title(ax, text, color, sub=None, sub_y=-0.03, fs=13.5, sub_fs=13):
     ax.text(0.5, 1.045, text, transform=ax.transAxes, color=color,
-            fontsize=fs, fontweight="bold", ha="center", va="bottom")
+            fontsize=fs, fontweight="bold", ha="center", va="bottom",
+            fontfamily=SERIF)
     if sub:
         ax.text(0.5, sub_y, sub, transform=ax.transAxes, color=DIM,
                 fontsize=sub_fs, ha="center", va="top", linespacing=1.5)
@@ -163,7 +168,7 @@ def fig_brdf_lobe():
             r = np.where(r < 0.004, 0.004, r)
         pts = np.column_stack([r * np.cos(th), r * np.sin(th)])
         ax.add_patch(Polygon(np.vstack([[0, 0], pts, [0, 0]]), closed=True,
-                             facecolor=color, alpha=0.26, edgecolor=color,
+                             facecolor=tint(color, 0.26), edgecolor=color,
                              lw=2.2, zorder=5))
 
         if power is not None:
@@ -340,7 +345,9 @@ def fig_depth_cues():
     img = np.ones(gx.shape) * np.nan
     img[mask] = shade[mask]
     a.imshow(img, extent=(1.1, 4.7, 3.0 - 1.8 * k, 3.0 + 1.8 * k), origin="lower",
-             cmap="bone", vmin=0, vmax=1.25, zorder=4, aspect="auto")
+             cmap=_INK_CMAP, vmin=0, vmax=1.05, zorder=4, aspect="auto")
+    a.add_patch(Ellipse((2.9, 3.0), 3.6, 3.6 * k, facecolor="none",
+                        edgecolor=FAINT, lw=1.0, zorder=5))   # 밝은 윗면이 지면에 묻히지 않게
     a.add_patch(FancyArrowPatch((7.3, 5.4), (5.2, 4.2), arrowstyle="-|>",
                                 color=WARN, lw=2.0, mutation_scale=14, zorder=6))
     a.text(7.5, 5.5, "빛", color=WARN, fontsize=13, fontweight="bold")
@@ -352,7 +359,7 @@ def fig_depth_cues():
     a = ax[4]
     for cx, sx, lab, c in [(2.7, 2.7, "접지", LAB), (6.9, 8.4, "공중에 뜸", TRAP)]:
         circ(a, (cx, 3.2), 0.72, facecolor=BG_SOFT, edgecolor=c, lw=2.0, zorder=5)
-        a.add_patch(Ellipse((sx, 1.35), 1.7, 0.52, facecolor="#242a38",
+        a.add_patch(Ellipse((sx, 1.35), 1.7, 0.52, facecolor=tint(FAINT, 0.55),
                             edgecolor="none", zorder=4))
         a.text(cx, 4.55, lab, color=c, fontsize=13, fontweight="bold", ha="center")
     a.plot([0.8, 9.4], [1.35, 1.35], color=LINE, lw=2.0, zorder=3)
@@ -364,7 +371,8 @@ def fig_depth_cues():
 
     # ⑥ 대기 원근
     a = ax[5]
-    peaks = [(2.4, 3.6, 0.95, FG), (4.9, 3.0, 0.55, DIM), (7.5, 2.5, 0.28, FAINT)]
+    # 가까울수록 진한 먹, 멀수록 지면에 녹아드는 옅은 청회색
+    peaks = [(2.4, 3.6, 0.95, FG), (4.9, 3.0, 0.75, "#4f6474"), (7.5, 2.5, 0.55, "#8ea7b8")]
     for cx, h, alpha, c in peaks:
         a.add_patch(Polygon([[cx - 2.3, 1.2], [cx, 1.2 + h], [cx + 2.3, 1.2]],
                             closed=True, facecolor=c, alpha=alpha,
@@ -416,7 +424,7 @@ def fig_bake_vs_realtime():
         x = X0
         for label, ms, sc in segs:
             w = ms * SCALE
-            ax.add_patch(Rectangle((x, y), w, 0.68, facecolor=sc, alpha=0.30,
+            ax.add_patch(Rectangle((x, y), w, 0.68, facecolor=tint(sc, 0.30),
                                    edgecolor=sc, lw=1.8, zorder=4))
             ax.text(x + w / 2, y + 0.34, label, color=sc, fontsize=12.5,
                     ha="center", va="center", zorder=6)

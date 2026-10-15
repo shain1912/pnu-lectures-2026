@@ -13,14 +13,15 @@
   .reveal svg.dg { display: block; margin: 0.25em auto 0; width: 100%; height: auto; max-height: 470px; }
   .reveal section:has(> h3) svg.dg { max-height: 540px; }
   .reveal .nodes { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35em 0.4em; font-size: 0.62em; margin: 0.5em 0; }
-  .reveal .nodes .n { background: var(--bg-card); border: 1px solid #1d5a66; border-radius: 9px; padding: 0.35em 0.65em; line-height: 1.35; }
+  .reveal .nodes .n { background: var(--bg-card); border: 1px solid var(--gfx); border-radius: 0; padding: 0.35em 0.65em; line-height: 1.35; }
   .reveal .nodes .n b { display: block; color: var(--gfx); font-family: var(--mono); font-size: 0.95em; }
   .reveal .nodes .n span { color: var(--fg-dim); }
-  .reveal .nodes .n.out { border-color: #3c5220; }
+  .reveal .nodes .n.out { border-color: var(--lab); }
   .reveal .nodes .n.out b { color: var(--lab); }
   .reveal .nodes .ar { color: var(--fg-faint); font-size: 1.3em; }
   .reveal pre { font-size: 0.6em; }
-  .reveal .swatch { display: inline-block; width: 0.9em; height: 0.9em; border-radius: 3px; vertical-align: -0.1em; border: 1px solid #ffffff44; }
+  .reveal dl.terms dd p { line-height: 1.42; }
+  .reveal .swatch { display: inline-block; width: 0.9em; height: 0.9em; border-radius: 0; vertical-align: -0.1em; border: 1px solid #cfc6b2; }
 </style>
 </head>
 <body>
@@ -66,11 +67,11 @@
       <p class="small">텍스처가 화면에서 몇 배 축소되는지 계산 → <b>밉맵 레벨을 손으로 구하고</b> 먼 무늬가 반짝이는 이유를 나이퀴스트 한계로 설명</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정 진단</h4>
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:var(--trap)">2</span> 함정 진단</h4>
       <p class="small">AI 가 만든 재질에서 <b>Generate Mipmap · Filter Mode · Surface Type · Alpha Clipping</b> 네 곳 점검 → 반짝임·투명 앞뒤 뒤바뀜 수정</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> VR 해상도 판단</h4>
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:var(--vr)">3</span> VR 해상도 판단</h4>
       <p class="small">PPD 계산으로 <b>«헤드셋에서 실제로 보이는 디테일 크기»</b> 산정 → 텍스처 해상도·무늬 굵기 결정</p>
     </div>
   </div>
@@ -109,16 +110,16 @@
       "VR 에 맞게 조명을<br>
       최적화해 주세요.<br>
       예쁘고 가볍게."<br><br>
-      <span style="color:#ff5a4d">// «최적화» · «예쁘게» · «가볍게»<br>
+      <span style="color:#c2401d">// «최적화» · «예쁘게» · «가볍게»<br>
       // 셋 다 숫자가 없음 → 통과 기준 없음</span>
     </div>
     <div class="good">
       <h4>통과 기준이 있는 명세</h4>
-      <span style="color:#e8ecf4">"실시간 그림자 광원 1개 이하,<br>
+      <span style="color:#1b1a17">"실시간 그림자 광원 1개 이하,<br>
       나머지 Mode = Baked,<br>
       Color Space = Linear,<br>
       헤드셋 프레임타임 11.1 ms 이내"</span><br><br>
-      <span style="color:#a8e05f">// 각 줄이 예/아니오로 판정 가능</span>
+      <span style="color:#4f7a16">// 각 줄이 예/아니오로 판정 가능</span>
     </div>
   </div>
   <div class="analogy">
@@ -141,19 +142,80 @@
 
 <section>
   <div class="tag gfx">Part I 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>용어 미리보기 (1/3) — 셰이더</h2>
   <dl class="terms">
-    <dt>셰이더<small>Shader</small></dt><dd>그래픽 카드에서 정점·픽셀마다 실행되는 작은 프로그램 (5주차)</dd>
-    <dt>정점 셰이더<small>Vertex shader</small></dt><dd>꼭짓점마다 한 번 실행 → <b>화면 어디에</b> 찍힐지 계산</dd>
-    <dt>프래그먼트 셰이더<small>Fragment shader</small></dt><dd>픽셀 후보마다 한 번 실행 → <b>무슨 색</b>일지 계산</dd>
-    <dt>보간<small>Interpolation</small></dt><dd>꼭짓점 세 개에만 있는 값을 삼각형 안쪽 점마다 <b>비율대로 섞어</b> 채우는 계산</dd>
-    <dt>텍스처 · 텍셀<small>Texture · Texel</small></dt><dd>표면에 입히는 그림 · 그 그림의 칸 하나 (화면 칸 = 픽셀과 구분)</dd>
-    <dt>UV<small>UV coordinates</small></dt><dd>3D 표면의 각 점이 그림의 <b>어디를 가리키는지</b> 적은 0~1 주소</dd>
-    <dt>밉맵<small>Mipmap</small></dt><dd>같은 그림을 절반씩 줄여 미리 만들어 둔 축소판 묶음</dd>
-    <dt>앨리어싱<small>Aliasing</small></dt><dd>표본이 너무 성겨서 원래 없던 무늬·반짝임이 보이는 현상</dd>
+    <dt>셰이더<small>Shader</small></dt>
+    <dd>
+      <p>그래픽 카드가 화면을 그릴 때 점·픽셀마다 한 번씩 돌리는 짧은 계산 규칙 — 도색 공장의 작업 지시서</p>
+      <p class="ex">정육면체 하나 = 꼭짓점 24번 + 픽셀 수만 번 같은 지시서 반복 실행</p>
+      <p class="why">표면 색·광택·투명도 모두 셰이더 결과 → 재질이 이상하면 셰이더 설정부터 의심</p>
+      <p class="where">Material Inspector 맨 위 Shader 드롭다운 (예 : Universal Render Pipeline/Lit)</p>
+    </dd>
+    <dt>정점 셰이더<small>Vertex shader</small></dt>
+    <dd>
+      <p>꼭짓점 하나마다 한 번 실행 → 그 점이 <b>화면 어디에</b> 찍힐지 계산 — 자리 잡기 담당</p>
+      <p class="ex">꼭짓점 24개 → 24회 실행 · 출력 = 화면 좌표 + 다음 공정에 넘길 UV·법선</p>
+      <p class="why">실행 횟수가 적은 싼 자리 → 픽셀마다 같은 계산은 여기로 옮겨 비용 절감</p>
+      <p class="where">Shader Graph 마스터 스택의 Vertex 블록 (Position · Normal · Tangent)</p>
+    </dd>
+    <dt>프래그먼트 셰이더<small>Fragment shader</small></dt>
+    <dd>
+      <p>삼각형이 덮는 픽셀 후보마다 한 번 실행 → 그 픽셀이 <b>무슨 색</b>일지 계산 — 색칠 담당</p>
+      <p class="ex">화면 300 × 300 픽셀 차지 → 약 90,000회 실행</p>
+      <p class="why">VR 비용 대부분이 여기 — 두 눈 × 높은 해상도 × 90 Hz 로 곱해짐</p>
+      <p class="where">Shader Graph 마스터 스택의 Fragment 블록 (Base Color · Normal · Alpha …)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>용어 미리보기 (2/3) — 보간 · 텍스처</h2>
+  <dl class="terms">
+    <dt>보간<small>Interpolation</small></dt>
+    <dd>
+      <p>꼭짓점에만 적힌 값을 삼각형 안쪽 점마다 <b>거리 비율대로 섞어</b> 채우기 — 물감 번지기</p>
+      <p class="ex">빨강 (1,0,0) · 초록 (0,1,0) 꼭짓점의 정중앙 → (0.5, 0.5, 0) 어두운 노랑</p>
+      <p class="why">UV·법선도 같은 방식으로 섞임 → 텍스처가 삼각형 안에서 매끄럽게 펼쳐지는 이유</p>
+      <p class="where">Vertex → Fragment 로 넘어가는 모든 값에 GPU 가 자동 적용 (설정 없음)</p>
+    </dd>
+    <dt>텍스처 · 텍셀<small>Texture · Texel</small></dt>
+    <dd>
+      <p>표면에 입히는 그림 파일 · 그 그림을 이루는 칸 하나 — 화면 칸(픽셀)과 구분하려고 따로 부르는 이름</p>
+      <p class="ex">1024 × 1024 텍스처 = 텍셀 약 105만 개 · 화면 픽셀 수와 무관</p>
+      <p class="why">«픽셀 하나가 텍셀 몇 개를 덮는가» = 오늘 반짝임 문제의 핵심 비율</p>
+      <p class="where">Project 창에서 이미지 선택 → Inspector 하단 미리보기에 해상도 표시</p>
+    </dd>
+    <dt>UV<small>UV coordinates</small></dt>
+    <dd>
+      <p>3D 표면의 각 점이 그림의 <b>어디를 가리키는지</b> 적은 0~1 주소 — 상자 전개도 위 좌표</p>
+      <p class="ex">UV (0.25, 0.75) + 1024 텍스처 → 텍셀 (256, 768)</p>
+      <p class="why">UV 가 꼬이면 무늬가 늘어나거나 뒤집힘 · 이음매(seam) 위치도 UV 가 결정</p>
+      <p class="where">Shader Graph UV 노드 (Channel UV0) · 제작은 보통 Blender UV Editing 같은 모델링 툴</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>용어 미리보기 (3/3) — 밉맵 · 앨리어싱</h2>
+  <dl class="terms">
+    <dt>밉맵<small>Mipmap</small></dt>
+    <dd>
+      <p>같은 그림을 절반씩 줄여 미리 만들어 둔 축소판 묶음 — 축척별 지도책</p>
+      <p class="ex">1024 → 512 → 256 → … → 1 · 모두 11장 · 메모리 +33%</p>
+      <p class="why">없으면 먼 바닥이 반짝이고 물결 무늬 → 오늘 AI 함정 #5 의 절반</p>
+      <p class="where">텍스처 Inspector → Advanced → Generate Mipmap (버전에 따라 Generate Mip Maps)</p>
+    </dd>
+    <dt>앨리어싱<small>Aliasing</small></dt>
+    <dd>
+      <p>읽는 점(표본)이 너무 성겨 원래 없던 무늬·반짝임이 보이는 현상 — 영화 속 거꾸로 도는 바퀴</p>
+      <p class="ex">흰·검 줄무늬 한 쌍이 화면 1.3 픽셀 → 굵은 가짜 물결(모아레)</p>
+      <p class="why">정지 화면에선 숨고 움직일 때 깜빡임 → 스크린샷 검수로는 못 잡음</p>
+      <p class="where">Scene 뷰 Draw Mode → Mipmaps · 헤드셋에서 먼 바닥 관찰</p>
+    </dd>
   </dl>
   <aside class="notes">
-    - 지금 외울 필요 없음 · 각 슬라이드에서 다시 풀어 줌
     - 픽셀(화면 칸)과 텍셀(그림 칸)을 구분하는 게 오늘의 열쇠라고 미리 강조
   </aside>
 </section>
@@ -218,7 +280,7 @@
   <div class="tag gfx">셰이더 · 3</div>
   <h2>보간 — 세 꼭짓점 값을 섞어 안쪽 채우기</h2>
   <dl class="terms">
-    <dt>무게중심 좌표<small>Barycentric coord.</small></dt><dd>삼각형 안의 한 점이 세 꼭짓점에 <b>각각 얼마나 가까운지</b>를 합이 1 인 비율 세 개 (w₁, w₂, w₃) 로 표현</dd>
+    <dt>무게중심 좌표<small>Barycentric coord.</small></dt><dd><p>삼각형 안의 한 점이 세 꼭짓점에 <b>각각 얼마나 가까운지</b>를 합이 1 인 비율 세 개 (w₁, w₂, w₃) 로 표현 <span class="muted">— 자세히 : 다음 장</span></p></dd>
   </dl>
   <div class="math-block">\[ v = w_1 v_1 + w_2 v_2 + w_3 v_3 \qquad (w_1 + w_2 + w_3 = 1) \]</div>
   <div class="cols">
@@ -240,6 +302,27 @@
     - 핵심 : UV 도 색과 똑같이 보간된다 → 그래서 텍스처가 삼각형 안에서 매끄럽게 펼쳐짐
     - 원근 보정 보간(perspective-correct)은 GPU 가 자동 처리 — 이름만 언급
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">셰이더 · 용어 풀이</div>
+  <h2>용어 풀이 — 무게중심 좌표</h2>
+  <dl class="terms">
+    <dt>무게중심 좌표<small>Barycentric coord.</small></dt>
+    <dd>
+      <p>삼각형 안 한 점이 세 꼭짓점에 각각 얼마나 가까운지를 <b>합이 1 인 비율 세 개</b> (w₁, w₂, w₃) 로 적은 것 — 세 물감을 섞는 비율표</p>
+      <p class="ex">꼭짓점 1 바로 위 = (1, 0, 0) · 세 꼭짓점 한가운데 = (⅓, ⅓, ⅓) · 앞 장 예 (0.5, 0.3, 0.2)</p>
+      <p class="why">이 비율 하나로 색·UV·법선을 모두 섞음 → 비율이 어긋나면 텍스처가 찌그러져 보임</p>
+      <p class="where">GPU 래스터화 단계가 픽셀마다 자동 계산 · Unity 코드에서는 <code>RaycastHit.barycentricCoordinate</code> 로 확인 가능</p>
+    </dd>
+    <dt>래스터화<small>Rasterization</small></dt>
+    <dd>
+      <p>삼각형이 화면의 어떤 픽셀 칸들을 덮는지 찾아내는 단계 (4주차) — 모눈종이에 도형을 대고 칸 칠하기</p>
+      <p class="ex">화면 300 × 300 픽셀을 덮는 정육면체 → 픽셀 후보 약 90,000개 생성</p>
+      <p class="why">여기서 나온 픽셀 후보 수 = 프래그먼트 셰이더 실행 횟수 = 비용</p>
+      <p class="where">설정 메뉴 없음 · 정점 셰이더와 프래그먼트 셰이더 사이에서 GPU 가 자동 처리</p>
+    </dd>
+  </dl>
 </section>
 
 <!-- ---------------------------------------------------- UV -->
@@ -292,8 +375,8 @@
   <div class="tag gfx">UV · 3</div>
   <h2>seam — 펼치려면 잘라야 하는 선</h2>
   <dl class="terms">
-    <dt>seam<small>이음매</small></dt><dd>UV 를 펼치려고 자른 모서리 — 3D 에서는 붙어 있지만 텍스처에서는 떨어진 두 자리</dd>
-    <dt>패딩<small>Padding</small></dt><dd>UV 조각 둘레에 바깥 색을 몇 텍셀 번져 칠해 둔 여백</dd>
+    <dt>seam<small>이음매</small></dt><dd><p>UV 를 펼치려고 자른 모서리 — 3D 에서는 붙어 있지만 텍스처에서는 떨어진 두 자리</p></dd>
+    <dt>패딩<small>Padding</small></dt><dd><p>UV 조각 둘레에 바깥 색을 몇 텍셀 번져 칠해 둔 여백 <span class="muted">— 자세히 : 다음 장</span></p></dd>
   </dl>
   <div class="analogy">
     <p><b>귤 껍질 · 세계 지도</b> : 귤 껍질은 칼집을 내야 평평하게 펼쳐짐 · 지구본을 지도로 펴면 그린란드가 실제보다 크게 늘어남 → 곡면을 평면에 펴면 <b>자르거나 늘리거나</b> 둘 중 하나</p>
@@ -307,6 +390,34 @@
     - 귤 비유 : 칼집 낸 곳 = seam
     - 밉맵 경계 번짐은 뒤에서 밉맵 배운 뒤 다시 짚음
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">UV · 용어 풀이</div>
+  <h2>용어 풀이 — seam · UV 조각 · 패딩</h2>
+  <dl class="terms">
+    <dt>seam<small>이음매</small></dt>
+    <dd>
+      <p>UV 를 평평하게 펼치려고 칼집 낸 모서리 — 3D 에서는 붙어 있지만 그림에서는 떨어진 두 자리</p>
+      <p class="ex">정육면체 십자형 전개도 = 모서리 12개 중 7개가 seam · 5개는 이어진 채 접힘</p>
+      <p class="why">seam 양쪽을 다르게 칠하면 무늬가 끊겨 보임 · 멀어지면 경계에 가는 선 출현</p>
+      <p class="where">Blender UV Editing → Mark Seam · Unity 안 편집은 ProBuilder UV Editor 정도</p>
+    </dd>
+    <dt>UV 조각<small>UV island</small></dt>
+    <dd>
+      <p>seam 으로 잘려 나온 전개도 한 덩어리 — 펼친 종이 위의 «섬»</p>
+      <p class="ex">십자형 전개도 = 조각 1개 · 여섯 면을 모두 따로 자르면 조각 6개</p>
+      <p class="why">조각 사이 간격이 좁으면 축소판(밉맵)에서 이웃 조각 색이 번져 들어옴</p>
+      <p class="where">Blender UV Editor → UV → Pack Islands (Margin = 조각 간격)</p>
+    </dd>
+    <dt>패딩<small>Padding</small></dt>
+    <dd>
+      <p>UV 조각 둘레 바깥까지 가장자리 색을 몇 텍셀 번져 칠해 둔 여유분 — 마스킹 테이프 바깥까지 칠하는 페인트</p>
+      <p class="ex">1024 텍스처에서 조각마다 8~16 텍셀 정도가 흔한 관행</p>
+      <p class="why">밉맵 레벨이 올라갈수록 조각 경계가 섞임 → 패딩이 없으면 seam 에 검은 선</p>
+      <p class="where">Substance 3D Painter 내보내기 → Padding · Blender Bake → Margin</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -334,13 +445,45 @@
   </div>
 </section>
 
+<section>
+  <div class="tag gfx">UV · 용어 풀이</div>
+  <h2>용어 풀이 — 타일링 · 오프셋 · Wrap Mode</h2>
+  <dl class="terms">
+    <dt>타일링<small>Tiling</small></dt>
+    <dd>
+      <p>UV 에 배수를 곱해 같은 그림을 여러 번 반복해 붙이기 — 작은 벽지 한 장을 이어 붙여 벽 전체 덮기</p>
+      <p class="ex">Tiling (4, 4) → 바닥 한 면에 그림 16장</p>
+      <p class="why">반복이 많을수록 멀리서 한 픽셀에 무늬 여러 장이 겹침 → 반짝임 재료</p>
+      <p class="where">URP Lit 재질 Inspector → Base Map 아래 Tiling · Shader Graph Tiling And Offset 노드</p>
+    </dd>
+    <dt>오프셋<small>Offset</small></dt>
+    <dd>
+      <p>UV 에 값을 더해 그림의 시작점을 옆으로 밀기 — 벽지 첫 장을 반 칸 밀어 붙이기</p>
+      <p class="ex">Offset (0.5, 0) → 가로로 절반 밀림 · 매 프레임 조금씩 더하면 흐르는 물</p>
+      <p class="where">재질 Inspector → Tiling 바로 아래 Offset · Tiling And Offset 노드</p>
+    </dd>
+    <dt>Wrap Mode<small>랩 모드</small></dt>
+    <dd>
+      <p>UV 가 0~1 밖으로 나갔을 때 그 자리를 어떻게 채울지 정하는 규칙</p>
+      <p class="ex">UV 1.2 → Repeat 0.2 · Clamp 1.0 · Mirror 0.8</p>
+      <p class="where">텍스처 Inspector → Wrap Mode (Repeat · Clamp · Mirror · Mirror Once)</p>
+    </dd>
+    <dt>타일러블<small>Tileable</small></dt>
+    <dd>
+      <p>왼쪽 끝과 오른쪽 끝, 위와 아래가 이어지게 그려 이어 붙여도 경계가 안 보이는 그림</p>
+      <p class="why">이음매가 안 맞으면 바닥 전체에 격자 줄이 규칙적으로 반복되어 보임</p>
+      <p class="where">Photoshop 필터 → 기타 → 오프셋 으로 이음매 점검 · 재질 라이브러리 소재 대부분 타일러블</p>
+    </dd>
+  </dl>
+</section>
+
 <!-- ---------------------------------------------------- 필터링 -->
 <section>
   <div class="tag gfx">필터링 · 1</div>
   <h2>확대 — Point 와 Bilinear</h2>
   <dl class="terms">
-    <dt>확대<small>Magnification</small></dt><dd>텍셀 하나가 화면 픽셀 여러 개를 덮는 상황 (가까이 다가감)</dd>
-    <dt>필터링<small>Filtering</small></dt><dd>UV 가 텍셀 사이 어중간한 자리를 가리킬 때 <b>어떤 값을 돌려줄지</b> 정하는 규칙</dd>
+    <dt>확대<small>Magnification</small></dt><dd><p>텍셀 하나가 화면 픽셀 여러 개를 덮는 상황 (가까이 다가감)</p></dd>
+    <dt>필터링<small>Filtering</small></dt><dd><p>UV 가 텍셀 사이 어중간한 자리를 가리킬 때 <b>어떤 값을 돌려줄지</b> 정하는 규칙 <span class="muted">— 자세히 : 다음 장</span></p></dd>
   </dl>
   <div class="cols">
     <div>
@@ -366,11 +509,43 @@
 </section>
 
 <section>
+  <div class="tag gfx">필터링 · 용어 풀이</div>
+  <h2>용어 풀이 — 확대 · 필터링 · Point · Bilinear</h2>
+  <dl class="terms">
+    <dt>확대<small>Magnification</small></dt>
+    <dd>
+      <p>텍셀 하나가 화면 픽셀 여러 개를 덮는 상황 — 그림에 코를 바짝 댄 상태</p>
+      <p class="ex">64 × 64 텍스처를 화면 640 픽셀 폭 벽에 → 텍셀 1개 = 픽셀 10 × 10</p>
+      <p class="why">텍셀 사이를 어떻게 메우느냐(필터)에 따라 도트 느낌 vs 매끄러움</p>
+    </dd>
+    <dt>필터링<small>Filtering</small></dt>
+    <dd>
+      <p>UV 가 텍셀 칸 사이 어중간한 자리를 가리킬 때 <b>어떤 값을 돌려줄지</b> 정하는 규칙</p>
+      <p class="ex">한 번 읽기에 쓰는 텍셀 수 : Point 1개 · Bilinear 4개 · Trilinear 8개</p>
+      <p class="why">같은 텍스처라도 필터에 따라 계단·흐림·반짝임이 달라짐</p>
+      <p class="where">텍스처 Inspector → Filter Mode · Shader Graph Sampler State 노드</p>
+    </dd>
+    <dt>Point<small>no filter</small></dt>
+    <dd>
+      <p>가장 가까운 텍셀 하나를 그대로 돌려주는 필터 — 반올림해서 한 칸만 집기</p>
+      <p class="ex">돋보기로 본 신문 사진의 인쇄 점 · 픽셀 아트 게임의 또렷한 도트</p>
+      <p class="why">3D 표면에 쓰면 가까이선 계단 · 멀리선 반짝임 (함정 #5 의 «선명하게»)</p>
+    </dd>
+    <dt>Bilinear<small>쌍선형</small></dt>
+    <dd>
+      <p>주변 텍셀 4개를 거리 비율대로 가로 한 번 · 세로 한 번 섞는 필터 — 이웃 칸 물감을 살짝 문지르기</p>
+      <p class="ex">0 · 1 · 1 · 1 네 칸 사이 (0.25, 0.4) 자리 → 0.55</p>
+      <p class="where">Filter Mode = Bilinear (새 텍스처의 기본값)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag trap">필터링 · 2</div>
   <h2>축소 — 픽셀 하나에 텍셀 수십 개</h2>
   <dl class="terms">
-    <dt>축소<small>Minification</small></dt><dd>화면 픽셀 하나가 텍셀 여러 개를 덮는 상황 (멀어짐 · 비스듬함)</dd>
-    <dt>샘플<small>Sample</small></dt><dd>값을 확인하려고 찍어 보는 지점 하나 — 픽셀 하나 = 보통 샘플 하나</dd>
+    <dt>축소<small>Minification</small></dt><dd><p>화면 픽셀 하나가 텍셀 여러 개를 덮는 상황 (멀어짐 · 비스듬함)</p></dd>
+    <dt>샘플<small>Sample</small></dt><dd><p>값을 확인하려고 찍어 보는 지점 하나 — 픽셀 하나 = 보통 샘플 하나 <span class="muted">— 자세히 : 다음 장</span></p></dd>
   </dl>
   <p class="small">먼 바닥 픽셀 하나가 텍스처 16 × 16 텍셀 영역을 덮는 상황 → Bilinear 도 <b>가운데 근처 4개만</b> 읽음 → 나머지 252개 무시</p>
   <p class="small">→ 읽힌 4개가 흰 칸이면 흰 픽셀 · 검은 칸이면 검은 픽셀 → 카메라가 조금만 움직여도 <b>흰↔검 뒤집힘 = 반짝임</b></p>
@@ -385,11 +560,32 @@
 </section>
 
 <section>
+  <div class="tag trap">필터링 · 용어 풀이</div>
+  <h2>용어 풀이 — 축소 · 샘플</h2>
+  <dl class="terms">
+    <dt>축소<small>Minification</small></dt>
+    <dd>
+      <p>화면 픽셀 하나가 텍셀 여러 개를 덮는 상황 — 멀리 있거나 비스듬히 본 면</p>
+      <p class="ex">먼 바닥 픽셀 1개 = 텍셀 16 × 16 = 256개 영역</p>
+      <p class="why">256개 중 몇 개만 읽으면 결과가 흰↔검 사이에서 널뜀 → 반짝임</p>
+      <p class="where">Scene 뷰 Draw Mode → Mipmaps : 빨강 = 텍스처가 화면 대비 과함 · 파랑 = 부족</p>
+    </dd>
+    <dt>샘플 · 표본<small>Sample</small></dt>
+    <dd>
+      <p>값을 확인하려고 찍어 보는 지점 하나 — 여론조사에서 뽑힌 응답자 한 명</p>
+      <p class="ex">픽셀 1개 = 보통 텍스처 읽기 1회 (Bilinear 면 그 자리 주변 텍셀 4개를 섞음)</p>
+      <p class="why">표본이 무늬보다 성기면 결과가 무늬를 대표하지 못함 → 다음 장 나이퀴스트</p>
+      <p class="where">Shader Graph Sample Texture 2D 노드 하나 = «텍스처 샘플 1회»</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag trap">앨리어싱 · 1</div>
   <h2>나이퀴스트 한계 — 한 주기에 표본 2개</h2>
   <dl class="terms">
-    <dt>주파수<small>Frequency</small></dt><dd>일정 거리(또는 시간) 안에서 무늬가 반복되는 횟수 — 촘촘할수록 고주파</dd>
-    <dt>나이퀴스트 한계<small>Nyquist limit</small></dt><dd>무늬를 제대로 담으려면 <b>한 주기당 표본 최소 2개</b> 필요 — 미달 시 가짜 무늬</dd>
+    <dt>주파수<small>Frequency</small></dt><dd><p>일정 거리(또는 시간) 안에서 무늬가 반복되는 횟수 — 촘촘할수록 고주파</p></dd>
+    <dt>나이퀴스트 한계<small>Nyquist limit</small></dt><dd><p>무늬를 제대로 담으려면 <b>한 주기당 표본 최소 2개</b> 필요 — 미달 시 가짜 무늬 <span class="muted">— 자세히 : 다음 장</span></p></dd>
   </dl>
   <div class="math-block">\[ f_{\text{표본}} \ge 2\, f_{\text{무늬}} \]</div>
   <p class="small"><b>손계산</b> : 흰·검 줄무늬 한 쌍(1주기)이 화면 4 픽셀 → 주기당 4 표본 ✔ · 거리 3배 → 약 1.3 픽셀 → 주기당 1.3 표본 ✘ → 가짜 굵은 줄무늬(모아레) 출현</p>
@@ -403,9 +599,37 @@
 </section>
 
 <section>
+  <div class="tag trap">앨리어싱 · 용어 풀이</div>
+  <h2>용어 풀이 — 주파수 · 나이퀴스트 · 모아레</h2>
+  <dl class="terms">
+    <dt>주파수<small>Frequency</small></dt>
+    <dd>
+      <p>일정 거리·시간 안에서 무늬가 반복되는 횟수 — 촘촘할수록 «고주파»</p>
+      <p class="ex">화면 100 픽셀 안에 흰·검 쌍 10개 = 10 픽셀마다 1주기</p>
+      <p class="why">같은 무늬도 멀어질수록 화면에서 촘촘해짐 → 거리만으로 주파수 상승</p>
+      <p class="where">바닥 Tiling 값을 올리거나 카메라를 멀리 두면 → 둘 다 화면상 주파수 상승</p>
+    </dd>
+    <dt>나이퀴스트 한계<small>Nyquist limit</small></dt>
+    <dd>
+      <p>무늬를 제대로 담으려면 <b>한 주기당 표본이 최소 2개</b> — 모자라면 원래 없던 무늬가 생김</p>
+      <p class="ex">1주기 = 4 픽셀 → 표본 4개 ✔ · 1주기 = 1.3 픽셀 → 1.3개 ✘</p>
+      <p class="why">반짝임·모아레의 수학적 원인 · Part II «왜 60 PPD 인가» 도 같은 규칙</p>
+      <p class="where">일상 예 : 음원 44.1 kHz = 사람이 듣는 최고음 약 20 kHz × 2 이상</p>
+    </dd>
+    <dt>모아레<small>Moiré</small></dt>
+    <dd>
+      <p>촘촘한 무늬를 성긴 표본으로 볼 때 나타나는 굵은 가짜 물결</p>
+      <p class="ex">줄무늬 셔츠를 휴대폰으로 찍으면 화면에 생기는 물결</p>
+      <p class="why">정지 화면에선 무늬 · 움직이면 꿈틀거림 → VR 에서는 깜빡임</p>
+      <p class="where">먼 바닥 타일 · 담장 · 건물 창문 격자 · 철망</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag trap">앨리어싱 · 2 ★</div>
   <h3 style="margin-bottom:.3em">표본이 부족하면 생기는 가짜 무늬</h3>
-  <svg class="dg" viewBox="0 0 1120 360" font-family="Pretendard, 'Malgun Gothic', sans-serif" role="img" aria-label="샘플이 부족하면 빠른 물결이 느린 가짜 물결로 보임"><text x="80" y="38" font-size="20" fill="#e8ecf4" font-weight="700">샘플 10개 · 한 주기당 약 1.1개 <tspan fill="#ff5a4d">→ 나이퀴스트 미달</tspan></text><path d="M80,110.0 L86,96.4 L92,84.5 L98,75.5 L104,70.7 L110,70.5 L116,75.0 L122,83.7 L128,95.5 L134,109.0 L140,122.6 L146,134.7 L152,143.9 L158,149.1 L164,149.6 L170,145.5 L176,137.1 L182,125.5 L188,112.1 L194,98.4 L200,86.1 L206,76.6 L212,71.1 L218,70.2 L224,74.1 L230,82.2 L236,93.6 L242,106.9 L248,120.6 L254,133.1 L260,142.8 L266,148.6 L272,149.9 L278,146.4 L284,138.6 L290,127.4 L296,114.1 L302,100.4 L308,87.8 L314,77.8 L320,71.7 L326,70.1 L332,73.2 L338,80.7 L344,91.7 L350,104.9 L356,118.7 L362,131.4 L368,141.6 L374,148.0 L380,150.0 L386,147.2 L392,140.0 L398,129.2 L404,116.1 L410,102.4 L416,89.5 L422,79.0 L428,72.3 L434,70.0 L440,72.5 L446,79.4 L452,89.9 L458,102.9 L464,116.6 L470,129.6 L476,140.3 L482,147.4 L488,150.0 L494,147.9 L500,141.3 L506,131.0 L512,118.1 L518,104.4 L524,91.3 L530,80.4 L536,73.0 L542,70.0 L548,71.8 L554,78.1 L560,88.2 L566,100.8 L572,114.6 L578,127.8 L584,138.9 L590,146.6 L596,149.9 L602,148.5 L608,142.5 L614,132.7 L620,120.1 L626,106.4 L632,93.1 L638,81.8 L644,73.9 L650,70.2 L656,71.2 L662,76.9 L668,86.5 L674,98.9 L680,112.6 L686,126.0 L692,137.5 L698,145.7 L704,149.7 L710,149.0 L716,143.7 L722,134.3 L728,122.1 L734,108.5 L740,95.0 L746,83.3 L752,74.8 L758,70.4 L764,70.8 L770,75.8 L776,84.9 L782,96.9 L788,110.5 L794,124.1 L800,135.9 L806,144.7 L812,149.4 L818,149.4 L824,144.7 L830,135.9 L836,124.1 L842,110.5 L848,96.9 L854,84.9 L860,75.8 L866,70.8 L872,70.4 L878,74.8 L884,83.3 L890,95.0 L896,108.5 L902,122.1 L908,134.3 L914,143.7 L920,149.0 L926,149.7 L932,145.7 L938,137.5 L944,126.0 L950,112.6 L956,98.9 L962,86.5 L968,76.9 L974,71.2 L980,70.2 L986,73.9 L992,81.8 L998,93.1 L1004,106.4 L1010,120.1 L1016,132.7 L1022,142.5 L1028,148.5 L1034,149.9 L1040,146.6 L1046,138.9 L1052,127.8 L1058,114.6" fill="none" stroke="#35d6e6" stroke-width="2.5" opacity=".55"/><path d="M80,110.0 L178,133.5 L276,148.0 L374,148.0 L472,133.5 L570,110.0 L668,86.5 L766,72.0 L864,72.0 L962,86.5 L1060,110.0" fill="none" stroke="#ff5fa2" stroke-width="3.5" stroke-dasharray="10 7"/><g fill="#ff5a4d"><circle cx="80" cy="110.0" r="7"/><circle cx="178" cy="133.5" r="7"/><circle cx="276" cy="148.0" r="7"/><circle cx="374" cy="148.0" r="7"/><circle cx="472" cy="133.5" r="7"/><circle cx="570" cy="110.0" r="7"/><circle cx="668" cy="86.5" r="7"/><circle cx="766" cy="72.0" r="7"/><circle cx="864" cy="72.0" r="7"/><circle cx="962" cy="86.5" r="7"/><circle cx="1060" cy="110.0" r="7"/></g><text x="1060" y="176" font-size="18" fill="#ff5fa2" text-anchor="end">점선 = 샘플만 보고 복원한 모양 : 원래 9주기 → <tspan font-weight="700">가짜 1주기</tspan></text><text x="80" y="214" font-size="20" fill="#e8ecf4" font-weight="700">샘플 40개 · 한 주기당 약 4.4개 <tspan fill="#a8e05f">→ 나이퀴스트 충족</tspan></text><path d="M80,280.0 L86,266.4 L92,254.5 L98,245.5 L104,240.7 L110,240.5 L116,245.0 L122,253.7 L128,265.5 L134,279.0 L140,292.6 L146,304.7 L152,313.9 L158,319.1 L164,319.6 L170,315.5 L176,307.1 L182,295.5 L188,282.1 L194,268.4 L200,256.1 L206,246.6 L212,241.1 L218,240.2 L224,244.1 L230,252.2 L236,263.6 L242,276.9 L248,290.6 L254,303.1 L260,312.8 L266,318.6 L272,319.9 L278,316.4 L284,308.6 L290,297.4 L296,284.1 L302,270.4 L308,257.8 L314,247.8 L320,241.7 L326,240.1 L332,243.2 L338,250.7 L344,261.7 L350,274.9 L356,288.7 L362,301.4 L368,311.6 L374,318.0 L380,320.0 L386,317.2 L392,310.0 L398,299.2 L404,286.1 L410,272.4 L416,259.5 L422,249.0 L428,242.3 L434,240.0 L440,242.5 L446,249.4 L452,259.9 L458,272.9 L464,286.6 L470,299.6 L476,310.3 L482,317.4 L488,320.0 L494,317.9 L500,311.3 L506,301.0 L512,288.1 L518,274.4 L524,261.3 L530,250.4 L536,243.0 L542,240.0 L548,241.8 L554,248.1 L560,258.2 L566,270.8 L572,284.6 L578,297.8 L584,308.9 L590,316.6 L596,319.9 L602,318.5 L608,312.5 L614,302.7 L620,290.1 L626,276.4 L632,263.1 L638,251.8 L644,243.9 L650,240.2 L656,241.2 L662,246.9 L668,256.5 L674,268.9 L680,282.6 L686,296.0 L692,307.5 L698,315.7 L704,319.7 L710,319.0 L716,313.7 L722,304.3 L728,292.1 L734,278.5 L740,265.0 L746,253.3 L752,244.8 L758,240.4 L764,240.8 L770,245.8 L776,254.9 L782,266.9 L788,280.5 L794,294.1 L800,305.9 L806,314.7 L812,319.4 L818,319.4 L824,314.7 L830,305.9 L836,294.1 L842,280.5 L848,266.9 L854,254.9 L860,245.8 L866,240.8 L872,240.4 L878,244.8 L884,253.3 L890,265.0 L896,278.5 L902,292.1 L908,304.3 L914,313.7 L920,319.0 L926,319.7 L932,315.7 L938,307.5 L944,296.0 L950,282.6 L956,268.9 L962,256.5 L968,246.9 L974,241.2 L980,240.2 L986,243.9 L992,251.8 L998,263.1 L1004,276.4 L1010,290.1 L1016,302.7 L1022,312.5 L1028,318.5 L1034,319.9 L1040,316.6 L1046,308.9 L1052,297.8 L1058,284.6" fill="none" stroke="#35d6e6" stroke-width="2.5" opacity=".55"/><path d="M80,280.0 L104,240.5 L129,267.6 L154,315.6 L178,303.5 L202,251.7 L227,247.6 L252,298.2 L276,318.0 L300,273.7 L325,240.0 L350,273.7 L374,318.0 L398,298.2 L423,247.6 L448,251.7 L472,303.5 L496,315.6 L521,267.6 L546,240.5 L570,280.0 L594,319.5 L619,292.4 L644,244.4 L668,256.5 L692,308.3 L717,312.4 L742,261.8 L766,242.0 L790,286.3 L815,320.0 L840,286.3 L864,242.0 L888,261.8 L913,312.4 L938,308.3 L962,256.5 L986,244.4 L1011,292.4 L1036,319.5 L1060,280.0" fill="none" stroke="#a8e05f" stroke-width="2.5"/><g fill="#a8e05f"><circle cx="80" cy="280.0" r="4.5"/><circle cx="104" cy="240.5" r="4.5"/><circle cx="129" cy="267.6" r="4.5"/><circle cx="154" cy="315.6" r="4.5"/><circle cx="178" cy="303.5" r="4.5"/><circle cx="202" cy="251.7" r="4.5"/><circle cx="227" cy="247.6" r="4.5"/><circle cx="252" cy="298.2" r="4.5"/><circle cx="276" cy="318.0" r="4.5"/><circle cx="300" cy="273.7" r="4.5"/><circle cx="325" cy="240.0" r="4.5"/><circle cx="350" cy="273.7" r="4.5"/><circle cx="374" cy="318.0" r="4.5"/><circle cx="398" cy="298.2" r="4.5"/><circle cx="423" cy="247.6" r="4.5"/><circle cx="448" cy="251.7" r="4.5"/><circle cx="472" cy="303.5" r="4.5"/><circle cx="496" cy="315.6" r="4.5"/><circle cx="521" cy="267.6" r="4.5"/><circle cx="546" cy="240.5" r="4.5"/><circle cx="570" cy="280.0" r="4.5"/><circle cx="594" cy="319.5" r="4.5"/><circle cx="619" cy="292.4" r="4.5"/><circle cx="644" cy="244.4" r="4.5"/><circle cx="668" cy="256.5" r="4.5"/><circle cx="692" cy="308.3" r="4.5"/><circle cx="717" cy="312.4" r="4.5"/><circle cx="742" cy="261.8" r="4.5"/><circle cx="766" cy="242.0" r="4.5"/><circle cx="790" cy="286.3" r="4.5"/><circle cx="815" cy="320.0" r="4.5"/><circle cx="840" cy="286.3" r="4.5"/><circle cx="864" cy="242.0" r="4.5"/><circle cx="888" cy="261.8" r="4.5"/><circle cx="913" cy="312.4" r="4.5"/><circle cx="938" cy="308.3" r="4.5"/><circle cx="962" cy="256.5" r="4.5"/><circle cx="986" cy="244.4" r="4.5"/><circle cx="1011" cy="292.4" r="4.5"/><circle cx="1036" cy="319.5" r="4.5"/><circle cx="1060" cy="280.0" r="4.5"/></g><text x="80" y="352" font-size="17" fill="#9aa4b8">하늘색 = 실제 무늬 (9주기) · 점 = 픽셀이 읽어 간 값 · 선 = 화면에 보이는 결과</text></svg>
+  <svg class="dg" viewBox="0 0 1120 360" font-family="Pretendard, 'Malgun Gothic', sans-serif" role="img" aria-label="샘플이 부족하면 빠른 물결이 느린 가짜 물결로 보임"><text x="80" y="38" font-size="20" fill="#1b1a17" font-weight="700">샘플 10개 · 한 주기당 약 1.1개 <tspan fill="#c2401d">→ 나이퀴스트 미달</tspan></text><path d="M80,110.0 L86,96.4 L92,84.5 L98,75.5 L104,70.7 L110,70.5 L116,75.0 L122,83.7 L128,95.5 L134,109.0 L140,122.6 L146,134.7 L152,143.9 L158,149.1 L164,149.6 L170,145.5 L176,137.1 L182,125.5 L188,112.1 L194,98.4 L200,86.1 L206,76.6 L212,71.1 L218,70.2 L224,74.1 L230,82.2 L236,93.6 L242,106.9 L248,120.6 L254,133.1 L260,142.8 L266,148.6 L272,149.9 L278,146.4 L284,138.6 L290,127.4 L296,114.1 L302,100.4 L308,87.8 L314,77.8 L320,71.7 L326,70.1 L332,73.2 L338,80.7 L344,91.7 L350,104.9 L356,118.7 L362,131.4 L368,141.6 L374,148.0 L380,150.0 L386,147.2 L392,140.0 L398,129.2 L404,116.1 L410,102.4 L416,89.5 L422,79.0 L428,72.3 L434,70.0 L440,72.5 L446,79.4 L452,89.9 L458,102.9 L464,116.6 L470,129.6 L476,140.3 L482,147.4 L488,150.0 L494,147.9 L500,141.3 L506,131.0 L512,118.1 L518,104.4 L524,91.3 L530,80.4 L536,73.0 L542,70.0 L548,71.8 L554,78.1 L560,88.2 L566,100.8 L572,114.6 L578,127.8 L584,138.9 L590,146.6 L596,149.9 L602,148.5 L608,142.5 L614,132.7 L620,120.1 L626,106.4 L632,93.1 L638,81.8 L644,73.9 L650,70.2 L656,71.2 L662,76.9 L668,86.5 L674,98.9 L680,112.6 L686,126.0 L692,137.5 L698,145.7 L704,149.7 L710,149.0 L716,143.7 L722,134.3 L728,122.1 L734,108.5 L740,95.0 L746,83.3 L752,74.8 L758,70.4 L764,70.8 L770,75.8 L776,84.9 L782,96.9 L788,110.5 L794,124.1 L800,135.9 L806,144.7 L812,149.4 L818,149.4 L824,144.7 L830,135.9 L836,124.1 L842,110.5 L848,96.9 L854,84.9 L860,75.8 L866,70.8 L872,70.4 L878,74.8 L884,83.3 L890,95.0 L896,108.5 L902,122.1 L908,134.3 L914,143.7 L920,149.0 L926,149.7 L932,145.7 L938,137.5 L944,126.0 L950,112.6 L956,98.9 L962,86.5 L968,76.9 L974,71.2 L980,70.2 L986,73.9 L992,81.8 L998,93.1 L1004,106.4 L1010,120.1 L1016,132.7 L1022,142.5 L1028,148.5 L1034,149.9 L1040,146.6 L1046,138.9 L1052,127.8 L1058,114.6" fill="none" stroke="#0d6b78" stroke-width="2.5" opacity=".55"/><path d="M80,110.0 L178,133.5 L276,148.0 L374,148.0 L472,133.5 L570,110.0 L668,86.5 L766,72.0 L864,72.0 L962,86.5 L1060,110.0" fill="none" stroke="#a3245e" stroke-width="3.5" stroke-dasharray="10 7"/><g fill="#c2401d"><circle cx="80" cy="110.0" r="7"/><circle cx="178" cy="133.5" r="7"/><circle cx="276" cy="148.0" r="7"/><circle cx="374" cy="148.0" r="7"/><circle cx="472" cy="133.5" r="7"/><circle cx="570" cy="110.0" r="7"/><circle cx="668" cy="86.5" r="7"/><circle cx="766" cy="72.0" r="7"/><circle cx="864" cy="72.0" r="7"/><circle cx="962" cy="86.5" r="7"/><circle cx="1060" cy="110.0" r="7"/></g><text x="1060" y="176" font-size="18" fill="#a3245e" text-anchor="end">점선 = 샘플만 보고 복원한 모양 : 원래 9주기 → <tspan font-weight="700">가짜 1주기</tspan></text><text x="80" y="214" font-size="20" fill="#1b1a17" font-weight="700">샘플 40개 · 한 주기당 약 4.4개 <tspan fill="#4f7a16">→ 나이퀴스트 충족</tspan></text><path d="M80,280.0 L86,266.4 L92,254.5 L98,245.5 L104,240.7 L110,240.5 L116,245.0 L122,253.7 L128,265.5 L134,279.0 L140,292.6 L146,304.7 L152,313.9 L158,319.1 L164,319.6 L170,315.5 L176,307.1 L182,295.5 L188,282.1 L194,268.4 L200,256.1 L206,246.6 L212,241.1 L218,240.2 L224,244.1 L230,252.2 L236,263.6 L242,276.9 L248,290.6 L254,303.1 L260,312.8 L266,318.6 L272,319.9 L278,316.4 L284,308.6 L290,297.4 L296,284.1 L302,270.4 L308,257.8 L314,247.8 L320,241.7 L326,240.1 L332,243.2 L338,250.7 L344,261.7 L350,274.9 L356,288.7 L362,301.4 L368,311.6 L374,318.0 L380,320.0 L386,317.2 L392,310.0 L398,299.2 L404,286.1 L410,272.4 L416,259.5 L422,249.0 L428,242.3 L434,240.0 L440,242.5 L446,249.4 L452,259.9 L458,272.9 L464,286.6 L470,299.6 L476,310.3 L482,317.4 L488,320.0 L494,317.9 L500,311.3 L506,301.0 L512,288.1 L518,274.4 L524,261.3 L530,250.4 L536,243.0 L542,240.0 L548,241.8 L554,248.1 L560,258.2 L566,270.8 L572,284.6 L578,297.8 L584,308.9 L590,316.6 L596,319.9 L602,318.5 L608,312.5 L614,302.7 L620,290.1 L626,276.4 L632,263.1 L638,251.8 L644,243.9 L650,240.2 L656,241.2 L662,246.9 L668,256.5 L674,268.9 L680,282.6 L686,296.0 L692,307.5 L698,315.7 L704,319.7 L710,319.0 L716,313.7 L722,304.3 L728,292.1 L734,278.5 L740,265.0 L746,253.3 L752,244.8 L758,240.4 L764,240.8 L770,245.8 L776,254.9 L782,266.9 L788,280.5 L794,294.1 L800,305.9 L806,314.7 L812,319.4 L818,319.4 L824,314.7 L830,305.9 L836,294.1 L842,280.5 L848,266.9 L854,254.9 L860,245.8 L866,240.8 L872,240.4 L878,244.8 L884,253.3 L890,265.0 L896,278.5 L902,292.1 L908,304.3 L914,313.7 L920,319.0 L926,319.7 L932,315.7 L938,307.5 L944,296.0 L950,282.6 L956,268.9 L962,256.5 L968,246.9 L974,241.2 L980,240.2 L986,243.9 L992,251.8 L998,263.1 L1004,276.4 L1010,290.1 L1016,302.7 L1022,312.5 L1028,318.5 L1034,319.9 L1040,316.6 L1046,308.9 L1052,297.8 L1058,284.6" fill="none" stroke="#0d6b78" stroke-width="2.5" opacity=".55"/><path d="M80,280.0 L104,240.5 L129,267.6 L154,315.6 L178,303.5 L202,251.7 L227,247.6 L252,298.2 L276,318.0 L300,273.7 L325,240.0 L350,273.7 L374,318.0 L398,298.2 L423,247.6 L448,251.7 L472,303.5 L496,315.6 L521,267.6 L546,240.5 L570,280.0 L594,319.5 L619,292.4 L644,244.4 L668,256.5 L692,308.3 L717,312.4 L742,261.8 L766,242.0 L790,286.3 L815,320.0 L840,286.3 L864,242.0 L888,261.8 L913,312.4 L938,308.3 L962,256.5 L986,244.4 L1011,292.4 L1036,319.5 L1060,280.0" fill="none" stroke="#4f7a16" stroke-width="2.5"/><g fill="#4f7a16"><circle cx="80" cy="280.0" r="4.5"/><circle cx="104" cy="240.5" r="4.5"/><circle cx="129" cy="267.6" r="4.5"/><circle cx="154" cy="315.6" r="4.5"/><circle cx="178" cy="303.5" r="4.5"/><circle cx="202" cy="251.7" r="4.5"/><circle cx="227" cy="247.6" r="4.5"/><circle cx="252" cy="298.2" r="4.5"/><circle cx="276" cy="318.0" r="4.5"/><circle cx="300" cy="273.7" r="4.5"/><circle cx="325" cy="240.0" r="4.5"/><circle cx="350" cy="273.7" r="4.5"/><circle cx="374" cy="318.0" r="4.5"/><circle cx="398" cy="298.2" r="4.5"/><circle cx="423" cy="247.6" r="4.5"/><circle cx="448" cy="251.7" r="4.5"/><circle cx="472" cy="303.5" r="4.5"/><circle cx="496" cy="315.6" r="4.5"/><circle cx="521" cy="267.6" r="4.5"/><circle cx="546" cy="240.5" r="4.5"/><circle cx="570" cy="280.0" r="4.5"/><circle cx="594" cy="319.5" r="4.5"/><circle cx="619" cy="292.4" r="4.5"/><circle cx="644" cy="244.4" r="4.5"/><circle cx="668" cy="256.5" r="4.5"/><circle cx="692" cy="308.3" r="4.5"/><circle cx="717" cy="312.4" r="4.5"/><circle cx="742" cy="261.8" r="4.5"/><circle cx="766" cy="242.0" r="4.5"/><circle cx="790" cy="286.3" r="4.5"/><circle cx="815" cy="320.0" r="4.5"/><circle cx="840" cy="286.3" r="4.5"/><circle cx="864" cy="242.0" r="4.5"/><circle cx="888" cy="261.8" r="4.5"/><circle cx="913" cy="312.4" r="4.5"/><circle cx="938" cy="308.3" r="4.5"/><circle cx="962" cy="256.5" r="4.5"/><circle cx="986" cy="244.4" r="4.5"/><circle cx="1011" cy="292.4" r="4.5"/><circle cx="1036" cy="319.5" r="4.5"/><circle cx="1060" cy="280.0" r="4.5"/></g><text x="80" y="352" font-size="17" fill="#4a463e">청록 = 실제 무늬 (9주기) · 점 = 픽셀이 읽어 간 값 · 선 = 화면에 보이는 결과</text></svg>
   <aside class="notes">
     - 위 : 9번 출렁이는 무늬를 10번만 찍음 → 점들을 이으면 한 번 출렁이는 느린 물결 → 원래 없던 무늬
     - 아래 : 40번 찍으면 원래 모양이 그대로 복원
@@ -435,7 +659,7 @@
 <section>
   <div class="tag gfx">밉맵 · 2 ★</div>
   <h3 style="margin-bottom:.3em">밉맵 체인과 메모리 비용</h3>
-  <svg class="dg" viewBox="0 0 1120 380" font-family="Pretendard, 'Malgun Gothic', sans-serif" role="img" aria-label="밉맵 체인"><defs><pattern id="mp0" width="30.0" height="30.0" patternUnits="userSpaceOnUse"><rect width="30.0" height="30.0" fill="#1c2230"/><rect width="15.0" height="15.0" fill="#c8d2e2"/><rect x="15.0" y="15.0" width="15.0" height="15.0" fill="#c8d2e2"/></pattern><pattern id="mp1" width="15.0" height="15.0" patternUnits="userSpaceOnUse"><rect width="15.0" height="15.0" fill="#1c2230"/><rect width="7.5" height="7.5" fill="#c8d2e2"/><rect x="7.5" y="7.5" width="7.5" height="7.5" fill="#c8d2e2"/></pattern><pattern id="mp2" width="7.5" height="7.5" patternUnits="userSpaceOnUse"><rect width="7.5" height="7.5" fill="#1c2230"/><rect width="3.75" height="3.75" fill="#c8d2e2"/><rect x="3.75" y="3.75" width="3.75" height="3.75" fill="#c8d2e2"/></pattern><pattern id="mp3" width="3.75" height="3.75" patternUnits="userSpaceOnUse"><rect width="3.75" height="3.75" fill="#1c2230"/><rect width="1.875" height="1.875" fill="#c8d2e2"/><rect x="1.875" y="1.875" width="1.875" height="1.875" fill="#c8d2e2"/></pattern><pattern id="mp4" width="1.875" height="1.875" patternUnits="userSpaceOnUse"><rect width="1.875" height="1.875" fill="#1c2230"/><rect width="0.9375" height="0.9375" fill="#c8d2e2"/><rect x="0.9375" y="0.9375" width="0.9375" height="0.9375" fill="#c8d2e2"/></pattern><pattern id="mp5" width="1.0" height="1.0" patternUnits="userSpaceOnUse"><rect width="1.0" height="1.0" fill="#1c2230"/><rect width="0.5" height="0.5" fill="#c8d2e2"/><rect x="0.5" y="0.5" width="0.5" height="0.5" fill="#c8d2e2"/></pattern></defs><g transform="translate(40,70)"><rect width="240" height="240" fill="url(#mp0)" stroke="#35d6e6" stroke-width="2"/></g><text x="160.0" y="340" font-size="18" fill="#35d6e6" text-anchor="middle" font-weight="700">0</text><text x="160.0" y="364" font-size="16" fill="#9aa4b8" text-anchor="middle">1024×1024</text><g transform="translate(314,190)"><rect width="120" height="120" fill="url(#mp1)" stroke="#35d6e6" stroke-width="2"/></g><text x="374.0" y="340" font-size="18" fill="#35d6e6" text-anchor="middle" font-weight="700">1</text><text x="374.0" y="364" font-size="16" fill="#9aa4b8" text-anchor="middle">512×512</text><g transform="translate(468,250)"><rect width="60" height="60" fill="url(#mp2)" stroke="#35d6e6" stroke-width="2"/></g><text x="498.0" y="340" font-size="18" fill="#35d6e6" text-anchor="middle" font-weight="700">2</text><text x="498.0" y="364" font-size="16" fill="#9aa4b8" text-anchor="middle">256×256</text><g transform="translate(562,280)"><rect width="30" height="30" fill="url(#mp3)" stroke="#35d6e6" stroke-width="2"/></g><text x="577.0" y="340" font-size="18" fill="#35d6e6" text-anchor="middle" font-weight="700">3</text><text x="577.0" y="364" font-size="16" fill="#9aa4b8" text-anchor="middle">128</text><g transform="translate(626,295)"><rect width="15" height="15" fill="url(#mp4)" stroke="#35d6e6" stroke-width="2"/></g><text x="633.5" y="340" font-size="18" fill="#35d6e6" text-anchor="middle" font-weight="700">4</text><text x="633.5" y="364" font-size="16" fill="#9aa4b8" text-anchor="middle">64</text><g transform="translate(669,302)"><rect width="8" height="8" fill="url(#mp5)" stroke="#35d6e6" stroke-width="2"/></g><text x="673.0" y="340" font-size="18" fill="#35d6e6" text-anchor="middle" font-weight="700">5</text><text x="673.0" y="364" font-size="16" fill="#9aa4b8" text-anchor="middle">32</text><text x="711" y="304" font-size="20" fill="#9aa4b8">… 레벨 10 = 1×1</text><text x="711" y="332" font-size="16" fill="#9aa4b8">(전체 평균 색 한 점)</text><text x="40" y="34" font-size="18" fill="#9aa4b8">숫자 = 레벨 · 아래 = 해상도 — 한 단계마다 가로·세로 절반 (텍셀 4개 평균 → 1개)</text><rect x="560" y="62" width="520" height="122" rx="12" fill="#12151d" stroke="#2a3040"/><text x="582" y="96" font-size="19" fill="#e8ecf4" font-weight="700">메모리 손계산 (RGBA 8bit · 압축 없음)</text><text x="582" y="130" font-size="18" fill="#9aa4b8">레벨 0 : 1024 × 1024 × 4 B = <tspan fill="#e8ecf4">4 MB</tspan></text><text x="582" y="162" font-size="18" fill="#9aa4b8">전체 : 4 × (1 + 1/4 + 1/16 + …) ≈ <tspan fill="#a8e05f" font-weight="700">5.3 MB (+33%)</tspan></text></svg>
+  <svg class="dg" viewBox="0 0 1120 380" font-family="Pretendard, 'Malgun Gothic', sans-serif" role="img" aria-label="밉맵 체인"><defs><pattern id="mp0" width="30.0" height="30.0" patternUnits="userSpaceOnUse"><rect width="30.0" height="30.0" fill="#1b1a17"/><rect width="15.0" height="15.0" fill="#fbf8f1"/><rect x="15.0" y="15.0" width="15.0" height="15.0" fill="#fbf8f1"/></pattern><pattern id="mp1" width="15.0" height="15.0" patternUnits="userSpaceOnUse"><rect width="15.0" height="15.0" fill="#1b1a17"/><rect width="7.5" height="7.5" fill="#fbf8f1"/><rect x="7.5" y="7.5" width="7.5" height="7.5" fill="#fbf8f1"/></pattern><pattern id="mp2" width="7.5" height="7.5" patternUnits="userSpaceOnUse"><rect width="7.5" height="7.5" fill="#1b1a17"/><rect width="3.75" height="3.75" fill="#fbf8f1"/><rect x="3.75" y="3.75" width="3.75" height="3.75" fill="#fbf8f1"/></pattern><pattern id="mp3" width="3.75" height="3.75" patternUnits="userSpaceOnUse"><rect width="3.75" height="3.75" fill="#1b1a17"/><rect width="1.875" height="1.875" fill="#fbf8f1"/><rect x="1.875" y="1.875" width="1.875" height="1.875" fill="#fbf8f1"/></pattern><pattern id="mp4" width="1.875" height="1.875" patternUnits="userSpaceOnUse"><rect width="1.875" height="1.875" fill="#1b1a17"/><rect width="0.9375" height="0.9375" fill="#fbf8f1"/><rect x="0.9375" y="0.9375" width="0.9375" height="0.9375" fill="#fbf8f1"/></pattern><pattern id="mp5" width="1.0" height="1.0" patternUnits="userSpaceOnUse"><rect width="1.0" height="1.0" fill="#1b1a17"/><rect width="0.5" height="0.5" fill="#fbf8f1"/><rect x="0.5" y="0.5" width="0.5" height="0.5" fill="#fbf8f1"/></pattern></defs><g transform="translate(40,70)"><rect width="240" height="240" fill="url(#mp0)" stroke="#0d6b78" stroke-width="2"/></g><text x="160.0" y="340" font-size="18" fill="#0d6b78" text-anchor="middle" font-weight="700">0</text><text x="160.0" y="364" font-size="16" fill="#4a463e" text-anchor="middle">1024×1024</text><g transform="translate(314,190)"><rect width="120" height="120" fill="url(#mp1)" stroke="#0d6b78" stroke-width="2"/></g><text x="374.0" y="340" font-size="18" fill="#0d6b78" text-anchor="middle" font-weight="700">1</text><text x="374.0" y="364" font-size="16" fill="#4a463e" text-anchor="middle">512×512</text><g transform="translate(468,250)"><rect width="60" height="60" fill="url(#mp2)" stroke="#0d6b78" stroke-width="2"/></g><text x="498.0" y="340" font-size="18" fill="#0d6b78" text-anchor="middle" font-weight="700">2</text><text x="498.0" y="364" font-size="16" fill="#4a463e" text-anchor="middle">256×256</text><g transform="translate(562,280)"><rect width="30" height="30" fill="url(#mp3)" stroke="#0d6b78" stroke-width="2"/></g><text x="577.0" y="340" font-size="18" fill="#0d6b78" text-anchor="middle" font-weight="700">3</text><text x="577.0" y="364" font-size="16" fill="#4a463e" text-anchor="middle">128</text><g transform="translate(626,295)"><rect width="15" height="15" fill="url(#mp4)" stroke="#0d6b78" stroke-width="2"/></g><text x="633.5" y="340" font-size="18" fill="#0d6b78" text-anchor="middle" font-weight="700">4</text><text x="633.5" y="364" font-size="16" fill="#4a463e" text-anchor="middle">64</text><g transform="translate(669,302)"><rect width="8" height="8" fill="url(#mp5)" stroke="#0d6b78" stroke-width="2"/></g><text x="673.0" y="340" font-size="18" fill="#0d6b78" text-anchor="middle" font-weight="700">5</text><text x="673.0" y="364" font-size="16" fill="#4a463e" text-anchor="middle">32</text><text x="711" y="304" font-size="20" fill="#4a463e">… 레벨 10 = 1×1</text><text x="711" y="332" font-size="16" fill="#4a463e">(전체 평균 색 한 점)</text><text x="40" y="34" font-size="18" fill="#4a463e">숫자 = 레벨 · 아래 = 해상도 — 한 단계마다 가로·세로 절반 (텍셀 4개 평균 → 1개)</text><rect x="560" y="62" width="520" height="122" rx="0" fill="#ece6d8" stroke="#cfc6b2"/><text x="582" y="96" font-size="19" fill="#1b1a17" font-weight="700">메모리 손계산 (RGBA 8bit · 압축 없음)</text><text x="582" y="130" font-size="18" fill="#4a463e">레벨 0 : 1024 × 1024 × 4 B = <tspan fill="#1b1a17">4 MB</tspan></text><text x="582" y="162" font-size="18" fill="#4a463e">전체 : 4 × (1 + 1/4 + 1/16 + …) ≈ <tspan fill="#4f7a16" font-weight="700">5.3 MB (+33%)</tspan></text></svg>
   <aside class="notes">
     - 레벨 0 → 10 까지 11장 · 1024 = 2¹⁰ 이라 10번 반으로 접으면 1
     - 메모리 +33% : 1/4 + 1/16 + ... = 1/3 · 공짜는 아니지만 반짝임 제거 대비 매우 싼 값
@@ -447,7 +671,7 @@
   <div class="tag gfx">밉맵 · 3</div>
   <h2>레벨 선택 — 손으로 계산하기</h2>
   <dl class="terms">
-    <dt>LOD<small>Level of Detail</small></dt><dd>이번 픽셀에 쓸 밉맵 레벨 번호 — 픽셀 하나가 덮는 텍셀 수로 결정</dd>
+    <dt>LOD<small>Level of Detail</small></dt><dd><p>이번 픽셀에 쓸 밉맵 레벨 번호 — 픽셀 하나가 덮는 텍셀 수로 결정 <span class="muted">— 자세히 : 다음 장</span></p></dd>
   </dl>
   <div class="math-block">\[ \text{LOD} = \log_2\left(\text{픽셀 하나가 덮는 텍셀 수 (한 변 기준)}\right) \]</div>
   <div class="cols">
@@ -467,9 +691,37 @@
       </table>
     </div>
   </div>
-  <div class="key">
+  <div class="key" style="margin:.4em 0 0">
     <p class="small">밉맵의 목표 = <b>읽는 텍셀과 화면 픽셀의 크기를 1 : 1 로 맞추기</b> → GPU 가 픽셀마다 자동 계산 (이웃 픽셀과의 UV 차이로)</p>
   </div>
+</section>
+
+<section>
+  <div class="tag gfx">밉맵 · 용어 풀이</div>
+  <h2>용어 풀이 — LOD · Trilinear · 이방성 필터링</h2>
+  <dl class="terms">
+    <dt>LOD<small>Level of Detail</small></dt>
+    <dd>
+      <p>이번 픽셀에 쓸 밉맵 레벨 번호 — 지도책에서 몇 번째 축척을 펼칠지</p>
+      <p class="ex">픽셀당 텍셀 16 → log₂16 = 4 → 레벨 4 (64 × 64 축소판)</p>
+      <p class="why">LOD 를 상수로 고정(예 : 0)하면 밉맵을 끈 것과 같은 반짝임</p>
+      <p class="where">Shader Graph Sample Texture 2D LOD 노드 · 주의 : 거리별 모델 교체 컴포넌트 LOD Group 과는 이름만 같음</p>
+    </dd>
+    <dt>Trilinear<small>삼선형</small></dt>
+    <dd>
+      <p>위·아래 두 밉맵 레벨에서 각각 Bilinear 로 읽은 뒤 그 둘을 다시 섞는 필터 — 계단 대신 경사로</p>
+      <p class="ex">LOD 2.3 → 레벨 2 값 × 0.7 + 레벨 3 값 × 0.3</p>
+      <p class="why">바닥에 흐림이 갑자기 바뀌는 띠(밉맵 경계선) 제거</p>
+      <p class="where">텍스처 Inspector → Filter Mode = Trilinear (밉맵이 켜져 있어야 의미)</p>
+    </dd>
+    <dt>이방성 필터링<small>Anisotropic filtering</small></dt>
+    <dd>
+      <p>비스듬히 본 면에서 길쭉해진 픽셀 영역을 <b>긴 방향으로 여러 번</b> 읽어 평균 — 방향마다 다르게 다루기</p>
+      <p class="ex">영역 가로 2 · 세로 8 텍셀 → Aniso 4× : 레벨 1 에서 세로로 4번 읽기</p>
+      <p class="why">Trilinear 만 쓰면 먼 바닥이 뿌옇게 뭉개짐 · 대신 읽기 횟수 증가</p>
+      <p class="where">텍스처 Inspector → Aniso Level (0~16) · Project Settings → Quality → Anisotropic Textures</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -574,32 +826,32 @@
   <h2>탄젠트 공간 — 표면 위에 세운 작은 좌표계</h2>
   <svg class="dg" viewBox="0 0 1120 360" font-family="Pretendard, 'Malgun Gothic', sans-serif" role="img" aria-label="탄젠트 공간의 T, B, N 축과 노멀맵이 기울인 법선">
     <defs>
-      <marker id="ah-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#35d6e6"/></marker>
-      <marker id="ah-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a8e05f"/></marker>
-      <marker id="ah-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ff5fa2"/></marker>
-      <marker id="ah-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker>
+      <marker id="ah-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0d6b78"/></marker>
+      <marker id="ah-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4f7a16"/></marker>
+      <marker id="ah-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a3245e"/></marker>
+      <marker id="ah-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a8701a"/></marker>
     </defs>
-    <path d="M40,330 Q330,90 620,330" fill="#171b25" stroke="#9aa4b8" stroke-width="3"/>
-    <circle cx="330" cy="210" r="7" fill="#e8ecf4"/>
-    <line x1="330" y1="210" x2="330" y2="70" stroke="#35d6e6" stroke-width="5" marker-end="url(#ah-c)"/>
-    <text x="342" y="80" font-size="22" fill="#35d6e6" font-weight="700">N 법선</text>
-    <line x1="330" y1="210" x2="480" y2="210" stroke="#a8e05f" stroke-width="5" marker-end="url(#ah-l)"/>
-    <text x="490" y="216" font-size="22" fill="#a8e05f" font-weight="700">T 탄젠트</text>
-    <text x="490" y="242" font-size="17" fill="#9aa4b8">UV 의 U 가 커지는 방향</text>
-    <line x1="330" y1="210" x2="250" y2="270" stroke="#ff5fa2" stroke-width="5" stroke-dasharray="9 6" marker-end="url(#ah-v)"/>
-    <text x="140" y="300" font-size="22" fill="#ff5fa2" font-weight="700">B</text>
-    <text x="68" y="326" font-size="17" fill="#9aa4b8">T·N 에 동시에 수직 (외적)</text>
-    <line x1="330" y1="210" x2="425" y2="115" stroke="#ffc44d" stroke-width="5" marker-end="url(#ah-w)"/>
-    <text x="432" y="112" font-size="19" fill="#ffc44d" font-weight="700">노멀맵이 기울인 법선</text>
-    <text x="432" y="136" font-size="17" fill="#9aa4b8">(0.71, 0, 0.71) = T 쪽 45°</text>
-    <rect x="690" y="40" width="400" height="290" rx="14" fill="#12151d" stroke="#2a3040"/>
-    <text x="714" y="80" font-size="20" fill="#e8ecf4" font-weight="700">노멀맵 RGB = 이 좌표계의 성분</text>
-    <text x="714" y="120" font-size="19" fill="#a8e05f">R → T 방향 성분</text>
-    <text x="714" y="152" font-size="19" fill="#ff5fa2">G → B 방향 성분</text>
-    <text x="714" y="184" font-size="19" fill="#35d6e6">B → N 방향 성분</text>
-    <text x="714" y="228" font-size="17" fill="#9aa4b8">표면이 휘거나 돌아가도</text>
-    <text x="714" y="254" font-size="17" fill="#9aa4b8">좌표계가 표면에 붙어 함께 움직임</text>
-    <text x="714" y="290" font-size="17" fill="#e8ecf4">→ 같은 노멀맵을 어느 면에나 재사용</text>
+    <path d="M40,330 Q330,90 620,330" fill="#ece6d8" stroke="#4a463e" stroke-width="3"/>
+    <circle cx="330" cy="210" r="7" fill="#1b1a17"/>
+    <line x1="330" y1="210" x2="330" y2="70" stroke="#0d6b78" stroke-width="5" marker-end="url(#ah-c)"/>
+    <text x="342" y="80" font-size="22" fill="#0d6b78" font-weight="700">N 법선</text>
+    <line x1="330" y1="210" x2="480" y2="210" stroke="#4f7a16" stroke-width="5" marker-end="url(#ah-l)"/>
+    <text x="490" y="216" font-size="22" fill="#4f7a16" font-weight="700">T 탄젠트</text>
+    <text x="490" y="242" font-size="17" fill="#4a463e">UV 의 U 가 커지는 방향</text>
+    <line x1="330" y1="210" x2="250" y2="270" stroke="#a3245e" stroke-width="5" stroke-dasharray="9 6" marker-end="url(#ah-v)"/>
+    <text x="140" y="300" font-size="22" fill="#a3245e" font-weight="700">B</text>
+    <text x="68" y="326" font-size="17" fill="#4a463e">T·N 에 동시에 수직 (외적)</text>
+    <line x1="330" y1="210" x2="425" y2="115" stroke="#a8701a" stroke-width="5" marker-end="url(#ah-w)"/>
+    <text x="432" y="112" font-size="19" fill="#a8701a" font-weight="700">노멀맵이 기울인 법선</text>
+    <text x="432" y="136" font-size="17" fill="#4a463e">(0.71, 0, 0.71) = T 쪽 45°</text>
+    <rect x="690" y="40" width="400" height="290" rx="0" fill="#ece6d8" stroke="#cfc6b2"/>
+    <text x="714" y="80" font-size="20" fill="#1b1a17" font-weight="700">노멀맵 RGB = 이 좌표계의 성분</text>
+    <text x="714" y="120" font-size="19" fill="#4f7a16">R → T 방향 성분</text>
+    <text x="714" y="152" font-size="19" fill="#a3245e">G → B 방향 성분</text>
+    <text x="714" y="184" font-size="19" fill="#0d6b78">B → N 방향 성분</text>
+    <text x="714" y="228" font-size="17" fill="#4a463e">표면이 휘거나 돌아가도</text>
+    <text x="714" y="254" font-size="17" fill="#4a463e">좌표계가 표면에 붙어 함께 움직임</text>
+    <text x="714" y="290" font-size="17" fill="#1b1a17">→ 같은 노멀맵을 어느 면에나 재사용</text>
   </svg>
   <p class="small">B = N × T — <b>2주차 외적</b>의 재등장 · 셰이더가 세 축으로 노멀맵 값을 월드 방향으로 바꾼 뒤 N·L 계산</p>
   <aside class="notes">
@@ -607,6 +859,33 @@
     - 메시에 Tangent 정보가 없으면 노멀맵이 엉뚱하게 비침 → Import Settings 의 Tangents = Calculate
     - Unity 는 B 의 방향 부호를 tangent.w 에 저장 (UV 가 뒤집힌 조각 대비)
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">노멀맵 · 용어 풀이</div>
+  <h2>용어 풀이 — 노멀맵 · 탄젠트 공간 · 운동 시차</h2>
+  <dl class="terms">
+    <dt>노멀맵<small>Normal map</small></dt>
+    <dd>
+      <p>픽셀마다 «이 점은 이쪽을 향한 척» 할 방향을 RGB 색으로 저장한 그림 — 트릭아트의 그늘 지시서</p>
+      <p class="ex">(128, 128, 255) = 똑바로 위 → 그래서 노멀맵 대부분이 보랏빛 파랑</p>
+      <p class="why">폴리곤 추가 없이 요철 표현 · 단 실루엣과 시차는 그대로 평면</p>
+      <p class="where">텍스처 Inspector → Texture Type = Normal map · URP Lit 재질 → Normal Map 칸</p>
+    </dd>
+    <dt>탄젠트 공간<small>Tangent space</small></dt>
+    <dd>
+      <p>표면의 각 점에 세운 작은 좌표계 T · B · N — 손바닥에 붙인 스티커의 «위쪽» 은 손을 뒤집어도 손바닥 기준</p>
+      <p class="ex">노멀맵 값 (0.71, 0, 0.71) = T 쪽으로 45° 기울어진 법선</p>
+      <p class="why">메시에 탄젠트 정보가 없거나 틀리면 요철이 엉뚱한 방향으로 비침</p>
+      <p class="where">모델 Import Settings → Model 탭 → Tangents (Calculate Mikktspace 등)</p>
+    </dd>
+    <dt>운동 시차<small>Motion parallax</small></dt>
+    <dd>
+      <p>머리가 움직일 때 가까운 것은 많이, 먼 것은 조금 움직여 보이는 깊이 단서 (5주차)</p>
+      <p class="ex">기차 창밖 — 가까운 전봇대는 휙 지나가고 먼 산은 천천히</p>
+      <p class="why">노멀맵은 이 단서를 못 만듦 → VR 에서 다가가 고개를 돌리면 «그림» 으로 들통</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -636,9 +915,9 @@
   <div class="tag gfx">Shader Graph · 1</div>
   <h2>노드 = 수식 한 줄</h2>
   <dl class="terms">
-    <dt>노드<small>Node</small></dt><dd>입력을 받아 계산 하나를 하고 결과를 내보내는 상자 — 곱하기·텍스처 읽기·거리 등</dd>
-    <dt>포트 · 엣지<small>Port · Edge</small></dt><dd>노드의 입출력 단자 · 단자끼리 잇는 선 = 값이 흐르는 길</dd>
-    <dt>마스터 스택<small>Master Stack</small></dt><dd>그래프의 최종 출구 — Vertex 블록(정점 셰이더) · Fragment 블록(Base Color · Normal · Alpha …)</dd>
+    <dt>노드<small>Node</small></dt><dd><p>입력을 받아 계산 하나를 하고 결과를 내보내는 상자 — 곱하기·텍스처 읽기·거리 등</p></dd>
+    <dt>포트 · 엣지<small>Port · Edge</small></dt><dd><p>노드의 입출력 단자 · 단자끼리 잇는 선 = 값이 흐르는 길</p></dd>
+    <dt>마스터 스택<small>Master Stack</small></dt><dd><p>그래프의 최종 출구 — Vertex 블록 · Fragment 블록 <span class="muted">— 자세히 : 다음 장</span></p></dd>
   </dl>
   <div class="analogy">
     <p><b>기타 이펙터 페달 체인</b> : 기타 소리 → 디스토션 → 딜레이 → 앰프 · 선으로 이어 순서만 바꾸면 소리가 바뀜 · 각 페달 = 노드 · 기타 = 텍스처·UV 입력 · 앰프 = 마스터 스택</p>
@@ -648,6 +927,38 @@
     - 디자인 전공에 익숙한 비유 : 블렌더 노드, 터치디자이너, 맥스 MSP
     - 노드 그래프는 저장 시 HLSL 셰이더 코드로 자동 변환 → "그림으로 쓰는 코드"
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Shader Graph · 용어 풀이</div>
+  <h2>용어 풀이 — 노드 · 포트 · 마스터 스택 · Lit</h2>
+  <dl class="terms">
+    <dt>노드<small>Node</small></dt>
+    <dd>
+      <p>입력을 받아 계산 하나를 하고 결과를 내보내는 상자 — 이펙터 페달 하나</p>
+      <p class="ex">Multiply 노드 : A 0.5 × B 2 → 출력 1</p>
+      <p class="why">노드 하나 = 수식 한 줄 → AI 에게 «노드 목록 + 연결 순서» 로 요구 가능</p>
+      <p class="where">Shader Graph 빈 곳 우클릭 → Create Node (단축키 Space)</p>
+    </dd>
+    <dt>포트 · 엣지<small>Port · Edge</small></dt>
+    <dd>
+      <p>노드의 입출력 단자(포트) · 단자끼리 잇는 선(엣지) = 값이 흐르는 길 — 페달 사이 케이블</p>
+      <p class="ex">Sample Texture 2D 의 RGBA(4) 출력 → Base Color(3) 입력</p>
+      <p class="why">단자 자료형(Float · Vector2/3/4)이 다르면 자동 변환 → 의도와 다른 값이 갈 수 있음</p>
+    </dd>
+    <dt>마스터 스택<small>Master Stack</small></dt>
+    <dd>
+      <p>그래프의 최종 출구 — 계산 결과를 실제 셰이더 칸에 꽂는 자리 · 앰프</p>
+      <p class="ex">Vertex 블록 (Position · Normal · Tangent) · Fragment 블록 (Base Color · Normal · Alpha …)</p>
+      <p class="where">Shader Graph 창의 고정 블록 · Graph Inspector → Graph Settings 로 칸 구성 변경</p>
+    </dd>
+    <dt>Lit · Unlit<small>Shader Graph 종류</small></dt>
+    <dd>
+      <p>Lit = 조명·그림자를 계산하는 재질 · Unlit = 조명을 무시하고 정한 색 그대로</p>
+      <p class="ex">하늘·UI·발광 표지 → Unlit · 벽·바닥·소품 → Lit</p>
+      <p class="where">Create → Shader Graph → URP → Lit Shader Graph / Unlit Shader Graph</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -685,6 +996,34 @@
     - 오늘 실습의 출발점 · 학생들이 이 그래프를 AI 에게 "노드 목록과 연결 순서" 로 요구하게 됨
     - B 의 회색 = 바둑판의 평균 밝기 (흰·검 반반이면 0.5) → 밉맵 최하위 레벨과 같은 값이라 경계가 자연스러움
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Shader Graph · 용어 풀이</div>
+  <h2>용어 풀이 — Sample Texture 2D · Lerp · Smoothstep</h2>
+  <dl class="terms">
+    <dt>Sample Texture 2D<small>텍스처 읽기 노드</small></dt>
+    <dd>
+      <p>UV 주소를 받아 텍스처에서 색을 한 번 읽어 오는 노드 — 셰이더의 «텍스처 샘플 1회»</p>
+      <p class="ex">UV (0.3, 0.2) 입력 → 그 자리의 RGBA 출력</p>
+      <p class="why">Quest 비용은 노드 수보다 이 노드 개수(텍스처 읽기 수)가 좌우</p>
+      <p class="where">노드 Type 항목 : Default (색) · Normal (노멀맵 해석)</p>
+    </dd>
+    <dt>Lerp<small>Linear interpolation</small></dt>
+    <dd>
+      <p>두 값 A · B 를 비율 T 로 섞는 계산 — T 0 이면 A, 1 이면 B, 0.5 면 반반</p>
+      <p class="ex">흰 칸 1 과 회색 0.5 를 T 0.45 로 → 1 × 0.55 + 0.5 × 0.45 ≈ 0.78</p>
+      <p class="why">두 색·두 재질을 부드럽게 바꾸는 효과의 기본 부품</p>
+      <p class="where">Shader Graph Lerp 노드 (A · B · T) · C# <code>Mathf.Lerp</code> · <code>Color.Lerp</code></p>
+    </dd>
+    <dt>Smoothstep<small>스무스스텝</small></dt>
+    <dd>
+      <p>두 경계 사이에서 0 → 1 로 S 자 곡선을 그리며 부드럽게 오르는 계산</p>
+      <p class="ex">경계 5 · 20 m · 거리 12 m → 약 0.45 · 5 m 이하 0 · 20 m 이상 1</p>
+      <p class="why">직선 전환보다 시작·끝이 완만 → 경계가 눈에 덜 띔</p>
+      <p class="where">Shader Graph Smoothstep 노드 (Edge1 · Edge2 · In) · C# <code>Mathf.SmoothStep</code> 은 인자 의미가 달라 주의</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -771,7 +1110,7 @@ mat.SetTextureScale("_BaseMap", new Vector2(50, 50));   // 바닥에 50번 반�
   <div class="tag trap">함정 · 원인</div>
   <h2>② 원인 — 알파 쪽 : 섞는 순서가 결과를 바꿈</h2>
   <dl class="terms">
-    <dt>알파 블렌딩<small>Alpha blending</small></dt><dd>앞 물체 색과 이미 그려진 뒤쪽 색을 투명도 α 비율로 섞기</dd>
+    <dt>알파 블렌딩<small>Alpha blending</small></dt><dd><p>앞 물체 색과 이미 그려진 뒤쪽 색을 투명도 α 비율로 섞기 <span class="muted">— 자세히 : 다음 장</span></p></dd>
   </dl>
   <div class="math-block">\[ C_{\text{결과}} = \alpha\, C_{\text{앞}} + (1 - \alpha)\, C_{\text{이미 그려진 것}} \]</div>
   <div class="cols">
@@ -792,32 +1131,64 @@ mat.SetTextureScale("_BaseMap", new Vector2(50, 50));   // 바닥에 50번 반�
 </section>
 
 <section>
+  <div class="tag trap">함정 · 용어 풀이</div>
+  <h2>용어 풀이 — 투명 그리기의 네 낱말</h2>
+  <dl class="terms">
+    <dt>알파 블렌딩<small>Alpha blending</small></dt>
+    <dd>
+      <p>앞 물체 색과 이미 그려진 뒤쪽 색을 투명도 α 비율로 섞기 — 셀로판지 겹치기</p>
+      <p class="why">섞는 순서가 바뀌면 결과 색이 바뀜 → 먼 것부터 그려야 함</p>
+      <p class="where">URP 재질 Surface Type = Transparent · Blending Mode = Alpha</p>
+    </dd>
+    <dt>깊이 버퍼<small>Depth buffer · Z-buffer</small></dt>
+    <dd>
+      <p>픽셀마다 «지금까지 그린 것 중 가장 가까운 거리» 를 적어 두는 메모장 (4주차)</p>
+      <p class="ex">3 m 가 적힌 픽셀에 5 m 물체가 오면 → 그리지 않고 버림</p>
+      <p class="why">불투명은 그리는 순서와 무관하게 앞뒤 정확 · 반투명은 기록 안 함(ZWrite Off) → 순서 의존</p>
+    </dd>
+    <dt>렌더 큐<small>Render Queue</small></dt>
+    <dd>
+      <p>재질을 그리는 순서 번호 — 작은 번호부터 그림</p>
+      <p class="ex">Opaque 2000 · AlphaTest 2450 · Transparent 3000</p>
+      <p class="why">3000 이상은 물체 «중심» 거리순 정렬만 → 앞뒤 뒤바뀜 위험</p>
+      <p class="where">재질 Inspector → Advanced Options → Sorting Priority · 코드 <code>material.renderQueue</code></p>
+    </dd>
+    <dt>오버드로<small>Overdraw</small></dt>
+    <dd>
+      <p>같은 픽셀을 한 프레임에 여러 번 덧칠하는 것</p>
+      <p class="why">프래그먼트 비용이 겹친 수만큼 곱해짐 → 덤불 앞 프레임 급락</p>
+      <p class="where">URP : Window → Analysis → Rendering Debugger → Overdraw (버전마다 위치 다름)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag trap">함정 · 원인 ★</div>
   <h3 style="margin-bottom:.3em">깊이 버퍼로 해결되지 않는 이유</h3>
   <svg class="dg" viewBox="0 0 1120 400" font-family="Pretendard, 'Malgun Gothic', sans-serif" role="img" aria-label="물체 중심 거리 정렬의 오류와 교차한 투명 면">
-    <text x="30" y="34" font-size="20" fill="#e8ecf4" font-weight="700">① 물체 «중심» 거리로 정렬 (위에서 본 그림)</text>
-    <polygon points="60,200 330,95 330,305" fill="#35d6e6" opacity=".07"/>
-    <circle cx="60" cy="200" r="16" fill="#35d6e6"/><text x="44" y="246" font-size="17" fill="#35d6e6">카메라</text>
-    <line x1="60" y1="200" x2="260" y2="170" stroke="#e8ecf4" stroke-width="1.5" stroke-dasharray="5 5"/>
-    <line x1="140" y1="120" x2="520" y2="330" stroke="#35d6e6" stroke-width="7" opacity=".85"/>
-    <circle cx="330" cy="225" r="6" fill="#35d6e6"/>
-    <text x="350" y="232" font-size="17" fill="#35d6e6">A 큰 유리 · 중심 거리 약 271</text>
-    <line x1="260" y1="140" x2="260" y2="200" stroke="#ff5fa2" stroke-width="7"/>
-    <circle cx="260" cy="170" r="6" fill="#ff5fa2"/>
-    <text x="276" y="132" font-size="17" fill="#ff5fa2">B 작은 유리 · 중심 거리 약 202</text>
-    <circle cx="237" cy="173" r="9" fill="none" stroke="#ffc44d" stroke-width="3"/>
-    <text x="30" y="362" font-size="17" fill="#ff5a4d">정렬 : A(멂) 먼저 → B 나중 → 화면에서 B 가 앞</text>
-    <text x="30" y="388" font-size="17" fill="#ffc44d">실제 : 노란 원 지점에서 A 가 시선을 먼저 가로막음</text>
-    <line x1="570" y1="30" x2="570" y2="390" stroke="#2a3040" stroke-width="2"/>
-    <text x="600" y="34" font-size="20" fill="#e8ecf4" font-weight="700">② 서로 교차한 투명 면 (잎 카드 X 자)</text>
-    <polygon points="630,210 900,110 900,310" fill="#35d6e6" opacity=".07"/>
-    <circle cx="630" cy="210" r="16" fill="#35d6e6"/>
-    <line x1="760" y1="120" x2="960" y2="300" stroke="#a8e05f" stroke-width="7" opacity=".85"/>
-    <line x1="760" y1="300" x2="960" y2="120" stroke="#ff5fa2" stroke-width="7" opacity=".85"/>
-    <text x="900" y="104" font-size="17" fill="#ff5fa2">잎 2</text>
-    <text x="900" y="330" font-size="17" fill="#a8e05f">잎 1</text>
-    <text x="600" y="362" font-size="17" fill="#ff5a4d">교차점 기준 왼쪽은 잎 1 이 앞 · 오른쪽은 잎 2 가 앞</text>
-    <text x="600" y="388" font-size="17" fill="#ffc44d">→ 물체 단위 순서로는 어떤 순서도 정답 아님</text>
+    <text x="30" y="34" font-size="20" fill="#1b1a17" font-weight="700">① 물체 «중심» 거리로 정렬 (위에서 본 그림)</text>
+    <polygon points="60,200 330,95 330,305" fill="#0d6b78" opacity=".07"/>
+    <circle cx="60" cy="200" r="16" fill="#0d6b78"/><text x="44" y="246" font-size="17" fill="#0d6b78">카메라</text>
+    <line x1="60" y1="200" x2="260" y2="170" stroke="#1b1a17" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <line x1="140" y1="120" x2="520" y2="330" stroke="#0d6b78" stroke-width="7" opacity=".85"/>
+    <circle cx="330" cy="225" r="6" fill="#0d6b78"/>
+    <text x="350" y="232" font-size="17" fill="#0d6b78">A 큰 유리 · 중심 거리 약 271</text>
+    <line x1="260" y1="140" x2="260" y2="200" stroke="#a3245e" stroke-width="7"/>
+    <circle cx="260" cy="170" r="6" fill="#a3245e"/>
+    <text x="276" y="132" font-size="17" fill="#a3245e">B 작은 유리 · 중심 거리 약 202</text>
+    <circle cx="237" cy="173" r="9" fill="none" stroke="#a8701a" stroke-width="3"/>
+    <text x="30" y="362" font-size="17" fill="#c2401d">정렬 : A(멂) 먼저 → B 나중 → 화면에서 B 가 앞</text>
+    <text x="30" y="388" font-size="17" fill="#a8701a">실제 : 황토색 원 지점에서 A 가 시선을 먼저 가로막음</text>
+    <line x1="570" y1="30" x2="570" y2="390" stroke="#cfc6b2" stroke-width="2"/>
+    <text x="600" y="34" font-size="20" fill="#1b1a17" font-weight="700">② 서로 교차한 투명 면 (잎 카드 X 자)</text>
+    <polygon points="630,210 900,110 900,310" fill="#0d6b78" opacity=".07"/>
+    <circle cx="630" cy="210" r="16" fill="#0d6b78"/>
+    <line x1="760" y1="120" x2="960" y2="300" stroke="#4f7a16" stroke-width="7" opacity=".85"/>
+    <line x1="760" y1="300" x2="960" y2="120" stroke="#a3245e" stroke-width="7" opacity=".85"/>
+    <text x="900" y="104" font-size="17" fill="#a3245e">잎 2</text>
+    <text x="900" y="330" font-size="17" fill="#4f7a16">잎 1</text>
+    <text x="600" y="362" font-size="17" fill="#c2401d">교차점 기준 왼쪽은 잎 1 이 앞 · 오른쪽은 잎 2 가 앞</text>
+    <text x="600" y="388" font-size="17" fill="#a8701a">→ 물체 단위 순서로는 어떤 순서도 정답 아님</text>
   </svg>
   <aside class="notes">
     - 불투명 : 깊이 버퍼가 픽셀마다 "더 가까운 것만 남김" → 그리는 순서 무관
@@ -858,7 +1229,7 @@ mat.SetTextureScale("_BaseMap", new Vector2(50, 50));   // 바닥에 50번 반�
       filterMode = <b>Point</b><br><br>
       잎 · 울타리 · 유리 전부<br>
       Surface Type = <b>Transparent</b><br><br>
-      <span style="color:#ff5a4d">// 먼 바닥 반짝임<br>
+      <span style="color:#c2401d">// 먼 바닥 반짝임<br>
       // 잎 순서 뒤바뀜 · 오버드로</span>
     </div>
     <div class="good">
@@ -867,7 +1238,7 @@ mat.SetTextureScale("_BaseMap", new Vector2(50, 50));   // 바닥에 50번 반�
       filterMode = <b>Trilinear</b> · anisoLevel = 4<br><br>
       잎 · 울타리 : <b>Opaque + Alpha Clipping</b><br>
       반투명 유리만 Transparent · 서로 교차 금지<br><br>
-      <span style="color:#a8e05f">// 먼 바닥 = 평균 회색<br>
+      <span style="color:#4f7a16">// 먼 바닥 = 평균 회색<br>
       // 잎은 깊이 버퍼로 순서 자동 해결</span>
     </div>
   </div>
@@ -907,30 +1278,90 @@ mat.SetTextureScale("_BaseMap", new Vector2(50, 50));   // 바닥에 50번 반�
 
 <section>
   <div class="tag vr">Part II 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>용어 미리보기 (1/3) — 눈</h2>
   <dl class="terms">
-    <dt>중심와<small>Fovea</small></dt><dd>망막 한가운데 시세포가 가장 빽빽한 작은 영역 — 시야 중심 약 2° 만 선명</dd>
-    <dt>주변시<small>Peripheral vision</small></dt><dd>시선 중심 바깥의 넓은 시야 — 흐릿하지만 <b>움직임·깜빡임에 민감</b></dd>
-    <dt>편심각<small>Eccentricity</small></dt><dd>시선 중심에서 몇 도 벗어난 자리인지 나타내는 각도</dd>
-    <dt>시각 예민도<small>Visual acuity</small></dt><dd>얼마나 작은 디테일까지 구분해 보는가 — 흔히 말하는 «시력»</dd>
-    <dt>사이클/도<small>cycles per degree</small></dt><dd>시야 1° 안에 흰·검 줄무늬 쌍이 몇 개 들어가는지 — 디테일의 촘촘함</dd>
-    <dt>PPD<small>Pixels per degree</small></dt><dd>시야 1° 안에 들어가는 화면 픽셀 수 — <b>각도 기준 해상도</b></dd>
-    <dt>스크린도어 효과<small>Screen-door effect</small></dt><dd>픽셀 사이 검은 틈이 방충망처럼 보이는 현상</dd>
-    <dt>포비티드 렌더링<small>Foveated rendering</small></dt><dd>시선 중심만 고해상도로, 주변은 성기게 그리는 최적화</dd>
+    <dt>중심와<small>Fovea</small></dt>
+    <dd>
+      <p>망막 한가운데, 빛을 받는 세포가 가장 빽빽한 작은 구역 — 카메라 센서의 고화소 중앙부</p>
+      <p class="ex">시야 중심 약 2° = 팔을 뻗었을 때 엄지손톱 너비 정도만 또렷</p>
+      <p class="why">화면 전체를 똑같이 고해상도로 그릴 필요가 없다는 근거 → 포비티드 렌더링</p>
+      <p class="where">Quest Pro 등 시선 추적 기기 = 중심와가 향한 곳을 실시간 추적</p>
+    </dd>
+    <dt>주변시<small>Peripheral vision</small></dt>
+    <dd>
+      <p>시선 중심 바깥의 넓은 시야 — 흐릿하지만 <b>움직임·깜빡임에 민감</b>한 경비원</p>
+      <p class="ex">책을 읽는 중에도 옆에서 날아드는 벌레는 바로 알아챔</p>
+      <p class="why">쳐다보지 않은 먼 바닥의 반짝임까지 거슬리는 이유</p>
+      <p class="where">헤드셋 렌즈 가장자리 영역 = 고정 포비티드 렌더링이 해상도를 낮추는 구역</p>
+    </dd>
+    <dt>편심각<small>Eccentricity</small></dt>
+    <dd>
+      <p>시선 중심에서 몇 도 벗어난 자리인지 나타내는 각도 — 과녁 중심에서 떨어진 거리를 «도» 로 잼</p>
+      <p class="ex">정면 = 0° · 편심각 10° 에서 예민도 약 1/6 (다음 장 도해의 대략 모형)</p>
+      <p class="why">편심각이 클수록 큰 글자·큰 형태만 보임 → UI·디테일 배치 기준</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>용어 미리보기 (2/3) — 시력 · 해상도</h2>
+  <dl class="terms">
+    <dt>시각 예민도<small>Visual acuity</small></dt>
+    <dd>
+      <p>얼마나 작은 디테일까지 구분해 보는가 — 흔히 말하는 «시력»</p>
+      <p class="ex">시력 1.0 (20/20) = 시야 1/60° (1각분) 크기 틈까지 구분</p>
+      <p class="why">눈 한계보다 작은 디테일은 만들어도 안 보임 → 해상도 낭비 판단 기준</p>
+      <p class="where">안과 시력표 (한국식 1.0 = 영미식 20/20)</p>
+    </dd>
+    <dt>사이클/도<small>cycles per degree</small></dt>
+    <dd>
+      <p>시야 1° 안에 흰·검 줄무늬 쌍이 몇 개 들어가는지 — 무늬의 촘촘함을 각도로 잰 값</p>
+      <p class="ex">1° 안에 흰·검 쌍 30개 = 30 사이클/도 = 시력 1.0 의 한계</p>
+      <p class="why">화면 PPD ÷ 2 = 그 화면이 보여 줄 수 있는 최대 사이클/도 (나이퀴스트)</p>
+    </dd>
+    <dt>PPD<small>Pixels per degree</small></dt>
+    <dd>
+      <p>시야 1° 안에 들어가는 화면 픽셀 수 — 화면 크기·거리와 무관한 <b>각도 기준 해상도</b></p>
+      <p class="ex">27″ QHD 모니터 60 cm ≈ 45 · Quest 3 ≈ 25 · 눈 한계 ≈ 60</p>
+      <p class="why">«4K 헤드셋» 같은 픽셀 개수만으로는 선명도 판단 불가</p>
+      <p class="where">헤드셋 사양표의 제조사 발표 값 (렌즈 중심 기준)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>용어 미리보기 (3/3) — 화면의 한계</h2>
+  <dl class="terms">
+    <dt>스크린도어 효과<small>Screen-door effect</small></dt>
+    <dd>
+      <p>픽셀 사이 빛나지 않는 틈이 렌즈로 확대되어 방충망처럼 보이는 현상</p>
+      <p class="ex">초기 헤드셋에서 밝은 하늘을 보면 가는 검은 격자가 겹쳐 보임</p>
+      <p class="why">가는 선·작은 글자가 격자에 끊겨 보임 → 세밀한 무늬 설계 시 고려</p>
+      <p class="where">Quest 3 : 고밀도 LCD + 팬케이크 렌즈로 크게 감소 · 밝은 단색 배경에서 확인</p>
+    </dd>
+    <dt>포비티드 렌더링<small>Foveated rendering</small></dt>
+    <dd>
+      <p>시선 중심만 원래 해상도로, 주변은 여러 픽셀을 묶어 한 번만 계산하는 최적화</p>
+      <p class="ex">가장자리 2 × 2 묶음 → 그 구역 색 계산 1/4</p>
+      <p class="why">프래그먼트 비용 절감 · 대신 주변부 텍스처 반짝임은 악화 가능</p>
+      <p class="where">Unity 6 <code>XRDisplaySubsystem.foveatedRenderingLevel</code> + XR 플러그인 설정 (버전마다 다름)</p>
+    </dd>
   </dl>
 </section>
 
 <section>
   <div class="tag vr">지각 · 1 ★</div>
   <h2>중심와와 주변시 — 선명한 곳은 아주 좁다</h2>
-  <svg class="dg" style="max-height:395px" viewBox="0 0 1120 400" font-family="Pretendard, 'Malgun Gothic', sans-serif" role="img" aria-label="편심각에 따른 시각 예민도"><rect x="548.5" y="60" width="23.0" height="270" fill="#ff5fa2" opacity=".18"/><line x1="100.0" y1="330" x2="1020.0" y2="330" stroke="#2a3040" stroke-width="2"/><line x1="100.0" y1="60" x2="100.0" y2="330" stroke="#2a3040" stroke-width="2"/><text x="100.0" y="356" font-size="17" fill="#9aa4b8" text-anchor="middle">-40°</text><text x="215.0" y="356" font-size="17" fill="#9aa4b8" text-anchor="middle">-30°</text><text x="330.0" y="356" font-size="17" fill="#9aa4b8" text-anchor="middle">-20°</text><text x="445.0" y="356" font-size="17" fill="#9aa4b8" text-anchor="middle">-10°</text><text x="560.0" y="356" font-size="17" fill="#9aa4b8" text-anchor="middle">0°</text><text x="675.0" y="356" font-size="17" fill="#9aa4b8" text-anchor="middle">10°</text><text x="790.0" y="356" font-size="17" fill="#9aa4b8" text-anchor="middle">20°</text><text x="905.0" y="356" font-size="17" fill="#9aa4b8" text-anchor="middle">30°</text><text x="1020.0" y="356" font-size="17" fill="#9aa4b8" text-anchor="middle">40°</text><text x="90.0" y="76.0" font-size="17" fill="#9aa4b8" text-anchor="end">100%</text><line x1="100.0" y1="70.0" x2="1020.0" y2="70.0" stroke="#2a3040" stroke-dasharray="3 6"/><text x="90.0" y="206.0" font-size="17" fill="#9aa4b8" text-anchor="end">50%</text><line x1="100.0" y1="200.0" x2="1020.0" y2="200.0" stroke="#2a3040" stroke-dasharray="3 6"/><line x1="100.0" y1="221.7" x2="1020.0" y2="221.7" stroke="#ffc44d" stroke-width="2.5" stroke-dasharray="10 6"/><text x="1020.0" y="209.7" font-size="17" fill="#ffc44d" text-anchor="end">Quest 3 약 25 PPD ≈ 중심 시력의 약 42% · 화면 전체 균일</text><path d="M100.0,317.6 L111.5,317.3 L123.0,317.0 L134.5,316.7 L146.0,316.3 L157.5,315.9 L169.0,315.6 L180.5,315.1 L192.0,314.7 L203.5,314.2 L215.0,313.8 L226.5,313.2 L238.0,312.7 L249.5,312.1 L261.0,311.4 L272.5,310.7 L284.0,310.0 L295.5,309.2 L307.0,308.3 L318.5,307.4 L330.0,306.4 L341.5,305.2 L353.0,304.0 L364.5,302.6 L376.0,301.1 L387.5,299.4 L399.0,297.5 L410.5,295.3 L422.0,292.9 L433.5,290.0 L445.0,286.7 L456.5,282.7 L468.0,278.0 L479.5,272.2 L491.0,265.0 L502.5,255.7 L505.4,253.0 L508.2,250.0 L511.1,246.8 L514.0,243.3 L516.9,239.6 L519.8,235.5 L522.6,231.0 L525.5,226.0 L528.4,220.5 L531.2,214.4 L534.1,207.6 L537.0,200.0 L539.9,191.3 L542.8,181.4 L545.6,170.0 L548.5,156.7 L551.4,140.9 L554.2,122.0 L557.1,98.9 L560.0,70.0 L562.9,98.9 L565.8,122.0 L568.6,140.9 L571.5,156.7 L574.4,170.0 L577.2,181.4 L580.1,191.3 L583.0,200.0 L585.9,207.6 L588.8,214.4 L591.6,220.5 L594.5,226.0 L597.4,231.0 L600.2,235.5 L603.1,239.6 L606.0,243.3 L608.9,246.8 L611.8,250.0 L614.6,253.0 L617.5,255.7 L620.4,258.3 L623.2,260.7 L626.1,262.9 L629.0,265.0 L640.5,272.2 L652.0,278.0 L663.5,282.7 L675.0,286.7 L686.5,290.0 L698.0,292.9 L709.5,295.3 L721.0,297.5 L732.5,299.4 L744.0,301.1 L755.5,302.6 L767.0,304.0 L778.5,305.2 L790.0,306.4 L801.5,307.4 L813.0,308.3 L824.5,309.2 L836.0,310.0 L847.5,310.7 L859.0,311.4 L870.5,312.1 L882.0,312.7 L893.5,313.2 L905.0,313.8 L916.5,314.2 L928.0,314.7 L939.5,315.1 L951.0,315.6 L962.5,315.9 L974.0,316.3 L985.5,316.7 L997.0,317.0 L1008.5,317.3 L1020.0,317.6" fill="none" stroke="#ff5fa2" stroke-width="3.5"/><circle cx="527.8" cy="221.7" r="6" fill="#ffc44d"/><circle cx="592.2" cy="221.7" r="6" fill="#ffc44d"/><text x="606.0" y="255.7" font-size="17" fill="#e8ecf4">약 3° 바깥 : 눈이 화면보다 둔함</text><text x="606.0" y="277.7" font-size="17" fill="#9aa4b8">→ 포비티드 렌더링의 여지</text><text x="578.4" y="84" font-size="18" fill="#ff5fa2" font-weight="700">중심와 (약 2°)</text><text x="111.5" y="40" font-size="18" fill="#e8ecf4" font-weight="700">상대 시각 예민도 (중심 = 100%)</text><text x="1020.0" y="392" font-size="16" fill="#9aa4b8" text-anchor="end">가로축 : 편심각 (시선 중심에서 벗어난 각도) · 대략적 모형 100% ÷ (1 + 편심각/2°) · 개인차 큼</text></svg>
+  <svg class="dg" style="max-height:395px" viewBox="0 0 1120 400" font-family="Pretendard, 'Malgun Gothic', sans-serif" role="img" aria-label="편심각에 따른 시각 예민도"><rect x="548.5" y="60" width="23.0" height="270" fill="#a3245e" opacity=".18"/><line x1="100.0" y1="330" x2="1020.0" y2="330" stroke="#cfc6b2" stroke-width="2"/><line x1="100.0" y1="60" x2="100.0" y2="330" stroke="#cfc6b2" stroke-width="2"/><text x="100.0" y="356" font-size="17" fill="#4a463e" text-anchor="middle">-40°</text><text x="215.0" y="356" font-size="17" fill="#4a463e" text-anchor="middle">-30°</text><text x="330.0" y="356" font-size="17" fill="#4a463e" text-anchor="middle">-20°</text><text x="445.0" y="356" font-size="17" fill="#4a463e" text-anchor="middle">-10°</text><text x="560.0" y="356" font-size="17" fill="#4a463e" text-anchor="middle">0°</text><text x="675.0" y="356" font-size="17" fill="#4a463e" text-anchor="middle">10°</text><text x="790.0" y="356" font-size="17" fill="#4a463e" text-anchor="middle">20°</text><text x="905.0" y="356" font-size="17" fill="#4a463e" text-anchor="middle">30°</text><text x="1020.0" y="356" font-size="17" fill="#4a463e" text-anchor="middle">40°</text><text x="90.0" y="76.0" font-size="17" fill="#4a463e" text-anchor="end">100%</text><line x1="100.0" y1="70.0" x2="1020.0" y2="70.0" stroke="#cfc6b2" stroke-dasharray="3 6"/><text x="90.0" y="206.0" font-size="17" fill="#4a463e" text-anchor="end">50%</text><line x1="100.0" y1="200.0" x2="1020.0" y2="200.0" stroke="#cfc6b2" stroke-dasharray="3 6"/><line x1="100.0" y1="221.7" x2="1020.0" y2="221.7" stroke="#a8701a" stroke-width="2.5" stroke-dasharray="10 6"/><text x="1020.0" y="209.7" font-size="17" fill="#a8701a" text-anchor="end">Quest 3 약 25 PPD ≈ 중심 시력의 약 42% · 화면 전체 균일</text><path d="M100.0,317.6 L111.5,317.3 L123.0,317.0 L134.5,316.7 L146.0,316.3 L157.5,315.9 L169.0,315.6 L180.5,315.1 L192.0,314.7 L203.5,314.2 L215.0,313.8 L226.5,313.2 L238.0,312.7 L249.5,312.1 L261.0,311.4 L272.5,310.7 L284.0,310.0 L295.5,309.2 L307.0,308.3 L318.5,307.4 L330.0,306.4 L341.5,305.2 L353.0,304.0 L364.5,302.6 L376.0,301.1 L387.5,299.4 L399.0,297.5 L410.5,295.3 L422.0,292.9 L433.5,290.0 L445.0,286.7 L456.5,282.7 L468.0,278.0 L479.5,272.2 L491.0,265.0 L502.5,255.7 L505.4,253.0 L508.2,250.0 L511.1,246.8 L514.0,243.3 L516.9,239.6 L519.8,235.5 L522.6,231.0 L525.5,226.0 L528.4,220.5 L531.2,214.4 L534.1,207.6 L537.0,200.0 L539.9,191.3 L542.8,181.4 L545.6,170.0 L548.5,156.7 L551.4,140.9 L554.2,122.0 L557.1,98.9 L560.0,70.0 L562.9,98.9 L565.8,122.0 L568.6,140.9 L571.5,156.7 L574.4,170.0 L577.2,181.4 L580.1,191.3 L583.0,200.0 L585.9,207.6 L588.8,214.4 L591.6,220.5 L594.5,226.0 L597.4,231.0 L600.2,235.5 L603.1,239.6 L606.0,243.3 L608.9,246.8 L611.8,250.0 L614.6,253.0 L617.5,255.7 L620.4,258.3 L623.2,260.7 L626.1,262.9 L629.0,265.0 L640.5,272.2 L652.0,278.0 L663.5,282.7 L675.0,286.7 L686.5,290.0 L698.0,292.9 L709.5,295.3 L721.0,297.5 L732.5,299.4 L744.0,301.1 L755.5,302.6 L767.0,304.0 L778.5,305.2 L790.0,306.4 L801.5,307.4 L813.0,308.3 L824.5,309.2 L836.0,310.0 L847.5,310.7 L859.0,311.4 L870.5,312.1 L882.0,312.7 L893.5,313.2 L905.0,313.8 L916.5,314.2 L928.0,314.7 L939.5,315.1 L951.0,315.6 L962.5,315.9 L974.0,316.3 L985.5,316.7 L997.0,317.0 L1008.5,317.3 L1020.0,317.6" fill="none" stroke="#a3245e" stroke-width="3.5"/><circle cx="527.8" cy="221.7" r="6" fill="#a8701a"/><circle cx="592.2" cy="221.7" r="6" fill="#a8701a"/><text x="700.0" y="252.7" font-size="17" fill="#1b1a17">약 3° 바깥 : 눈이 화면보다 둔함</text><text x="700.0" y="274.7" font-size="17" fill="#4a463e">→ 포비티드 렌더링의 여지</text><text x="578.4" y="84" font-size="18" fill="#a3245e" font-weight="700">중심와 (약 2°)</text><text x="111.5" y="40" font-size="18" fill="#1b1a17" font-weight="700">상대 시각 예민도 (중심 = 100%)</text><text x="1020.0" y="392" font-size="16" fill="#4a463e" text-anchor="end">가로축 : 편심각 (시선 중심에서 벗어난 각도) · 대략적 모형 100% ÷ (1 + 편심각/2°) · 개인차 큼</text></svg>
   <div class="analogy" style="margin-top:.2em">
     <p><b>어두운 방의 손전등</b> : 비추는 동그라미 안만 또렷 · 나머지는 «뭔가 있다» 정도 → 그래도 방 전체가 선명하다고 느끼는 이유 = 눈이 초당 여러 번 시선을 옮기며 손전등을 비춤</p>
   </div>
   <aside class="notes">
     - 실험 : 이 슬라이드 제목 한 글자를 응시한 채 양옆 단어를 읽어 보기 → 2~3 단어만 벗어나도 못 읽음
     - 곡선은 개념 설명용 대략 모형 (LaValle Fig 5.5 의 광수용체 밀도 분포 참고) · 정확한 값은 개인·밝기 조건마다 다름
-    - 노란 선 : 헤드셋은 화면 전체를 같은 해상도로 그림 → 중심에선 부족, 주변에선 남음
+    - 황토색 점선 : 헤드셋은 화면 전체를 같은 해상도로 그림 → 중심에선 부족, 주변에선 남음
   </aside>
 </section>
 
@@ -989,7 +1420,7 @@ mat.SetTextureScale("_BaseMap", new Vector2(50, 50));   // 바닥에 50번 반�
 <section>
   <div class="tag vr">지각 · 4 ★</div>
   <h3 style="margin-bottom:.3em">시야 1° 안의 픽셀 — 같은 사선, 다른 계단</h3>
-  <svg class="dg" viewBox="0 0 1120 410" font-family="Pretendard, 'Malgun Gothic', sans-serif" role="img" aria-label="시야 1도 안의 픽셀 수 비교"><text x="40" y="34" font-size="19" fill="#e8ecf4" font-weight="700">시야 1° × 1° 정사각형 안의 픽셀 · 분홍 선 = 같은 사선 하나를 그린 결과</text><g transform="translate(60,60)"><rect width="270" height="270" fill="#0f131b"/><rect x="21.60" y="205.20" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="32.40" y="194.40" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="32.40" y="205.20" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="43.20" y="194.40" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="54.00" y="183.60" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="54.00" y="194.40" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="64.80" y="183.60" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="75.60" y="172.80" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="86.40" y="172.80" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="97.20" y="162.00" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="108.00" y="151.20" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="108.00" y="162.00" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="118.80" y="151.20" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="129.60" y="140.40" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="140.40" y="140.40" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="151.20" y="129.60" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="162.00" y="118.80" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="162.00" y="129.60" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="172.80" y="118.80" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="183.60" y="108.00" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="194.40" y="108.00" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="205.20" y="97.20" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="216.00" y="86.40" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="216.00" y="97.20" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="226.80" y="86.40" width="10.80" height="10.80" fill="#ff5a4d"/><rect x="237.60" y="75.60" width="10.80" height="10.80" fill="#ff5a4d"/><path d="M10.80,0V270M0,10.80H270M21.60,0V270M0,21.60H270M32.40,0V270M0,32.40H270M43.20,0V270M0,43.20H270M54.00,0V270M0,54.00H270M64.80,0V270M0,64.80H270M75.60,0V270M0,75.60H270M86.40,0V270M0,86.40H270M97.20,0V270M0,97.20H270M108.00,0V270M0,108.00H270M118.80,0V270M0,118.80H270M129.60,0V270M0,129.60H270M140.40,0V270M0,140.40H270M151.20,0V270M0,151.20H270M162.00,0V270M0,162.00H270M172.80,0V270M0,172.80H270M183.60,0V270M0,183.60H270M194.40,0V270M0,194.40H270M205.20,0V270M0,205.20H270M216.00,0V270M0,216.00H270M226.80,0V270M0,226.80H270M237.60,0V270M0,237.60H270M248.40,0V270M0,248.40H270M259.20,0V270M0,259.20H270" stroke="#2a3040" stroke-width="1"/><line x1="21.6" y1="216.0" x2="248.4" y2="81.0" stroke="#ff5fa2" stroke-width="1.8"/><rect width="270" height="270" fill="none" stroke="#9aa4b8" stroke-width="2"/><text x="135.0" y="304" font-size="20" fill="#ff5a4d" text-anchor="middle" font-weight="700">Quest 3 · 약 25 PPD</text><text x="135.0" y="330" font-size="17" fill="#9aa4b8" text-anchor="middle">1° 안 625 픽셀</text></g><g transform="translate(425,60)"><rect width="270" height="270" fill="#0f131b"/><rect x="18.00" y="210.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="24.00" y="210.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="30.00" y="204.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="36.00" y="204.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="42.00" y="198.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="48.00" y="192.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="48.00" y="198.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="54.00" y="192.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="60.00" y="186.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="60.00" y="192.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="66.00" y="186.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="72.00" y="180.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="78.00" y="174.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="78.00" y="180.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="84.00" y="174.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="90.00" y="168.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="90.00" y="174.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="96.00" y="168.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="102.00" y="162.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="108.00" y="162.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="114.00" y="156.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="120.00" y="150.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="120.00" y="156.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="126.00" y="150.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="132.00" y="144.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="138.00" y="144.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="144.00" y="138.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="150.00" y="132.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="150.00" y="138.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="156.00" y="132.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="162.00" y="126.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="168.00" y="126.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="174.00" y="120.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="180.00" y="114.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="180.00" y="120.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="186.00" y="114.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="192.00" y="108.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="198.00" y="108.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="204.00" y="102.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="210.00" y="96.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="210.00" y="102.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="216.00" y="96.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="222.00" y="90.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="228.00" y="90.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="234.00" y="84.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="240.00" y="78.00" width="6.00" height="6.00" fill="#35d6e6"/><rect x="240.00" y="84.00" width="6.00" height="6.00" fill="#35d6e6"/><path d="M6.00,0V270M0,6.00H270M12.00,0V270M0,12.00H270M18.00,0V270M0,18.00H270M24.00,0V270M0,24.00H270M30.00,0V270M0,30.00H270M36.00,0V270M0,36.00H270M42.00,0V270M0,42.00H270M48.00,0V270M0,48.00H270M54.00,0V270M0,54.00H270M60.00,0V270M0,60.00H270M66.00,0V270M0,66.00H270M72.00,0V270M0,72.00H270M78.00,0V270M0,78.00H270M84.00,0V270M0,84.00H270M90.00,0V270M0,90.00H270M96.00,0V270M0,96.00H270M102.00,0V270M0,102.00H270M108.00,0V270M0,108.00H270M114.00,0V270M0,114.00H270M120.00,0V270M0,120.00H270M126.00,0V270M0,126.00H270M132.00,0V270M0,132.00H270M138.00,0V270M0,138.00H270M144.00,0V270M0,144.00H270M150.00,0V270M0,150.00H270M156.00,0V270M0,156.00H270M162.00,0V270M0,162.00H270M168.00,0V270M0,168.00H270M174.00,0V270M0,174.00H270M180.00,0V270M0,180.00H270M186.00,0V270M0,186.00H270M192.00,0V270M0,192.00H270M198.00,0V270M0,198.00H270M204.00,0V270M0,204.00H270M210.00,0V270M0,210.00H270M216.00,0V270M0,216.00H270M222.00,0V270M0,222.00H270M228.00,0V270M0,228.00H270M234.00,0V270M0,234.00H270M240.00,0V270M0,240.00H270M246.00,0V270M0,246.00H270M252.00,0V270M0,252.00H270M258.00,0V270M0,258.00H270M264.00,0V270M0,264.00H270" stroke="#2a3040" stroke-width="0.7"/><line x1="21.6" y1="216.0" x2="248.4" y2="81.0" stroke="#ff5fa2" stroke-width="1.8"/><rect width="270" height="270" fill="none" stroke="#9aa4b8" stroke-width="2"/><text x="135.0" y="304" font-size="20" fill="#35d6e6" text-anchor="middle" font-weight="700">27″ QHD 모니터 60 cm · 약 45 PPD</text><text x="135.0" y="330" font-size="17" fill="#9aa4b8" text-anchor="middle">1° 안 약 2,000 픽셀</text></g><g transform="translate(790,60)"><rect width="270" height="270" fill="#0f131b"/><rect x="22.50" y="211.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="27.00" y="207.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="27.00" y="211.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="31.50" y="207.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="36.00" y="202.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="40.50" y="202.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="45.00" y="198.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="49.50" y="193.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="49.50" y="198.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="54.00" y="193.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="58.50" y="189.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="63.00" y="189.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="67.50" y="184.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="72.00" y="180.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="72.00" y="184.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="76.50" y="180.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="81.00" y="175.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="85.50" y="175.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="90.00" y="171.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="94.50" y="166.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="94.50" y="171.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="99.00" y="166.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="103.50" y="162.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="108.00" y="162.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="112.50" y="157.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="117.00" y="153.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="117.00" y="157.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="121.50" y="153.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="126.00" y="148.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="126.00" y="153.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="130.50" y="148.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="135.00" y="144.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="139.50" y="139.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="139.50" y="144.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="144.00" y="139.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="148.50" y="135.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="148.50" y="139.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="153.00" y="135.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="157.50" y="130.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="162.00" y="130.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="166.50" y="126.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="171.00" y="121.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="171.00" y="126.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="175.50" y="121.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="180.00" y="117.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="184.50" y="117.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="189.00" y="112.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="193.50" y="108.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="193.50" y="112.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="198.00" y="108.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="202.50" y="103.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="207.00" y="103.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="211.50" y="99.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="216.00" y="94.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="216.00" y="99.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="220.50" y="94.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="225.00" y="90.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="229.50" y="90.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="234.00" y="85.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="238.50" y="81.00" width="4.50" height="4.50" fill="#a8e05f"/><rect x="238.50" y="85.50" width="4.50" height="4.50" fill="#a8e05f"/><rect x="243.00" y="81.00" width="4.50" height="4.50" fill="#a8e05f"/><path d="M4.50,0V270M0,4.50H270M9.00,0V270M0,9.00H270M13.50,0V270M0,13.50H270M18.00,0V270M0,18.00H270M22.50,0V270M0,22.50H270M27.00,0V270M0,27.00H270M31.50,0V270M0,31.50H270M36.00,0V270M0,36.00H270M40.50,0V270M0,40.50H270M45.00,0V270M0,45.00H270M49.50,0V270M0,49.50H270M54.00,0V270M0,54.00H270M58.50,0V270M0,58.50H270M63.00,0V270M0,63.00H270M67.50,0V270M0,67.50H270M72.00,0V270M0,72.00H270M76.50,0V270M0,76.50H270M81.00,0V270M0,81.00H270M85.50,0V270M0,85.50H270M90.00,0V270M0,90.00H270M94.50,0V270M0,94.50H270M99.00,0V270M0,99.00H270M103.50,0V270M0,103.50H270M108.00,0V270M0,108.00H270M112.50,0V270M0,112.50H270M117.00,0V270M0,117.00H270M121.50,0V270M0,121.50H270M126.00,0V270M0,126.00H270M130.50,0V270M0,130.50H270M135.00,0V270M0,135.00H270M139.50,0V270M0,139.50H270M144.00,0V270M0,144.00H270M148.50,0V270M0,148.50H270M153.00,0V270M0,153.00H270M157.50,0V270M0,157.50H270M162.00,0V270M0,162.00H270M166.50,0V270M0,166.50H270M171.00,0V270M0,171.00H270M175.50,0V270M0,175.50H270M180.00,0V270M0,180.00H270M184.50,0V270M0,184.50H270M189.00,0V270M0,189.00H270M193.50,0V270M0,193.50H270M198.00,0V270M0,198.00H270M202.50,0V270M0,202.50H270M207.00,0V270M0,207.00H270M211.50,0V270M0,211.50H270M216.00,0V270M0,216.00H270M220.50,0V270M0,220.50H270M225.00,0V270M0,225.00H270M229.50,0V270M0,229.50H270M234.00,0V270M0,234.00H270M238.50,0V270M0,238.50H270M243.00,0V270M0,243.00H270M247.50,0V270M0,247.50H270M252.00,0V270M0,252.00H270M256.50,0V270M0,256.50H270M261.00,0V270M0,261.00H270M265.50,0V270M0,265.50H270" stroke="#2a3040" stroke-width="0.7"/><line x1="21.6" y1="216.0" x2="248.4" y2="81.0" stroke="#ff5fa2" stroke-width="1.8"/><rect width="270" height="270" fill="none" stroke="#9aa4b8" stroke-width="2"/><text x="135.0" y="304" font-size="20" fill="#a8e05f" text-anchor="middle" font-weight="700">20/20 시력 기준 · 60 PPD</text><text x="135.0" y="330" font-size="17" fill="#9aa4b8" text-anchor="middle">1° 안 3,600 픽셀</text></g></svg>
+  <svg class="dg" viewBox="0 0 1120 410" font-family="Pretendard, 'Malgun Gothic', sans-serif" role="img" aria-label="시야 1도 안의 픽셀 수 비교"><text x="40" y="34" font-size="19" fill="#1b1a17" font-weight="700">시야 1° × 1° 정사각형 안의 픽셀 · 자주색 선 = 같은 사선 하나를 그린 결과</text><g transform="translate(60,60)"><rect width="270" height="270" fill="#fbf8f1"/><rect x="21.60" y="205.20" width="10.80" height="10.80" fill="#c2401d"/><rect x="32.40" y="194.40" width="10.80" height="10.80" fill="#c2401d"/><rect x="32.40" y="205.20" width="10.80" height="10.80" fill="#c2401d"/><rect x="43.20" y="194.40" width="10.80" height="10.80" fill="#c2401d"/><rect x="54.00" y="183.60" width="10.80" height="10.80" fill="#c2401d"/><rect x="54.00" y="194.40" width="10.80" height="10.80" fill="#c2401d"/><rect x="64.80" y="183.60" width="10.80" height="10.80" fill="#c2401d"/><rect x="75.60" y="172.80" width="10.80" height="10.80" fill="#c2401d"/><rect x="86.40" y="172.80" width="10.80" height="10.80" fill="#c2401d"/><rect x="97.20" y="162.00" width="10.80" height="10.80" fill="#c2401d"/><rect x="108.00" y="151.20" width="10.80" height="10.80" fill="#c2401d"/><rect x="108.00" y="162.00" width="10.80" height="10.80" fill="#c2401d"/><rect x="118.80" y="151.20" width="10.80" height="10.80" fill="#c2401d"/><rect x="129.60" y="140.40" width="10.80" height="10.80" fill="#c2401d"/><rect x="140.40" y="140.40" width="10.80" height="10.80" fill="#c2401d"/><rect x="151.20" y="129.60" width="10.80" height="10.80" fill="#c2401d"/><rect x="162.00" y="118.80" width="10.80" height="10.80" fill="#c2401d"/><rect x="162.00" y="129.60" width="10.80" height="10.80" fill="#c2401d"/><rect x="172.80" y="118.80" width="10.80" height="10.80" fill="#c2401d"/><rect x="183.60" y="108.00" width="10.80" height="10.80" fill="#c2401d"/><rect x="194.40" y="108.00" width="10.80" height="10.80" fill="#c2401d"/><rect x="205.20" y="97.20" width="10.80" height="10.80" fill="#c2401d"/><rect x="216.00" y="86.40" width="10.80" height="10.80" fill="#c2401d"/><rect x="216.00" y="97.20" width="10.80" height="10.80" fill="#c2401d"/><rect x="226.80" y="86.40" width="10.80" height="10.80" fill="#c2401d"/><rect x="237.60" y="75.60" width="10.80" height="10.80" fill="#c2401d"/><path d="M10.80,0V270M0,10.80H270M21.60,0V270M0,21.60H270M32.40,0V270M0,32.40H270M43.20,0V270M0,43.20H270M54.00,0V270M0,54.00H270M64.80,0V270M0,64.80H270M75.60,0V270M0,75.60H270M86.40,0V270M0,86.40H270M97.20,0V270M0,97.20H270M108.00,0V270M0,108.00H270M118.80,0V270M0,118.80H270M129.60,0V270M0,129.60H270M140.40,0V270M0,140.40H270M151.20,0V270M0,151.20H270M162.00,0V270M0,162.00H270M172.80,0V270M0,172.80H270M183.60,0V270M0,183.60H270M194.40,0V270M0,194.40H270M205.20,0V270M0,205.20H270M216.00,0V270M0,216.00H270M226.80,0V270M0,226.80H270M237.60,0V270M0,237.60H270M248.40,0V270M0,248.40H270M259.20,0V270M0,259.20H270" stroke="#cfc6b2" stroke-width="1"/><line x1="21.6" y1="216.0" x2="248.4" y2="81.0" stroke="#a3245e" stroke-width="1.8"/><rect width="270" height="270" fill="none" stroke="#4a463e" stroke-width="2"/><text x="135.0" y="304" font-size="20" fill="#c2401d" text-anchor="middle" font-weight="700">Quest 3 · 약 25 PPD</text><text x="135.0" y="330" font-size="17" fill="#4a463e" text-anchor="middle">1° 안 625 픽셀</text></g><g transform="translate(425,60)"><rect width="270" height="270" fill="#fbf8f1"/><rect x="18.00" y="210.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="24.00" y="210.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="30.00" y="204.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="36.00" y="204.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="42.00" y="198.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="48.00" y="192.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="48.00" y="198.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="54.00" y="192.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="60.00" y="186.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="60.00" y="192.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="66.00" y="186.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="72.00" y="180.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="78.00" y="174.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="78.00" y="180.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="84.00" y="174.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="90.00" y="168.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="90.00" y="174.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="96.00" y="168.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="102.00" y="162.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="108.00" y="162.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="114.00" y="156.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="120.00" y="150.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="120.00" y="156.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="126.00" y="150.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="132.00" y="144.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="138.00" y="144.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="144.00" y="138.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="150.00" y="132.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="150.00" y="138.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="156.00" y="132.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="162.00" y="126.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="168.00" y="126.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="174.00" y="120.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="180.00" y="114.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="180.00" y="120.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="186.00" y="114.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="192.00" y="108.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="198.00" y="108.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="204.00" y="102.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="210.00" y="96.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="210.00" y="102.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="216.00" y="96.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="222.00" y="90.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="228.00" y="90.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="234.00" y="84.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="240.00" y="78.00" width="6.00" height="6.00" fill="#0d6b78"/><rect x="240.00" y="84.00" width="6.00" height="6.00" fill="#0d6b78"/><path d="M6.00,0V270M0,6.00H270M12.00,0V270M0,12.00H270M18.00,0V270M0,18.00H270M24.00,0V270M0,24.00H270M30.00,0V270M0,30.00H270M36.00,0V270M0,36.00H270M42.00,0V270M0,42.00H270M48.00,0V270M0,48.00H270M54.00,0V270M0,54.00H270M60.00,0V270M0,60.00H270M66.00,0V270M0,66.00H270M72.00,0V270M0,72.00H270M78.00,0V270M0,78.00H270M84.00,0V270M0,84.00H270M90.00,0V270M0,90.00H270M96.00,0V270M0,96.00H270M102.00,0V270M0,102.00H270M108.00,0V270M0,108.00H270M114.00,0V270M0,114.00H270M120.00,0V270M0,120.00H270M126.00,0V270M0,126.00H270M132.00,0V270M0,132.00H270M138.00,0V270M0,138.00H270M144.00,0V270M0,144.00H270M150.00,0V270M0,150.00H270M156.00,0V270M0,156.00H270M162.00,0V270M0,162.00H270M168.00,0V270M0,168.00H270M174.00,0V270M0,174.00H270M180.00,0V270M0,180.00H270M186.00,0V270M0,186.00H270M192.00,0V270M0,192.00H270M198.00,0V270M0,198.00H270M204.00,0V270M0,204.00H270M210.00,0V270M0,210.00H270M216.00,0V270M0,216.00H270M222.00,0V270M0,222.00H270M228.00,0V270M0,228.00H270M234.00,0V270M0,234.00H270M240.00,0V270M0,240.00H270M246.00,0V270M0,246.00H270M252.00,0V270M0,252.00H270M258.00,0V270M0,258.00H270M264.00,0V270M0,264.00H270" stroke="#cfc6b2" stroke-width="0.7"/><line x1="21.6" y1="216.0" x2="248.4" y2="81.0" stroke="#a3245e" stroke-width="1.8"/><rect width="270" height="270" fill="none" stroke="#4a463e" stroke-width="2"/><text x="135.0" y="304" font-size="20" fill="#0d6b78" text-anchor="middle" font-weight="700">27″ QHD 모니터 60 cm · 약 45 PPD</text><text x="135.0" y="330" font-size="17" fill="#4a463e" text-anchor="middle">1° 안 약 2,000 픽셀</text></g><g transform="translate(790,60)"><rect width="270" height="270" fill="#fbf8f1"/><rect x="22.50" y="211.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="27.00" y="207.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="27.00" y="211.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="31.50" y="207.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="36.00" y="202.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="40.50" y="202.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="45.00" y="198.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="49.50" y="193.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="49.50" y="198.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="54.00" y="193.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="58.50" y="189.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="63.00" y="189.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="67.50" y="184.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="72.00" y="180.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="72.00" y="184.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="76.50" y="180.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="81.00" y="175.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="85.50" y="175.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="90.00" y="171.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="94.50" y="166.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="94.50" y="171.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="99.00" y="166.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="103.50" y="162.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="108.00" y="162.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="112.50" y="157.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="117.00" y="153.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="117.00" y="157.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="121.50" y="153.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="126.00" y="148.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="126.00" y="153.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="130.50" y="148.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="135.00" y="144.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="139.50" y="139.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="139.50" y="144.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="144.00" y="139.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="148.50" y="135.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="148.50" y="139.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="153.00" y="135.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="157.50" y="130.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="162.00" y="130.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="166.50" y="126.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="171.00" y="121.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="171.00" y="126.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="175.50" y="121.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="180.00" y="117.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="184.50" y="117.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="189.00" y="112.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="193.50" y="108.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="193.50" y="112.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="198.00" y="108.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="202.50" y="103.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="207.00" y="103.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="211.50" y="99.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="216.00" y="94.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="216.00" y="99.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="220.50" y="94.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="225.00" y="90.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="229.50" y="90.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="234.00" y="85.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="238.50" y="81.00" width="4.50" height="4.50" fill="#4f7a16"/><rect x="238.50" y="85.50" width="4.50" height="4.50" fill="#4f7a16"/><rect x="243.00" y="81.00" width="4.50" height="4.50" fill="#4f7a16"/><path d="M4.50,0V270M0,4.50H270M9.00,0V270M0,9.00H270M13.50,0V270M0,13.50H270M18.00,0V270M0,18.00H270M22.50,0V270M0,22.50H270M27.00,0V270M0,27.00H270M31.50,0V270M0,31.50H270M36.00,0V270M0,36.00H270M40.50,0V270M0,40.50H270M45.00,0V270M0,45.00H270M49.50,0V270M0,49.50H270M54.00,0V270M0,54.00H270M58.50,0V270M0,58.50H270M63.00,0V270M0,63.00H270M67.50,0V270M0,67.50H270M72.00,0V270M0,72.00H270M76.50,0V270M0,76.50H270M81.00,0V270M0,81.00H270M85.50,0V270M0,85.50H270M90.00,0V270M0,90.00H270M94.50,0V270M0,94.50H270M99.00,0V270M0,99.00H270M103.50,0V270M0,103.50H270M108.00,0V270M0,108.00H270M112.50,0V270M0,112.50H270M117.00,0V270M0,117.00H270M121.50,0V270M0,121.50H270M126.00,0V270M0,126.00H270M130.50,0V270M0,130.50H270M135.00,0V270M0,135.00H270M139.50,0V270M0,139.50H270M144.00,0V270M0,144.00H270M148.50,0V270M0,148.50H270M153.00,0V270M0,153.00H270M157.50,0V270M0,157.50H270M162.00,0V270M0,162.00H270M166.50,0V270M0,166.50H270M171.00,0V270M0,171.00H270M175.50,0V270M0,175.50H270M180.00,0V270M0,180.00H270M184.50,0V270M0,184.50H270M189.00,0V270M0,189.00H270M193.50,0V270M0,193.50H270M198.00,0V270M0,198.00H270M202.50,0V270M0,202.50H270M207.00,0V270M0,207.00H270M211.50,0V270M0,211.50H270M216.00,0V270M0,216.00H270M220.50,0V270M0,220.50H270M225.00,0V270M0,225.00H270M229.50,0V270M0,229.50H270M234.00,0V270M0,234.00H270M238.50,0V270M0,238.50H270M243.00,0V270M0,243.00H270M247.50,0V270M0,247.50H270M252.00,0V270M0,252.00H270M256.50,0V270M0,256.50H270M261.00,0V270M0,261.00H270M265.50,0V270M0,265.50H270" stroke="#cfc6b2" stroke-width="0.7"/><line x1="21.6" y1="216.0" x2="248.4" y2="81.0" stroke="#a3245e" stroke-width="1.8"/><rect width="270" height="270" fill="none" stroke="#4a463e" stroke-width="2"/><text x="135.0" y="304" font-size="20" fill="#4f7a16" text-anchor="middle" font-weight="700">20/20 시력 기준 · 60 PPD</text><text x="135.0" y="330" font-size="17" fill="#4a463e" text-anchor="middle">1° 안 3,600 픽셀</text></g></svg>
   <aside class="notes">
     - 왼쪽 계단이 굵음 → 같은 텍스처·같은 선도 헤드셋에서는 계단·반짝임이 3배 굵게 보임
     - 무늬 한 주기가 1° 안에 12.5개보다 촘촘하면 Quest 3 에서는 원리적으로 표현 불가 → 밉맵이 회색으로 바꿔 줘야 정상
@@ -1269,7 +1700,7 @@ foreach (var r in FindObjectsByType&lt;Renderer&gt;(FindObjectsSortMode.None))
   </table>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">다음 주</div>
   <div class="rule"></div>
   <h1>애니메이션과 <em>물리</em></h1>

@@ -12,7 +12,8 @@
 /* 덱 고유 : 인라인 SVG 도해 */
 .reveal svg.dg { display:block; margin:.15em auto 0; max-width:100%; height:auto; }
 .reveal svg.dg text { font-family: var(--sans); }
-.reveal svg.dg text:not([fill]) { fill: #e8ecf4; }
+.reveal svg.dg text:not([fill]) { fill: var(--ink); }
+  .reveal dl.terms.dense { font-size:.64em; }
 </style>
 </head>
 <body>
@@ -59,11 +60,11 @@
       <p>3D 점 하나가 화면의 픽셀이 되기까지 거치는 <b>여섯 개 좌표 공간</b>을 순서대로 말하고, 각 단계에서 무엇이 바뀌는지 한 문장으로 설명</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 깜빡임 진단</h4>
+      <h4><span class="step">2</span> 깜빡임 진단</h4>
       <p>카메라의 near·far 값으로 <b>특정 거리의 깊이 구분 간격을 직접 계산</b>하고, 깜빡임(z-fighting)이 생길지 판정 · near 조정으로 해결</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> VR 카메라 판단</h4>
+      <h4><span class="step">3</span> VR 카메라 판단</h4>
       <p>헤드셋이 <b>일부러 찌그러진 그림 두 장</b>을 그리는 이유를 설명하고, Unity에서 개발자가 바꿔도 되는 값(near·far)과 손대면 안 되는 값 구분</p>
     </div>
   </div>
@@ -79,18 +80,69 @@
 
 <section>
   <div class="tag gfx">Part I · 용어 미리보기</div>
-  <h2>이번 파트에서 쓰는 말 여덟 개</h2>
-  <dl class="terms" style="font-size:.68em;grid-template-columns:max-content 1fr max-content 1fr;gap:.55em 1em">
-    <dt>정점<small>Vertex</small></dt><dd>3D 모델을 이루는 <b>꼭짓점</b> 하나 · 위치·색·UV 등을 담은 점</dd>
-    <dt>셰이더<small>Shader</small></dt><dd>GPU에서 도는 <b>작은 프로그램</b> · 정점용과 픽셀용 두 종류</dd>
-    <dt>래스터화<small>Rasterization</small></dt><dd>삼각형이 덮는 <b>화면 칸(픽셀)을 골라내는</b> 단계</dd>
-    <dt>프래그먼트<small>Fragment</small></dt><dd>래스터화가 만든 <b>픽셀 후보</b> 하나 · 색이 정해지기 전 상태</dd>
-    <dt>절두체<small>Frustum</small></dt><dd>카메라에 보이는 공간 · <b>꼭대기가 잘린 피라미드</b> 모양</dd>
-    <dt>near · far<small>Clip planes</small></dt><dd>절두체의 <b>앞벽·뒷벽</b>까지의 거리 · 이 밖은 그리지 않음</dd>
-    <dt>NDC<small>Normalized Device Coords</small></dt><dd>화면을 가로·세로·깊이 모두 <b>−1~+1</b> 로 맞춘 공통 좌표</dd>
-    <dt>깊이 버퍼<small>Depth buffer</small></dt><dd>픽셀마다 <b>가장 가까운 물체의 거리</b>를 적어 두는 표</dd>
+  <h2>용어 미리보기 (1/2) — 점이 칸이 되기까지</h2>
+  <dl class="terms dense">
+    <dt>정점<small>Vertex</small></dt>
+    <dd>
+      <p>3D 모델을 이루는 <b>꼭짓점</b> 하나 — 위치뿐 아니라 색 · 법선 · UV 를 함께 적은 «점 카드»</p>
+      <p class="ex">정육면체 = 꼭짓점 8개지만 면마다 법선이 달라 Unity 에서는 정점 24개</p>
+      <p class="why">정점 셰이더가 정점마다 한 번씩 실행 → 정점 수 = 계산 비용의 한 축</p>
+      <p class="where">Game 뷰 Stats 의 Verts · 메시 Inspector 아래 미리보기의 Vertices 수</p>
+    </dd>
+    <dt>셰이더<small>Shader</small></dt>
+    <dd>
+      <p>GPU 안에서 정점마다 · 픽셀마다 수천 번 동시에 도는 <b>작은 프로그램</b> — 위치를 정하는 정점용, 색을 정하는 픽셀용</p>
+      <p class="ex">정점 셰이더 = 점에 행렬 곱하기 · 프래그먼트 셰이더 = 그 칸의 색 (빨강 0.8, 초록 0.2 …)</p>
+      <p class="where">Material Inspector 맨 위 Shader 드롭다운 (Universal Render Pipeline/Lit 등) · 6주차 Shader Graph</p>
+    </dd>
+    <dt>래스터화<small>Rasterization</small></dt>
+    <dd>
+      <p>화면 위 삼각형이 모눈종이의 <b>어느 칸(픽셀)을 덮는지</b> 골라내는 단계</p>
+      <p class="ex">오늘 도해의 삼각형 → 칸 중심이 안에 든 44칸 선택</p>
+      <p class="why">고른 칸 수만큼 프래그먼트 셰이더 실행 → 화면을 가득 채우는 물체가 비싼 이유</p>
+      <p class="where">GPU 고정 기능 · Scene 뷰 Draw Mode → Wireframe 으로 삼각형 확인</p>
+    </dd>
+    <dt>프래그먼트<small>Fragment</small></dt>
+    <dd>
+      <p>래스터화가 만든 <b>«픽셀 후보»</b> 하나 — 색과 깊이 시험을 아직 통과하지 못한 상태</p>
+      <p class="ex">상자 뒤에 숨은 벽도 프래그먼트는 생김 → 깊이 비교에서 지면 버려짐</p>
+      <p class="why">물체가 겹칠수록 같은 칸에 여러 번 생김(오버드로) → 12주차 성능 주제</p>
+    </dd>
   </dl>
-  <p class="small" style="margin-top:.6em">처음 등장할 때마다 다시 풀어 설명 · 지금은 낯이 익는 정도로 충분</p>
+</section>
+
+<section>
+  <div class="tag gfx">Part I · 용어 미리보기</div>
+  <h2>용어 미리보기 (2/2) — 카메라 상자와 깊이</h2>
+  <dl class="terms dense">
+    <dt>절두체<small>Frustum</small></dt>
+    <dd>
+      <p>카메라에 찍힐 수 있는 공간 전부 — <b>꼭대기를 잘라낸 피라미드</b> 모양 유리 상자</p>
+      <p class="ex">시야각 60° · near 0.3 · far 1000 → 앞벽 높이 약 35 cm · 뒷벽 높이 약 1.15 km</p>
+      <p class="why">상자 밖 물체는 그리지 않음 → 성능의 출발점 · 상자 모양 = 투영 행렬</p>
+      <p class="where">Scene 뷰에서 Camera 선택 시 보이는 흰 선 피라미드</p>
+    </dd>
+    <dt>near · far<small>Clip planes</small></dt>
+    <dd>
+      <p>절두체의 <b>앞벽 · 뒷벽</b>까지 거리 — 이보다 가깝거나 먼 것은 잘려서 안 그림</p>
+      <p class="ex">Unity 기본 near 0.3 · far 1000 · near 를 0.01 로 줄이면 먼 바닥이 깜빡임 (오늘의 함정)</p>
+      <p class="where">Camera Inspector → Projection → Clipping Planes 의 Near · Far</p>
+    </dd>
+    <dt>NDC<small>Normalized Device Coords</small></dt>
+    <dd>
+      <p>화면 크기와 상관없이 가로 · 세로 · 깊이를 모두 <b>−1~+1</b> 로 맞춘 공통 좌표 — 픽셀 대신 «몇 %» 로 적은 설계도</p>
+      <p class="ex">화면 정중앙 = (0, 0) · 오른쪽 끝 = x +1 · x 0.5 = 폭의 75% 지점</p>
+      <p class="why">해상도가 달라도 같은 계산 재사용 · 이 범위 밖 = 화면 밖 (깊이 범위는 API 마다 다름)</p>
+    </dd>
+    <dt>깊이 버퍼<small>Depth buffer</small></dt>
+    <dd>
+      <p>픽셀마다 «지금까지 그린 것 중 <b>가장 가까운 거리</b>» 를 적어 두는 숫자 표 — 칸마다 붙은 메모지</p>
+      <p class="ex">1920×1080 화면 = 메모지 약 207만 장 · 24비트면 한 장에 약 1677만 단계</p>
+      <p class="why">그리는 순서와 무관하게 앞뒤가 맞는 이유 · 단계가 유한해서 z-fighting 발생</p>
+      <p class="where">Window → Analysis → Frame Debugger 에서 그리기 단계별 확인</p>
+    </dd>
+  </dl>
+  <p class="small muted" style="margin-top:.3em">처음 등장할 때마다 다시 풀어 설명 · 지금은 낯이 익는 정도로 충분</p>
 </section>
 
 <!-- ---------------------------------------------------- 파이프라인 -->
@@ -103,12 +155,10 @@
       <p class="small">하지만 "세상 어디에 있는가"와 "화면 어디에 찍히는가"는 다른 질문 → 행렬 <b>두 개를 더 곱해야</b> 화면 위치 확정</p>
     </div>
     <div>
-      <dl class="terms" style="margin-top:0">
-        <dt>뷰 행렬<small>View matrix</small></dt><dd>세상을 <b>카메라 기준</b>으로 다시 놓는 행렬</dd>
-        <dt>투영 행렬<small>Projection</small></dt><dd>3D 장면을 <b>평평한 화면</b>으로 눌러 담는 행렬</dd>
-        <dt>파이프라인<small>Pipeline</small></dt><dd>이 계산들을 <b>정해진 순서</b>로 처리하는 GPU의 작업 흐름</dd>
-      </dl>
-      <p class="small">Unity Camera 컴포넌트의 인스펙터 값 → 이 두 행렬을 자동 생성</p>
+      <div class="key" style="margin-top:0">
+        <p class="small">더 곱하는 두 행렬 = <b>뷰 행렬</b>(카메라 기준으로 다시 놓기) · <b>투영 행렬</b>(평평한 화면에 눌러 담기)</p>
+      </div>
+      <p class="small">Unity Camera 컴포넌트의 인스펙터 값 → 이 두 행렬을 자동 생성 · 자세한 풀이는 다음 장</p>
     </div>
   </div>
   <div class="analogy">
@@ -119,6 +169,40 @@
     - 컨베이어 벨트 비유 : "부품(정점)이 공정을 하나씩 지나가며 모양이 바뀐다. 공정 순서는 바꿀 수 없다"
     - 2주차에 배운 모델 행렬이 첫 공정, 오늘 배우는 뷰·투영 행렬이 그 다음 공정
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">파이프라인 · 용어 풀이</div>
+  <h2>용어 풀이 — 행렬 두 개와 작업 흐름</h2>
+  <dl class="terms dense">
+    <dt>뷰 행렬<small>View matrix</small></dt>
+    <dd>
+      <p>세상 전체를 <b>카메라 기준</b>으로 다시 놓는 행렬 — 카메라 위치를 원점, 보는 방향을 −Z 로 맞춤</p>
+      <p class="ex">카메라 (0, 0, 5) → 세상 전체를 (0, 0, −5) 이동 → 원점의 상자가 «정면 5 m»</p>
+      <p class="why">카메라 Transform 을 움직이면 Unity 가 자동 갱신 · VR 에서는 헤드셋이 갱신</p>
+      <p class="where">스크립트 <code>Camera.worldToCameraMatrix</code> · 셰이더 <code>UNITY_MATRIX_V</code></p>
+    </dd>
+    <dt>투영 행렬<small>Projection matrix</small></dt>
+    <dd>
+      <p>3D 공간을 <b>평평한 화면</b>으로 눌러 담는 행렬 — 먼 것이 작아지게 만드는 장치가 여기 들어 있음</p>
+      <p class="ex">시야각 60° · 종횡비 16:9 · near 0.3 · far 1000 → 이 네 숫자로 16칸 행렬 완성</p>
+      <p class="why">VR 에서는 헤드셋이 눈마다 다른 행렬을 넣음 → 코드로 덮어쓰면 입체 붕괴</p>
+      <p class="where">Camera Inspector 의 Field of View · Clipping Planes · 스크립트 <code>Camera.projectionMatrix</code></p>
+    </dd>
+    <dt>역행렬<small>Inverse matrix</small></dt>
+    <dd>
+      <p>어떤 변환을 <b>정확히 되돌리는</b> 변환 — «앞으로 5 걷기» 의 역 = «뒤로 5 걷기»</p>
+      <p class="ex">카메라를 (0, 0, 5) 로 옮긴 변환의 역행렬 = 세상을 (0, 0, −5) 로 옮기는 변환 = 뷰 행렬</p>
+      <p class="where">스크립트 <code>Matrix4x4.inverse</code> · <code>transform.worldToLocalMatrix</code></p>
+    </dd>
+    <dt>파이프라인<small>Pipeline</small></dt>
+    <dd>
+      <p>정점이 픽셀이 될 때까지 GPU 가 <b>정해진 순서</b>로 처리하는 작업 흐름 — 공장 컨베이어 벨트</p>
+      <p class="ex">정점 셰이더 → 클리핑 → 원근 나눗셈 → 뷰포트 → 래스터화 → 프래그먼트 셰이더 → 깊이 비교</p>
+      <p class="why">문제가 어느 공정에서 생겼는지 알아야 고칠 곳(코드 · 설정 · 하드웨어) 선택 가능</p>
+      <p class="where">Window → Analysis → Frame Debugger — 한 프레임을 그리기 주문 단위로 되감아 보기</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -181,40 +265,40 @@
   <div class="tag gfx">파이프라인 · 4 도해</div>
   <h2>카메라를 미는 대신 세상을 민다</h2>
   <svg class="dg" viewBox="0 0 1100 420" width="1100" height="420" role="img" aria-label="왼쪽은 카메라를 z=5로 옮긴 월드 공간, 오른쪽은 카메라를 원점에 두고 세상을 -5 옮긴 뷰 공간 · 둘의 배치는 같음">
-    <rect x="10" y="40" width="490" height="370" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
-    <rect x="600" y="40" width="490" height="370" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
-    <text x="255" y="26" text-anchor="middle" font-size="21" font-weight="700" fill="#ffc44d">① 카메라를 +5 이동 (월드 공간)</text>
-    <text x="845" y="26" text-anchor="middle" font-size="21" font-weight="700" fill="#35d6e6">② 세상 전체를 −5 이동 (GPU 방식)</text>
-    <line x1="255" y1="70" x2="255" y2="385" stroke="#2a3040" stroke-width="2" stroke-dasharray="6 6"/>
-    <line x1="845" y1="70" x2="845" y2="385" stroke="#2a3040" stroke-width="2" stroke-dasharray="6 6"/>
-    <rect x="230" y="85" width="50" height="50" rx="4" fill="#35d6e6" fill-opacity=".35" stroke="#35d6e6" stroke-width="2"/>
-    <rect x="820" y="85" width="50" height="50" rx="4" fill="#35d6e6" fill-opacity=".35" stroke="#35d6e6" stroke-width="2"/>
-    <circle cx="255" cy="110" r="15" fill="none" stroke="#ff5fa2" stroke-width="3"/><line x1="233" y1="110" x2="277" y2="110" stroke="#ff5fa2" stroke-width="3"/><line x1="255" y1="88" x2="255" y2="132" stroke="#ff5fa2" stroke-width="3"/>
-    <path d="M255 340 L217 280 L293 280 Z" fill="#ffc44d" fill-opacity=".15" stroke="#ffc44d" stroke-width="2"/><rect x="235" y="340" width="40" height="28" rx="5" fill="#ffc44d"/>
-    <path d="M845 340 L807 280 L883 280 Z" fill="#ffc44d" fill-opacity=".15" stroke="#ffc44d" stroke-width="2"/><rect x="825" y="340" width="40" height="28" rx="5" fill="#ffc44d"/>
-    <circle cx="845" cy="360" r="15" fill="none" stroke="#ff5fa2" stroke-width="3"/><line x1="823" y1="360" x2="867" y2="360" stroke="#ff5fa2" stroke-width="3"/><line x1="845" y1="338" x2="845" y2="382" stroke="#ff5fa2" stroke-width="3"/>
+    <rect x="10" y="40" width="490" height="370" rx="2" fill="#ece6d8" stroke="#cfc6b2" stroke-width="2"/>
+    <rect x="600" y="40" width="490" height="370" rx="2" fill="#ece6d8" stroke="#cfc6b2" stroke-width="2"/>
+    <text x="255" y="26" text-anchor="middle" font-size="21" font-weight="700" fill="#a8701a">① 카메라를 +5 이동 (월드 공간)</text>
+    <text x="845" y="26" text-anchor="middle" font-size="21" font-weight="700" fill="#0d6b78">② 세상 전체를 −5 이동 (GPU 방식)</text>
+    <line x1="255" y1="70" x2="255" y2="385" stroke="#cfc6b2" stroke-width="2" stroke-dasharray="6 6"/>
+    <line x1="845" y1="70" x2="845" y2="385" stroke="#cfc6b2" stroke-width="2" stroke-dasharray="6 6"/>
+    <rect x="230" y="85" width="50" height="50" rx="2" fill="#0d6b78" fill-opacity=".35" stroke="#0d6b78" stroke-width="2"/>
+    <rect x="820" y="85" width="50" height="50" rx="2" fill="#0d6b78" fill-opacity=".35" stroke="#0d6b78" stroke-width="2"/>
+    <circle cx="255" cy="110" r="15" fill="none" stroke="#a3245e" stroke-width="3"/><line x1="233" y1="110" x2="277" y2="110" stroke="#a3245e" stroke-width="3"/><line x1="255" y1="88" x2="255" y2="132" stroke="#a3245e" stroke-width="3"/>
+    <path d="M255 340 L217 280 L293 280 Z" fill="#a8701a" fill-opacity=".15" stroke="#a8701a" stroke-width="2"/><rect x="235" y="340" width="40" height="28" rx="2" fill="#a8701a"/>
+    <path d="M845 340 L807 280 L883 280 Z" fill="#a8701a" fill-opacity=".15" stroke="#a8701a" stroke-width="2"/><rect x="825" y="340" width="40" height="28" rx="2" fill="#a8701a"/>
+    <circle cx="845" cy="360" r="15" fill="none" stroke="#a3245e" stroke-width="3"/><line x1="823" y1="360" x2="867" y2="360" stroke="#a3245e" stroke-width="3"/><line x1="845" y1="338" x2="845" y2="382" stroke="#a3245e" stroke-width="3"/>
     <text x="300" y="104" font-size="19">상자 (0, 0, 0)</text>
-    <text x="300" y="130" font-size="18" fill="#ff5fa2">← 원점 = 상자</text>
+    <text x="300" y="130" font-size="18" fill="#a3245e">← 원점 = 상자</text>
     <text x="300" y="356" font-size="19">카메라 (0, 0, 5)</text>
-    <text x="300" y="380" font-size="18" fill="#9aa4b8">−Z 쪽(위)을 봄</text>
+    <text x="300" y="380" font-size="18" fill="#4a463e">−Z 쪽(위)을 봄</text>
     <text x="890" y="104" font-size="19">상자 (0, 0, −5)</text>
-    <text x="890" y="130" font-size="18" fill="#9aa4b8">= 카메라 정면 5 m</text>
+    <text x="890" y="130" font-size="18" fill="#4a463e">= 카메라 정면 5 m</text>
     <text x="890" y="356" font-size="19">카메라 (0, 0, 0)</text>
-    <text x="890" y="380" font-size="18" fill="#ff5fa2">← 원점 = 카메라</text>
-    <line x1="150" y1="130" x2="150" y2="330" stroke="#ffc44d" stroke-width="4"/>
-    <path d="M150 342 l-10 -18 h20 z" fill="#ffc44d"/>
-    <text x="138" y="236" text-anchor="end" font-size="20" font-weight="700" fill="#ffc44d">카메라</text>
-    <text x="138" y="262" text-anchor="end" font-size="20" font-weight="700" fill="#ffc44d">+5</text>
-    <line x1="740" y1="330" x2="740" y2="130" stroke="#35d6e6" stroke-width="4"/>
-    <path d="M740 118 l-10 18 h20 z" fill="#35d6e6"/>
-    <text x="728" y="236" text-anchor="end" font-size="20" font-weight="700" fill="#35d6e6">세상</text>
-    <text x="728" y="262" text-anchor="end" font-size="20" font-weight="700" fill="#35d6e6">−5</text>
-    <text x="550" y="222" text-anchor="middle" font-size="52" font-weight="700" fill="#e8ecf4">=</text>
-    <text x="550" y="256" text-anchor="middle" font-size="18" fill="#9aa4b8">찍힌 화면</text>
-    <text x="550" y="278" text-anchor="middle" font-size="18" fill="#9aa4b8">동일</text>
+    <text x="890" y="380" font-size="18" fill="#a3245e">← 원점 = 카메라</text>
+    <line x1="150" y1="130" x2="150" y2="330" stroke="#a8701a" stroke-width="4"/>
+    <path d="M150 342 l-10 -18 h20 z" fill="#a8701a"/>
+    <text x="138" y="236" text-anchor="end" font-size="20" font-weight="700" fill="#a8701a">카메라</text>
+    <text x="138" y="262" text-anchor="end" font-size="20" font-weight="700" fill="#a8701a">+5</text>
+    <line x1="740" y1="330" x2="740" y2="130" stroke="#0d6b78" stroke-width="4"/>
+    <path d="M740 118 l-10 18 h20 z" fill="#0d6b78"/>
+    <text x="728" y="236" text-anchor="end" font-size="20" font-weight="700" fill="#0d6b78">세상</text>
+    <text x="728" y="262" text-anchor="end" font-size="20" font-weight="700" fill="#0d6b78">−5</text>
+    <text x="550" y="222" text-anchor="middle" font-size="52" font-weight="700" fill="#1b1a17">=</text>
+    <text x="550" y="256" text-anchor="middle" font-size="18" fill="#4a463e">찍힌 화면</text>
+    <text x="550" y="278" text-anchor="middle" font-size="18" fill="#4a463e">동일</text>
   </svg>
   <div class="analogy" style="margin-top:.5em">
-    <p><b>삼각대에 묶은 카메라 앞에서 무대 세트 밀기</b> · ①과 ②는 상자와 카메라의 사이 간격이 똑같음 · 바뀐 것은 <b>원점(분홍 십자)이 어디냐</b>뿐 → 뷰 행렬 = 원점을 카메라로 옮기는 변환</p>
+    <p><b>삼각대에 묶은 카메라 앞에서 무대 세트 밀기</b> · ①과 ②는 상자와 카메라의 사이 간격이 똑같음 · 바뀐 것은 <b>원점(자주색 십자)이 어디냐</b>뿐 → 뷰 행렬 = 원점을 카메라로 옮기는 변환</p>
   </div>
   <aside class="notes">
     - 두 그림이 생김새는 똑같고 분홍 십자(원점) 위치만 다르다는 점을 먼저 찾게 함
@@ -362,32 +446,32 @@
   <div class="tag gfx">투영 · 2 도해</div>
   <h2>닮은꼴 삼각형 — 옆에서 본 그림</h2>
   <svg class="dg" viewBox="0 0 1100 430" width="1100" height="430" role="img" aria-label="눈, near 평면 유리, 4m와 8m 거리의 같은 높이 나무 두 그루와 유리 위에 맺힌 높이 0.5, 0.25">
-    <line x1="30" y1="320" x2="1070" y2="320" stroke="#9aa4b8" stroke-width="2"/>
-    <path d="M1070 320 l-14 -7 v14 z" fill="#9aa4b8"/>
-    <rect x="172" y="70" width="16" height="250" fill="#35d6e6" fill-opacity=".18" stroke="#35d6e6" stroke-width="2"/>
-    <text x="180" y="56" text-anchor="middle" font-size="20" font-weight="700" fill="#35d6e6">창문 유리 = near 평면</text>
-    <line x1="510" y1="320" x2="510" y2="100" stroke="#a8e05f" stroke-width="7" stroke-linecap="round"/>
-    <circle cx="510" cy="100" r="9" fill="#a8e05f"/>
-    <text x="510" y="80" text-anchor="middle" font-size="20" font-weight="700" fill="#a8e05f">나무 A · 높이 2</text>
-    <line x1="950" y1="320" x2="950" y2="100" stroke="#9aa4b8" stroke-width="7" stroke-linecap="round"/>
-    <circle cx="950" cy="100" r="9" fill="#9aa4b8"/>
-    <text x="950" y="80" text-anchor="middle" font-size="20" font-weight="700" fill="#9aa4b8">나무 B · 높이 2</text>
-    <line x1="510" y1="100" x2="70" y2="320" stroke="#a8e05f" stroke-width="3"/>
-    <line x1="950" y1="100" x2="70" y2="320" stroke="#9aa4b8" stroke-width="3" stroke-dasharray="9 7"/>
-    <circle cx="180" cy="265" r="8" fill="#a8e05f" stroke="#0b0d12" stroke-width="2"/>
-    <circle cx="180" cy="292.5" r="8" fill="#9aa4b8" stroke="#0b0d12" stroke-width="2"/>
-    <text x="214" y="268" font-size="20" font-weight="700" fill="#a8e05f">A = 0.5</text>
-    <text x="206" y="313" font-size="20" font-weight="700" fill="#9aa4b8">B = 0.25</text>
-    <circle cx="70" cy="320" r="13" fill="#e8ecf4"/>
-    <circle cx="74" cy="320" r="5" fill="#0b0d12"/>
+    <line x1="30" y1="320" x2="1070" y2="320" stroke="#4a463e" stroke-width="2"/>
+    <path d="M1070 320 l-14 -7 v14 z" fill="#4a463e"/>
+    <rect x="172" y="70" width="16" height="250" fill="#0d6b78" fill-opacity=".18" stroke="#0d6b78" stroke-width="2"/>
+    <text x="180" y="56" text-anchor="middle" font-size="20" font-weight="700" fill="#0d6b78">창문 유리 = near 평면</text>
+    <line x1="510" y1="320" x2="510" y2="100" stroke="#4f7a16" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="510" cy="100" r="9" fill="#4f7a16"/>
+    <text x="510" y="80" text-anchor="middle" font-size="20" font-weight="700" fill="#4f7a16">나무 A · 높이 2</text>
+    <line x1="950" y1="320" x2="950" y2="100" stroke="#4a463e" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="950" cy="100" r="9" fill="#4a463e"/>
+    <text x="950" y="80" text-anchor="middle" font-size="20" font-weight="700" fill="#4a463e">나무 B · 높이 2</text>
+    <line x1="510" y1="100" x2="70" y2="320" stroke="#4f7a16" stroke-width="3"/>
+    <line x1="950" y1="100" x2="70" y2="320" stroke="#4a463e" stroke-width="3" stroke-dasharray="9 7"/>
+    <circle cx="180" cy="265" r="8" fill="#4f7a16" stroke="#f5f1e8" stroke-width="2"/>
+    <circle cx="180" cy="292.5" r="8" fill="#4a463e" stroke="#f5f1e8" stroke-width="2"/>
+    <text x="214" y="268" font-size="20" font-weight="700" fill="#4f7a16">A = 0.5</text>
+    <text x="206" y="313" font-size="20" font-weight="700" fill="#4a463e">B = 0.25</text>
+    <circle cx="70" cy="320" r="13" fill="#fbf8f1" stroke="#1b1a17" stroke-width="2"/>
+    <circle cx="74" cy="320" r="5" fill="#1b1a17"/>
     <text x="62" y="352" text-anchor="middle" font-size="18">눈</text>
-    <line x1="180" y1="314" x2="180" y2="326" stroke="#9aa4b8" stroke-width="2"/>
-    <line x1="510" y1="314" x2="510" y2="326" stroke="#9aa4b8" stroke-width="2"/>
-    <line x1="950" y1="314" x2="950" y2="326" stroke="#9aa4b8" stroke-width="2"/>
-    <text x="180" y="352" text-anchor="middle" font-size="18" fill="#9aa4b8">거리 n = 1</text>
-    <text x="510" y="352" text-anchor="middle" font-size="18" fill="#9aa4b8">거리 4 (z = −4)</text>
-    <text x="950" y="352" text-anchor="middle" font-size="18" fill="#9aa4b8">거리 8 (z = −8)</text>
-    <text x="550" y="410" text-anchor="middle" font-size="21">큰 삼각형(높이 2 · 밑변 4) · 작은 삼각형(높이 x′ · 밑변 1) 닮음 → <tspan fill="#a8e05f" font-weight="700">x′ = 2 × 1 ÷ 4 = 0.5</tspan> · 8 m 뒤 → <tspan fill="#9aa4b8" font-weight="700">0.25</tspan></text>
+    <line x1="180" y1="314" x2="180" y2="326" stroke="#4a463e" stroke-width="2"/>
+    <line x1="510" y1="314" x2="510" y2="326" stroke="#4a463e" stroke-width="2"/>
+    <line x1="950" y1="314" x2="950" y2="326" stroke="#4a463e" stroke-width="2"/>
+    <text x="180" y="352" text-anchor="middle" font-size="18" fill="#4a463e">거리 n = 1</text>
+    <text x="510" y="352" text-anchor="middle" font-size="18" fill="#4a463e">거리 4 (z = −4)</text>
+    <text x="950" y="352" text-anchor="middle" font-size="18" fill="#4a463e">거리 8 (z = −8)</text>
+    <text x="550" y="410" text-anchor="middle" font-size="21">큰 삼각형(높이 2 · 밑변 4) · 작은 삼각형(높이 x′ · 밑변 1) 닮음 → <tspan fill="#4f7a16" font-weight="700">x′ = 2 × 1 ÷ 4 = 0.5</tspan> · 8 m 뒤 → <tspan fill="#4a463e" font-weight="700">0.25</tspan></text>
   </svg>
   <div class="analogy" style="margin-top:.5em">
     <p><b>창문 유리에 바깥 풍경 따라 그리기를 옆에서 본 모습</b> · 눈은 고정, 유리(near 평면)는 눈에서 1 · 같은 높이의 나무도 두 배 멀면 유리 위 그림은 절반</p>
@@ -404,14 +488,12 @@
   <h2>투영 행렬 — w 칸에 거리 저장</h2>
   <div class="cols wide-left">
     <div>
-      <div class="math-block" style="font-size:.95em">\[ P = \begin{bmatrix} \frac{1}{a\,t} & 0 & 0 & 0 \\[6pt] 0 & \frac{1}{t} & 0 & 0 \\[6pt] 0 & 0 & -\frac{f+n}{f-n} & -\frac{2fn}{f-n} \\[6pt] 0 & 0 & \color{#ff5a4d}{-1} & 0 \end{bmatrix} \]</div>
+      <div class="math-block" style="font-size:.95em">\[ P = \begin{bmatrix} \frac{1}{a\,t} & 0 & 0 & 0 \\[6pt] 0 & \frac{1}{t} & 0 & 0 \\[6pt] 0 & 0 & -\frac{f+n}{f-n} & -\frac{2fn}{f-n} \\[6pt] 0 & 0 & \color{#c2401d}{-1} & 0 \end{bmatrix} \]</div>
       <p class="small muted" style="text-align:center">\( t=\tan(\text{시야각}/2) \) · \( a \) = 종횡비 · \( n, f \) = near, far</p>
     </div>
     <div>
-      <dl class="terms" style="margin-top:0;grid-template-columns:1fr;gap:.25em">
-        <dt>동차좌표<small>Homogeneous coords</small></dt><dd>(x, y, z) 뒤에 <b>네 번째 칸 w</b> 를 붙인 4칸 좌표 · 2주차에서는 점(w=1)과 방향(w=0) 구분용</dd>
-        <dt>원근 나눗셈<small>Perspective divide</small></dt><dd>x, y, z 를 <b>w 로 나누는</b> 단계 · GPU가 자동 수행</dd>
-      </dl>
+      <p class="small" style="margin-top:.4em"><b>w</b> = 좌표 (x, y, z) 뒤에 붙는 <b>네 번째 칸</b> · 2주차 점(w=1) · 방향(w=0) 구분에 쓰던 그 칸</p>
+      <p class="small">이번에는 이 칸이 <b>«나중에 나눌 거리»</b> 를 담는 메모 칸 · 자세한 풀이는 다음 장</p>
     </div>
   </div>
   <div class="key">
@@ -424,10 +506,31 @@
 </section>
 
 <section>
+  <div class="tag gfx">투영 · 용어 풀이</div>
+  <h2>용어 풀이 — w 칸과 나눗셈</h2>
+  <dl class="terms">
+    <dt>동차좌표<small>Homogeneous coords</small></dt>
+    <dd>
+      <p>(x, y, z) 뒤에 <b>네 번째 칸 w</b> 를 붙인 4칸 좌표 — 계산을 미뤄 둘 «메모 칸» 이 하나 더 달린 주소</p>
+      <p class="ex">점 (2, 1, −4) → (2, 1, −4, <b>1</b>) · 투영 행렬을 곱한 뒤 (2, 1, 2.06, <b>4</b>) — w 칸에 거리 4</p>
+      <p class="why">행렬 곱셈 하나로 이동 · 회전 · 원근을 모두 표현하는 비결 · 2주차 점(w=1) · 방향(w=0) 구분과 같은 칸</p>
+      <p class="where">셰이더 <code>float4</code> · 스크립트 <code>Vector4</code> · <code>Matrix4x4</code> 와의 곱셈</p>
+    </dd>
+    <dt>원근 나눗셈<small>Perspective divide</small></dt>
+    <dd>
+      <p>클립 좌표의 x, y, z 를 <b>w 로 나누는</b> 단계 — 택배 상자 메모에 적힌 수로 마지막에 나누기</p>
+      <p class="ex">(2, 1, 2.06, 4) ÷ 4 → (0.5, 0.25, 0.52) · 같은 점이 8 m 뒤면 8로 나뉘어 절반 크기</p>
+      <p class="why">먼 물체가 작아지는 실제 순간 · 깊이 값도 같이 나뉘어 뒤쪽 눈금이 성겨짐 (z-fighting 의 씨앗)</p>
+      <p class="where">GPU 고정 기능 — 정점 셰이더가 끝난 뒤 자동 수행 · 코드로 끌 수 없음</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag gfx">투영 · 4</div>
   <h2>손계산 — 점 하나를 끝까지 따라가기</h2>
   <p class="small" style="margin-bottom:.3em">조건 : 시야각 90° (\( t=1 \)), 종횡비 1, \( n=1,\ f=100 \) · 뷰 공간의 점 \( (2,\,1,\,-4) \)</p>
-  <div class="math-block" style="font-size:.9em;margin:.3em 0">\[ \underbrace{(2,\ 1,\ -4,\ 1)}_{\text{뷰}} \xrightarrow{\;P\;} \underbrace{(2,\ 1,\ 2.06,\ \color{#ff5a4d}{4})}_{\text{클립}} \xrightarrow{\;\div w\;} \underbrace{(0.5,\ 0.25,\ 0.52)}_{\text{NDC}} \xrightarrow{\text{뷰포트}} \underbrace{(1440,\ 675)}_{1920\times1080} \]</div>
+  <div class="math-block" style="font-size:.9em;margin:.3em 0">\[ \underbrace{(2,\ 1,\ -4,\ 1)}_{\text{뷰}} \xrightarrow{\;P\;} \underbrace{(2,\ 1,\ 2.06,\ \color{#c2401d}{4})}_{\text{클립}} \xrightarrow{\;\div w\;} \underbrace{(0.5,\ 0.25,\ 0.52)}_{\text{NDC}} \xrightarrow{\text{뷰포트}} \underbrace{(1440,\ 675)}_{1920\times1080} \]</div>
   <div class="cols" style="margin-top:.4em">
     <div class="key">
       <p class="small"><b>투영 · 1 질문의 답</b><br>
@@ -465,7 +568,7 @@
   <video src="../../figures/out/w04-projection.mp4"
          poster="../../figures/out/w04-projection-poster.png"
          controls muted playsinline data-autoplay
-         style="display:block;margin:.1em auto 0;max-width:100%;max-height:470px;border-radius:12px"></video>
+         style="display:block;margin:.1em auto 0;max-width:100%;max-height:470px;border:1px solid var(--ink)"></video>
   <p class="small" style="margin-top:.5em">
     절두체 → 정육면체 · 넓은 먼 쪽일수록 크게 눌림 · <b>깊이 눈금도 함께 눌려 뒤쪽이 성기게 됨</b>
   </p>
@@ -577,30 +680,30 @@
   <div class="tag trap">깊이 · 3 도해</div>
   <h2>1/d 곡선 — 눈금이 앞쪽에 몰린 자</h2>
   <svg class="dg" viewBox="0 0 1100 430" width="1100" height="430" role="img" aria-label="near 0.1, far 1000 에서 거리 0~10m 에 대한 깊이 저장 값 곡선과 0.1 간격 눈금 위치">
-    <line x1="90" y1="165" x2="1040" y2="165" stroke="#2a3040" stroke-width="2" stroke-dasharray="6 6"/>
-    <line x1="90" y1="57" x2="1040" y2="57" stroke="#2a3040" stroke-width="2" stroke-dasharray="6 6"/>
-    <line x1="90" y1="30" x2="90" y2="300" stroke="#9aa4b8" stroke-width="2"/>
-    <line x1="90" y1="300" x2="1040" y2="300" stroke="#9aa4b8" stroke-width="2"/>
-    <text x="80" y="306" text-anchor="end" font-size="18" fill="#9aa4b8">0</text>
-    <text x="80" y="171" text-anchor="end" font-size="18" fill="#9aa4b8">0.5</text>
-    <text x="80" y="63" text-anchor="end" font-size="18" fill="#9aa4b8">0.9</text>
-    <text x="80" y="36" text-anchor="end" font-size="18" fill="#9aa4b8">1</text>
-    <text x="104" y="20" font-size="18" fill="#9aa4b8">깊이 버퍼 저장 값</text>
-    <line x1="90" y1="300" x2="90" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="90" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">0</text><line x1="185" y1="300" x2="185" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="185" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">1</text><line x1="280" y1="300" x2="280" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="280" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">2</text><line x1="375" y1="300" x2="375" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="375" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">3</text><line x1="470" y1="300" x2="470" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="470" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">4</text><line x1="565" y1="300" x2="565" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="565" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">5</text><line x1="660" y1="300" x2="660" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="660" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">6</text><line x1="755" y1="300" x2="755" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="755" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">7</text><line x1="850" y1="300" x2="850" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="850" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">8</text><line x1="945" y1="300" x2="945" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="945" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">9</text><line x1="1040" y1="300" x2="1040" y2="307" stroke="#9aa4b8" stroke-width="2"/><text x="1040" y="328" text-anchor="middle" font-size="18" fill="#9aa4b8">10</text>
-    <text x="1040" y="352" text-anchor="end" font-size="18" fill="#9aa4b8">카메라에서의 거리 d (m) · near 0.1 · far 1000</text>
-    <polyline points="99.5,300.0 99.9,289.6 100.3,279.6 100.7,270.0 101.1,260.8 101.6,251.9 102.0,243.4 102.5,235.2 103.0,227.3 103.5,219.7 104.1,212.4 104.6,205.4 105.2,198.6 105.8,192.1 106.5,185.9 107.1,179.9 107.8,174.1 108.5,168.6 109.2,163.3 110.0,158.1 110.8,153.2 111.6,148.5 112.5,143.9 113.4,139.5 114.4,135.3 115.3,131.3 116.3,127.4 117.4,123.6 118.5,120.0 119.6,116.6 120.8,113.2 122.0,110.0 123.3,106.9 124.7,104.0 126.0,101.1 127.5,98.4 129.0,95.8 130.5,93.2 132.2,90.8 133.9,88.5 135.6,86.2 137.4,84.1 139.3,82.0 141.3,80.0 143.4,78.1 145.5,76.2 147.7,74.4 150.0,72.7 152.4,71.1 154.9,69.5 157.5,68.0 160.2,66.5 163.0,65.1 165.9,63.8 169.0,62.5 172.1,61.2 175.4,60.0 178.8,58.8 182.4,57.7 186.1,56.7 195.6,54.3 205.1,52.3 214.6,50.6 224.1,49.1 233.6,47.8 243.1,46.7 252.6,45.8 262.1,44.9 271.6,44.1 281.1,43.4 290.6,42.8 300.1,42.2 309.6,41.7 319.1,41.2 328.6,40.7 338.1,40.3 347.6,39.9 357.1,39.6 366.6,39.2 376.1,38.9 385.6,38.7 395.1,38.4 404.6,38.1 414.1,37.9 423.6,37.7 433.1,37.4 442.6,37.2 452.1,37.1 461.6,36.9 471.1,36.7 480.6,36.5 490.1,36.4 499.6,36.2 509.1,36.1 518.6,36.0 528.1,35.8 537.6,35.7 547.1,35.6 556.6,35.5 566.1,35.4 575.6,35.3 585.1,35.2 594.6,35.1 604.1,35.0 613.6,34.9 623.1,34.8 632.6,34.7 642.1,34.6 651.6,34.5 661.1,34.5 670.6,34.4 680.1,34.3 689.6,34.3 699.1,34.2 708.6,34.1 718.1,34.1 727.6,34.0 737.1,33.9 746.6,33.9 756.1,33.8 765.6,33.8 775.1,33.7 784.6,33.7 794.1,33.6 803.6,33.6 813.1,33.5 822.6,33.5 832.1,33.4 841.6,33.4 851.1,33.3 860.6,33.3 870.1,33.3 879.6,33.2 889.1,33.2 898.6,33.1 908.1,33.1 917.6,33.1 927.1,33.0 936.6,33.0 946.1,33.0 955.6,32.9 965.1,32.9 974.6,32.9 984.1,32.8 993.6,32.8 1003.1,32.8 1012.6,32.8 1022.1,32.7 1031.6,32.7 1040.0,32.7" fill="none" stroke="#ff5a4d" stroke-width="4" stroke-linejoin="round"/>
-    <circle cx="109" cy="165" r="7" fill="#ffc44d"/>
-    <circle cx="185" cy="57" r="7" fill="#ffc44d"/>
-    <circle cx="1040" cy="32.7" r="7" fill="#ffc44d"/>
-    <text x="124" y="196" font-size="20" font-weight="700" fill="#ffc44d">0.2 m → 0.500 (절반 소진)</text>
-    <text x="200" y="92" font-size="20" font-weight="700" fill="#ffc44d">1 m → 0.900 (90% 소진)</text>
-    <text x="1030" y="70" text-anchor="end" font-size="20" font-weight="700" fill="#ffc44d">10 m → 0.990</text>
-    <text x="1030" y="98" text-anchor="end" font-size="18" fill="#9aa4b8">100 m → 0.999 · 1000 m → 1.000 (그래프 밖)</text>
+    <line x1="90" y1="165" x2="1040" y2="165" stroke="#cfc6b2" stroke-width="2" stroke-dasharray="6 6"/>
+    <line x1="90" y1="57" x2="1040" y2="57" stroke="#cfc6b2" stroke-width="2" stroke-dasharray="6 6"/>
+    <line x1="90" y1="30" x2="90" y2="300" stroke="#4a463e" stroke-width="2"/>
+    <line x1="90" y1="300" x2="1040" y2="300" stroke="#4a463e" stroke-width="2"/>
+    <text x="80" y="306" text-anchor="end" font-size="18" fill="#4a463e">0</text>
+    <text x="80" y="171" text-anchor="end" font-size="18" fill="#4a463e">0.5</text>
+    <text x="80" y="63" text-anchor="end" font-size="18" fill="#4a463e">0.9</text>
+    <text x="80" y="36" text-anchor="end" font-size="18" fill="#4a463e">1</text>
+    <text x="104" y="20" font-size="18" fill="#4a463e">깊이 버퍼 저장 값</text>
+    <line x1="90" y1="300" x2="90" y2="307" stroke="#4a463e" stroke-width="2"/><text x="90" y="328" text-anchor="middle" font-size="18" fill="#4a463e">0</text><line x1="185" y1="300" x2="185" y2="307" stroke="#4a463e" stroke-width="2"/><text x="185" y="328" text-anchor="middle" font-size="18" fill="#4a463e">1</text><line x1="280" y1="300" x2="280" y2="307" stroke="#4a463e" stroke-width="2"/><text x="280" y="328" text-anchor="middle" font-size="18" fill="#4a463e">2</text><line x1="375" y1="300" x2="375" y2="307" stroke="#4a463e" stroke-width="2"/><text x="375" y="328" text-anchor="middle" font-size="18" fill="#4a463e">3</text><line x1="470" y1="300" x2="470" y2="307" stroke="#4a463e" stroke-width="2"/><text x="470" y="328" text-anchor="middle" font-size="18" fill="#4a463e">4</text><line x1="565" y1="300" x2="565" y2="307" stroke="#4a463e" stroke-width="2"/><text x="565" y="328" text-anchor="middle" font-size="18" fill="#4a463e">5</text><line x1="660" y1="300" x2="660" y2="307" stroke="#4a463e" stroke-width="2"/><text x="660" y="328" text-anchor="middle" font-size="18" fill="#4a463e">6</text><line x1="755" y1="300" x2="755" y2="307" stroke="#4a463e" stroke-width="2"/><text x="755" y="328" text-anchor="middle" font-size="18" fill="#4a463e">7</text><line x1="850" y1="300" x2="850" y2="307" stroke="#4a463e" stroke-width="2"/><text x="850" y="328" text-anchor="middle" font-size="18" fill="#4a463e">8</text><line x1="945" y1="300" x2="945" y2="307" stroke="#4a463e" stroke-width="2"/><text x="945" y="328" text-anchor="middle" font-size="18" fill="#4a463e">9</text><line x1="1040" y1="300" x2="1040" y2="307" stroke="#4a463e" stroke-width="2"/><text x="1040" y="328" text-anchor="middle" font-size="18" fill="#4a463e">10</text>
+    <text x="1040" y="352" text-anchor="end" font-size="18" fill="#4a463e">카메라에서의 거리 d (m) · near 0.1 · far 1000</text>
+    <polyline points="99.5,300.0 99.9,289.6 100.3,279.6 100.7,270.0 101.1,260.8 101.6,251.9 102.0,243.4 102.5,235.2 103.0,227.3 103.5,219.7 104.1,212.4 104.6,205.4 105.2,198.6 105.8,192.1 106.5,185.9 107.1,179.9 107.8,174.1 108.5,168.6 109.2,163.3 110.0,158.1 110.8,153.2 111.6,148.5 112.5,143.9 113.4,139.5 114.4,135.3 115.3,131.3 116.3,127.4 117.4,123.6 118.5,120.0 119.6,116.6 120.8,113.2 122.0,110.0 123.3,106.9 124.7,104.0 126.0,101.1 127.5,98.4 129.0,95.8 130.5,93.2 132.2,90.8 133.9,88.5 135.6,86.2 137.4,84.1 139.3,82.0 141.3,80.0 143.4,78.1 145.5,76.2 147.7,74.4 150.0,72.7 152.4,71.1 154.9,69.5 157.5,68.0 160.2,66.5 163.0,65.1 165.9,63.8 169.0,62.5 172.1,61.2 175.4,60.0 178.8,58.8 182.4,57.7 186.1,56.7 195.6,54.3 205.1,52.3 214.6,50.6 224.1,49.1 233.6,47.8 243.1,46.7 252.6,45.8 262.1,44.9 271.6,44.1 281.1,43.4 290.6,42.8 300.1,42.2 309.6,41.7 319.1,41.2 328.6,40.7 338.1,40.3 347.6,39.9 357.1,39.6 366.6,39.2 376.1,38.9 385.6,38.7 395.1,38.4 404.6,38.1 414.1,37.9 423.6,37.7 433.1,37.4 442.6,37.2 452.1,37.1 461.6,36.9 471.1,36.7 480.6,36.5 490.1,36.4 499.6,36.2 509.1,36.1 518.6,36.0 528.1,35.8 537.6,35.7 547.1,35.6 556.6,35.5 566.1,35.4 575.6,35.3 585.1,35.2 594.6,35.1 604.1,35.0 613.6,34.9 623.1,34.8 632.6,34.7 642.1,34.6 651.6,34.5 661.1,34.5 670.6,34.4 680.1,34.3 689.6,34.3 699.1,34.2 708.6,34.1 718.1,34.1 727.6,34.0 737.1,33.9 746.6,33.9 756.1,33.8 765.6,33.8 775.1,33.7 784.6,33.7 794.1,33.6 803.6,33.6 813.1,33.5 822.6,33.5 832.1,33.4 841.6,33.4 851.1,33.3 860.6,33.3 870.1,33.3 879.6,33.2 889.1,33.2 898.6,33.1 908.1,33.1 917.6,33.1 927.1,33.0 936.6,33.0 946.1,33.0 955.6,32.9 965.1,32.9 974.6,32.9 984.1,32.8 993.6,32.8 1003.1,32.8 1012.6,32.8 1022.1,32.7 1031.6,32.7 1040.0,32.7" fill="none" stroke="#c2401d" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="109" cy="165" r="7" fill="#a8701a"/>
+    <circle cx="185" cy="57" r="7" fill="#a8701a"/>
+    <circle cx="1040" cy="32.7" r="7" fill="#a8701a"/>
+    <text x="124" y="196" font-size="20" font-weight="700" fill="#a8701a">0.2 m → 0.500 (절반 소진)</text>
+    <text x="200" y="92" font-size="20" font-weight="700" fill="#a8701a">1 m → 0.900 (90% 소진)</text>
+    <text x="1030" y="70" text-anchor="end" font-size="20" font-weight="700" fill="#a8701a">10 m → 0.990</text>
+    <text x="1030" y="98" text-anchor="end" font-size="18" fill="#4a463e">100 m → 0.999 · 1000 m → 1.000 (그래프 밖)</text>
     <text x="600" y="200" text-anchor="middle" font-size="20">1 m ~ 10 m 넓은 구간이 쓰는 몫 = 0.90 → 0.99, 겨우 9%</text>
-    <line x1="90" y1="384" x2="1040" y2="384" stroke="#9aa4b8" stroke-width="2"/>
-    <line x1="100.6" y1="372" x2="100.6" y2="396" stroke="#ff5a4d" stroke-width="2"/><line x1="101.9" y1="372" x2="101.9" y2="396" stroke="#ff5a4d" stroke-width="2"/><line x1="103.6" y1="372" x2="103.6" y2="396" stroke="#ff5a4d" stroke-width="2"/><line x1="105.8" y1="372" x2="105.8" y2="396" stroke="#ff5a4d" stroke-width="2"/><line x1="109.0" y1="372" x2="109.0" y2="396" stroke="#ff5a4d" stroke-width="2"/><line x1="113.7" y1="372" x2="113.7" y2="396" stroke="#ff5a4d" stroke-width="2"/><line x1="121.7" y1="372" x2="121.7" y2="396" stroke="#ff5a4d" stroke-width="2"/><line x1="137.5" y1="372" x2="137.5" y2="396" stroke="#ff5a4d" stroke-width="2"/><line x1="184.9" y1="372" x2="184.9" y2="396" stroke="#ff5a4d" stroke-width="2"/>
-    <text x="205" y="377" font-size="19" fill="#ff5a4d">← 저장 값 0.1·0.2·…·0.9 눈금 9개가 놓인 자리 = 전부 1 m 안</text>
-    <text x="1040" y="421" text-anchor="end" font-size="18" fill="#9aa4b8">아래 자 : 같은 가로축(거리) 위에 저장 값 0.1 간격 눈금을 표시</text>
+    <line x1="90" y1="384" x2="1040" y2="384" stroke="#4a463e" stroke-width="2"/>
+    <line x1="100.6" y1="372" x2="100.6" y2="396" stroke="#c2401d" stroke-width="2"/><line x1="101.9" y1="372" x2="101.9" y2="396" stroke="#c2401d" stroke-width="2"/><line x1="103.6" y1="372" x2="103.6" y2="396" stroke="#c2401d" stroke-width="2"/><line x1="105.8" y1="372" x2="105.8" y2="396" stroke="#c2401d" stroke-width="2"/><line x1="109.0" y1="372" x2="109.0" y2="396" stroke="#c2401d" stroke-width="2"/><line x1="113.7" y1="372" x2="113.7" y2="396" stroke="#c2401d" stroke-width="2"/><line x1="121.7" y1="372" x2="121.7" y2="396" stroke="#c2401d" stroke-width="2"/><line x1="137.5" y1="372" x2="137.5" y2="396" stroke="#c2401d" stroke-width="2"/><line x1="184.9" y1="372" x2="184.9" y2="396" stroke="#c2401d" stroke-width="2"/>
+    <text x="205" y="377" font-size="19" fill="#c2401d">← 저장 값 0.1·0.2·…·0.9 눈금 9개가 놓인 자리 = 전부 1 m 안</text>
+    <text x="1040" y="421" text-anchor="end" font-size="18" fill="#4a463e">아래 자 : 같은 가로축(거리) 위에 저장 값 0.1 간격 눈금을 표시</text>
   </svg>
   <div class="analogy" style="margin-top:.4em">
     <p><b>앞부분에만 눈금이 빽빽한 자</b> · 붉은 눈금 9개가 처음 1 m 에 몰려 있고 1~10 m 에는 눈금이 거의 없음 → 먼 곳의 2mm 차이를 잴 눈금 부족</p>
@@ -709,23 +812,27 @@
 <section>
   <div class="tag trap">도입 질문의 답</div>
   <h2>먼 바닥이 지직거린 이유와 해결</h2>
-  <div class="cols">
+  <dl class="terms dense" style="margin-top:0">
+    <dt>z-fighting<small>Z-fighting · 깊이 다툼</small></dt>
+    <dd>
+      <p>거의 같은 깊이의 두 면(바닥과 그림자 · 스티커)이 깊이 버퍼에 <b>같은 숫자로 기록</b> → 프레임마다 이기는 쪽이 바뀌며 깜빡임</p>
+      <p class="ex">바닥 위 2 mm 스티커 · 100 m 지점 · near 0.01 → 구분 간격 약 6 cm 라 두 면이 같은 숫자</p>
+      <p class="why">코드가 멀쩡해도 발생 → 셰이더 · 텍스처를 뒤지면 시간 낭비</p>
+    </dd>
+  </dl>
+  <div class="cols" style="margin-top:.4em">
     <div>
-      <dl class="terms" style="margin-top:0;grid-template-columns:1fr;gap:.25em">
-        <dt>z-fighting<small>Z-fighting · 깊이 다툼</small></dt>
-        <dd>거의 같은 깊이의 두 면(바닥과 그림자·스티커)이 깊이 버퍼에서 <b>같은 숫자로 기록</b> → 프레임마다 이기는 쪽이 바뀌며 깜빡임</dd>
-      </dl>
-      <div class="analogy">
+      <div class="analogy" style="margin-top:.6em">
         <p><b>1cm 눈금 자로 2mm 차이 나는 두 종이 높이 재기</b> · 둘 다 같은 눈금 → 누가 위인지 매번 동전 던지기 · 카메라가 조금 움직일 때마다 결과가 바뀌어 무늬가 꿈틀거림</p>
       </div>
     </div>
     <div>
-      <div class="key trap">
+      <div class="key trap" style="margin:.2em 0 .5em">
         <p class="small"><b>원인</b> : 코드가 아니라 Camera 의 <b>near 값이 너무 작음</b> (예 : 0.01)<br>
         → 깊이 눈금 대부분이 카메라 코앞에 몰림<br>
         → 100m 지점에서는 약 6cm 보다 가까운 두 면을 구분 불가</p>
       </div>
-      <div class="key lab">
+      <div class="key lab" style="margin:0">
         <p class="small"><b>해결</b> : near 를 카메라가 실제로 다가갈 최소 거리까지 키움 (예 : 0.3)<br>
         → 100m 지점 구분 간격 약 2mm 로 개선<br>
         far 만 줄이는 것은 <b>효과 거의 없음</b></p>
@@ -749,13 +856,37 @@
     <tr><td class="lab-txt"><b>4</b></td><td>깊이 버퍼가 <b>16비트</b>로 설정돼 있지 않은지 확인 (24비트 대비 눈금 256분의 1)</td><td>모바일·Quest 프로젝트 설정에 따라 발생</td></tr>
     <tr><td class="muted"><b>5</b></td><td>far 감소</td><td>정밀도 효과 거의 없음 · 컬링(안 그리기)에는 도움</td></tr>
   </table>
-  <dl class="terms" style="margin-top:.4em;font-size:.66em">
-    <dt>데칼<small>Decal</small></dt><dd>표면 위에 얇게 덧붙이는 <b>스티커형 그림</b> · 낙서, 핏자국, 도로 표시</dd>
-    <dt>깊이 오프셋<small>Depth offset</small></dt><dd>깊이 비교 때 특정 면을 <b>살짝 앞에 있는 것으로 쳐 주는</b> 설정</dd>
-  </dl>
   <div class="key lab">
-    <p class="small">순서가 중요 · 5번부터 시도 = <b>공식을 모른다는 신호</b></p>
+    <p class="small">순서가 중요 · 5번부터 시도 = <b>공식을 모른다는 신호</b> · 표 속 낯선 말(데칼 · 깊이 오프셋 · 16비트)은 다음 장</p>
   </div>
+</section>
+
+<section>
+  <div class="tag lab">깊이 · 용어 풀이</div>
+  <h2>용어 풀이 — 해결 순서에 나온 말</h2>
+  <dl class="terms">
+    <dt>데칼<small>Decal</small></dt>
+    <dd>
+      <p>표면 위에 얇게 덧붙이는 <b>스티커형 그림</b> — 벽에 붙인 포스터</p>
+      <p class="ex">도로 차선 · 벽 낙서 · 바닥 핏자국 · 총알 자국</p>
+      <p class="why">바닥과 거의 같은 높이에 놓임 → z-fighting 의 단골 피해자</p>
+      <p class="where">URP : Renderer 에 Decal Renderer Feature 추가 → 오브젝트에 URP Decal Projector 컴포넌트</p>
+    </dd>
+    <dt>깊이 오프셋<small>Depth offset</small></dt>
+    <dd>
+      <p>깊이 비교 때 특정 면을 <b>살짝 앞에 있는 것으로 쳐 주는</b> 보정 — 줄 설 때 반 발짝 앞으로 세워 주기</p>
+      <p class="ex">셰이더에 <code>Offset -1, -1</code> 한 줄 → 바닥 위 데칼이 깊이 비교에서 항상 이김</p>
+      <p class="why">면을 실제로 띄우지 않고 깜빡임 제거 · 값을 너무 크게 주면 뒤 물체를 뚫고 보임</p>
+      <p class="where">ShaderLab 셰이더의 <code>Offset</code> 명령 · URP Decal Projector 는 내부에서 처리</p>
+    </dd>
+    <dt>깊이 비트 수<small>Depth bits</small></dt>
+    <dd>
+      <p>깊이 메모지 한 칸에 적을 수 있는 숫자의 <b>자릿수</b> — 자에 새긴 눈금 개수</p>
+      <p class="ex">16비트 = 약 6.5만 단계 · 24비트 = 약 1677만 단계 (256배)</p>
+      <p class="why">16비트면 같은 near · far 에서 구분 간격이 256배 거칠어짐 → 모바일 · Quest 깜빡임 원인</p>
+      <p class="where">Frame Debugger 의 렌더 타깃 형식 (D24… = 24비트 · D16… = 16비트) · 설정 위치는 플랫폼 · 버전마다 다름</p>
+    </dd>
+  </dl>
 </section>
 
 <!-- ---------------------------------------------------- 버리기 -->
@@ -770,12 +901,43 @@
 
 <section>
   <div class="tag gfx">버리기 · 2</div>
-  <h2>버리는 방법 세 가지 — 쉬운 말로</h2>
-  <dl class="terms" style="font-size:.7em">
-    <dt>컬링<small>Culling</small></dt><dd>그릴 필요 없는 것을 <b>통째로 빼기</b> · 원래 "솎아내기"라는 뜻</dd>
-    <dt>프러스텀 컬링<small>Frustum culling</small></dt><dd>절두체(카메라 상자) <b>밖에 있는 물체</b> 전체를 그리기 전에 제외</dd>
-    <dt>클리핑<small>Clipping</small></dt><dd>상자 경계에 <b>걸친 삼각형</b>을 경계선을 따라 잘라 안쪽만 남김</dd>
-    <dt>백페이스 컬링<small>Back-face culling</small></dt><dd>카메라를 <b>등지고 있는 면</b>(물체 뒷면)을 제외 · 닫힌 물체의 뒷면은 어차피 앞면에 가려짐</dd>
+  <h2>버리는 방법 세 가지 — 쉬운 말로 (1/2)</h2>
+  <dl class="terms">
+    <dt>컬링<small>Culling</small></dt>
+    <dd>
+      <p>그릴 필요 없는 것을 그리기 전에 <b>통째로 빼기</b> — 원래 «솎아내기» 라는 뜻</p>
+      <p class="ex">등 뒤 건물 100채 → GPU 에 그리기 주문조차 안 보냄</p>
+      <p class="why">안 그리는 것이 가장 싼 최적화 · 11.1 ms 예산의 첫 절약 수단</p>
+      <p class="where">Camera Inspector 의 Culling Mask (레이어별로 통째 제외)</p>
+    </dd>
+    <dt>프러스텀 컬링<small>Frustum culling</small></dt>
+    <dd>
+      <p>절두체(카메라 상자) <b>밖에 있는 물체</b> 전체를 그리기 전에 제외</p>
+      <p class="ex">시야각 60° 카메라 → 왼쪽 90° 방향의 의자는 그리기 목록에서 빠짐</p>
+      <p class="why">Unity 가 물체 단위로 자동 수행 → 씬 전체를 메시 하나로 합치면 일부만 보여도 통째로 그려야 함</p>
+      <p class="where">자동 · 결과는 Game 뷰 Stats 의 Batches · Frame Debugger 그리기 목록에서 확인</p>
+    </dd>
+    <dt>클리핑<small>Clipping</small></dt>
+    <dd>
+      <p>상자 경계에 <b>걸친 삼각형</b>을 경계선을 따라 잘라 안쪽만 남김 — 사진 가장자리에서 잘린 사람</p>
+      <p class="ex">near 0.3 → 카메라 30 cm 안으로 들어온 벽은 잘려서 벽 속이 보임</p>
+      <p class="why">VR 에서 손 · 물체를 얼굴 가까이 가져오면 잘려 보이는 이유 → near 값의 하한</p>
+      <p class="where">GPU 고정 기능 · 조절은 Camera 의 Clipping Planes 로만</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">버리기 · 2</div>
+  <h2>버리는 방법 세 가지 — 쉬운 말로 (2/2)</h2>
+  <dl class="terms">
+    <dt>백페이스 컬링<small>Back-face culling</small></dt>
+    <dd>
+      <p>카메라를 <b>등지고 있는 면</b>(물체 뒷면)을 그리지 않기 — 닫힌 물체의 뒷면은 어차피 앞면에 가려짐</p>
+      <p class="ex">공 뒤쪽 절반은 처음부터 안 그림 · Plane 한 장을 뒤에서 보면 사라짐</p>
+      <p class="why">닫힌 물체 삼각형의 약 절반을 공짜로 절약 · 대신 한 장짜리 면은 뒤에서 투명</p>
+      <p class="where">URP/Lit Material → Surface Options → Render Face (Front · Back · Both)</p>
+    </dd>
   </dl>
   <div class="analogy">
     <p><b>단체 사진 촬영</b> · 프레임 밖에 서 있는 사람은 아예 부르지 않음(프러스텀 컬링), 프레임 가장자리에 걸친 사람은 사진에서 잘림(클리핑) · <b>영화 세트 건물</b>은 카메라 쪽 앞면만 만들고 뒷면은 비워 둠(백페이스 컬링)</p>
@@ -796,16 +958,44 @@
     <tr><td class="lab-txt"><b>백페이스 컬링</b></td><td>GPU · 래스터화 직전</td><td>삼각형 하나</td><td>정점 감김 방향이 반대</td></tr>
     <tr><td><b>오클루전 컬링</b></td><td>CPU · 미리 계산</td><td>오브젝트 전체</td><td>다른 물체에 완전히 가림</td></tr>
   </table>
-  <dl class="terms" style="font-size:.62em;margin:.4em 0;grid-template-columns:max-content 1fr max-content 1fr">
-    <dt>드로우콜<small>Draw call</small></dt><dd>CPU가 GPU에게 보내는 <b>"이것 그려" 주문</b> 한 번</dd>
-    <dt>바운딩 박스<small>Bounding box</small></dt><dd>물체를 감싸는 <b>가장 작은 상자</b></dd>
-    <dt>감김 방향<small>Winding order</small></dt><dd>삼각형 세 꼭짓점이 화면에서 <b>시계/반시계</b>로 도는 방향</dd>
-    <dt>오클루전<small>Occlusion</small></dt><dd>다른 물체에 <b>가려짐</b></dd>
-  </dl>
   <div class="key">
     <p class="small">3주차 <b>11.1ms 예산</b> 상기 · 상자를 줄여 덜 그리기 = 가장 저렴한 절약 → <b>far 를 줄이는 실제 이유는 정밀도가 아니라 컬링</b><br>
     흔한 당황 지점 : 백페이스 컬링을 켠 채 평면 한 장 생성 → 뒤에서 보면 사라짐</p>
   </div>
+  <p class="small muted">표 속 낯선 말(드로우콜 · 바운딩 박스 · 감김 방향 · 오클루전) → 다음 장 용어 풀이</p>
+</section>
+
+<section>
+  <div class="tag gfx">버리기 · 용어 풀이</div>
+  <h2>용어 풀이 — 무엇을 기준으로 버리나</h2>
+  <dl class="terms dense">
+    <dt>드로우콜<small>Draw call</small></dt>
+    <dd>
+      <p>CPU 가 GPU 에게 보내는 <b>«이 물체를 이 재질로 그려» 주문</b> 한 번 — 식당 주문서 한 장</p>
+      <p class="ex">재질이 다른 의자 50개 → 주문 약 50번 · 같은 재질로 묶으면(배칭) 줄어듦</p>
+      <p class="why">주문서 작성은 CPU 몫 → 주문이 많으면 GPU 가 놀고 있어도 프레임 저하</p>
+      <p class="where">Game 뷰 Stats 의 Batches · SetPass calls · Frame Debugger</p>
+    </dd>
+    <dt>바운딩 박스<small>Bounding box</small></dt>
+    <dd>
+      <p>물체를 딱 맞게 감싸는 <b>가장 작은 상자</b> — 물건 모양과 상관없이 택배 상자 하나로 취급</p>
+      <p class="ex">다리가 복잡한 의자 → 0.5 × 1 × 0.5 m 상자 꼭짓점 8개로 화면 안 · 밖 판정</p>
+      <p class="where">스크립트 <code>Renderer.bounds</code> · Skinned Mesh Renderer Inspector 의 Bounds</p>
+    </dd>
+    <dt>감김 방향<small>Winding order</small></dt>
+    <dd>
+      <p>삼각형 세 꼭짓점이 화면에서 <b>시계 / 반시계</b>로 도는 순서 — 앞면 · 뒷면을 가리는 표식</p>
+      <p class="ex">Unity = 화면에서 시계 방향으로 보이면 앞면 · 같은 삼각형을 뒤에서 보면 반시계 → 뒷면</p>
+      <p class="why">모델링 툴에서 면이 뒤집히면 Unity 에서 구멍 난 듯 보임</p>
+      <p class="where">Blender : Viewport Overlays → Face Orientation (파랑 앞 · 빨강 뒤)</p>
+    </dd>
+    <dt>오클루전 컬링<small>Occlusion culling</small></dt>
+    <dd>
+      <p>다른 물체에 <b>완전히 가린</b> 물체를 미리 계산해 그리지 않기 — 벽 너머 방은 안 그림</p>
+      <p class="ex">복도에서 문 닫힌 방 10개 → 방 안 가구 전부 제외</p>
+      <p class="where">Window → Rendering → Occlusion Culling → Bake · 오브젝트 Static 의 Occluder · Occludee</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -839,20 +1029,20 @@
   <h2>모눈종이로 보는 래스터화</h2>
   <div class="cols wide-left" style="align-items:center">
     <svg class="dg" viewBox="-36 -36 680 432" width="680" height="432" role="img" aria-label="모눈종이 위 삼각형 · 칸 중심이 안에 든 칸만 꼭짓점 색을 섞어 칠함">
-      <rect x="242" y="2" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="202" y="42" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="240" y="40" width="40" height="40" fill="rgb(87,129,234)"/><rect x="282" y="42" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="162" y="82" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="200" y="80" width="40" height="40" fill="rgb(114,118,212)"/><rect x="240" y="80" width="40" height="40" fill="rgb(104,130,210)"/><rect x="280" y="80" width="40" height="40" fill="rgb(94,141,208)"/><rect x="320" y="80" width="40" height="40" fill="rgb(84,153,206)"/><rect x="362" y="82" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="160" y="120" width="40" height="40" fill="rgb(141,108,189)"/><rect x="200" y="120" width="40" height="40" fill="rgb(131,119,187)"/><rect x="240" y="120" width="40" height="40" fill="rgb(121,131,185)"/><rect x="280" y="120" width="40" height="40" fill="rgb(111,142,183)"/><rect x="320" y="120" width="40" height="40" fill="rgb(101,154,181)"/><rect x="360" y="120" width="40" height="40" fill="rgb(91,165,180)"/><rect x="402" y="122" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="122" y="162" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="160" y="160" width="40" height="40" fill="rgb(158,109,164)"/><rect x="200" y="160" width="40" height="40" fill="rgb(148,120,162)"/><rect x="240" y="160" width="40" height="40" fill="rgb(138,132,161)"/><rect x="280" y="160" width="40" height="40" fill="rgb(128,143,159)"/><rect x="320" y="160" width="40" height="40" fill="rgb(118,155,157)"/><rect x="360" y="160" width="40" height="40" fill="rgb(108,166,155)"/><rect x="400" y="160" width="40" height="40" fill="rgb(97,178,153)"/><rect x="442" y="162" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="82" y="202" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="120" y="200" width="40" height="40" fill="rgb(186,98,141)"/><rect x="160" y="200" width="40" height="40" fill="rgb(175,110,140)"/><rect x="200" y="200" width="40" height="40" fill="rgb(165,121,138)"/><rect x="240" y="200" width="40" height="40" fill="rgb(155,133,136)"/><rect x="280" y="200" width="40" height="40" fill="rgb(145,144,134)"/><rect x="320" y="200" width="40" height="40" fill="rgb(135,156,132)"/><rect x="360" y="200" width="40" height="40" fill="rgb(125,167,130)"/><rect x="400" y="200" width="40" height="40" fill="rgb(114,179,129)"/><rect x="440" y="200" width="40" height="40" fill="rgb(104,190,127)"/><rect x="480" y="200" width="40" height="40" fill="rgb(94,202,125)"/><rect x="522" y="202" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="82" y="242" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="120" y="240" width="40" height="40" fill="rgb(203,99,117)"/><rect x="160" y="240" width="40" height="40" fill="rgb(192,110,115)"/><rect x="200" y="240" width="40" height="40" fill="rgb(182,122,113)"/><rect x="240" y="240" width="40" height="40" fill="rgb(172,134,111)"/><rect x="280" y="240" width="40" height="40" fill="rgb(162,145,110)"/><rect x="320" y="240" width="40" height="40" fill="rgb(152,157,108)"/><rect x="360" y="240" width="40" height="40" fill="rgb(142,168,106)"/><rect x="400" y="240" width="40" height="40" fill="rgb(131,180,104)"/><rect x="440" y="240" width="40" height="40" fill="rgb(121,191,102)"/><rect x="480" y="240" width="40" height="40" fill="rgb(111,203,100)"/><rect x="520" y="240" width="40" height="40" fill="rgb(101,214,98)"/><rect x="562" y="242" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="42" y="282" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="80" y="280" width="40" height="40" fill="rgb(230,88,94)"/><rect x="120" y="280" width="40" height="40" fill="rgb(220,100,92)"/><rect x="160" y="280" width="40" height="40" fill="rgb(209,111,90)"/><rect x="200" y="280" width="40" height="40" fill="rgb(199,123,89)"/><rect x="240" y="280" width="40" height="40" fill="rgb(189,134,87)"/><rect x="282" y="282" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="322" y="282" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="362" y="282" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="402" y="282" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="42" y="322" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="82" y="322" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/><rect x="122" y="322" width="36" height="36" fill="none" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/>
-      <g stroke="#3a4258" stroke-width="1.2"><line x1="0" y1="0" x2="0" y2="360"/><line x1="40" y1="0" x2="40" y2="360"/><line x1="80" y1="0" x2="80" y2="360"/><line x1="120" y1="0" x2="120" y2="360"/><line x1="160" y1="0" x2="160" y2="360"/><line x1="200" y1="0" x2="200" y2="360"/><line x1="240" y1="0" x2="240" y2="360"/><line x1="280" y1="0" x2="280" y2="360"/><line x1="320" y1="0" x2="320" y2="360"/><line x1="360" y1="0" x2="360" y2="360"/><line x1="400" y1="0" x2="400" y2="360"/><line x1="440" y1="0" x2="440" y2="360"/><line x1="480" y1="0" x2="480" y2="360"/><line x1="520" y1="0" x2="520" y2="360"/><line x1="560" y1="0" x2="560" y2="360"/><line x1="600" y1="0" x2="600" y2="360"/><line x1="0" y1="0" x2="600" y2="0"/><line x1="0" y1="40" x2="600" y2="40"/><line x1="0" y1="80" x2="600" y2="80"/><line x1="0" y1="120" x2="600" y2="120"/><line x1="0" y1="160" x2="600" y2="160"/><line x1="0" y1="200" x2="600" y2="200"/><line x1="0" y1="240" x2="600" y2="240"/><line x1="0" y1="280" x2="600" y2="280"/><line x1="0" y1="320" x2="600" y2="320"/><line x1="0" y1="360" x2="600" y2="360"/></g>
-      <g fill="#e8ecf4" fill-opacity=".55"><circle cx="20.0" cy="20.0" r="2.6"/><circle cx="60.0" cy="20.0" r="2.6"/><circle cx="100.0" cy="20.0" r="2.6"/><circle cx="140.0" cy="20.0" r="2.6"/><circle cx="180.0" cy="20.0" r="2.6"/><circle cx="220.0" cy="20.0" r="2.6"/><circle cx="260.0" cy="20.0" r="2.6"/><circle cx="300.0" cy="20.0" r="2.6"/><circle cx="340.0" cy="20.0" r="2.6"/><circle cx="380.0" cy="20.0" r="2.6"/><circle cx="420.0" cy="20.0" r="2.6"/><circle cx="460.0" cy="20.0" r="2.6"/><circle cx="500.0" cy="20.0" r="2.6"/><circle cx="540.0" cy="20.0" r="2.6"/><circle cx="580.0" cy="20.0" r="2.6"/><circle cx="20.0" cy="60.0" r="2.6"/><circle cx="60.0" cy="60.0" r="2.6"/><circle cx="100.0" cy="60.0" r="2.6"/><circle cx="140.0" cy="60.0" r="2.6"/><circle cx="180.0" cy="60.0" r="2.6"/><circle cx="220.0" cy="60.0" r="2.6"/><circle cx="260.0" cy="60.0" r="2.6"/><circle cx="300.0" cy="60.0" r="2.6"/><circle cx="340.0" cy="60.0" r="2.6"/><circle cx="380.0" cy="60.0" r="2.6"/><circle cx="420.0" cy="60.0" r="2.6"/><circle cx="460.0" cy="60.0" r="2.6"/><circle cx="500.0" cy="60.0" r="2.6"/><circle cx="540.0" cy="60.0" r="2.6"/><circle cx="580.0" cy="60.0" r="2.6"/><circle cx="20.0" cy="100.0" r="2.6"/><circle cx="60.0" cy="100.0" r="2.6"/><circle cx="100.0" cy="100.0" r="2.6"/><circle cx="140.0" cy="100.0" r="2.6"/><circle cx="180.0" cy="100.0" r="2.6"/><circle cx="220.0" cy="100.0" r="2.6"/><circle cx="260.0" cy="100.0" r="2.6"/><circle cx="300.0" cy="100.0" r="2.6"/><circle cx="340.0" cy="100.0" r="2.6"/><circle cx="380.0" cy="100.0" r="2.6"/><circle cx="420.0" cy="100.0" r="2.6"/><circle cx="460.0" cy="100.0" r="2.6"/><circle cx="500.0" cy="100.0" r="2.6"/><circle cx="540.0" cy="100.0" r="2.6"/><circle cx="580.0" cy="100.0" r="2.6"/><circle cx="20.0" cy="140.0" r="2.6"/><circle cx="60.0" cy="140.0" r="2.6"/><circle cx="100.0" cy="140.0" r="2.6"/><circle cx="140.0" cy="140.0" r="2.6"/><circle cx="180.0" cy="140.0" r="2.6"/><circle cx="220.0" cy="140.0" r="2.6"/><circle cx="260.0" cy="140.0" r="2.6"/><circle cx="300.0" cy="140.0" r="2.6"/><circle cx="340.0" cy="140.0" r="2.6"/><circle cx="380.0" cy="140.0" r="2.6"/><circle cx="420.0" cy="140.0" r="2.6"/><circle cx="460.0" cy="140.0" r="2.6"/><circle cx="500.0" cy="140.0" r="2.6"/><circle cx="540.0" cy="140.0" r="2.6"/><circle cx="580.0" cy="140.0" r="2.6"/><circle cx="20.0" cy="180.0" r="2.6"/><circle cx="60.0" cy="180.0" r="2.6"/><circle cx="100.0" cy="180.0" r="2.6"/><circle cx="140.0" cy="180.0" r="2.6"/><circle cx="180.0" cy="180.0" r="2.6"/><circle cx="220.0" cy="180.0" r="2.6"/><circle cx="260.0" cy="180.0" r="2.6"/><circle cx="300.0" cy="180.0" r="2.6"/><circle cx="340.0" cy="180.0" r="2.6"/><circle cx="380.0" cy="180.0" r="2.6"/><circle cx="420.0" cy="180.0" r="2.6"/><circle cx="460.0" cy="180.0" r="2.6"/><circle cx="500.0" cy="180.0" r="2.6"/><circle cx="540.0" cy="180.0" r="2.6"/><circle cx="580.0" cy="180.0" r="2.6"/><circle cx="20.0" cy="220.0" r="2.6"/><circle cx="60.0" cy="220.0" r="2.6"/><circle cx="100.0" cy="220.0" r="2.6"/><circle cx="140.0" cy="220.0" r="2.6"/><circle cx="180.0" cy="220.0" r="2.6"/><circle cx="220.0" cy="220.0" r="2.6"/><circle cx="260.0" cy="220.0" r="2.6"/><circle cx="300.0" cy="220.0" r="2.6"/><circle cx="340.0" cy="220.0" r="2.6"/><circle cx="380.0" cy="220.0" r="2.6"/><circle cx="420.0" cy="220.0" r="2.6"/><circle cx="460.0" cy="220.0" r="2.6"/><circle cx="500.0" cy="220.0" r="2.6"/><circle cx="540.0" cy="220.0" r="2.6"/><circle cx="580.0" cy="220.0" r="2.6"/><circle cx="20.0" cy="260.0" r="2.6"/><circle cx="60.0" cy="260.0" r="2.6"/><circle cx="100.0" cy="260.0" r="2.6"/><circle cx="140.0" cy="260.0" r="2.6"/><circle cx="180.0" cy="260.0" r="2.6"/><circle cx="220.0" cy="260.0" r="2.6"/><circle cx="260.0" cy="260.0" r="2.6"/><circle cx="300.0" cy="260.0" r="2.6"/><circle cx="340.0" cy="260.0" r="2.6"/><circle cx="380.0" cy="260.0" r="2.6"/><circle cx="420.0" cy="260.0" r="2.6"/><circle cx="460.0" cy="260.0" r="2.6"/><circle cx="500.0" cy="260.0" r="2.6"/><circle cx="540.0" cy="260.0" r="2.6"/><circle cx="580.0" cy="260.0" r="2.6"/><circle cx="20.0" cy="300.0" r="2.6"/><circle cx="60.0" cy="300.0" r="2.6"/><circle cx="100.0" cy="300.0" r="2.6"/><circle cx="140.0" cy="300.0" r="2.6"/><circle cx="180.0" cy="300.0" r="2.6"/><circle cx="220.0" cy="300.0" r="2.6"/><circle cx="260.0" cy="300.0" r="2.6"/><circle cx="300.0" cy="300.0" r="2.6"/><circle cx="340.0" cy="300.0" r="2.6"/><circle cx="380.0" cy="300.0" r="2.6"/><circle cx="420.0" cy="300.0" r="2.6"/><circle cx="460.0" cy="300.0" r="2.6"/><circle cx="500.0" cy="300.0" r="2.6"/><circle cx="540.0" cy="300.0" r="2.6"/><circle cx="580.0" cy="300.0" r="2.6"/><circle cx="20.0" cy="340.0" r="2.6"/><circle cx="60.0" cy="340.0" r="2.6"/><circle cx="100.0" cy="340.0" r="2.6"/><circle cx="140.0" cy="340.0" r="2.6"/><circle cx="180.0" cy="340.0" r="2.6"/><circle cx="220.0" cy="340.0" r="2.6"/><circle cx="260.0" cy="340.0" r="2.6"/><circle cx="300.0" cy="340.0" r="2.6"/><circle cx="340.0" cy="340.0" r="2.6"/><circle cx="380.0" cy="340.0" r="2.6"/><circle cx="420.0" cy="340.0" r="2.6"/><circle cx="460.0" cy="340.0" r="2.6"/><circle cx="500.0" cy="340.0" r="2.6"/><circle cx="540.0" cy="340.0" r="2.6"/><circle cx="580.0" cy="340.0" r="2.6"/></g>
-      <polygon points="56.0,332.0 572.0,264.0 248.0,28.0" fill="none" stroke="#e8ecf4" stroke-width="3" stroke-linejoin="round"/>
-      <circle cx="56" cy="332" r="10" fill="#ff4d4d" stroke="#0b0d12" stroke-width="2"/>
-      <circle cx="572" cy="264" r="10" fill="#5fe05f" stroke="#0b0d12" stroke-width="2"/>
-      <circle cx="248" cy="28" r="10" fill="#4d7dff" stroke="#0b0d12" stroke-width="2"/>
-      <text x="40" y="380" font-size="19" font-weight="700" fill="#ff6b6b">빨강 정점</text>
-      <text x="610" y="300" text-anchor="end" font-size="19" font-weight="700" fill="#5fe05f">초록 정점</text>
-      <text x="270" y="-12" font-size="19" font-weight="700" fill="#7fa2ff">파랑 정점</text>
+      <rect x="242" y="2" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="202" y="42" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="240" y="40" width="40" height="40" fill="rgb(87,129,234)"/><rect x="282" y="42" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="162" y="82" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="200" y="80" width="40" height="40" fill="rgb(114,118,212)"/><rect x="240" y="80" width="40" height="40" fill="rgb(104,130,210)"/><rect x="280" y="80" width="40" height="40" fill="rgb(94,141,208)"/><rect x="320" y="80" width="40" height="40" fill="rgb(84,153,206)"/><rect x="362" y="82" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="160" y="120" width="40" height="40" fill="rgb(141,108,189)"/><rect x="200" y="120" width="40" height="40" fill="rgb(131,119,187)"/><rect x="240" y="120" width="40" height="40" fill="rgb(121,131,185)"/><rect x="280" y="120" width="40" height="40" fill="rgb(111,142,183)"/><rect x="320" y="120" width="40" height="40" fill="rgb(101,154,181)"/><rect x="360" y="120" width="40" height="40" fill="rgb(91,165,180)"/><rect x="402" y="122" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="122" y="162" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="160" y="160" width="40" height="40" fill="rgb(158,109,164)"/><rect x="200" y="160" width="40" height="40" fill="rgb(148,120,162)"/><rect x="240" y="160" width="40" height="40" fill="rgb(138,132,161)"/><rect x="280" y="160" width="40" height="40" fill="rgb(128,143,159)"/><rect x="320" y="160" width="40" height="40" fill="rgb(118,155,157)"/><rect x="360" y="160" width="40" height="40" fill="rgb(108,166,155)"/><rect x="400" y="160" width="40" height="40" fill="rgb(97,178,153)"/><rect x="442" y="162" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="82" y="202" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="120" y="200" width="40" height="40" fill="rgb(186,98,141)"/><rect x="160" y="200" width="40" height="40" fill="rgb(175,110,140)"/><rect x="200" y="200" width="40" height="40" fill="rgb(165,121,138)"/><rect x="240" y="200" width="40" height="40" fill="rgb(155,133,136)"/><rect x="280" y="200" width="40" height="40" fill="rgb(145,144,134)"/><rect x="320" y="200" width="40" height="40" fill="rgb(135,156,132)"/><rect x="360" y="200" width="40" height="40" fill="rgb(125,167,130)"/><rect x="400" y="200" width="40" height="40" fill="rgb(114,179,129)"/><rect x="440" y="200" width="40" height="40" fill="rgb(104,190,127)"/><rect x="480" y="200" width="40" height="40" fill="rgb(94,202,125)"/><rect x="522" y="202" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="82" y="242" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="120" y="240" width="40" height="40" fill="rgb(203,99,117)"/><rect x="160" y="240" width="40" height="40" fill="rgb(192,110,115)"/><rect x="200" y="240" width="40" height="40" fill="rgb(182,122,113)"/><rect x="240" y="240" width="40" height="40" fill="rgb(172,134,111)"/><rect x="280" y="240" width="40" height="40" fill="rgb(162,145,110)"/><rect x="320" y="240" width="40" height="40" fill="rgb(152,157,108)"/><rect x="360" y="240" width="40" height="40" fill="rgb(142,168,106)"/><rect x="400" y="240" width="40" height="40" fill="rgb(131,180,104)"/><rect x="440" y="240" width="40" height="40" fill="rgb(121,191,102)"/><rect x="480" y="240" width="40" height="40" fill="rgb(111,203,100)"/><rect x="520" y="240" width="40" height="40" fill="rgb(101,214,98)"/><rect x="562" y="242" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="42" y="282" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="80" y="280" width="40" height="40" fill="rgb(230,88,94)"/><rect x="120" y="280" width="40" height="40" fill="rgb(220,100,92)"/><rect x="160" y="280" width="40" height="40" fill="rgb(209,111,90)"/><rect x="200" y="280" width="40" height="40" fill="rgb(199,123,89)"/><rect x="240" y="280" width="40" height="40" fill="rgb(189,134,87)"/><rect x="282" y="282" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="322" y="282" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="362" y="282" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="402" y="282" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="42" y="322" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="82" y="322" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/><rect x="122" y="322" width="36" height="36" fill="none" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/>
+      <g stroke="#cfc6b2" stroke-width="1.2"><line x1="0" y1="0" x2="0" y2="360"/><line x1="40" y1="0" x2="40" y2="360"/><line x1="80" y1="0" x2="80" y2="360"/><line x1="120" y1="0" x2="120" y2="360"/><line x1="160" y1="0" x2="160" y2="360"/><line x1="200" y1="0" x2="200" y2="360"/><line x1="240" y1="0" x2="240" y2="360"/><line x1="280" y1="0" x2="280" y2="360"/><line x1="320" y1="0" x2="320" y2="360"/><line x1="360" y1="0" x2="360" y2="360"/><line x1="400" y1="0" x2="400" y2="360"/><line x1="440" y1="0" x2="440" y2="360"/><line x1="480" y1="0" x2="480" y2="360"/><line x1="520" y1="0" x2="520" y2="360"/><line x1="560" y1="0" x2="560" y2="360"/><line x1="600" y1="0" x2="600" y2="360"/><line x1="0" y1="0" x2="600" y2="0"/><line x1="0" y1="40" x2="600" y2="40"/><line x1="0" y1="80" x2="600" y2="80"/><line x1="0" y1="120" x2="600" y2="120"/><line x1="0" y1="160" x2="600" y2="160"/><line x1="0" y1="200" x2="600" y2="200"/><line x1="0" y1="240" x2="600" y2="240"/><line x1="0" y1="280" x2="600" y2="280"/><line x1="0" y1="320" x2="600" y2="320"/><line x1="0" y1="360" x2="600" y2="360"/></g>
+      <g fill="#1b1a17" fill-opacity=".55"><circle cx="20.0" cy="20.0" r="2.6"/><circle cx="60.0" cy="20.0" r="2.6"/><circle cx="100.0" cy="20.0" r="2.6"/><circle cx="140.0" cy="20.0" r="2.6"/><circle cx="180.0" cy="20.0" r="2.6"/><circle cx="220.0" cy="20.0" r="2.6"/><circle cx="260.0" cy="20.0" r="2.6"/><circle cx="300.0" cy="20.0" r="2.6"/><circle cx="340.0" cy="20.0" r="2.6"/><circle cx="380.0" cy="20.0" r="2.6"/><circle cx="420.0" cy="20.0" r="2.6"/><circle cx="460.0" cy="20.0" r="2.6"/><circle cx="500.0" cy="20.0" r="2.6"/><circle cx="540.0" cy="20.0" r="2.6"/><circle cx="580.0" cy="20.0" r="2.6"/><circle cx="20.0" cy="60.0" r="2.6"/><circle cx="60.0" cy="60.0" r="2.6"/><circle cx="100.0" cy="60.0" r="2.6"/><circle cx="140.0" cy="60.0" r="2.6"/><circle cx="180.0" cy="60.0" r="2.6"/><circle cx="220.0" cy="60.0" r="2.6"/><circle cx="260.0" cy="60.0" r="2.6"/><circle cx="300.0" cy="60.0" r="2.6"/><circle cx="340.0" cy="60.0" r="2.6"/><circle cx="380.0" cy="60.0" r="2.6"/><circle cx="420.0" cy="60.0" r="2.6"/><circle cx="460.0" cy="60.0" r="2.6"/><circle cx="500.0" cy="60.0" r="2.6"/><circle cx="540.0" cy="60.0" r="2.6"/><circle cx="580.0" cy="60.0" r="2.6"/><circle cx="20.0" cy="100.0" r="2.6"/><circle cx="60.0" cy="100.0" r="2.6"/><circle cx="100.0" cy="100.0" r="2.6"/><circle cx="140.0" cy="100.0" r="2.6"/><circle cx="180.0" cy="100.0" r="2.6"/><circle cx="220.0" cy="100.0" r="2.6"/><circle cx="260.0" cy="100.0" r="2.6"/><circle cx="300.0" cy="100.0" r="2.6"/><circle cx="340.0" cy="100.0" r="2.6"/><circle cx="380.0" cy="100.0" r="2.6"/><circle cx="420.0" cy="100.0" r="2.6"/><circle cx="460.0" cy="100.0" r="2.6"/><circle cx="500.0" cy="100.0" r="2.6"/><circle cx="540.0" cy="100.0" r="2.6"/><circle cx="580.0" cy="100.0" r="2.6"/><circle cx="20.0" cy="140.0" r="2.6"/><circle cx="60.0" cy="140.0" r="2.6"/><circle cx="100.0" cy="140.0" r="2.6"/><circle cx="140.0" cy="140.0" r="2.6"/><circle cx="180.0" cy="140.0" r="2.6"/><circle cx="220.0" cy="140.0" r="2.6"/><circle cx="260.0" cy="140.0" r="2.6"/><circle cx="300.0" cy="140.0" r="2.6"/><circle cx="340.0" cy="140.0" r="2.6"/><circle cx="380.0" cy="140.0" r="2.6"/><circle cx="420.0" cy="140.0" r="2.6"/><circle cx="460.0" cy="140.0" r="2.6"/><circle cx="500.0" cy="140.0" r="2.6"/><circle cx="540.0" cy="140.0" r="2.6"/><circle cx="580.0" cy="140.0" r="2.6"/><circle cx="20.0" cy="180.0" r="2.6"/><circle cx="60.0" cy="180.0" r="2.6"/><circle cx="100.0" cy="180.0" r="2.6"/><circle cx="140.0" cy="180.0" r="2.6"/><circle cx="180.0" cy="180.0" r="2.6"/><circle cx="220.0" cy="180.0" r="2.6"/><circle cx="260.0" cy="180.0" r="2.6"/><circle cx="300.0" cy="180.0" r="2.6"/><circle cx="340.0" cy="180.0" r="2.6"/><circle cx="380.0" cy="180.0" r="2.6"/><circle cx="420.0" cy="180.0" r="2.6"/><circle cx="460.0" cy="180.0" r="2.6"/><circle cx="500.0" cy="180.0" r="2.6"/><circle cx="540.0" cy="180.0" r="2.6"/><circle cx="580.0" cy="180.0" r="2.6"/><circle cx="20.0" cy="220.0" r="2.6"/><circle cx="60.0" cy="220.0" r="2.6"/><circle cx="100.0" cy="220.0" r="2.6"/><circle cx="140.0" cy="220.0" r="2.6"/><circle cx="180.0" cy="220.0" r="2.6"/><circle cx="220.0" cy="220.0" r="2.6"/><circle cx="260.0" cy="220.0" r="2.6"/><circle cx="300.0" cy="220.0" r="2.6"/><circle cx="340.0" cy="220.0" r="2.6"/><circle cx="380.0" cy="220.0" r="2.6"/><circle cx="420.0" cy="220.0" r="2.6"/><circle cx="460.0" cy="220.0" r="2.6"/><circle cx="500.0" cy="220.0" r="2.6"/><circle cx="540.0" cy="220.0" r="2.6"/><circle cx="580.0" cy="220.0" r="2.6"/><circle cx="20.0" cy="260.0" r="2.6"/><circle cx="60.0" cy="260.0" r="2.6"/><circle cx="100.0" cy="260.0" r="2.6"/><circle cx="140.0" cy="260.0" r="2.6"/><circle cx="180.0" cy="260.0" r="2.6"/><circle cx="220.0" cy="260.0" r="2.6"/><circle cx="260.0" cy="260.0" r="2.6"/><circle cx="300.0" cy="260.0" r="2.6"/><circle cx="340.0" cy="260.0" r="2.6"/><circle cx="380.0" cy="260.0" r="2.6"/><circle cx="420.0" cy="260.0" r="2.6"/><circle cx="460.0" cy="260.0" r="2.6"/><circle cx="500.0" cy="260.0" r="2.6"/><circle cx="540.0" cy="260.0" r="2.6"/><circle cx="580.0" cy="260.0" r="2.6"/><circle cx="20.0" cy="300.0" r="2.6"/><circle cx="60.0" cy="300.0" r="2.6"/><circle cx="100.0" cy="300.0" r="2.6"/><circle cx="140.0" cy="300.0" r="2.6"/><circle cx="180.0" cy="300.0" r="2.6"/><circle cx="220.0" cy="300.0" r="2.6"/><circle cx="260.0" cy="300.0" r="2.6"/><circle cx="300.0" cy="300.0" r="2.6"/><circle cx="340.0" cy="300.0" r="2.6"/><circle cx="380.0" cy="300.0" r="2.6"/><circle cx="420.0" cy="300.0" r="2.6"/><circle cx="460.0" cy="300.0" r="2.6"/><circle cx="500.0" cy="300.0" r="2.6"/><circle cx="540.0" cy="300.0" r="2.6"/><circle cx="580.0" cy="300.0" r="2.6"/><circle cx="20.0" cy="340.0" r="2.6"/><circle cx="60.0" cy="340.0" r="2.6"/><circle cx="100.0" cy="340.0" r="2.6"/><circle cx="140.0" cy="340.0" r="2.6"/><circle cx="180.0" cy="340.0" r="2.6"/><circle cx="220.0" cy="340.0" r="2.6"/><circle cx="260.0" cy="340.0" r="2.6"/><circle cx="300.0" cy="340.0" r="2.6"/><circle cx="340.0" cy="340.0" r="2.6"/><circle cx="380.0" cy="340.0" r="2.6"/><circle cx="420.0" cy="340.0" r="2.6"/><circle cx="460.0" cy="340.0" r="2.6"/><circle cx="500.0" cy="340.0" r="2.6"/><circle cx="540.0" cy="340.0" r="2.6"/><circle cx="580.0" cy="340.0" r="2.6"/></g>
+      <polygon points="56.0,332.0 572.0,264.0 248.0,28.0" fill="none" stroke="#1b1a17" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="56" cy="332" r="10" fill="#ff4d4d" stroke="#1b1a17" stroke-width="2"/>
+      <circle cx="572" cy="264" r="10" fill="#5fe05f" stroke="#1b1a17" stroke-width="2"/>
+      <circle cx="248" cy="28" r="10" fill="#4d7dff" stroke="#1b1a17" stroke-width="2"/>
+      <text x="40" y="380" font-size="19" font-weight="700" fill="#b3261e">빨강 정점</text>
+      <text x="610" y="300" text-anchor="end" font-size="19" font-weight="700" fill="#2f7d2f">초록 정점</text>
+      <text x="270" y="-12" font-size="19" font-weight="700" fill="#2a4fb8">파랑 정점</text>
     </svg>
     <div>
-      <p class="small"><span style="display:inline-block;width:.9em;height:.9em;background:linear-gradient(90deg,#ff4d4d,#7d7dff,#5fe05f);vertical-align:-.1em;border-radius:3px"></span> <b>칠한 칸 44개</b> : 칸 <b>중심 점</b>이 삼각형 안 → 프래그먼트 생성 → 프래그먼트 셰이더 44번 실행</p>
-      <p class="small"><span style="display:inline-block;width:.9em;height:.9em;border:2px dashed #ffc44d;vertical-align:-.1em"></span> <b>노란 점선 칸</b> : 선은 지나가지만 중심이 밖 → 칠하지 않음</p>
+      <p class="small"><span style="display:inline-block;width:.9em;height:.9em;background:linear-gradient(90deg,#ff4d4d,#7d7dff,#5fe05f);vertical-align:-.1em"></span> <b>칠한 칸 44개</b> : 칸 <b>중심 점</b>이 삼각형 안 → 프래그먼트 생성 → 프래그먼트 셰이더 44번 실행</p>
+      <p class="small"><span style="display:inline-block;width:.9em;height:.9em;border:2px dashed var(--analogy);vertical-align:-.1em"></span> <b>노란 점선 칸</b> : 선은 지나가지만 중심이 밖 → 칠하지 않음</p>
       <p class="small"><b>색</b> : 세 정점의 빨강·초록·파랑을 <b>가까운 정도에 비례해 섞음</b>(보간) → 가운데로 갈수록 섞인 색</p>
       <div class="analogy">
         <p><b>모눈종이 칸 칠하기</b> · 연필 선이 칸을 스쳐도 칸의 한가운데가 선 안쪽일 때만 칠함 · 꼭짓점 물감이 안쪽으로 번지듯 섞임</p>
@@ -876,16 +1066,67 @@
 
 <section>
   <div class="tag vr">Part II · 용어 미리보기</div>
-  <h2>이번 파트에서 쓰는 말 여덟 개</h2>
-  <dl class="terms" style="font-size:.66em;grid-template-columns:max-content 1fr max-content 1fr;gap:.55em 1em">
-    <dt>HMD<small>Head-Mounted Display</small></dt><dd>머리에 쓰는 화면 · VR 헤드셋</dd>
-    <dt>핀쿠션·배럴 왜곡<small>Pincushion / Barrel</small></dt><dd>상이 가장자리로 <b>늘어나는</b>(핀쿠션) / <b>오므라드는</b>(배럴) 찌그러짐</dd>
-    <dt>색수차<small>Chromatic aberration</small></dt><dd>렌즈가 빨강·초록·파랑을 <b>조금씩 다르게 꺾어</b> 가장자리에 색 번짐</dd>
-    <dt>아이박스<small>Eyebox</small></dt><dd>렌즈가 또렷한 상을 보여 주는 <b>눈동자 위치 범위</b></dd>
-    <dt>IPD<small>Interpupillary distance</small></dt><dd>두 눈동자 사이 거리 · 사람마다 다름</dd>
-    <dt>양안 시차·융합<small>Disparity / Fusion</small></dt><dd>두 눈에 비친 상의 <b>어긋남</b> / 뇌가 두 상을 <b>하나의 입체</b>로 합치는 과정</dd>
-    <dt>비대칭 절두체<small>Asymmetric frustum</small></dt><dd>좌우 폭이 <b>다른</b> 카메라 상자 · VR 각 눈에 사용</dd>
-    <dt>싱글패스 인스턴싱<small>Single-pass instanced</small></dt><dd>두 눈을 <b>한 번의 그리기 주문</b>으로 동시에 그리는 방식</dd>
+  <h2>용어 미리보기 (1/2) — 렌즈와 눈</h2>
+  <dl class="terms dense">
+    <dt>HMD<small>Head-Mounted Display</small></dt>
+    <dd>
+      <p>머리에 쓰는 화면 — 눈앞 몇 cm 에 디스플레이와 렌즈를 붙인 VR 헤드셋</p>
+      <p class="ex">Quest 3 = 눈마다 2064×2208 픽셀 화면 + 눈마다 렌즈 하나</p>
+      <p class="why">화면이 눈에 너무 가까움 → 렌즈 필요 → 오늘의 왜곡 · 아이박스 · IPD 문제의 출발점</p>
+      <p class="where">Project Settings → XR Plug-in Management 에서 대상 기기 선택 (OpenXR · Meta)</p>
+    </dd>
+    <dt>핀쿠션 · 배럴 왜곡<small>Pincushion / Barrel</small></dt>
+    <dd>
+      <p>상이 가장자리로 갈수록 <b>늘어나는</b>(핀쿠션 · 바늘꽂이 모양) / <b>오므라드는</b>(배럴 · 술통 모양) 찌그러짐</p>
+      <p class="ex">렌즈가 핀쿠션으로 늘림 → GPU 가 미리 배럴로 오므림 → 둘이 상쇄되어 반듯</p>
+      <p class="why">렌즈 안쪽 화면이 찌그러져 보여도 정상 · 개발자가 보정 코드를 쓸 필요 없음</p>
+    </dd>
+    <dt>색수차<small>Chromatic aberration</small></dt>
+    <dd>
+      <p>렌즈가 빨강 · 초록 · 파랑 빛을 <b>조금씩 다르게 꺾어</b> 가장자리에 무지개 테두리가 생기는 현상 — 프리즘 무지개</p>
+      <p class="ex">렌즈 가장자리의 흰 글자 → 한쪽은 빨강, 반대쪽은 파랑으로 번짐</p>
+      <p class="why">보정하려면 R · G · B 를 서로 다른 배율로 왜곡 → 후처리 비용 증가</p>
+    </dd>
+    <dt>아이박스<small>Eyebox</small></dt>
+    <dd>
+      <p>렌즈가 또렷한 상을 보여 주는 <b>눈동자 위치 범위</b> — 쌍안경을 눈에 대는 «정확한 자리»</p>
+      <p class="ex">한 변 약 10 mm 안팎 · 헤드셋이 아래로 처지면 가장자리가 어둡고 흐림</p>
+      <p class="why">«화질 나쁨» 불만의 상당수 = 착용 불량 → 플레이테스트 전에 착용부터 확인</p>
+      <p class="where">Quest : 머리끈 조임 · 얼굴 패드 위치 · 렌즈 간격 휠</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II · 용어 미리보기</div>
+  <h2>용어 미리보기 (2/2) — 두 눈과 두 장</h2>
+  <dl class="terms dense">
+    <dt>IPD<small>Interpupillary distance</small></dt>
+    <dd>
+      <p>두 눈동자 중심 사이 거리 — 성인 대부분 약 53~73 mm, 평균 약 63 mm</p>
+      <p class="ex">IPD 58 mm 인 사람이 렌즈 간격 68 mm 로 보면 상이 어긋나 눈 피로</p>
+      <p class="why">가상 카메라 간격까지 틀리면 세상 크기 감각이 바뀜 (거인 · 개미 시점)</p>
+      <p class="where">Quest 3 : 아래쪽 렌즈 간격 휠 · 가상 카메라 간격은 XR 런타임이 자동 적용</p>
+    </dd>
+    <dt>양안 시차 · 융합<small>Disparity / Fusion</small></dt>
+    <dd>
+      <p>두 눈에 비친 상의 <b>작은 어긋남</b>(시차) / 뇌가 그 두 상을 <b>하나의 입체</b>로 합치는 과정(융합)</p>
+      <p class="ex">손가락을 코앞에 세우고 한 눈씩 감으면 손가락이 좌우로 점프 = 시차</p>
+      <p class="why">VR 입체감의 근원 · 두 상이 엉뚱하게 어긋나면 융합 실패 → 겹쳐 보임 · 두통</p>
+    </dd>
+    <dt>비대칭 절두체<small>Asymmetric frustum</small></dt>
+    <dd>
+      <p>좌우 폭이 <b>서로 다른</b> 카메라 상자 — VR 각 눈은 코 쪽이 좁고 귀 쪽이 넓음</p>
+      <p class="ex">왼눈 상자 = 코 쪽 40° · 귀 쪽 50° 처럼 한쪽으로 쏠림 (값은 기기마다 다름)</p>
+      <p class="why">fieldOfView 숫자 하나로는 표현 불가 → 코드로 덮어쓰면 두 눈 상이 어긋남</p>
+      <p class="where">XR 런타임이 매 프레임 주입 · 스크립트 <code>Camera.GetStereoProjectionMatrix</code> 로 읽기만</p>
+    </dd>
+    <dt>싱글패스 인스턴싱<small>Single-pass instanced</small></dt>
+    <dd>
+      <p>두 눈 그림을 <b>그리기 주문 한 번</b>으로 동시에 그리는 방식 — 복사기 «2부» 주문</p>
+      <p class="ex">드로우콜 100 → 그대로 100 (멀티패스면 200) · 픽셀 처리는 여전히 두 배</p>
+      <p class="where">Project Settings → XR Plug-in Management → OpenXR → Render Mode (Single Pass Instanced / Multi-view)</p>
+    </dd>
   </dl>
 </section>
 
@@ -1007,6 +1248,39 @@
 </section>
 
 <section>
+  <div class="tag vr">광학 · 용어 풀이</div>
+  <h2>용어 풀이 — 헤드셋이 대신 하는 일</h2>
+  <dl class="terms dense">
+    <dt>합성기<small>Compositor</small></dt>
+    <dd>
+      <p>헤드셋 운영체제 안에서 앱이 완성한 두 눈 그림을 받아 <b>마지막 손질</b> 후 화면에 내보내는 프로그램 — 인쇄 직전의 편집 데스크</p>
+      <p class="ex">배럴 왜곡 사전보정 · 색수차 보정 · 타임워프 · 시스템 메뉴 겹쳐 그리기</p>
+      <p class="why">이 일들은 개발자 몫이 아님 → 같은 보정을 코드로 또 하면 이중 보정</p>
+    </dd>
+    <dt>타임워프<small>Timewarp</small></dt>
+    <dd>
+      <p>그림을 다 그린 뒤 내보내기 직전, 그사이 <b>돌아간 머리 방향만큼</b> 그림을 살짝 밀어 맞추는 보정</p>
+      <p class="ex">그리는 동안 머리가 오른쪽으로 1° 회전 → 내보내기 직전 그림을 1° 만큼 이동</p>
+      <p class="why">세상이 머리보다 늦게 따라오는 느낌(멀미 원인) 감소 · 11주 motion-to-photon 에서 다시</p>
+    </dd>
+    <dt>XR 런타임<small>XR runtime</small></dt>
+    <dd>
+      <p>헤드셋 제조사가 제공하는 구동 프로그램 — 렌즈 · 화면 · 머리 위치를 알고 앱에 알려 주는 «통역사»</p>
+      <p class="ex">매 프레임 눈마다 다른 투영 행렬 · 머리 위치 · 컨트롤러 위치를 Unity 에 전달</p>
+      <p class="why">비대칭 절두체 · IPD 를 정확히 아는 유일한 주체 → 카메라 값을 코드로 덮어쓰면 안 되는 이유</p>
+      <p class="where">Project Settings → XR Plug-in Management → OpenXR (Meta Quest 기능 그룹)</p>
+    </dd>
+    <dt>비네팅<small>Vignetting</small></dt>
+    <dd>
+      <p>화면 <b>가장자리가 점점 어두워지는</b> 현상 — 오래된 사진 모서리의 그늘</p>
+      <p class="ex">헤드셋이 눈보다 몇 mm 위로 올라가면 아래쪽 시야가 어두워짐</p>
+      <p class="why">아이박스 이탈의 신호 · 반대로 이동 멀미를 줄이려고 일부러 가장자리를 어둡게 하기도 함</p>
+      <p class="where">XRI 의 Tunneling Vignette (12주 컴포트) · URP 후처리 Volume 의 Vignette</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag vr">양안 · 1</div>
   <h2>IPD — 사람마다 다른 상수</h2>
   <div class="cols">
@@ -1110,41 +1384,41 @@ cam.farClipPlane  = 500f;
   <div class="tag vr">양안 · 5 도해</div>
   <h2>세 가지 방식 — 주문서와 결과물 비교</h2>
   <svg class="dg" viewBox="0 0 1100 420" width="1100" height="420" role="img" aria-label="멀티패스, 더블와이드, 싱글패스 인스턴싱의 씬 순회 횟수, 드로우콜, 결과 이미지, 정점·픽셀 처리량 비교">
-    <g font-size="18" fill="#9aa4b8" text-anchor="middle">
+    <g font-size="18" fill="#4a463e" text-anchor="middle">
       <text x="110" y="28">방식</text>
       <text x="345" y="28">씬 순회·컬링</text>
       <text x="545" y="28">드로우콜 (CPU 주문서)</text>
       <text x="795" y="28">결과 이미지</text>
       <text x="1012" y="28">정점 · 픽셀</text>
     </g>
-    <g stroke="#2a3040" stroke-width="2">
+    <g stroke="#cfc6b2" stroke-width="2">
       <line x1="0" y1="44" x2="1100" y2="44"/><line x1="0" y1="168" x2="1100" y2="168"/><line x1="0" y1="292" x2="1100" y2="292"/>
     </g>
-    <text x="16" y="100" font-size="23" font-weight="700" fill="#ff5a4d">멀티패스</text>
-    <text x="16" y="128" font-size="18" fill="#9aa4b8">Multi-pass</text>
-    <text x="345" y="116" text-anchor="middle" font-size="30" font-weight="700" fill="#ff5a4d">2회</text>
-    <rect x="455" y="82" width="82" height="46" rx="6" fill="#ff5a4d" fill-opacity=".14" stroke="#ff5a4d" stroke-width="2"/><text x="496.0" y="112" text-anchor="middle" font-size="18" font-weight="700" fill="#ff5a4d">주문 L</text><rect x="553" y="82" width="82" height="46" rx="6" fill="#ff5a4d" fill-opacity=".14" stroke="#ff5a4d" stroke-width="2"/><text x="594.0" y="112" text-anchor="middle" font-size="18" font-weight="700" fill="#ff5a4d">주문 R</text>
-    <rect x="705" y="75" width="80" height="62" rx="4" fill="#171b25" stroke="#ff5a4d" stroke-width="2"/><text x="745.0" y="114.0" text-anchor="middle" font-size="22" font-weight="700" fill="#ff5a4d">L</text><rect x="805" y="75" width="80" height="62" rx="4" fill="#171b25" stroke="#ff5a4d" stroke-width="2"/><text x="845.0" y="114.0" text-anchor="middle" font-size="22" font-weight="700" fill="#ff5a4d">R</text>
+    <text x="16" y="100" font-size="23" font-weight="700" fill="#c2401d">멀티패스</text>
+    <text x="16" y="128" font-size="18" fill="#4a463e">Multi-pass</text>
+    <text x="345" y="116" text-anchor="middle" font-size="30" font-weight="700" fill="#c2401d">2회</text>
+    <rect x="455" y="82" width="82" height="46" rx="2" fill="#c2401d" fill-opacity=".14" stroke="#c2401d" stroke-width="2"/><text x="496.0" y="112" text-anchor="middle" font-size="18" font-weight="700" fill="#c2401d">주문 L</text><rect x="553" y="82" width="82" height="46" rx="2" fill="#c2401d" fill-opacity=".14" stroke="#c2401d" stroke-width="2"/><text x="594.0" y="112" text-anchor="middle" font-size="18" font-weight="700" fill="#c2401d">주문 R</text>
+    <rect x="705" y="75" width="80" height="62" rx="2" fill="#ece6d8" stroke="#c2401d" stroke-width="2"/><text x="745.0" y="114.0" text-anchor="middle" font-size="22" font-weight="700" fill="#c2401d">L</text><rect x="805" y="75" width="80" height="62" rx="2" fill="#ece6d8" stroke="#c2401d" stroke-width="2"/><text x="845.0" y="114.0" text-anchor="middle" font-size="22" font-weight="700" fill="#c2401d">R</text>
     <text x="1012" y="116" text-anchor="middle" font-size="24" font-weight="700">×2 · ×2</text>
 
-    <text x="16" y="222" font-size="23" font-weight="700" fill="#ffc44d">더블와이드</text>
-    <text x="16" y="250" font-size="18" fill="#9aa4b8">구형 싱글패스</text>
-    <text x="345" y="240" text-anchor="middle" font-size="30" font-weight="700" fill="#ffc44d">1회</text>
-    <rect x="455" y="206" width="82" height="46" rx="6" fill="#ffc44d" fill-opacity=".14" stroke="#ffc44d" stroke-width="2"/><text x="496.0" y="236" text-anchor="middle" font-size="18" font-weight="700" fill="#ffc44d">주문 L</text><rect x="553" y="206" width="82" height="46" rx="6" fill="#ffc44d" fill-opacity=".14" stroke="#ffc44d" stroke-width="2"/><text x="594.0" y="236" text-anchor="middle" font-size="18" font-weight="700" fill="#ffc44d">주문 R</text>
-    <rect x="705" y="199" width="180" height="62" rx="4" fill="#171b25" stroke="#ffc44d" stroke-width="2"/>
-    <line x1="795" y1="199" x2="795" y2="261" stroke="#ffc44d" stroke-width="2" stroke-dasharray="5 4"/>
-    <text x="750" y="238" text-anchor="middle" font-size="22" font-weight="700" fill="#ffc44d">L</text>
-    <text x="840" y="238" text-anchor="middle" font-size="22" font-weight="700" fill="#ffc44d">R</text>
-    <text x="795" y="284" text-anchor="middle" font-size="18" fill="#9aa4b8">가로 두 배 한 장</text>
+    <text x="16" y="222" font-size="23" font-weight="700" fill="#a8701a">더블와이드</text>
+    <text x="16" y="250" font-size="18" fill="#4a463e">구형 싱글패스</text>
+    <text x="345" y="240" text-anchor="middle" font-size="30" font-weight="700" fill="#a8701a">1회</text>
+    <rect x="455" y="206" width="82" height="46" rx="2" fill="#a8701a" fill-opacity=".14" stroke="#a8701a" stroke-width="2"/><text x="496.0" y="236" text-anchor="middle" font-size="18" font-weight="700" fill="#a8701a">주문 L</text><rect x="553" y="206" width="82" height="46" rx="2" fill="#a8701a" fill-opacity=".14" stroke="#a8701a" stroke-width="2"/><text x="594.0" y="236" text-anchor="middle" font-size="18" font-weight="700" fill="#a8701a">주문 R</text>
+    <rect x="705" y="199" width="180" height="62" rx="2" fill="#ece6d8" stroke="#a8701a" stroke-width="2"/>
+    <line x1="795" y1="199" x2="795" y2="261" stroke="#a8701a" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="750" y="238" text-anchor="middle" font-size="22" font-weight="700" fill="#a8701a">L</text>
+    <text x="840" y="238" text-anchor="middle" font-size="22" font-weight="700" fill="#a8701a">R</text>
+    <text x="795" y="284" text-anchor="middle" font-size="18" fill="#4a463e">가로 두 배 한 장</text>
     <text x="1012" y="240" text-anchor="middle" font-size="24" font-weight="700">×2 · ×2</text>
 
-    <text x="16" y="342" font-size="23" font-weight="700" fill="#a8e05f">싱글패스 인스턴싱</text>
-    <text x="16" y="370" font-size="18" fill="#9aa4b8">Single Pass Instanced</text>
-    <text x="16" y="394" font-size="18" fill="#9aa4b8">(Quest : Multiview)</text>
-    <text x="345" y="364" text-anchor="middle" font-size="30" font-weight="700" fill="#a8e05f">1회</text>
-    <rect x="475" y="330" width="140" height="46" rx="6" fill="#a8e05f" fill-opacity=".14" stroke="#a8e05f" stroke-width="2"/><text x="545.0" y="360" text-anchor="middle" font-size="18" font-weight="700" fill="#a8e05f">주문 1장 (2부)</text>
-    <rect x="735" y="315" width="100" height="56" rx="4" fill="#171b25" stroke="#a8e05f" stroke-width="2"/><text x="785.0" y="351.0" text-anchor="middle" font-size="22" font-weight="700" fill="#a8e05f">R</text><rect x="717" y="333" width="100" height="56" rx="4" fill="#171b25" stroke="#a8e05f" stroke-width="2"/><text x="767.0" y="369.0" text-anchor="middle" font-size="22" font-weight="700" fill="#a8e05f">L</text>
-    <text x="790" y="412" text-anchor="middle" font-size="18" fill="#9aa4b8">두 장을 겹친 묶음</text>
+    <text x="16" y="342" font-size="23" font-weight="700" fill="#4f7a16">싱글패스 인스턴싱</text>
+    <text x="16" y="370" font-size="18" fill="#4a463e">Single Pass Instanced</text>
+    <text x="16" y="394" font-size="18" fill="#4a463e">(Quest : Multiview)</text>
+    <text x="345" y="364" text-anchor="middle" font-size="30" font-weight="700" fill="#4f7a16">1회</text>
+    <rect x="475" y="330" width="140" height="46" rx="2" fill="#4f7a16" fill-opacity=".14" stroke="#4f7a16" stroke-width="2"/><text x="545.0" y="360" text-anchor="middle" font-size="18" font-weight="700" fill="#4f7a16">주문 1장 (2부)</text>
+    <rect x="735" y="315" width="100" height="56" rx="2" fill="#ece6d8" stroke="#4f7a16" stroke-width="2"/><text x="785.0" y="351.0" text-anchor="middle" font-size="22" font-weight="700" fill="#4f7a16">R</text><rect x="717" y="333" width="100" height="56" rx="2" fill="#ece6d8" stroke="#4f7a16" stroke-width="2"/><text x="767.0" y="369.0" text-anchor="middle" font-size="22" font-weight="700" fill="#4f7a16">L</text>
+    <text x="790" y="412" text-anchor="middle" font-size="18" fill="#4a463e">두 장을 겹친 묶음</text>
     <text x="1012" y="364" text-anchor="middle" font-size="24" font-weight="700">×2 · ×2</text>
   </svg>
   <div class="cols" style="margin-top:.3em">
@@ -1192,24 +1466,24 @@ cam.farClipPlane  = 500f;
   <div class="vs">
     <div class="bad">
       <h4>나쁜 프롬프트와 그 결과</h4>
-      <span style="color:#e8ecf4">"멀리까지 잘 보이는<br>
+      <span style="color:var(--ink)">"멀리까지 잘 보이는<br>
       3인칭 카메라 만들어줘"</span><br><br>
       cam.nearClipPlane = <b>0.01f</b>;<br>
       cam.farClipPlane&nbsp; = <b>10000f</b>;<br><br>
-      <span style="color:#5f6980">// 문법 정상<br>
+      <span style="color:var(--ink-3)">// 문법 정상<br>
       // 에디터에서 정상 동작<br>
       // 요구 사항 모두 포함</span><br><br>
-      <span style="color:#ff5a4d">// far / near = 1,000,000 : 1</span>
+      <span style="color:var(--trap)">// far / near = 1,000,000 : 1</span>
     </div>
     <div class="good">
       <h4>학생이 해야 할 지적</h4>
-      <span style="color:#e8ecf4">"far 가 아니라 near 가 문제다."</span><br><br>
+      <span style="color:var(--ink)">"far 가 아니라 near 가 문제다."</span><br><br>
       정밀도를 결정하는 값 : <b>1/near − 1/far</b><br>
       far=10000 → 1/far = 0.0001 ≈ 0<br>
       near=0.01 → 1/near = <b>100</b><br><br>
-      <span style="color:#a8e05f">// near 0.01 → 0.3<br>
+      <span style="color:var(--lab)">// near 0.01 → 0.3<br>
       // 정밀도 약 30배, 먼 시야는 그대로</span><br><br>
-      <span style="color:#a8e05f">// far/near 상한을 명세에 명시</span>
+      <span style="color:var(--lab)">// far/near 상한을 명세에 명시</span>
     </div>
   </div>
   <div class="key trap" style="margin-top:.8em">
@@ -1276,7 +1550,7 @@ cam.farClipPlane  = 500f;
   <div class="tag lab">실습 · 2</div>
   <h2>이번 주 명세 예시</h2>
   <div class="cols wide-left">
-  <pre style="margin-top:0"><code data-trim>[목표]
+  <pre style="margin-top:0"><code class="language-plaintext" data-trim>[목표]
 지형 위를 따라다니는 3인칭 카메라. 시야 거리 500m.
 
 [제약]
@@ -1368,14 +1642,14 @@ cam.farClipPlane  = 500f;
   </table>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">다음 주</div>
   <div class="rule"></div>
   <h1>조명과 <em>재질</em></h1>
   <p class="sub">이번 주 : 픽셀이 <b>어디에</b> 찍히는가<br>
   다음 주 : 그 자리에 <b>어떤 색</b>이 찍히는가<br>
   그 색과 <b>깊이 지각</b>의 관계</p>
-  <div class="note">AI 함정 #4 — 실시간 그림자 남발과 감마·선형 색공간 혼동</div>
+  <div class="note" style="position:static;margin-top:2.4em;display:inline-block">AI 함정 #4 — 실시간 그림자 남발과 감마·선형 색공간 혼동</div>
 </section>
 
 </div></div>

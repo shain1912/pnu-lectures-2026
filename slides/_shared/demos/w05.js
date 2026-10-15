@@ -160,8 +160,8 @@
       Array.prototype.forEach.call(btns, function (b) {
         var k = b.dataset.cue;
         b.textContent = LABEL[k] + (cue[k] ? " 켬" : " 끔");
-        b.style.borderColor = cue[k] ? "#35d6e6" : "";
-        b.style.color = cue[k] ? "#35d6e6" : "";
+        b.style.borderColor = cue[k] ? "#0d6b78" : "";
+        b.style.color = cue[k] ? "#0d6b78" : "";
       });
       if (revealBtn) revealBtn.textContent = reveal ? "거리 가리기" : "실제 거리 공개";
 

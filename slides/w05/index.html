@@ -12,7 +12,7 @@
 /* 덱 고유 : 인라인 SVG 도해 */
 .reveal svg.dg { display:block; margin:.15em auto 0; max-width:100%; height:auto; }
 .reveal svg.dg text { font-family: var(--sans); }
-.reveal svg.dg text:not([fill]) { fill: #e8ecf4; }
+.reveal svg.dg text:not([fill]) { fill: var(--ink); }
 </style>
 </head>
 <body>
@@ -58,11 +58,11 @@
       <p class="small">법선·광원 방향 두 화살표의 <b>내적으로 표면 밝기 직접 계산</b> · 하이라이트가 시점 따라 움직이는 이유를 식으로 설명</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정 진단</h4>
+      <h4><span class="step">2</span> 함정 진단</h4>
       <p class="small">AI 가 만든 씬에서 <b>그림자 켠 광원 수 · Color Space · 텍스처 sRGB</b> 세 가지 점검 → 헤드셋 프레임 급락·색 바램의 원인 찾기</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> VR 공간 설계</h4>
+      <h4><span class="step">3</span> VR 공간 설계</h4>
       <p class="small">접촉 그림자·바닥 무늬·크기 기준 물체 배치로 <b>«떠 보이는 물체 · 좁아 보이는 방»</b> 현상 완화</p>
     </div>
   </div>
@@ -81,21 +81,75 @@
 
 <section>
   <div class="tag gfx">Part I 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>이번 파트 용어 미리보기 (1/3)</h2>
   <dl class="terms">
-    <dt>프래그먼트<small>Fragment</small></dt><dd>화면 픽셀 하나에 대응하는 «색칠 후보» 점 — 색을 계산하는 단위</dd>
-    <dt>셰이더<small>Shader</small></dt><dd>그래픽 카드에서 정점·픽셀마다 실행되는 작은 프로그램</dd>
-    <dt>법선<small>Normal</small></dt><dd>면이 바라보는 방향을 가리키는 <b>길이 1 의 화살표</b></dd>
-    <dt>내적<small>Dot product</small></dt><dd>두 화살표가 같은 쪽을 보는 정도를 숫자 하나로 계산 — 같은 방향 1 · 직각 0 · 반대 −1 (2주차)</dd>
-    <dt>확산반사<small>Diffuse</small></dt><dd>빛이 표면에서 사방으로 고르게 흩어지는 반사 — 종이·벽처럼 <b>보는 방향과 무관</b></dd>
-    <dt>정반사<small>Specular</small></dt><dd>빛이 거울처럼 한 방향으로 튕기는 반사 — 반짝이는 하이라이트 · <b>보는 위치 따라 이동</b></dd>
-    <dt>알베도<small>Albedo</small></dt><dd>조명 효과를 뺀 표면 고유의 바탕색</dd>
-    <dt>색공간<small>Color space</small></dt><dd>색을 숫자로 적는 눈금 체계 — 사람 눈 기준(sRGB) · 실제 빛 에너지 기준(Linear)</dd>
+    <dt>프래그먼트<small>Fragment</small></dt><dd>
+      <p>화면 픽셀 한 칸에 대응하는 «색칠 후보» 점 — 색을 계산하는 최소 단위</p>
+      <p class="ex">삼각형 하나가 화면에서 300칸을 덮으면 프래그먼트 300개 → 칸마다 색 계산 300번</p>
+      <p class="why">조명 비용 = 프래그먼트 수 × 한 칸 계산량 → 화면을 크게 덮는 물체일수록 비쌈</p>
+      <p class="where">Unity : Shader Graph 의 Fragment 블록 · Window → Analysis → Frame Debugger</p>
+    </dd>
+    <dt>셰이더<small>Shader</small></dt><dd>
+      <p>그래픽 카드가 꼭짓점·픽셀마다 실행하는 작은 프로그램 — 색칠 방법을 적은 «레시피»</p>
+      <p class="ex">같은 큐브라도 셰이더를 Lit → Unlit 으로 바꾸면 그늘·하이라이트가 사라짐</p>
+      <p class="why">머티리얼 = 셰이더 + 숫자 설정값 → 셰이더가 다르면 같은 숫자도 다른 결과</p>
+      <p class="where">Unity : 머티리얼 Inspector 맨 위 Shader 메뉴 → Universal Render Pipeline/Lit</p>
+    </dd>
+    <dt>법선<small>Normal</small></dt><dd>
+      <p>면이 바라보는 방향을 가리키는 <b>길이 1 의 화살표</b> — 면에 수직으로 꽂은 이쑤시개</p>
+      <p class="ex">바닥 법선 (0, 1, 0) = 위쪽 · 정면 벽 법선 (0, 0, −1) = 카메라 쪽</p>
+      <p class="why">조명 밝기 계산의 기준축 — 법선이 뒤집히면 밝아야 할 면이 어둡게 나옴</p>
+      <p class="where">Unity : 모델 Import Settings → Model 탭 → Normals (Import · Calculate)</p>
+    </dd>
   </dl>
   <aside class="notes">
     - 지금 다 외울 필요 없음 · 슬라이드마다 다시 풀어 줌
     - 내적은 2주차 복습 : "두 화살표가 얼마나 같은 쪽을 보나"
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기 (2/3)</h2>
+  <dl class="terms">
+    <dt>내적<small>Dot product</small></dt><dd>
+      <p>두 화살표가 같은 쪽을 보는 정도를 숫자 하나로 계산 — 같은 방향 1 · 직각 0 · 반대 −1 (2주차)</p>
+      <p class="ex">(0, 1, 0) · (0.6, 0.8, 0) = 0×0.6 + 1×0.8 + 0×0 = 0.8 → «80% 같은 쪽»</p>
+      <p class="why">면이 빛을 얼마나 정면으로 받는지 = 법선과 빛 방향의 내적 → 밝기 계산의 핵심 한 줄</p>
+      <p class="where">Unity : C# <code>Vector3.Dot(a, b)</code> · Shader Graph 의 Dot Product 노드</p>
+    </dd>
+    <dt>확산반사<small>Diffuse</small></dt><dd>
+      <p>빛이 표면에서 사방으로 고르게 흩어지는 반사 — 종이·벽·천처럼 <b>보는 방향과 무관</b></p>
+      <p class="ex">흰 종이는 정면에서 봐도 옆에서 봐도 밝기가 같음 = 확산반사만 있는 표면</p>
+      <p class="why">물체의 형태(어느 면이 빛을 향하나)를 보여 주는 항 — 빠지면 납작한 실루엣만 남음</p>
+      <p class="where">Unity URP Lit : Surface Inputs → Base Map 색이 확산반사 색으로 쓰임</p>
+    </dd>
+    <dt>정반사<small>Specular</small></dt><dd>
+      <p>빛이 거울처럼 한 방향으로 튕기는 반사 — 반짝이는 하이라이트 · <b>보는 위치 따라 이동</b></p>
+      <p class="ex">당구공의 흰 반짝임 점 → 고개를 옮기면 점도 공 위에서 따라 움직임</p>
+      <p class="why">재질감(광택·금속)의 주된 단서 — 빠지면 모든 물체가 종이처럼 보임</p>
+      <p class="where">Unity URP Lit : Smoothness 슬라이더 · Advanced Options → Specular Highlights</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기 (3/3)</h2>
+  <dl class="terms">
+    <dt>알베도<small>Albedo</small></dt><dd>
+      <p>조명 효과를 뺀 표면 고유의 바탕색 — 그늘·반짝임이 전혀 없는 «물감 색»</p>
+      <p class="ex">빨간 공의 알베도 (0.8, 0.2, 0.2) · 그늘진 쪽이 어두워도 알베도는 그대로</p>
+      <p class="why">알베도 텍스처에 그림자를 그려 넣으면 조명을 바꿀 때 가짜 그림자가 남음</p>
+      <p class="where">Unity URP Lit : Base Map (구 Built-in Standard 셰이더의 Albedo 칸)</p>
+    </dd>
+    <dt>색공간<small>Color space</small></dt><dd>
+      <p>색을 숫자로 적는 눈금 체계 — 사람 눈 기준(sRGB) · 실제 빛 에너지 기준(Linear)</p>
+      <p class="ex">회색 0.5 = sRGB 눈금으로는 «중간 밝기» · 실제 빛의 양으로는 약 0.22</p>
+      <p class="why">눈금이 섞이면 조명 덧셈이 과장 → 밝은 곳이 흰색으로 뭉침 (AI 함정 #4)</p>
+      <p class="where">Unity : Project Settings → Player → Other Settings → Color Space</p>
+    </dd>
+  </dl>
 </section>
 
 <!-- ---------------------------------------------------- 광원 -->
@@ -135,21 +189,35 @@
     <tr><td class="gfx-txt"><b>Spot</b></td><td>한 점에서 원뿔 모양으로</td><td>손전등 · 무대 조명</td><td>있음 + 원뿔 가장자리로 갈수록 약해짐</td></tr>
     <tr><td class="gfx-txt"><b>Area</b></td><td>사각형 면 전체에서</td><td>창문 · 형광등 패널</td><td>있음 · <span class="lab-txt">URP 에서는 베이크 전용</span></td></tr>
   </table>
+  <p class="small">광원 종류마다 실시간 그림자 비용이 크게 다름 → 그림자맵 (다음다음 장)</p>
+  <p class="xs muted" style="margin-top:.5em">용어 풀이 → 다음 장 : 감쇠 · 베이크</p>
+</section>
+
+<section>
+  <div class="tag gfx">조명 · 2 용어 풀이</div>
+  <h2>감쇠와 베이크</h2>
   <dl class="terms">
-    <dt>감쇠<small>Attenuation</small></dt><dd>광원에서 멀어질수록 빛이 약해지는 정도</dd>
-    <dt>베이크<small>Bake</small></dt><dd>조명 결과를 개발 중에 미리 계산해 그림(텍스처)으로 저장해 두는 방식 — 실행 중 계산 생략 · 뒤에서 상세</dd>
+    <dt>감쇠<small>Attenuation</small></dt><dd>
+      <p>광원에서 멀어질수록 빛이 약해지는 정도 — 촛불 가까이는 밝고 방 구석은 어두운 현상</p>
+      <p class="ex">전구에서 1 m 밝기 100 → 2 m 25 → 3 m 약 11 («조명 · 4» 역제곱 손계산)</p>
+      <p class="why">감쇠를 모르고 Intensity 만 올리면 광원 근처만 하얗게 타고 먼 곳은 그대로 어두움</p>
+      <p class="where">Unity : Point · Spot Light 컴포넌트의 Range · Intensity (Directional 에는 Range 없음)</p>
+    </dd>
+    <dt>베이크<small>Bake</small></dt><dd>
+      <p>조명 결과를 개발 중에 미리 계산해 그림(텍스처)으로 저장해 두는 방식 — «미리 싸 둔 도시락»</p>
+      <p class="ex">방 하나 베이크에 몇 분 소요 → 실행 중에는 저장된 밝기를 읽기만 → 프레임마다 계산 0</p>
+      <p class="why">헤드셋 칩으로 매 프레임 간접광·그림자 계산은 불가능에 가까움 → VR 조명의 기본 전략</p>
+      <p class="where">Unity : Light → Mode = Baked · Window → Rendering → Lighting → Generate Lighting</p>
+    </dd>
   </dl>
-  <p class="small">광원 종류마다 실시간 그림자 비용이 크게 다름 → 다음 장</p>
+  <div class="key">
+    <p class="small">대가 : 베이크된 빛·그림자는 <b>움직이지 않음</b> → 광원·물체를 옮기면 다시 베이크 (전역조명 파트에서 상세)</p>
+  </div>
 </section>
 
 <section>
   <div class="tag gfx">조명 · 3</div>
   <h2>그림자가 비싼 이유 — 그림자맵</h2>
-  <dl class="terms">
-    <dt>그림자맵<small>Shadow map</small></dt><dd>광원 자리에서 장면을 찍어 <b>«광원에서 보이는 가장 가까운 물체까지의 거리»</b> 를 적어 둔 이미지</dd>
-    <dt>큐브맵<small>Cubemap</small></dt><dd>정육면체 6면 방향(위·아래·앞·뒤·좌·우)으로 찍은 이미지 6장 묶음</dd>
-    <dt>캐스케이드<small>Cascade</small></dt><dd>카메라 가까운 곳은 촘촘히, 먼 곳은 성기게 구간을 나눠 찍은 그림자맵 여러 장</dd>
-  </dl>
   <div class="analogy">
     <p><b>광원 자리에 선 사진사의 사진</b> : 사진에 찍힌 곳 = 빛이 닿는 곳 · 다른 물체 뒤에 숨어 안 찍힌 곳 = 그림자</p>
     <p>비유의 한계 : 실제로는 색이 아니라 거리 숫자를 기록 · 사진 해상도가 낮으면 그림자 가장자리가 계단처럼 깨짐</p>
@@ -158,40 +226,66 @@
     <p class="small">사진 1장 = 장면 전체를 광원 시점에서 한 번 더 그리기 → Spot : 1장 · Directional : 거리 구간별 2~4장 · Point : 사방으로 빛 → 6방향 각각 촬영 → <b>6장, Spot 의 6배</b><br>
     → 성능을 좌우하는 것 = 광원 개수보다 <b>그림자를 켠 광원 개수</b></p>
   </div>
+  <p class="xs muted" style="margin-top:.5em">용어 풀이 → 다음 장 : 그림자맵 · 큐브맵 · 캐스케이드</p>
   <aside class="notes">
     - 사진사 비유 : 광원 자리에 카메라를 세우고 찍는다 → 찍힌 곳은 빛이 닿고, 가려진 곳은 그림자
     - 전구는 사방을 비추니 사진사가 위·아래·앞·뒤·좌·우 여섯 번 찍어야 함 → 비싼 이유
     - 한계 : 실제로는 색 사진이 아니라 거리 사진(깊이)
   </aside>
 </section>
+
+<section>
+  <div class="tag gfx">조명 · 3 용어 풀이</div>
+  <h2>그림자맵 · 큐브맵 · 캐스케이드</h2>
+  <dl class="terms">
+    <dt>그림자맵<small>Shadow map</small></dt><dd>
+      <p>광원 자리에서 장면을 찍어 <b>«광원에서 보이는 가장 가까운 물체까지의 거리»</b> 를 칸마다 적어 둔 이미지</p>
+      <p class="ex">어떤 칸에 «5 m» 기록 · 그 방향으로 8 m 떨어진 바닥 점 → 5 m 지점에 막는 물체 → 그림자</p>
+      <p class="why">해상도가 낮으면 그림자 가장자리 계단 · 광원마다 장면을 한 번 더 그리므로 비용 큼</p>
+      <p class="where">Unity : Light → Shadow Type · URP Asset → Lighting → Shadow Resolution</p>
+    </dd>
+    <dt>큐브맵<small>Cubemap</small></dt><dd>
+      <p>정육면체 6면 방향(위·아래·앞·뒤·좌·우)으로 찍은 이미지 6장 묶음 — 주사위 전개도 같은 사진첩</p>
+      <p class="ex">점광원 그림자 = 큐브맵 6장 · 하늘 배경(스카이박스) · 반사 프로브 결과도 큐브맵</p>
+      <p class="why">Point 광원 그림자가 Spot 의 6배 비용인 이유 = 큐브맵 6면을 각각 촬영</p>
+      <p class="where">Unity : 텍스처 Import Settings → Texture Shape = Cube · Reflection Probe 결과물</p>
+    </dd>
+    <dt>캐스케이드<small>Cascade</small></dt><dd>
+      <p>카메라 가까운 곳은 촘촘히, 먼 곳은 성기게 구간을 나눠 찍은 그림자맵 여러 장 — 계단식 폭포</p>
+      <p class="ex">캐스케이드 4개 : 0~5 m · 5~15 m · 15~40 m · 40~100 m 구간을 각각 한 장씩 (예시 수치)</p>
+      <p class="why">태양 그림자 한 장으로 넓은 범위를 덮으면 발밑 그림자가 뭉개짐 · 장수만큼 비용 증가</p>
+      <p class="where">Unity : URP Asset → Shadows → Max Distance · Cascade Count (1~4)</p>
+    </dd>
+  </dl>
+</section>
 <section>
   <div class="tag gfx">조명 · 3 도해</div>
   <h2>그림자맵 판정 · 점광원은 6방향 촬영</h2>
   <svg class="dg" viewBox="0 0 1120 420" width="1120" height="420" role="img" aria-label="광원에서 본 거리 기록과 실제 거리를 비교해 그림자를 판정하는 그림, 점광원이 6방향으로 그림자맵을 찍는 그림">
-    <text x="20" y="22" font-size="20" font-weight="700" fill="#ffc44d">① 광원 자리에서 «거리 사진» 촬영 → ② 각 점의 실제 거리와 비교</text>
-    <polygon points="300,340 449,340 300,230" fill="#000" fill-opacity=".55"/>
-    <line x1="30" y1="340" x2="630" y2="340" stroke="#9aa4b8" stroke-width="3"/>
-    <rect x="230" y="230" width="70" height="110" fill="#35d6e6" fill-opacity=".25" stroke="#35d6e6" stroke-width="2"/>
-    <text x="265" y="292" text-anchor="middle" font-size="19" fill="#35d6e6">상자</text>
-    <line x1="70" y1="60" x2="70.0" y2="30.0" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="91.2" y2="38.8" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="100.0" y2="60.0" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="91.2" y2="81.2" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="70.0" y2="90.0" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="48.8" y2="81.2" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="40.0" y2="60.0" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="48.8" y2="38.8" stroke="#ffc44d" stroke-width="2" stroke-opacity=".5"/>
-    <circle cx="70" cy="60" r="18" fill="#ffc44d"/>
-    <text x="98" y="56" font-size="19" fill="#ffc44d">광원</text>
-    <line x1="70" y1="60" x2="262.1" y2="230" stroke="#ffc44d" stroke-width="3"/>
-    <line x1="262.1" y1="230" x2="380" y2="340" stroke="#ff5a4d" stroke-width="3" stroke-dasharray="8 6"/>
-    <circle cx="262.1" cy="230" r="6" fill="#ffc44d"/>
-    <line x1="70" y1="60" x2="560" y2="340" stroke="#ffc44d" stroke-width="3"/>
-    <circle cx="380" cy="340" r="9" fill="#ff5a4d"/>
-    <circle cx="560" cy="340" r="9" fill="#a8e05f"/>
-    <text x="215" y="222" text-anchor="end" font-size="19" fill="#ffc44d">기록 5 m</text>
-    <text x="320" y="374" font-size="20" font-weight="700" fill="#ff5a4d">B · 기록 5 m &lt; 실제 8 m</text>
-    <text x="320" y="400" font-size="19" fill="#ff5a4d">→ 앞에 막는 물체 있음 → 그림자</text>
-    <text x="630" y="170" text-anchor="end" font-size="20" font-weight="700" fill="#a8e05f">A · 기록 11 m = 실제 11 m</text>
-    <text x="630" y="196" text-anchor="end" font-size="19" fill="#a8e05f">→ 막는 물체 없음 → 빛 닿음</text>
-    <line x1="668" y1="40" x2="668" y2="410" stroke="#2a3040" stroke-width="2"/>
-    <text x="905" y="22" text-anchor="middle" font-size="20" font-weight="700" fill="#ffc44d">점광원 : 사방이라 6방향 각각 촬영</text>
-    <line x1="905.0" y1="189.0" x2="905.0" y2="125.0" stroke="#ffc44d" stroke-width="3"/><path d="M905.0 113.0 L911.0 125.0 L899.0 125.0 Z" fill="#ffc44d"/><rect x="871" y="45" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="905" y="82" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">위</text><line x1="905.0" y1="241.0" x2="905.0" y2="305.0" stroke="#ffc44d" stroke-width="3"/><path d="M905.0 317.0 L899.0 305.0 L911.0 305.0 Z" fill="#ffc44d"/><rect x="871" y="325" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="905" y="362" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">아래</text><line x1="879.0" y1="215.0" x2="805.0" y2="215.0" stroke="#ffc44d" stroke-width="3"/><path d="M793.0 215.0 L805.0 209.0 L805.0 221.0 Z" fill="#ffc44d"/><rect x="721" y="185" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="755" y="222" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">왼쪽</text><line x1="931.0" y1="215.0" x2="1005.0" y2="215.0" stroke="#ffc44d" stroke-width="3"/><path d="M1017.0 215.0 L1005.0 221.0 L1005.0 209.0 Z" fill="#ffc44d"/><rect x="1021" y="185" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="1055" y="222" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">오른쪽</text><line x1="886.6" y1="233.4" x2="840.4" y2="279.6" stroke="#ffc44d" stroke-width="3"/><path d="M831.9 288.1 L836.1 275.4 L844.6 283.9 Z" fill="#ffc44d"/><rect x="771" y="285" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="805" y="322" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">앞</text><line x1="923.4" y1="196.6" x2="969.6" y2="150.4" stroke="#ffc44d" stroke-width="3"/><path d="M978.1 141.9 L973.9 154.6 L965.4 146.1 Z" fill="#ffc44d"/><rect x="971" y="85" width="68" height="60" rx="6" fill="#171b25" stroke="#35d6e6" stroke-width="2"/><text x="1005" y="122" text-anchor="middle" font-size="19" font-weight="700" fill="#35d6e6">뒤</text>
-    <circle cx="905" cy="215" r="20" fill="#ffc44d"/>
-    <text x="905" y="410" text-anchor="middle" font-size="19" fill="#9aa4b8">6장 = Spot 1장의 6배</text>
+    <text x="20" y="22" font-size="20" font-weight="700" fill="#a8701a">① 광원 자리에서 «거리 사진» 촬영 → ② 각 점의 실제 거리와 비교</text>
+    <polygon points="300,340 449,340 300,230" fill="#1b1a17" fill-opacity=".2"/>
+    <line x1="30" y1="340" x2="630" y2="340" stroke="#4a463e" stroke-width="3"/>
+    <rect x="230" y="230" width="70" height="110" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+    <text x="265" y="292" text-anchor="middle" font-size="19" fill="#0d6b78">상자</text>
+    <line x1="70" y1="60" x2="70.0" y2="30.0" stroke="#a8701a" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="91.2" y2="38.8" stroke="#a8701a" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="100.0" y2="60.0" stroke="#a8701a" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="91.2" y2="81.2" stroke="#a8701a" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="70.0" y2="90.0" stroke="#a8701a" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="48.8" y2="81.2" stroke="#a8701a" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="40.0" y2="60.0" stroke="#a8701a" stroke-width="2" stroke-opacity=".5"/><line x1="70" y1="60" x2="48.8" y2="38.8" stroke="#a8701a" stroke-width="2" stroke-opacity=".5"/>
+    <circle cx="70" cy="60" r="18" fill="#a8701a"/>
+    <text x="98" y="56" font-size="19" fill="#a8701a">광원</text>
+    <line x1="70" y1="60" x2="262.1" y2="230" stroke="#a8701a" stroke-width="3"/>
+    <line x1="262.1" y1="230" x2="380" y2="340" stroke="#c2401d" stroke-width="3" stroke-dasharray="8 6"/>
+    <circle cx="262.1" cy="230" r="6" fill="#a8701a"/>
+    <line x1="70" y1="60" x2="560" y2="340" stroke="#a8701a" stroke-width="3"/>
+    <circle cx="380" cy="340" r="9" fill="#c2401d"/>
+    <circle cx="560" cy="340" r="9" fill="#4f7a16"/>
+    <text x="215" y="222" text-anchor="end" font-size="19" fill="#a8701a">기록 5 m</text>
+    <text x="320" y="374" font-size="20" font-weight="700" fill="#c2401d">B · 기록 5 m &lt; 실제 8 m</text>
+    <text x="320" y="400" font-size="19" fill="#c2401d">→ 앞에 막는 물체 있음 → 그림자</text>
+    <text x="630" y="170" text-anchor="end" font-size="20" font-weight="700" fill="#4f7a16">A · 기록 11 m = 실제 11 m</text>
+    <text x="630" y="196" text-anchor="end" font-size="19" fill="#4f7a16">→ 막는 물체 없음 → 빛 닿음</text>
+    <line x1="668" y1="40" x2="668" y2="410" stroke="#cfc6b2" stroke-width="2"/>
+    <text x="905" y="22" text-anchor="middle" font-size="20" font-weight="700" fill="#a8701a">점광원 : 사방이라 6방향 각각 촬영</text>
+    <line x1="905.0" y1="189.0" x2="905.0" y2="125.0" stroke="#a8701a" stroke-width="3"/><path d="M905.0 113.0 L911.0 125.0 L899.0 125.0 Z" fill="#a8701a"/><rect x="871" y="45" width="68" height="60" fill="#fbf8f1" stroke="#0d6b78" stroke-width="2"/><text x="905" y="82" text-anchor="middle" font-size="19" font-weight="700" fill="#0d6b78">위</text><line x1="905.0" y1="241.0" x2="905.0" y2="305.0" stroke="#a8701a" stroke-width="3"/><path d="M905.0 317.0 L899.0 305.0 L911.0 305.0 Z" fill="#a8701a"/><rect x="871" y="325" width="68" height="60" fill="#fbf8f1" stroke="#0d6b78" stroke-width="2"/><text x="905" y="362" text-anchor="middle" font-size="19" font-weight="700" fill="#0d6b78">아래</text><line x1="879.0" y1="215.0" x2="805.0" y2="215.0" stroke="#a8701a" stroke-width="3"/><path d="M793.0 215.0 L805.0 209.0 L805.0 221.0 Z" fill="#a8701a"/><rect x="721" y="185" width="68" height="60" fill="#fbf8f1" stroke="#0d6b78" stroke-width="2"/><text x="755" y="222" text-anchor="middle" font-size="19" font-weight="700" fill="#0d6b78">왼쪽</text><line x1="931.0" y1="215.0" x2="1005.0" y2="215.0" stroke="#a8701a" stroke-width="3"/><path d="M1017.0 215.0 L1005.0 221.0 L1005.0 209.0 Z" fill="#a8701a"/><rect x="1021" y="185" width="68" height="60" fill="#fbf8f1" stroke="#0d6b78" stroke-width="2"/><text x="1055" y="222" text-anchor="middle" font-size="19" font-weight="700" fill="#0d6b78">오른쪽</text><line x1="886.6" y1="233.4" x2="840.4" y2="279.6" stroke="#a8701a" stroke-width="3"/><path d="M831.9 288.1 L836.1 275.4 L844.6 283.9 Z" fill="#a8701a"/><rect x="771" y="285" width="68" height="60" fill="#fbf8f1" stroke="#0d6b78" stroke-width="2"/><text x="805" y="322" text-anchor="middle" font-size="19" font-weight="700" fill="#0d6b78">앞</text><line x1="923.4" y1="196.6" x2="969.6" y2="150.4" stroke="#a8701a" stroke-width="3"/><path d="M978.1 141.9 L973.9 154.6 L965.4 146.1 Z" fill="#a8701a"/><rect x="971" y="85" width="68" height="60" fill="#fbf8f1" stroke="#0d6b78" stroke-width="2"/><text x="1005" y="122" text-anchor="middle" font-size="19" font-weight="700" fill="#0d6b78">뒤</text>
+    <circle cx="905" cy="215" r="20" fill="#a8701a"/>
+    <text x="905" y="410" text-anchor="middle" font-size="19" fill="#4a463e">6장 = Spot 1장의 6배</text>
   </svg>
   <div class="analogy" style="margin-top:.4em">
     <p><b>광원 자리의 사진사</b> · 사진에 «그 방향 첫 물체까지 거리»를 적어 둠 → 내 자리가 그보다 멀면 누군가 앞을 막은 것 = 그림자 · 전구 자리 사진사는 위·아래·앞·뒤·좌·우 6번 촬영</p>
@@ -235,10 +329,6 @@
 <section>
   <div class="tag gfx">조명 · 5</div>
   <h2>환경광 — 그늘의 색을 정하는 값</h2>
-  <dl class="terms">
-    <dt>간접광<small>Indirect light</small></dt><dd>광원에서 바로 오지 않고 벽·바닥·하늘에 한 번 이상 튕겨서 오는 빛</dd>
-    <dt>환경광<small>Ambient</small></dt><dd>간접광을 <b>«모든 방향에서 고르게 오는 빛 한 덩어리»</b> 로 단순화한 값 — 가장 거친 근사</dd>
-  </dl>
   <div class="cols">
     <div>
       <table style="font-size:.66em">
@@ -256,6 +346,29 @@
   </div>
   <div class="key">
     <p class="small">환경광 값 0 → 그늘이 완전한 검정 → 형태 판독 불가 · 모바일·VR 에서는 <b>환경광 설정만으로 분위기의 절반 결정</b></p>
+  </div>
+  <p class="xs muted" style="margin-top:.5em">용어 풀이 → 다음 장 : 간접광 · 환경광</p>
+</section>
+
+<section>
+  <div class="tag gfx">조명 · 5 용어 풀이</div>
+  <h2>간접광과 환경광</h2>
+  <dl class="terms">
+    <dt>간접광<small>Indirect light</small></dt><dd>
+      <p>광원에서 바로 오지 않고 벽·바닥·하늘에 한 번 이상 튕겨서 오는 빛 — «당구공의 쿠션 샷» 같은 빛</p>
+      <p class="ex">창으로 든 햇빛이 흰 바닥에 튕겨 천장까지 밝힘 · 해가 직접 안 닿는 천장도 보임</p>
+      <p class="why">실내 밝기의 상당 부분 = 간접광 → 빠지면 비친 곳만 밝고 나머지는 동굴처럼 어두움</p>
+      <p class="where">Unity : Light → Indirect Multiplier · Lighting 창 → Lightmapping Settings (베이크 GI)</p>
+    </dd>
+    <dt>환경광<small>Ambient</small></dt><dd>
+      <p>간접광을 <b>«모든 방향에서 고르게 오는 빛 한 덩어리»</b> 로 단순화한 값 — 가장 거친 근사</p>
+      <p class="ex">Source = Color, 회색 (0.2, 0.2, 0.2) → 모든 그늘에 같은 회색이 깔림 · 방향감 없음</p>
+      <p class="why">그늘의 바닥 밝기를 정하는 값 — 0 이면 그늘이 새까매짐 · 너무 높으면 입체감 소멸</p>
+      <p class="where">Unity : Window → Rendering → Lighting → Environment 탭 → Environment Lighting → Source</p>
+    </dd>
+  </dl>
+  <div class="analogy">
+    <p><b>쿠션 샷 vs 안개 조명</b> : 간접광 = 벽에 맞고 튕긴 공의 실제 경로 · 환경광 = «어디서 왔는지 모르는 빛이 사방에 고르게 깔렸다» 고 퉁친 값</p>
   </div>
 </section>
 
@@ -280,15 +393,31 @@
   </div>
   <p class="small">표면이 기울어짐 → 같은 빛다발이 덮는 면적 증가 (60° 에서 2배) → 단위 면적당 빛 감소 (1/2) → 감소 비율 = <b>cos θ</b> → 이 값을 내적 한 번으로 계산</p>
   <div class="math-block">\[ \mathbf{N}\cdot\mathbf{L} = |\mathbf{N}|\,|\mathbf{L}|\cos\theta = \cos\theta \quad (\text{두 화살표 모두 길이 } 1) \]</div>
-  <dl class="terms">
-    <dt>광원 방향 L<small>Light vector</small></dt><dd>표면에서 <b>광원 쪽</b>을 가리키는 길이 1 화살표 — 빛이 날아오는 방향의 반대</dd>
-    <dt>정규화<small>Normalize</small></dt><dd>방향은 그대로 두고 길이만 1 로 맞추는 계산 → 내적이 곧 cos θ 가 되도록</dd>
-  </dl>
   <p class="small">확산반사의 특징 : 식에 카메라 위치가 없음 → <b>어디서 봐도 밝기 동일</b> → 종이·벽·천의 «무광» 느낌</p>
+  <p class="xs muted" style="margin-top:.5em">용어 풀이 → 다음 장 : 광원 방향 L · 정규화</p>
   <aside class="notes">
     - 손전등을 실제로 꺼내 책상을 수직/비스듬히 비춰 보이면 가장 좋음
     - "빛의 양은 그대로인데 퍼지는 넓이가 커진다" → 넓이가 2배면 밝기 1/2 → 그 비율이 코사인
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">반사 · 2 용어 풀이</div>
+  <h2>광원 방향 L 과 정규화</h2>
+  <dl class="terms">
+    <dt>광원 방향 L<small>Light vector</small></dt><dd>
+      <p>표면에서 <b>광원 쪽</b>을 가리키는 길이 1 화살표 — 빛이 날아오는 방향의 반대 («빛을 마중 나가는 화살표»)</p>
+      <p class="ex">해가 머리 위 → L = (0, 1, 0) · 해가 비스듬히 위 → L = (0.6, 0.8, 0)</p>
+      <p class="why">방향을 거꾸로(빛이 오는 쪽으로) 넣으면 N·L 부호가 뒤집혀 밝은 면과 그늘이 바뀜</p>
+      <p class="where">Unity : Directional Light 의 회전 = 빛이 날아가는 방향 (L 은 반대) · Shader Graph Main Light Direction 노드 (버전별 상이)</p>
+    </dd>
+    <dt>정규화<small>Normalize</small></dt><dd>
+      <p>방향은 그대로 두고 길이만 1 로 맞추는 계산 — 화살표를 «표준 길이 자» 에 맞춰 자르기</p>
+      <p class="ex">(3, 4, 0) 의 길이 5 → 각 칸 ÷ 5 → (0.6, 0.8, 0) · 방향 같음 · 길이 1</p>
+      <p class="why">길이 1 이 아니면 내적 ≠ cos θ → 길이 2 짜리 화살표는 밝기 2배라는 엉뚱한 결과</p>
+      <p class="where">Unity : C# <code>vector.normalized</code> · Shader Graph 의 Normalize 노드</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -342,12 +471,33 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
 </section>
 
 <section>
+  <div class="tag gfx">반사 · 4 용어 풀이</div>
+  <h2>외적 · 면 법선 · 정점 법선</h2>
+  <dl class="terms">
+    <dt>외적<small>Cross product</small></dt><dd>
+      <p>두 화살표에 <b>동시에 수직인</b> 세 번째 화살표를 구하는 계산 (2주차) — 두 손가락이 펼친 면에 수직으로 선 엄지</p>
+      <p class="ex">(0, 0, 1) × (1, 0, 0) = (0, 1, 0) · 순서를 바꾸면 (0, −1, 0) → 방향이 정반대</p>
+      <p class="why">곱하는 순서 = 꼭짓점 순서(감기 방향) → 순서가 틀리면 법선이 뒤집혀 면이 안 보이거나 검게 나옴</p>
+      <p class="where">Unity : C# <code>Vector3.Cross(a, b)</code> · Shader Graph 의 Cross Product 노드</p>
+    </dd>
+    <dt>면 법선<small>Face normal</small></dt><dd>
+      <p>삼각형 하나에 하나씩 붙는 법선 — 면 전체가 같은 방향 → 면마다 밝기가 뚝뚝 끊김</p>
+      <p class="ex">로우폴리 스타일 바위 · 주사위 → 면마다 단색으로 칠한 듯한 각진 음영</p>
+      <p class="why">의도한 «각진 스타일» 이 아닌데 면 법선만 쓰면 매끈해야 할 공이 다면체로 보임</p>
+      <p class="where">Unity : 모델 Import Settings → Normals = Calculate · Smoothing Angle 0 에 가까울수록 각짐</p>
+    </dd>
+    <dt>정점 법선<small>Vertex normal</small></dt><dd>
+      <p>한 꼭짓점을 공유하는 면들의 법선을 평균 낸 법선 — 면 사이 경계를 «사포로 문지른» 효과</p>
+      <p class="ex">면 법선 (0, 1, 0) 과 (1, 0, 0) 이 만나는 꼭짓점 → 평균 후 정규화 ≈ (0.71, 0.71, 0)</p>
+      <p class="why">면 수를 늘리지 않고도 둥근 표면처럼 보이게 함 → 삼각형 예산 절약 (VR 에 중요)</p>
+      <p class="where">Unity : Import Settings → Normals · Smoothing Angle (기본 60°) · Blender 의 Shade Smooth</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag gfx">반사 · 5</div>
   <h2>법선을 다룰 때의 함정</h2>
-  <dl class="terms">
-    <dt>동차좌표<small>Homogeneous coord.</small></dt><dd>(x, y, z) 에 네 번째 값 w 를 붙인 표기 — <b>w = 1 : 위치</b> (이동 적용) · <b>w = 0 : 방향</b> (이동 무시) · 2주차</dd>
-    <dt>역전치 행렬<small>Inverse transpose</small></dt><dd>늘이기·누르기 변환 후 법선을 다시 면에 수직으로 맞추는 보정 행렬</dd>
-  </dl>
   <div class="key trap">
     <p class="small">물체를 옆으로 옮겨도 면이 보는 방향은 그대로 → 법선에 이동을 적용하면 방향이 틀어짐 → 조명 붕괴<br>
     → 법선 변환은 방향 전용 : Unity <code>MultiplyVector</code> (w = 0) · <code>MultiplyPoint</code> 사용 금지</p>
@@ -357,6 +507,26 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
     <p>Unity 기본 셰이더는 자동 처리 · 커스텀 셰이더에서 법선을 직접 변환할 때만 주의</p>
   </div>
   <p class="small">같은 메시라도 법선이 틀어지면 재질·조명 설정이 무의미</p>
+  <p class="xs muted" style="margin-top:.5em">용어 풀이 → 다음 장 : 동차좌표 · 역전치 행렬</p>
+</section>
+
+<section>
+  <div class="tag gfx">반사 · 5 용어 풀이</div>
+  <h2>동차좌표와 역전치 행렬</h2>
+  <dl class="terms">
+    <dt>동차좌표<small>Homogeneous coord.</small></dt><dd>
+      <p>(x, y, z) 에 네 번째 값 w 를 붙인 표기 (2주차) — <b>w = 1 : 위치</b> (이동 적용) · <b>w = 0 : 방향</b> (이동 무시)</p>
+      <p class="ex">오른쪽 3 m 이동 : 점 (1, 0, 0, <b>1</b>) → (4, 0, 0) · 방향 (1, 0, 0, <b>0</b>) → (1, 0, 0) 그대로</p>
+      <p class="why">«집 주소» 와 «북쪽이라는 방향» 의 차이 — 방향에 이동을 더하면 화살표가 엉뚱하게 기울어짐</p>
+      <p class="where">Unity : <code>Matrix4x4.MultiplyPoint</code> (w = 1) · <code>MultiplyVector</code> (w = 0) · <code>Transform.TransformDirection</code></p>
+    </dd>
+    <dt>역전치 행렬<small>Inverse transpose</small></dt><dd>
+      <p>늘이기·누르기 변환 후 법선을 다시 면에 수직으로 세워 주는 보정 행렬 — 눌린 이쑤시개를 «다시 똑바로 꽂기»</p>
+      <p class="ex">공을 세로로 ½ 납작하게 (scale y = 0.5) → 옆면 법선은 오히려 더 위쪽으로 기울어야 수직 유지</p>
+      <p class="why">균일하지 않은 스케일 (1, 0.5, 1) 물체에 일반 행렬로 법선 변환 → 조명 얼룩 · 하이라이트 위치 오류</p>
+      <p class="where">Unity : URP 셰이더 함수 <code>TransformObjectToWorldNormal</code> 이 자동 처리 · 직접 쓸 때만 주의</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -365,40 +535,62 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
   <div class="analogy">
     <p><b>비 온 뒤 젖은 아스팔트의 가로등 반사</b> : 걸어가면 반짝이는 자리가 따라 움직임 → 반짝임 = 광원·표면·내 눈의 각도가 거울 반사 조건에 맞는 자리에서만 보임</p>
   </div>
-  <dl class="terms">
-    <dt>시선 방향 V<small>View vector</small></dt><dd>표면에서 카메라(눈) 쪽을 가리키는 길이 1 화살표</dd>
-    <dt>하프벡터 H<small>Half vector</small></dt><dd>L 과 V 의 <b>정확히 가운데</b> 방향 — 면이 이 방향을 보면 빛이 거울처럼 눈으로 튕겨 옴</dd>
-    <dt>광택 지수 s<small>Shininess</small></dt><dd>하이라이트를 얼마나 좁게 모을지 정하는 거듭제곱 숫자</dd>
-  </dl>
   <div class="math-block">\[ \mathbf{H} = \frac{\mathbf{L}+\mathbf{V}}{|\mathbf{L}+\mathbf{V}|} \qquad \text{spec} = \max(0,\ \mathbf{N}\cdot\mathbf{H})^{\,s} \]</div>
+  <p class="small">식 읽기 : <b>H</b> = 광원 쪽과 눈 쪽의 한가운데 · <b>N·H</b> = 면이 그 한가운데를 얼마나 정면으로 보나 · <b>s</b> 제곱 = 얼마나 정확히 맞아야 반짝이나</p>
+  <p class="xs muted" style="margin-top:.5em">용어 풀이 → 다음 장 : 시선 방향 V · 하프벡터 H · 광택 지수 s</p>
   <aside class="notes">
     - 젖은 길 비유 : 걸으면 가로등 반짝임이 나를 따라옴 → 정반사는 "내 눈 위치" 가 식에 들어감
     - N·H : 면이 거울 조건(가운데 방향)을 얼마나 정확히 보고 있나
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">반사 · 6 용어 풀이</div>
+  <h2>시선 방향 V · 하프벡터 H · 광택 지수 s</h2>
+  <dl class="terms">
+    <dt>시선 방향 V<small>View vector</small></dt><dd>
+      <p>표면의 한 점에서 카메라(눈) 쪽을 가리키는 길이 1 화살표 — «이 점에서 나를 올려다보는 방향»</p>
+      <p class="ex">카메라가 점의 바로 위 → V = (0, 1, 0) · 고개를 옆으로 옮기면 V 도 같이 기울어짐</p>
+      <p class="why">정반사 식에만 V 가 들어감 → 하이라이트가 시점 따라 움직이는 이유 · VR 은 두 눈의 V 가 서로 다름</p>
+      <p class="where">Unity : Shader Graph 의 View Direction 노드 · 카메라 Transform 위치에서 계산</p>
+    </dd>
+    <dt>하프벡터 H<small>Half vector</small></dt><dd>
+      <p>L 과 V 의 <b>정확히 가운데</b> 방향 — 면이 이 방향을 보면 빛이 거울처럼 눈으로 튕겨 옴</p>
+      <p class="ex">L = (0, 1, 0) · V = (1, 0, 0) → 합 (1, 1, 0) → 정규화 (0.71, 0.71, 0) = 두 화살표 사이 45°</p>
+      <p class="why">«반사 방향을 직접 계산» 보다 덧셈 한 번으로 싸게 거울 조건을 판정 (Blinn-Phong 의 핵심 아이디어)</p>
+      <p class="where">Unity : 전용 노드 없음 · Shader Graph 에서 Add → Normalize 로 직접 조립 · URP Lit 내부에서 자동 계산</p>
+    </dd>
+    <dt>광택 지수 s<small>Shininess</small></dt><dd>
+      <p>하이라이트를 얼마나 좁게 모을지 정하는 거듭제곱 숫자 — 클수록 «작고 날카로운» 반짝임</p>
+      <p class="ex">N·H = 0.9 일 때 s = 8 → 0.43 (넓게 남음) · s = 64 → 0.001 (거의 사라짐)</p>
+      <p class="why">s 를 모르고 반짝임을 키우려다 하이라이트 크기만 커져 «기름 바른 플라스틱» 이 됨</p>
+      <p class="where">Unity URP : s 를 직접 입력하지 않음 · Smoothness (0~1) 가 내부에서 이 값으로 환산됨</p>
+    </dd>
+  </dl>
 </section>
 <section>
   <div class="tag gfx">반사 · 6 도해</div>
   <h2>하프벡터 H — L 과 V 의 한가운데</h2>
   <div class="cols wide-left" style="align-items:center">
     <svg class="dg" viewBox="-30 40 670 340" width="670" height="340" role="img" aria-label="표면 위 한 점에서 광원 방향 L, 눈 방향 V, 그 가운데 H, 법선 N">
-      <line x1="80" y1="332" x2="62" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="102" y1="332" x2="84" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="124" y1="332" x2="106" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="146" y1="332" x2="128" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="168" y1="332" x2="150" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="190" y1="332" x2="172" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="212" y1="332" x2="194" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="234" y1="332" x2="216" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="256" y1="332" x2="238" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="278" y1="332" x2="260" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="300" y1="332" x2="282" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="322" y1="332" x2="304" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="344" y1="332" x2="326" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="366" y1="332" x2="348" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="388" y1="332" x2="370" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="410" y1="332" x2="392" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="432" y1="332" x2="414" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="454" y1="332" x2="436" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="476" y1="332" x2="458" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="498" y1="332" x2="480" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="520" y1="332" x2="502" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="542" y1="332" x2="524" y2="352" stroke="#2a3040" stroke-width="2"/><line x1="564" y1="332" x2="546" y2="352" stroke="#2a3040" stroke-width="2"/>
-      <line x1="60" y1="330" x2="600" y2="330" stroke="#9aa4b8" stroke-width="3"/>
-      <path d="M229.9 266.9 A110 110 0 0 1 291.5 223.7" fill="none" stroke="#ffc44d" stroke-width="2.5" stroke-dasharray="6 5"/>
-      <path d="M291.5 223.7 A110 110 0 0 1 366.5 230.3" fill="none" stroke="#ffc44d" stroke-width="2.5" stroke-dasharray="6 5"/>
-      <text x="242.0" y="225.6" text-anchor="middle" font-size="22" font-style="italic" fill="#ffc44d">α</text>
-      <text x="331.9" y="201.5" text-anchor="middle" font-size="22" font-style="italic" fill="#ffc44d">α</text>
-      <line x1="320.0" y1="330.0" x2="320.0" y2="126.0" stroke="#9aa4b8" stroke-width="3"/><path d="M320.0 110.0 L328.0 126.0 L312.0 126.0 Z" fill="#9aa4b8"/>
-      <line x1="320.0" y1="330.0" x2="152.9" y2="213.0" stroke="#e8ecf4" stroke-width="4"/><path d="M139.8 203.8 L157.5 206.4 L148.3 219.5 Z" fill="#e8ecf4"/>
-      <line x1="320.0" y1="330.0" x2="406.2" y2="145.1" stroke="#35d6e6" stroke-width="4"/><path d="M413.0 130.6 L413.5 148.5 L399.0 141.7 Z" fill="#35d6e6"/>
-      <line x1="320.0" y1="330.0" x2="267.2" y2="133.0" stroke="#ffc44d" stroke-width="5"/><path d="M263.1 117.5 L274.9 130.9 L259.5 135.0 Z" fill="#ffc44d"/>
-      <circle cx="115.2" cy="186.6" r="17" fill="#ffc44d"/>
+      <line x1="80" y1="332" x2="62" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="102" y1="332" x2="84" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="124" y1="332" x2="106" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="146" y1="332" x2="128" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="168" y1="332" x2="150" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="190" y1="332" x2="172" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="212" y1="332" x2="194" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="234" y1="332" x2="216" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="256" y1="332" x2="238" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="278" y1="332" x2="260" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="300" y1="332" x2="282" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="322" y1="332" x2="304" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="344" y1="332" x2="326" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="366" y1="332" x2="348" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="388" y1="332" x2="370" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="410" y1="332" x2="392" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="432" y1="332" x2="414" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="454" y1="332" x2="436" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="476" y1="332" x2="458" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="498" y1="332" x2="480" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="520" y1="332" x2="502" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="542" y1="332" x2="524" y2="352" stroke="#cfc6b2" stroke-width="2"/><line x1="564" y1="332" x2="546" y2="352" stroke="#cfc6b2" stroke-width="2"/>
+      <line x1="60" y1="330" x2="600" y2="330" stroke="#4a463e" stroke-width="3"/>
+      <path d="M229.9 266.9 A110 110 0 0 1 291.5 223.7" fill="none" stroke="#a8701a" stroke-width="2.5" stroke-dasharray="6 5"/>
+      <path d="M291.5 223.7 A110 110 0 0 1 366.5 230.3" fill="none" stroke="#a8701a" stroke-width="2.5" stroke-dasharray="6 5"/>
+      <text x="242.0" y="225.6" text-anchor="middle" font-size="22" font-style="italic" fill="#a8701a">α</text>
+      <text x="331.9" y="201.5" text-anchor="middle" font-size="22" font-style="italic" fill="#a8701a">α</text>
+      <line x1="320.0" y1="330.0" x2="320.0" y2="126.0" stroke="#4a463e" stroke-width="3"/><path d="M320.0 110.0 L328.0 126.0 L312.0 126.0 Z" fill="#4a463e"/>
+      <line x1="320.0" y1="330.0" x2="152.9" y2="213.0" stroke="#1b1a17" stroke-width="4"/><path d="M139.8 203.8 L157.5 206.4 L148.3 219.5 Z" fill="#1b1a17"/>
+      <line x1="320.0" y1="330.0" x2="406.2" y2="145.1" stroke="#0d6b78" stroke-width="4"/><path d="M413.0 130.6 L413.5 148.5 L399.0 141.7 Z" fill="#0d6b78"/>
+      <line x1="320.0" y1="330.0" x2="267.2" y2="133.0" stroke="#a8701a" stroke-width="5"/><path d="M263.1 117.5 L274.9 130.9 L259.5 135.0 Z" fill="#a8701a"/>
+      <circle cx="115.2" cy="186.6" r="17" fill="#a8701a"/>
       <text x="91.2" y="192.6" text-anchor="end" font-size="20" font-weight="700">L 광원 쪽</text>
-      <ellipse cx="425.7" cy="103.4" rx="20" ry="12" fill="#e8ecf4"/>
-      <circle cx="425.7" cy="103.4" r="6" fill="#0b0d12"/>
-      <text x="453.7" y="110.4" font-size="20" font-weight="700" fill="#35d6e6">V 눈 쪽</text>
-      <text x="253.1" y="105.5" text-anchor="end" font-size="22" font-weight="700" fill="#ffc44d">H</text>
-      <text x="330.0" y="100.0" font-size="20" font-weight="700" fill="#9aa4b8">N 법선</text>
-      <circle cx="320" cy="330" r="6" fill="#e8ecf4"/>
+      <ellipse cx="425.7" cy="103.4" rx="20" ry="12" fill="#fbf8f1" stroke="#1b1a17" stroke-width="2"/>
+      <circle cx="425.7" cy="103.4" r="6" fill="#1b1a17"/>
+      <text x="453.7" y="110.4" font-size="20" font-weight="700" fill="#0d6b78">V 눈 쪽</text>
+      <text x="253.1" y="105.5" text-anchor="end" font-size="22" font-weight="700" fill="#a8701a">H</text>
+      <text x="330.0" y="100.0" font-size="20" font-weight="700" fill="#4a463e">N 법선</text>
+      <circle cx="320" cy="330" r="6" fill="#1b1a17"/>
     </svg>
     <div>
       <div class="key">
@@ -470,19 +662,38 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
   <div class="tag gfx">PBR · 1</div>
   <h2>렌더링 방정식 — 모든 조명 모델의 원본</h2>
   <div class="math-block">\[ L_o(x,\omega_o) = L_e + \int_{\Omega} f(x,\omega_i,\omega_o)\, L_i(x,\omega_i)\,(\mathbf{N}\cdot\omega_i)\, d\omega_i \]</div>
-  <dl class="terms">
-    <dt>\(L_o\) · \(L_e\)</dt><dd>눈으로 나가는 빛 · 표면이 스스로 내는 빛 (조명 기구·화면 등)</dd>
-    <dt>\(\int_{\Omega}\)</dt><dd>표면 위 <b>반구(Ω)의 모든 방향</b>에서 들어오는 빛을 빠짐없이 더하기</dd>
-    <dt>\(f\) · \(L_i\) · \(\mathbf{N}\cdot\omega_i\)</dt><dd>재질 규칙(BRDF) · 그 방향에서 들어온 빛 · Lambert 의 기울기 보정</dd>
-  </dl>
   <div class="analogy">
     <p><b>장보기 영수증 합계</b> : 품목(들어오는 방향)마다 수량(들어온 빛) × 단가(재질 규칙 f) × 할인율(기울기 cos) → 전부 더한 총액 = 눈으로 나가는 빛 · 적분 = 품목을 무한히 잘게 나눈 영수증</p>
   </div>
   <p class="small">Lambert · Blinn-Phong · PBR 의 차이 = <b>가운데 f 를 무엇으로 두는가</b> · 실시간 렌더링 = 이 합계를 몇 개 방향만 골라 근사</p>
+  <p class="xs muted" style="margin-top:.5em">용어 풀이 → 다음 장 : 식의 기호</p>
   <aside class="notes">
     - 영수증 비유 : 사방에서 들어온 빛 하나하나에 재질 단가와 기울기 할인을 곱해 합산
     - 앞에서 배운 Lambert·정반사는 이 영수증에서 "광원 방향 몇 줄만" 계산한 간이 영수증
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">PBR · 1 용어 풀이</div>
+  <h2>렌더링 방정식의 기호 읽기</h2>
+  <dl class="terms">
+    <dt>\(L_o\) · \(L_e\)<small>Outgoing · Emitted</small></dt><dd>
+      <p>\(L_o\) : 이 점에서 눈 쪽으로 나가는 빛 (= 화면에 찍힐 색) · \(L_e\) : 표면이 스스로 내는 빛</p>
+      <p class="ex">꺼진 모니터 \(L_e = 0\) · 켜진 네온사인 \(L_e > 0\) → 주변이 깜깜해도 혼자 보임</p>
+      <p class="why">\(L_e\) 는 다른 빛과 무관하게 더해지는 항 → «스스로 빛나는 재질» 은 조명으로 꺼지지 않음</p>
+      <p class="where">Unity URP Lit : Emission 체크 → Emission Map · 색 (= \(L_e\))</p>
+    </dd>
+    <dt>\(\int_{\Omega}\) · \(d\omega_i\)<small>Integral over hemisphere</small></dt><dd>
+      <p>표면 위 <b>반구(Ω)의 모든 방향</b>에서 들어오는 빛을 빠짐없이 더하기 — 그릇을 엎어 놓은 모양의 하늘 전체</p>
+      <p class="ex">바닥의 한 점 : 머리 위 하늘 · 옆 벽 · 천장 등 들어오는 방향이 무한히 많음 → 전부 합산</p>
+      <p class="why">무한한 방향을 매 프레임 다 더할 수 없음 → 실시간 그래픽스 = 몇 개 방향만 골라 근사하는 기술</p>
+    </dd>
+    <dt>\(f\) · \(L_i\) · \(\mathbf{N}\cdot\omega_i\)</dt><dd>
+      <p>\(f\) : 재질의 반사 규칙(BRDF) · \(L_i\) : 그 방향에서 들어온 빛 · \(\mathbf{N}\cdot\omega_i\) : Lambert 의 기울기 보정 (cos θ)</p>
+      <p class="ex">영수증 한 줄 = 단가 \(f\) × 수량 \(L_i\) × 할인율 cos θ → 비스듬히 들어온 빛은 «할인» 되어 덜 기여</p>
+      <p class="why">Lambert · Blinn-Phong · PBR 의 차이 = \(f\) 자리에 무엇을 넣는가 하나뿐</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -498,17 +709,44 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
 
 <section>
   <div class="tag gfx">PBR · 3</div>
-  <h2>BRDF 와 로브 — 쉬운 말로</h2>
+  <h2>BRDF 와 로브 — 쉬운 말로 (1/2)</h2>
   <dl class="terms">
-    <dt>BRDF<small>양방향 반사 분포 함수</small></dt><dd>재질의 <b>«반사 규칙표»</b> — 어느 방향에서 들어온 빛을 어느 방향으로 얼마나 돌려보내는지</dd>
-    <dt>로브<small>Lobe</small></dt><dd>반사된 빛이 퍼지는 모양을 그린 풍선꼴 도형 — 길게 뻗은 쪽으로 빛이 많이 나감</dd>
-    <dt>거칠기<small>Roughness</small></dt><dd>표면의 미세한 울퉁불퉁함 — 클수록 로브가 넓어짐 · Unity Smoothness = 1 − Roughness</dd>
-    <dt>에너지 보존<small>Energy conservation</small></dt><dd>표면이 받은 빛보다 더 많은 빛을 내보낼 수 없다는 원칙</dd>
+    <dt>BRDF<small>양방향 반사 분포 함수</small></dt><dd>
+      <p>재질의 <b>«반사 규칙표»</b> — 어느 방향에서 들어온 빛을 어느 방향으로 얼마나 돌려보내는지 적은 표</p>
+      <p class="ex">종이의 표 : 어디서 들어와도 사방에 고르게 · 거울의 표 : 들어온 각도 그대로 반대편 한 방향에만</p>
+      <p class="why">«재질» 의 정체 = 이 규칙표 → 색만 바꾸고 규칙(거칠기·금속)을 안 바꾸면 물질감이 안 바뀜</p>
+      <p class="where">Unity : URP Lit 셰이더가 내장 BRDF 사용 · 조절 손잡이 = Metallic · Smoothness</p>
+    </dd>
+    <dt>로브<small>Lobe</small></dt><dd>
+      <p>반사된 빛이 퍼지는 모양을 그린 풍선꼴 도형 — 길게 뻗은 쪽으로 빛이 많이 나감</p>
+      <p class="ex">젖은 바닥 : 반사 방향으로 길고 가는 로브 · 무광 플라스틱 : 짧고 뚱뚱한 로브</p>
+      <p class="why">로브 폭 = 하이라이트 크기 → 화면 속 반짝임이 «작고 강한가, 크고 흐린가» 를 결정</p>
+      <p class="where">Unity : 로브 자체는 안 보임 · Smoothness 를 움직이며 Scene 뷰 구 하이라이트 크기 변화로 확인</p>
+    </dd>
   </dl>
   <div class="analogy">
     <p><b>호스 노즐</b> : 나오는 물의 양은 그대로 · 노즐을 좁히면 가늘고 센 물줄기 (작고 강한 하이라이트) · 넓히면 넓고 약한 분무 (크고 흐린 하이라이트)</p>
     <p>비유의 한계 : 실제 표면은 받은 빛 일부를 흡수 → 나가는 총량 ≤ 들어온 양</p>
   </div>
+</section>
+
+<section>
+  <div class="tag gfx">PBR · 3</div>
+  <h2>BRDF 와 로브 — 쉬운 말로 (2/2)</h2>
+  <dl class="terms">
+    <dt>거칠기<small>Roughness</small></dt><dd>
+      <p>표면의 눈에 안 보이는 미세한 울퉁불퉁함 — 클수록 빛이 여러 방향으로 흩어져 로브가 넓어짐</p>
+      <p class="ex">새 볼링공 거칠기 약 0.1 → 형광등이 또렷이 비침 · 사포질한 공 약 0.7 → 뿌연 얼룩만</p>
+      <p class="why">Unity 는 반대 이름(Smoothness)을 씀 → 다른 툴의 Roughness 값을 그대로 넣으면 광택이 뒤집힘</p>
+      <p class="where">Unity URP Lit : Smoothness = 1 − Roughness · Source = Metallic Alpha 또는 Albedo Alpha</p>
+    </dd>
+    <dt>에너지 보존<small>Energy conservation</small></dt><dd>
+      <p>표면이 받은 빛보다 더 많은 빛을 내보낼 수 없다는 원칙 — 받은 용돈보다 많이 쓸 수 없음</p>
+      <p class="ex">하이라이트가 좁아지면 그만큼 더 밝아짐 · 넓어지면 흐려짐 → 총량은 그대로</p>
+      <p class="why">이 원칙 덕에 PBR 재질은 어떤 조명 아래서도 «너무 밝게 타는» 일이 적음</p>
+      <p class="where">Unity URP Lit : 셰이더가 자동 보장 · 단 Emission 은 예외 (스스로 내는 빛)</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -526,6 +764,31 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
   <div class="key">
     <p class="small">같은 빨간 albedo 로 만드는 세 물체 : Metallic 0 · Smoothness 0.2 → <b>고무공</b> · Metallic 0 · Smoothness 0.9 → <b>당구공</b> · Metallic 1 · Smoothness 0.9 → <b>빨간 크롬 장식</b></p>
   </div>
+</section>
+
+<section>
+  <div class="tag gfx">PBR · 4 용어 풀이</div>
+  <h2>PBR · 메탈릭 · 오클루전</h2>
+  <dl class="terms">
+    <dt>PBR<small>Physically Based Rendering</small></dt><dd>
+      <p>물리 기반 렌더링 — 실제 물질을 측정한 값의 범위 안에서 재질을 정하는 방식 · «실측 레시피로 요리하기»</p>
+      <p class="ex">같은 금속 재질 → 낮 하늘 아래 · 실내 전구 아래 · 노을 아래 모두 «금속» 으로 보임</p>
+      <p class="why">눈대중 재질은 조명 하나에만 맞춰짐 → 조명을 바꾸면 갑자기 플라스틱처럼 변함</p>
+      <p class="where">Unity : URP 기본 머티리얼 = Universal Render Pipeline/Lit (PBR 셰이더)</p>
+    </dd>
+    <dt>메탈릭<small>Metallic</small></dt><dd>
+      <p>«이 표면이 금속인가» 를 0(비금속) 또는 1(금속)로 적는 값 — 사실상 예/아니오 스위치</p>
+      <p class="ex">금반지 · 쇠 숟가락 = 1 · 나무 · 플라스틱 · 피부 · 페인트 칠한 금속 = 0 (표면이 페인트이므로)</p>
+      <p class="why">0.5 같은 중간값 → 현실에 없는 «반쯤 금속» → 어떤 조명에서도 정체불명의 회색빛</p>
+      <p class="where">Unity URP Lit : Workflow Mode = Metallic → Surface Inputs → Metallic Map · 슬라이더</p>
+    </dd>
+    <dt>오클루전<small>Ambient occlusion</small></dt><dd>
+      <p>틈새·구석처럼 주변에 가려 간접광이 덜 드는 정도를 0~1 로 적은 값 — «먼지가 쌓이는 자리» 지도</p>
+      <p class="ex">벽돌 사이 줄눈 0.3 · 평평한 벽돌 면 1.0 → 줄눈만 은근히 어두워져 입체감 생김</p>
+      <p class="why">빠지면 구석까지 고르게 밝아 장난감 같은 인상 · sRGB 체크하면 값이 틀어짐 (색공간 파트)</p>
+      <p class="where">Unity URP Lit : Surface Inputs → Occlusion Map · URP 렌더러의 SSAO 기능은 별도</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -570,19 +833,40 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
 <section>
   <div class="tag trap">색공간 · 1</div>
   <h2>같은 숫자, 두 가지 눈금</h2>
-  <dl class="terms">
-    <dt>sRGB<small>standard RGB</small></dt><dd>이미지 파일·모니터의 표준 눈금 — 사람 눈이 어두운 쪽을 더 잘 구분 → <b>어두운 쪽에 숫자를 촘촘히 배정</b></dd>
-    <dt>감마<small>Gamma</small></dt><dd>그 눈금과 실제 빛 사이의 휘어진 변환 곡선 (지수 약 2.2)</dd>
-    <dt>선형<small>Linear</small></dt><dd>숫자 2배 = 실제 빛 에너지 2배인 곧은 눈금 — 빛을 더하고 곱하는 계산의 기준</dd>
-  </dl>
   <div class="analogy">
     <p><b>볼륨 노브 눈금 vs 스피커의 실제 출력</b> : 노브 눈금은 «귀에 들리는 크기» 에 맞춰 나눔 → 눈금 50% ≠ 실제 소리 에너지 50% · 두 스피커 소리를 합치는 계산은 눈금이 아닌 실제 에너지끼리 해야 정확</p>
   </div>
   <p class="small">그래서 : 텍스처는 눈 기준(sRGB)으로 저장 → 계산 직전 선형으로 변환 → 조명 계산 → 화면 출력 때 다시 sRGB</p>
+  <p class="xs muted" style="margin-top:.5em">용어 풀이 → 다음 장 : sRGB · 감마 · 선형</p>
   <aside class="notes">
     - 볼륨 비유 : 노브 눈금은 귀 기준, 실제 에너지는 따로 → 그림 파일 숫자는 눈 기준, 빛 에너지는 따로
     - 계산(더하기·곱하기)은 반드시 에너지 쪽에서
   </aside>
+</section>
+
+<section>
+  <div class="tag trap">색공간 · 1 용어 풀이</div>
+  <h2>sRGB · 감마 · 선형</h2>
+  <dl class="terms">
+    <dt>sRGB<small>standard RGB</small></dt><dd>
+      <p>이미지 파일·모니터의 표준 눈금 — 사람 눈이 어두운 쪽 차이를 더 잘 느낌 → <b>어두운 쪽에 숫자를 촘촘히 배정</b></p>
+      <p class="ex">PNG 의 회색 128 (= 0.5) → 눈에는 «중간 밝기» · 실제 빛 에너지는 흰색의 약 22%</p>
+      <p class="why">8비트(0~255) 로 저장할 때 어두운 계조가 뭉개지지 않게 하는 압축 요령 → 대부분의 그림 파일이 sRGB</p>
+      <p class="where">Unity : 텍스처 Import Settings → sRGB (Color Texture) 체크박스</p>
+    </dd>
+    <dt>감마<small>Gamma</small></dt><dd>
+      <p>sRGB 눈금과 실제 빛 사이의 휘어진 변환 곡선 (지수 약 2.2) — 눈금 → 에너지는 «2.2 제곱»</p>
+      <p class="ex">\(0.5^{2.2} \approx 0.22\) · 거꾸로 \(0.22^{1/2.2} \approx 0.5\) → 저장할 땐 펴고, 계산할 땐 다시 휨</p>
+      <p class="why">Unity 의 «Gamma» 설정 = 이 변환 없이 눈금 숫자로 바로 계산 → 조명 덧셈이 과장됨</p>
+      <p class="where">Unity : Player → Other Settings → Color Space = Gamma (구형 방식 · 비권장)</p>
+    </dd>
+    <dt>선형<small>Linear</small></dt><dd>
+      <p>숫자 2배 = 실제 빛 에너지 2배인 곧은 눈금 — 빛을 더하고 곱하는 계산의 기준</p>
+      <p class="ex">전구 두 개 0.22 + 0.22 = 0.44 → 실제로 빛 2배 → 화면용 변환 후 약 0.7 (흰색 아님)</p>
+      <p class="why">PBR 값 범위 · 라이트맵 · 조명 세기 모두 선형 계산 전제 → 프로젝트 시작 시 결정</p>
+      <p class="where">Unity : Player → Other Settings → Color Space = Linear (URP 템플릿 기본값)</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -685,6 +969,25 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
 </section>
 
 <section>
+  <div class="tag gfx">전역조명 · 1 용어 풀이</div>
+  <h2>전역조명과 색 번짐</h2>
+  <dl class="terms">
+    <dt>전역조명<small>Global Illumination · GI</small></dt><dd>
+      <p>광원에서 바로 온 빛 + 여러 번 튕긴 간접광까지 «장면 전체(전역)» 를 따져 계산하는 조명</p>
+      <p class="ex">창 하나뿐인 방 : 직접광만 → 창가 바닥만 밝은 사각형 · GI → 벽·천장까지 은은하게 밝음</p>
+      <p class="why">GI 가 빠진 실내 = 무대 조명 같은 인상 · 매 프레임 계산은 너무 비쌈 → VR 은 베이크로 해결</p>
+      <p class="where">Unity : Window → Rendering → Lighting → Scene 탭 → Baked Global Illumination · Generate Lighting</p>
+    </dd>
+    <dt>색 번짐<small>Color bleeding</small></dt><dd>
+      <p>색 있는 표면에서 튕긴 빛이 옆 표면을 그 색으로 물들이는 현상 — 간접광이 «색을 실어 나름»</p>
+      <p class="ex">빨간 소파 옆 흰 벽 아랫부분이 분홍빛 · 잔디밭 위 흰 공의 아랫면이 연두빛</p>
+      <p class="why">물체들이 «같은 공간에 함께 있다» 는 인상을 주는 단서 → 없으면 물체가 합성 사진처럼 따로 놂</p>
+      <p class="where">Unity : 베이크 GI 결과에서 확인 · 물체마다 Mesh Renderer → Contribute Global Illumination 체크 필요</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag vr">전역조명 · 2 ★</div>
   <h2>실시간 그림자와 베이크의 비용</h2>
   <img src="../../figures/out/w05-bake-vs-realtime.svg" class="fig" alt="실시간 그림자 3개와 베이크 구성의 프레임 예산 비교">
@@ -770,32 +1073,32 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
       <clipPath id="dgClip"><circle cx="825" cy="200" r="105"/></clipPath>
     </defs>
     <text x="275" y="24" text-anchor="middle" font-size="20" font-weight="700">빈 방 · 단색 환경광 + 점광원 1개</text>
-    <rect x="40" y="38" width="470" height="300" rx="10" fill="#cfd3db"/>
-    <polygon points="40,270 510,270 510,338 40,338" fill="#b3b8c2"/>
-    <circle cx="90" cy="70" r="12" fill="#ffc44d"/>
-    <ellipse cx="275" cy="312" rx="92" ry="14" fill="#000" fill-opacity=".25"/>
+    <rect x="40" y="38" width="470" height="300" fill="#dcd6c9"/>
+    <polygon points="40,270 510,270 510,338 40,338" fill="#c4bcab"/>
+    <circle cx="90" cy="70" r="12" fill="#a8701a"/>
+    <ellipse cx="275" cy="312" rx="92" ry="14" fill="#1b1a17" fill-opacity=".18"/>
     <circle cx="275" cy="200" r="105" fill="url(#dgP)"/>
     <circle cx="238" cy="160" r="16" fill="url(#dgSpot)"/>
-    <text x="275" y="372" text-anchor="middle" font-size="20" font-weight="700" fill="#ff5a4d">비칠 풍경 없음 → 하이라이트 점 하나</text>
-    <text x="275" y="400" text-anchor="middle" font-size="20" fill="#ff5a4d">→ 플라스틱 장난감처럼 보임</text>
+    <text x="275" y="372" text-anchor="middle" font-size="20" font-weight="700" fill="#c2401d">비칠 풍경 없음 → 하이라이트 점 하나</text>
+    <text x="275" y="400" text-anchor="middle" font-size="20" fill="#c2401d">→ 플라스틱 장난감처럼 보임</text>
 
     <text x="825" y="24" text-anchor="middle" font-size="20" font-weight="700">주변 환경이 있는 방 · 스카이박스·반사 프로브</text>
-    <rect x="590" y="38" width="470" height="300" rx="10" fill="#6b5a48"/>
+    <rect x="590" y="38" width="470" height="300" fill="#6b5a48"/>
     <rect x="620" y="60" width="150" height="150" fill="url(#dgSky)" stroke="#d9cbb8" stroke-width="5"/>
     <line x1="695" y1="60" x2="695" y2="210" stroke="#d9cbb8" stroke-width="4"/>
     <polygon points="590,270 1060,270 1060,338 590,338" fill="#4a3626"/>
-    <ellipse cx="825" cy="312" rx="92" ry="14" fill="#000" fill-opacity=".35"/>
+    <ellipse cx="825" cy="312" rx="92" ry="14" fill="#1b1a17" fill-opacity=".3"/>
     <g clip-path="url(#dgClip)">
       <rect x="715" y="90" width="220" height="220" fill="url(#dgM)"/>
       <path d="M752 128 Q770 112 800 110 L800 168 Q772 170 756 182 Z" fill="#cfe9ff"/>
       <path d="M800 110 Q812 110 818 111 L818 167 Q810 167 800 168 Z" fill="#d9cbb8"/>
       <circle cx="825" cy="200" r="105" fill="url(#dgEdge)"/>
     </g>
-    <circle cx="772" cy="138" r="9" fill="#fff"/>
-    <text x="825" y="372" text-anchor="middle" font-size="20" font-weight="700" fill="#a8e05f">하늘·창문·바닥이 표면에 비침</text>
-    <text x="825" y="400" text-anchor="middle" font-size="20" fill="#a8e05f">→ 금속처럼 보임</text>
-    <text x="550" y="206" text-anchor="middle" font-size="18" fill="#9aa4b8">같은</text>
-    <text x="550" y="230" text-anchor="middle" font-size="18" fill="#9aa4b8">재질</text>
+    <circle cx="772" cy="138" r="9" fill="#fffefa"/>
+    <text x="825" y="372" text-anchor="middle" font-size="20" font-weight="700" fill="#4f7a16">하늘·창문·바닥이 표면에 비침</text>
+    <text x="825" y="400" text-anchor="middle" font-size="20" fill="#4f7a16">→ 금속처럼 보임</text>
+    <text x="550" y="206" text-anchor="middle" font-size="18" fill="#4a463e">같은</text>
+    <text x="550" y="230" text-anchor="middle" font-size="18" fill="#4a463e">재질</text>
   </svg>
   <div class="analogy" style="margin-top:.4em">
     <p><b>거울</b> · 텅 빈 흰 방의 거울은 그냥 흰 판 · 금속도 비칠 주변이 있어야 «금속다움»이 드러남 → 재질 값보다 <b>반사될 환경</b>부터 확인</p>
@@ -881,6 +1184,31 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
 </section>
 
 <section>
+  <div class="tag trap">함정 · 진단 용어 풀이</div>
+  <h2>프레임타임 · Frame Debugger · OVR Metrics Tool</h2>
+  <dl class="terms">
+    <dt>프레임타임<small>Frame time</small></dt><dd>
+      <p>화면 한 장을 그리는 데 걸린 시간 (ms) — fps 의 뒤집은 값 · «한 장당 마감 시간»</p>
+      <p class="ex">90Hz → 1000 ÷ 90 ≈ 11.1 ms · 그림자 추가로 13.8 ms 가 되면 → 약 72 fps 로 떨어짐</p>
+      <p class="why">fps 평균만 보면 가끔 튀는 느린 프레임이 숨음 → ms 로 보면 «마감 초과» 가 바로 보임</p>
+      <p class="where">Unity : Window → Analysis → Profiler · Game 뷰 Stats (에디터 기준이므로 참고만)</p>
+    </dd>
+    <dt>Frame Debugger<small>Unity 도구</small></dt><dd>
+      <p>한 프레임을 그리는 단계를 하나씩 멈춰 보여 주는 Unity 도구 — 요리 과정을 한 컷씩 넘겨 보기</p>
+      <p class="ex">목록에 «Shadows» 관련 단계가 광원 수만큼 줄줄이 → 그림자맵을 몇 번 그리는지 셀 수 있음</p>
+      <p class="why">«무엇이 느린지» 짐작 대신 «무엇을 몇 번 그렸는지» 를 눈으로 확인</p>
+      <p class="where">Unity : Window → Analysis → Frame Debugger → Enable</p>
+    </dd>
+    <dt>OVR Metrics Tool<small>Meta 도구</small></dt><dd>
+      <p>Quest 헤드셋 화면 위에 fps · 프레임타임 · 칩 사용률을 겹쳐 띄우는 Meta 의 성능 측정 앱</p>
+      <p class="ex">헤드셋 안에서 걸어 다니며 «이 방에 들어서면 72 fps 로 떨어짐» 을 그 자리에서 확인</p>
+      <p class="why">에디터는 PC 성능 → 헤드셋 실측만이 진짜 판정 근거 (14주 플레이테스트에서도 사용)</p>
+      <p class="where">Quest : Meta Horizon Store 에서 설치 → 헤드셋 설정에서 성능 오버레이 켜기 (버전마다 메뉴 다름)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag trap">함정 · 수정</div>
   <h2>④ 수정</h2>
   <div class="vs">
@@ -888,19 +1216,19 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
       <h4>AI 가 내놓는 기본 구성</h4>
       light.type = Point;<br>
       light.shadows = <b>LightShadows.Soft</b>;<br>
-      <span style="color:#5f6980">// 광원 3개 모두 동일</span><br><br>
+      <span style="color:var(--ink-3)">// 광원 3개 모두 동일</span><br><br>
       Color Space : <b>Gamma</b><br><br>
-      <span style="color:#ff5a4d">// Point 3개 × 6장 = 그림자맵 18장<br>
+      <span style="color:var(--trap)">// Point 3개 × 6장 = 그림자맵 18장<br>
       // 베이크 미사용</span>
     </div>
     <div class="good">
       <h4>학생이 요구할 구성</h4>
-      <span style="color:#e8ecf4">"그림자는 태양 하나만,<br>
+      <span style="color:var(--ink)">"그림자는 태양 하나만,<br>
       나머지는 베이크로"</span><br><br>
       Directional 1개 : Realtime<br>
       Point · Spot : <b>Mode = Baked</b><br>
       Color Space : <b>Linear</b><br><br>
-      <span style="color:#a8e05f">// 실시간 그림자 광원 1개 (캐스케이드 2~4장)<br>
+      <span style="color:var(--lab)">// 실시간 그림자 광원 1개 (캐스케이드 2~4장)<br>
       // 간접광은 라이트맵</span>
     </div>
   </div>
@@ -919,16 +1247,76 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
 
 <section>
   <div class="tag vr">Part II 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>이번 파트 용어 미리보기 (1/3)</h2>
   <dl class="terms">
-    <dt>깊이 단서<small>Depth cue</small></dt><dd>뇌가 «얼마나 먼가» 를 판단할 때 쓰는 시각 정보 하나하나</dd>
-    <dt>단안 단서<small>Monocular cue</small></dt><dd>한쪽 눈만으로도 얻는 단서 — 그림자·크기·가려짐 등 · <b>사진 한 장에도 존재</b></dd>
-    <dt>양안 시차<small>Binocular disparity</small></dt><dd>약 6.3 cm 떨어진 두 눈이 보는 장면의 미세한 차이</dd>
-    <dt>수렴<small>Vergence</small></dt><dd>가까운 것을 볼 때 두 눈이 안쪽으로 모이는 움직임</dd>
-    <dt>조절<small>Accommodation</small></dt><dd>거리에 맞춰 수정체 두께를 바꿔 초점을 맞추는 작용</dd>
-    <dt>운동 시차<small>Motion parallax</small></dt><dd>머리가 움직일 때 가까운 것은 많이, 먼 것은 적게 움직여 보이는 현상</dd>
-    <dt>시야각<small>FOV</small></dt><dd>한 번에 볼 수 있는 범위를 각도로 잰 값</dd>
-    <dt>중심와<small>Fovea</small></dt><dd>망막 한가운데 가장 선명하게 보는 작은 영역 (시야 중심 약 2°)</dd>
+    <dt>깊이 단서<small>Depth cue</small></dt><dd>
+      <p>뇌가 «얼마나 먼가» 를 판단할 때 쓰는 시각 정보 하나하나 — 거리를 추리하는 «증거물»</p>
+      <p class="ex">컵이 책을 가림(가려짐) · 같은 의자인데 작게 보임(크기) · 바닥 그림자 위치 → 각각 하나의 단서</p>
+      <p class="why">VR 은 일부 단서를 못 줌 → 남은 단서를 만들어 주지 않으면 공간이 납작·좁게 느껴짐</p>
+      <p class="where">이번 주 «깊이 단서 실험실» 데모 · Unity 에서는 그림자 · 안개 · 바닥 텍스처 설정이 곧 단서</p>
+    </dd>
+    <dt>단안 단서<small>Monocular cue</small></dt><dd>
+      <p>한쪽 눈만으로도 얻는 깊이 단서 — 그림자·크기·가려짐·무늬·흐림 등 · <b>사진 한 장에도 존재</b></p>
+      <p class="ex">풍경 사진만 보고도 «산이 집보다 멀다» 를 앎 → 전부 단안 단서 덕분</p>
+      <p class="why">약 10 m 바깥의 공간감은 거의 단안 단서 담당 → 조명·텍스처 설계가 곧 거리감 설계</p>
+      <p class="where">Unity : Light 그림자 · Lighting 창 → Environment → Other Settings → Fog · 바닥 머티리얼 무늬</p>
+    </dd>
+    <dt>양안 시차<small>Binocular disparity</small></dt><dd>
+      <p>약 6.3 cm 떨어진 두 눈이 보는 장면의 미세한 차이 — 뇌가 두 장을 겹쳐 입체로 계산</p>
+      <p class="ex">팔 뻗은 엄지를 한 눈씩 감아 보면 크게 점프 · 창밖 건물은 거의 그대로</p>
+      <p class="why">가까운 거리(팔 닿는 범위)에서 가장 강한 단서 → VR 잡기·놓기 정확도의 바탕</p>
+      <p class="where">Quest 3 : 렌즈 간격(IPD) 조절 휠 약 58~71 mm · Unity XR 이 두 눈 카메라를 자동 생성</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기 (2/3)</h2>
+  <dl class="terms">
+    <dt>수렴<small>Vergence</small></dt><dd>
+      <p>가까운 것을 볼 때 두 눈이 안쪽으로 모이는 움직임 — 코끝을 보면 «사팔눈» 이 되는 그 동작</p>
+      <p class="ex">30 cm 앞 책 → 두 눈이 크게 모임 · 먼 산 → 두 시선이 거의 평행</p>
+      <p class="why">VR 에서 수렴은 물체 거리에 맞게 바뀌지만 초점(조절)은 고정 → 두 신호 불일치 = 눈 피로 원인</p>
+      <p class="where">10주차 공간 UI : 패널을 0.5 m 보다 가깝게 두지 말라는 규칙의 근거</p>
+    </dd>
+    <dt>조절<small>Accommodation</small></dt><dd>
+      <p>거리에 맞춰 수정체 두께를 바꿔 초점을 맞추는 작용 — 카메라 렌즈의 «자동 초점»</p>
+      <p class="ex">책을 보다 창밖을 보면 잠깐 흐렸다가 선명해짐 = 조절이 다시 맞춰지는 시간</p>
+      <p class="why">HMD 화면은 렌즈로 일정 거리에 고정된 상 → 가까운 물체든 먼 물체든 초점은 같은 자리</p>
+      <p class="where">Quest 3 : 렌즈 초점 거리 고정 (정확한 값은 기기마다 다름 · 대략 1~2 m 대)</p>
+    </dd>
+    <dt>운동 시차<small>Motion parallax</small></dt><dd>
+      <p>머리가 움직일 때 가까운 것은 많이, 먼 것은 적게 움직여 보이는 현상 — 기차 창밖 풍경</p>
+      <p class="ex">머리 10 cm 이동 : 1 m 물체 약 5.7° · 10 m 물체 약 0.57° 이동 → 10배 차이</p>
+      <p class="why">한 눈으로도 강력한 단서 · 카메라가 머리를 정확히 따라가지 않으면 깨지고 멀미 유발</p>
+      <p class="where">Unity XRI : XR Origin → Main Camera 의 Tracked Pose Driver 가 머리 위치를 매 프레임 반영</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기 (3/3)</h2>
+  <dl class="terms">
+    <dt>시야각<small>FOV · Field of view</small></dt><dd>
+      <p>한 번에 볼 수 있는 범위를 각도로 잰 값 — 고개를 돌리지 않고 보이는 «창문의 폭»</p>
+      <p class="ex">사람 양안 수평 약 200° · Quest 3 약 110° → 시야 가장자리가 검은 테두리로 잘림</p>
+      <p class="why">주변시 자극이 줄면 거리·속도 판단 근거도 줄어듦 → VR 거리 과소추정 원인 후보</p>
+      <p class="where">Unity : XR 실행 중 Camera 의 Field of View 는 헤드셋이 덮어씀 → 직접 바꿔도 무시됨</p>
+    </dd>
+    <dt>중심와<small>Fovea</small></dt><dd>
+      <p>망막 한가운데 가장 선명하게 보는 작은 영역 (시야 중심 약 2°) — 팔 뻗은 엄지손톱 정도 크기</p>
+      <p class="ex">이 문장의 한 글자를 보면 옆 줄은 이미 흐림 → 선명한 곳은 시선이 닿은 아주 좁은 범위</p>
+      <p class="why">시야 가장자리는 덜 선명하게 그려도 티가 덜 남 → 렌더링 비용 절약 기법의 근거</p>
+      <p class="where">Quest : 고정 포비티드 렌더링(가장자리 해상도 낮추기) · Unity OpenXR Meta 설정에서 지원 (버전마다 다름)</p>
+    </dd>
+    <dt>접촉 그림자<small>Contact shadow</small></dt><dd>
+      <p>물체가 바닥에 닿는 지점 바로 아래 생기는 짙고 좁은 그림자 — «여기 붙어 있음» 표시</p>
+      <p class="ex">책상 위 컵 밑의 진한 테두리 · 컵을 1 cm 들어 올리면 그림자와 컵 사이 틈이 생김</p>
+      <p class="why">없으면 물체가 바닥에서 떠 보임 → VR 에서 잡기·놓기 위치 판단 오류</p>
+      <p class="where">Unity : 물체 밑에 흐린 원판 텍스처를 붙인 Quad 1장 (가장 싼 방법) · 베이크 AO 로도 일부 표현</p>
+    </dd>
   </dl>
 </section>
 
@@ -1012,21 +1400,21 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
   <div class="tag vr">지각 · 4 도해</div>
   <h2>엄지 실험을 위에서 내려다보면</h2>
   <svg class="dg" viewBox="0 0 1100 370" width="1100" height="370" role="img" aria-label="두 눈에서 0.5m 물체를 보는 각 약 7도, 10m 물체를 보는 각 약 0.4도">
-    <rect x="10" y="20" width="1080" height="150" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
-    <rect x="10" y="185" width="1080" height="150" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
-    <line x1="80" y1="70" x2="300" y2="100" stroke="#ff5fa2" stroke-width="3"/><line x1="80" y1="130" x2="300" y2="100" stroke="#ff5fa2" stroke-width="3"/><path d="M230.6 90.5 A70 70 0 0 0 230.6 109.5" fill="#ffc44d" fill-opacity=".25" stroke="#ffc44d" stroke-width="3"/>
-    <g><ellipse cx="80" cy="70" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="70" r="5" fill="#0b0d12"/></g><g><ellipse cx="80" cy="130" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="130" r="5" fill="#0b0d12"/></g>
-    <circle cx="300" cy="100" r="12" fill="#ffc44d"/>
-    <text x="330" y="94" font-size="22" font-weight="700" fill="#ffc44d">엄지 0.5 m → 두 시선 각 약 7°</text>
-    <text x="330" y="124" font-size="19" fill="#9aa4b8">두 눈 영상의 차이 큼 → 거리 단서 강함</text>
-    <text x="110" y="48" font-size="18" fill="#9aa4b8">왼눈</text>
-    <text x="110" y="160" font-size="18" fill="#9aa4b8">오른눈 (간격 6.3 cm)</text>
-    <line x1="80" y1="230" x2="960" y2="260" stroke="#ff5fa2" stroke-width="3"/><line x1="80" y1="290" x2="960" y2="260" stroke="#ff5fa2" stroke-width="3"/><path d="M800.1 254.5 A160 160 0 0 0 800.1 265.5" fill="#ffc44d" fill-opacity=".25" stroke="#ffc44d" stroke-width="3"/>
-    <g><ellipse cx="80" cy="230" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="230" r="5" fill="#0b0d12"/></g><g><ellipse cx="80" cy="290" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="290" r="5" fill="#0b0d12"/></g>
-    <rect x="946" y="220" width="28" height="80" fill="#9aa4b8"/>
-    <text x="760" y="224" text-anchor="end" font-size="22" font-weight="700" fill="#ffc44d">건물 10 m → 약 0.4°</text>
-    <text x="760" y="316" text-anchor="end" font-size="19" fill="#9aa4b8">두 시선이 거의 평행 → 거리 단서 약함</text>
-    <text x="1090" y="362" text-anchor="end" font-size="18" fill="#9aa4b8">눈 간격·각도는 보이도록 과장 · 각도 ≈ 6.3 cm ÷ 거리</text>
+    <rect x="10" y="20" width="1080" height="150" fill="#ece6d8" stroke="#cfc6b2" stroke-width="2"/>
+    <rect x="10" y="185" width="1080" height="150" fill="#ece6d8" stroke="#cfc6b2" stroke-width="2"/>
+    <line x1="80" y1="70" x2="300" y2="100" stroke="#a3245e" stroke-width="3"/><line x1="80" y1="130" x2="300" y2="100" stroke="#a3245e" stroke-width="3"/><path d="M230.6 90.5 A70 70 0 0 0 230.6 109.5" fill="#f3e7cf" stroke="#a8701a" stroke-width="3"/>
+    <g><ellipse cx="80" cy="70" rx="16" ry="10" fill="#fbf8f1" stroke="#1b1a17" stroke-width="2"/><circle cx="84" cy="70" r="5" fill="#1b1a17"/></g><g><ellipse cx="80" cy="130" rx="16" ry="10" fill="#fbf8f1" stroke="#1b1a17" stroke-width="2"/><circle cx="84" cy="130" r="5" fill="#1b1a17"/></g>
+    <circle cx="300" cy="100" r="12" fill="#a8701a"/>
+    <text x="330" y="94" font-size="22" font-weight="700" fill="#a8701a">엄지 0.5 m → 두 시선 각 약 7°</text>
+    <text x="330" y="124" font-size="19" fill="#4a463e">두 눈 영상의 차이 큼 → 거리 단서 강함</text>
+    <text x="110" y="48" font-size="18" fill="#4a463e">왼눈</text>
+    <text x="110" y="160" font-size="18" fill="#4a463e">오른눈 (간격 6.3 cm)</text>
+    <line x1="80" y1="230" x2="960" y2="260" stroke="#a3245e" stroke-width="3"/><line x1="80" y1="290" x2="960" y2="260" stroke="#a3245e" stroke-width="3"/><path d="M800.1 254.5 A160 160 0 0 0 800.1 265.5" fill="#f3e7cf" stroke="#a8701a" stroke-width="3"/>
+    <g><ellipse cx="80" cy="230" rx="16" ry="10" fill="#fbf8f1" stroke="#1b1a17" stroke-width="2"/><circle cx="84" cy="230" r="5" fill="#1b1a17"/></g><g><ellipse cx="80" cy="290" rx="16" ry="10" fill="#fbf8f1" stroke="#1b1a17" stroke-width="2"/><circle cx="84" cy="290" r="5" fill="#1b1a17"/></g>
+    <rect x="946" y="220" width="28" height="80" fill="#4a463e"/>
+    <text x="760" y="224" text-anchor="end" font-size="22" font-weight="700" fill="#a8701a">건물 10 m → 약 0.4°</text>
+    <text x="760" y="316" text-anchor="end" font-size="19" fill="#4a463e">두 시선이 거의 평행 → 거리 단서 약함</text>
+    <text x="1090" y="362" text-anchor="end" font-size="18" fill="#4a463e">눈 간격·각도는 보이도록 과장 · 각도 ≈ 6.3 cm ÷ 거리</text>
   </svg>
   <div class="analogy" style="margin-top:.4em">
     <p><b>엄지 손가락 실험의 평면도</b> · 가까운 엄지는 두 눈의 시선이 크게 벌어져 번갈아 감을 때 크게 점프 · 먼 건물은 두 시선이 거의 겹쳐 그대로</p>
@@ -1147,21 +1535,21 @@ float3 diffuse = albedo * lightColor * ndotl * intensity;
   <div class="tag vr">지각 · 9 도해</div>
   <h2>머리 10 cm 이동 — 가까운 것은 크게, 먼 것은 조금</h2>
   <svg class="dg" viewBox="0 0 1100 370" width="1100" height="370" role="img" aria-label="머리를 10cm 옮기면 1m 물체 방향은 약 5.7도, 10m 물체 방향은 약 0.57도 바뀜">
-    <rect x="10" y="20" width="1080" height="150" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
-    <rect x="10" y="185" width="1080" height="150" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
-    <line x1="80" y1="70" x2="300" y2="70" stroke="#9aa4b8" stroke-width="3" stroke-dasharray="8 6"/><line x1="80" y1="130" x2="300" y2="70" stroke="#ff5fa2" stroke-width="3"/><path d="M230.0 70.0 A70 70 0 0 0 232.5 88.4" fill="#ffc44d" fill-opacity=".25" stroke="#ffc44d" stroke-width="3"/>
-    <g opacity=".35"><ellipse cx="80" cy="70" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="70" r="5" fill="#0b0d12"/></g><g><ellipse cx="80" cy="130" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="130" r="5" fill="#0b0d12"/></g>
-    <circle cx="300" cy="70" r="12" fill="#ffc44d"/>
-    <text x="330" y="78" font-size="22" font-weight="700" fill="#ffc44d">전봇대 1 m → 방향 약 5.7° 변화</text>
-    <text x="330" y="108" font-size="19" fill="#9aa4b8">화면 속에서 크게 휙 이동</text>
-    <text x="110" y="48" font-size="18" fill="#9aa4b8">이동 전 ①</text>
-    <text x="110" y="160" font-size="18" fill="#ff5fa2">이동 후 ② (10 cm 옆)</text>
-    <line x1="80" y1="230" x2="960" y2="230" stroke="#9aa4b8" stroke-width="3" stroke-dasharray="8 6"/><line x1="80" y1="290" x2="960" y2="230" stroke="#ff5fa2" stroke-width="3"/><path d="M800.0 230.0 A160 160 0 0 0 800.4 240.9" fill="#ffc44d" fill-opacity=".25" stroke="#ffc44d" stroke-width="3"/>
-    <g opacity=".35"><ellipse cx="80" cy="230" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="230" r="5" fill="#0b0d12"/></g><g><ellipse cx="80" cy="290" rx="16" ry="10" fill="#e8ecf4"/><circle cx="84" cy="290" r="5" fill="#0b0d12"/></g>
-    <path d="M920 260 L960 190 L1000 260 Z" fill="#9aa4b8"/>
-    <text x="760" y="214" text-anchor="end" font-size="22" font-weight="700" fill="#ffc44d">먼 산 10 m → 약 0.57° 변화</text>
-    <text x="760" y="320" text-anchor="end" font-size="19" fill="#9aa4b8">화면 속에서 거의 그대로 → 10배 차이</text>
-    <text x="1090" y="362" text-anchor="end" font-size="18" fill="#9aa4b8">이동 거리·각도는 보이도록 과장 · 양안 시차와 같은 기하 (두 눈 대신 한 눈이 시간차로 이동)</text>
+    <rect x="10" y="20" width="1080" height="150" fill="#ece6d8" stroke="#cfc6b2" stroke-width="2"/>
+    <rect x="10" y="185" width="1080" height="150" fill="#ece6d8" stroke="#cfc6b2" stroke-width="2"/>
+    <line x1="80" y1="70" x2="300" y2="70" stroke="#4a463e" stroke-width="3" stroke-dasharray="8 6"/><line x1="80" y1="130" x2="300" y2="70" stroke="#a3245e" stroke-width="3"/><path d="M230.0 70.0 A70 70 0 0 0 232.5 88.4" fill="#f3e7cf" stroke="#a8701a" stroke-width="3"/>
+    <g opacity=".35"><ellipse cx="80" cy="70" rx="16" ry="10" fill="#fbf8f1" stroke="#1b1a17" stroke-width="2"/><circle cx="84" cy="70" r="5" fill="#1b1a17"/></g><g><ellipse cx="80" cy="130" rx="16" ry="10" fill="#fbf8f1" stroke="#1b1a17" stroke-width="2"/><circle cx="84" cy="130" r="5" fill="#1b1a17"/></g>
+    <circle cx="300" cy="70" r="12" fill="#a8701a"/>
+    <text x="330" y="78" font-size="22" font-weight="700" fill="#a8701a">전봇대 1 m → 방향 약 5.7° 변화</text>
+    <text x="330" y="108" font-size="19" fill="#4a463e">화면 속에서 크게 휙 이동</text>
+    <text x="110" y="48" font-size="18" fill="#4a463e">이동 전 ①</text>
+    <text x="110" y="160" font-size="18" fill="#a3245e">이동 후 ② (10 cm 옆)</text>
+    <line x1="80" y1="230" x2="960" y2="230" stroke="#4a463e" stroke-width="3" stroke-dasharray="8 6"/><line x1="80" y1="290" x2="960" y2="230" stroke="#a3245e" stroke-width="3"/><path d="M800.0 230.0 A160 160 0 0 0 800.4 240.9" fill="#f3e7cf" stroke="#a8701a" stroke-width="3"/>
+    <g opacity=".35"><ellipse cx="80" cy="230" rx="16" ry="10" fill="#fbf8f1" stroke="#1b1a17" stroke-width="2"/><circle cx="84" cy="230" r="5" fill="#1b1a17"/></g><g><ellipse cx="80" cy="290" rx="16" ry="10" fill="#fbf8f1" stroke="#1b1a17" stroke-width="2"/><circle cx="84" cy="290" r="5" fill="#1b1a17"/></g>
+    <path d="M920 260 L960 190 L1000 260 Z" fill="#4a463e"/>
+    <text x="760" y="214" text-anchor="end" font-size="22" font-weight="700" fill="#a8701a">먼 산 10 m → 약 0.57° 변화</text>
+    <text x="760" y="320" text-anchor="end" font-size="19" fill="#4a463e">화면 속에서 거의 그대로 → 10배 차이</text>
+    <text x="1090" y="362" text-anchor="end" font-size="18" fill="#4a463e">이동 거리·각도는 보이도록 과장 · 양안 시차와 같은 기하 (두 눈 대신 한 눈이 시간차로 이동)</text>
   </svg>
   <div class="analogy" style="margin-top:.4em">
     <p><b>기차 창밖</b> · 같은 만큼 움직여도 가까운 전봇대는 시선 방향이 크게 꺾여 휙 지나가고, 먼 산은 거의 안 꺾여 천천히 흐름</p>
@@ -1343,7 +1731,7 @@ void Update() {
   </table>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">다음 주</div>
   <div class="rule"></div>
   <h1>셰이더 <em>기초</em></h1>

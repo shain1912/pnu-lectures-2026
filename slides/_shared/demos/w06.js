@@ -108,13 +108,13 @@
       if (jitV) jitV.textContent = st.jit + "′";
       if (fBtn) {
         fBtn.textContent = "필터 : " + FILTERS[st.filter];
-        fBtn.style.borderColor = st.filter ? "#a8e05f" : "#ff5a4d";
-        fBtn.style.color = st.filter ? "#a8e05f" : "#ff5a4d";
+        fBtn.style.borderColor = st.filter ? "#4f7a16" : "#c2401d";
+        fBtn.style.color = st.filter ? "#4f7a16" : "#c2401d";
       }
       if (fovBtn) {
         fovBtn.textContent = FOVS[st.fov];
-        fovBtn.style.borderColor = st.fov ? "#ff5fa2" : "";
-        fovBtn.style.color = st.fov ? "#ff5fa2" : "";
+        fovBtn.style.borderColor = st.fov ? "#a3245e" : "";
+        fovBtn.style.color = st.fov ? "#a3245e" : "";
       }
       Array.prototype.forEach.call(presets, function (b) {
         var on = +b.dataset.ppd === st.ppd;

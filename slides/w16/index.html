@@ -12,8 +12,12 @@
   .reveal svg.fig-svg { display:block; margin:.2em auto 0; width:100%; height:auto; max-height:460px; }
   .reveal svg.fig-svg text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
   .reveal .tl { display:grid; gap:.35em; font-size:.68em; }
-  .reveal .tl div { display:grid; grid-template-columns: 8.5em 1fr; gap:.8em; padding:.38em .7em; border-radius:8px; background:var(--bg-card); border:1px solid var(--line); }
+  .reveal .tl div { display:grid; grid-template-columns: 8.5em 1fr; gap:.8em; padding:.38em .2em; border-radius:0; background:none; border:0; border-bottom:1px solid var(--hair); }
+  .reveal .tl div:first-child { border-top:2px solid var(--ink); }
+  .reveal .tl div:last-child { border-bottom:2px solid var(--ink); }
+  .reveal .tl { gap:0; }
   .reveal .tl b.time { font-family:var(--mono); color:var(--fg-dim); font-weight:500; }
+  .reveal dl.terms.dense { font-size:.64em; }
 </style>
 </head>
 <body>
@@ -54,11 +58,11 @@
       <p class="small">팀 피드백을 <b>우선 개선 3가지 + 근거 + 재측정 방법</b>으로 정리해 보완</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 동향을 원리로 읽기</h4>
+      <h4><span class="step">2</span> 동향을 원리로 읽기</h4>
       <p class="small">아이트래킹 포비티드 · 햅틱 · 패스스루 MR · 공간 비디오를 <b>학기 개념(주차)에 연결</b>해 설명</p>
     </div>
     <div class="card lab">
-      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 포트폴리오 · 체크리스트</h4>
+      <h4><span class="step">3</span> 포트폴리오 · 체크리스트</h4>
       <p class="small">시연 영상 2종 촬영 계획 · 근거·수치·검증이 담긴 문서 · <b>개인 AI 함정 체크리스트</b></p>
     </div>
   </div>
@@ -127,7 +131,7 @@
 </section>
 
 <!-- ========================================================= PART I -->
-<section class="divider part-ii">
+<section class="divider part-ii no-1">
   <div class="kicker">Part I · 30분</div>
   <div class="rule"></div>
   <h1>최신 XR 동향을<br><em>원리</em>로 읽기</h1>
@@ -136,15 +140,66 @@
 
 <section>
   <div class="tag vr">Part I 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
-  <dl class="terms">
-    <dt>아이트래킹<small>Eye tracking</small></dt><dd>헤드셋 안 카메라로 <b>눈동자가 보는 방향</b>을 실시간 측정</dd>
-    <dt>포비티드 렌더링<small>Foveated rendering</small></dt><dd>시선 중심만 선명하게, 주변은 거칠게 그려 계산을 줄이는 방법 (6주 중심와)</dd>
-    <dt>FFR · ETFR<small>Fixed · Eye-tracked</small></dt><dd>선명한 영역이 <b>렌즈 중앙에 고정</b> · <b>시선을 따라 이동</b></dd>
-    <dt>햅틱<small>Haptics</small></dt><dd>진동·힘·압력 등 <b>촉각</b>으로 정보를 전달하는 기술</dd>
-    <dt>패스스루<small>Passthrough</small></dt><dd>헤드셋 바깥 카메라 영상으로 현실을 실시간으로 보여 주는 기능</dd>
-    <dt>혼합현실<small>Mixed reality, MR</small></dt><dd>현실 영상 위에 가상 물체를 섞어 같은 공간에 있는 것처럼 보이게 하는 경험</dd>
-    <dt>공간 비디오<small>Spatial video</small></dt><dd>두 렌즈로 찍어 <b>양쪽 눈에 다른 영상</b>을 보여 주는 입체 영상</dd>
+  <h2>용어 미리보기 (1/2) — 시선과 촉각</h2>
+  <dl class="terms dense">
+    <dt>아이트래킹<small>Eye tracking</small></dt>
+    <dd>
+      <p>헤드셋 안쪽 작은 카메라가 눈동자를 찍어 <b>지금 어디를 보는지</b> 실시간으로 알아내는 기술 — 눈에 단 레이저 포인터</p>
+      <p class="ex">메뉴 버튼을 바라보기만 하면 버튼이 강조됨 · 시선 위치를 1초에 수십 번 이상 갱신 (기기마다 다름)</p>
+      <p class="why">포비티드 렌더링 · 시선 선택 · 아바타 눈맞춤의 전제 — Quest 3 에는 없음 → 수업 장비로는 체험 불가</p>
+      <p class="where">Quest Pro · Apple Vision Pro · PS VR2 등 · Unity : OpenXR 의 Eye Gaze Interaction 프로필 (버전마다 다름)</p>
+    </dd>
+    <dt>포비티드 렌더링<small>Foveated rendering</small></dt>
+    <dd>
+      <p>눈이 똑바로 보는 한가운데만 선명하게, 주변은 거칠게 그려 계산을 아끼는 방법 — 사람 눈도 중심만 선명 (6주 중심와)</p>
+      <p class="ex">중심 20% 원래 해상도 · 바깥 50% 는 픽셀 1/16 → 계산할 픽셀 약 31% (동향 · 2 손계산)</p>
+      <p class="why">VR = 두 눈 × 고해상도 × 72~120Hz → 픽셀 비용이 가장 큰 부담 · 아낀 만큼 프레임 여유</p>
+      <p class="where">Unity : OpenXR · Meta XR 설정의 Foveated Rendering 항목 (Off ~ High 단계 · 버전마다 다름)</p>
+    </dd>
+    <dt>FFR · ETFR<small>Fixed · Eye-tracked</small></dt>
+    <dd>
+      <p>선명 영역의 위치를 정하는 두 방식 — FFR 은 <b>렌즈 한가운데에 고정</b>, ETFR 은 <b>눈동자를 따라 이동</b></p>
+      <p class="ex">시선을 화면 구석으로 → FFR 은 거친 영역이 그대로 보임 · ETFR 은 그 구석이 선명해짐</p>
+      <p class="why">고정 방식은 가장자리를 볼 때를 대비해 선명 영역을 크게 잡아야 함 → 절약 폭이 작음</p>
+    </dd>
+    <dt>햅틱<small>Haptics</small></dt>
+    <dd>
+      <p>진동·힘·압력처럼 <b>피부로 느끼는 신호</b>로 정보를 전하는 기술 — 휴대폰 키보드의 «톡» 진동이 가장 흔한 예</p>
+      <p class="ex">잡기 성공 순간 진폭 0.3 · 0.05초 진동 → «잡았다» 확신 · 다시 쥐어 보는 행동 감소</p>
+      <p class="where">XRI 3.x : Haptic Impulse Player · Simple Haptic Feedback 컴포넌트 (이름은 버전마다 다름)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part I 용어</div>
+  <h2>용어 미리보기 (2/2) — 현실과 섞기</h2>
+  <dl class="terms dense">
+    <dt>패스스루<small>Passthrough</small></dt>
+    <dd>
+      <p>헤드셋 바깥 카메라로 찍은 주변 모습을 안쪽 화면에 <b>실시간으로</b> 보여 주는 기능 — 헤드셋을 쓴 채 방을 보는 «디지털 창문»</p>
+      <p class="ex">Quest 3 에서 플레이 경계를 그릴 때 보이는 컬러 방 화면</p>
+      <p class="why">카메라 영상이 머리 움직임보다 늦으면 현실 세계가 출렁 → 멀미 · 손 위치 착각</p>
+    </dd>
+    <dt>혼합현실<small>Mixed reality, MR</small></dt>
+    <dd>
+      <p>진짜 방 영상 위에 가상 물체를 얹어 <b>같은 공간에 있는 것처럼</b> 보이게 하는 경험</p>
+      <p class="ex">실제 책상 위에 가상 공을 올리면 책상 모서리에서 굴러떨어짐</p>
+      <p class="why">현실이 비교 기준 → 그림자 · 가림 · 크기가 조금만 틀려도 «합성» 티가 바로 남</p>
+      <p class="where">Unity : AR Foundation + Meta 용 OpenXR 패키지 — AR Plane Manager(평면 인식) · 앵커 (버전마다 다름)</p>
+    </dd>
+    <dt>공간 비디오<small>Spatial video</small></dt>
+    <dd>
+      <p>사람 눈 간격만큼 떨어진 두 렌즈로 동시에 찍어 <b>왼눈 · 오른눈에 다른 영상</b>을 보여 주는 입체 영상</p>
+      <p class="ex">생일 케이크 장면을 찍어 헤드셋으로 보면 촛불이 화면 앞으로 튀어나와 보임</p>
+      <p class="where">일부 스마트폰 · 헤드셋의 촬영 기능 · 재생 앱과 파일 형식은 기기 · 버전마다 다름</p>
+    </dd>
+    <dt>운동 시차<small>Motion parallax</small></dt>
+    <dd>
+      <p>머리를 움직이면 <b>가까운 것은 많이, 먼 것은 조금</b> 움직여 보이는 현상 — 뇌가 거리를 재는 단서 (5주)</p>
+      <p class="ex">기차 창밖 전봇대는 휙 지나가고 먼 산은 거의 그대로</p>
+      <p class="why">공간 비디오 · 360° 영상에는 없음 → 고개를 옆으로 움직여도 장면이 «붙어서» 따라오는 어색함</p>
+    </dd>
   </dl>
 </section>
 
@@ -153,23 +208,23 @@
   <h2>아이트래킹 포비티드 렌더링</h2>
   <svg class="fig-svg" style="max-height:360px" viewBox="0 0 1100 360" role="img" aria-label="고정 포비티드는 선명 영역이 화면 중앙에 고정, 아이트래킹 포비티드는 시선 위치를 따라 선명 영역 이동">
     <g font-size="20" font-weight="700">
-      <text x="270" y="32" fill="#35d6e6" text-anchor="middle">고정 포비티드 (FFR) — Quest 3</text>
-      <text x="830" y="32" fill="#ff5fa2" text-anchor="middle">아이트래킹 포비티드 (ETFR)</text>
+      <text x="270" y="32" fill="#0d6b78" text-anchor="middle">고정 포비티드 (FFR) — Quest 3</text>
+      <text x="830" y="32" fill="#a3245e" text-anchor="middle">아이트래킹 포비티드 (ETFR)</text>
     </g>
-    <rect x="40" y="50" width="460" height="260" rx="12" fill="#171b25" stroke="#2a3040"/>
-    <ellipse cx="270" cy="180" rx="210" ry="120" fill="rgba(53,214,230,0.10)" stroke="#35d6e6" stroke-dasharray="6 5"/>
-    <ellipse cx="270" cy="180" rx="120" ry="70" fill="rgba(53,214,230,0.18)" stroke="#35d6e6"/>
-    <text x="270" y="187" fill="#e8ecf4" font-size="21" text-anchor="middle">항상 렌즈 중앙</text>
-    <circle cx="420" cy="110" r="8" fill="#ffc44d"/>
-    <text x="420" y="92" fill="#ffc44d" font-size="20" text-anchor="middle">시선</text>
-    <rect x="600" y="50" width="460" height="260" rx="12" fill="#171b25" stroke="#2a3040"/>
-    <ellipse cx="900" cy="150" rx="130" ry="80" fill="rgba(255,95,162,0.10)" stroke="#ff5fa2" stroke-dasharray="6 5"/>
-    <ellipse cx="900" cy="150" rx="60" ry="38" fill="rgba(255,95,162,0.22)" stroke="#ff5fa2"/>
-    <circle cx="900" cy="150" r="8" fill="#ffc44d"/>
-    <text x="900" y="266" fill="#e8ecf4" font-size="21" text-anchor="middle">선명 영역이 시선을 따라 이동</text>
+    <rect x="40" y="50" width="460" height="260" rx="2" fill="#ece6d8" stroke="#cfc6b2"/>
+    <ellipse cx="270" cy="180" rx="210" ry="120" fill="#0d6b78" fill-opacity=".08" stroke="#0d6b78" stroke-dasharray="6 5"/>
+    <ellipse cx="270" cy="180" rx="120" ry="70" fill="#0d6b78" fill-opacity=".18" stroke="#0d6b78"/>
+    <text x="270" y="187" fill="#1b1a17" font-size="21" text-anchor="middle">항상 렌즈 중앙</text>
+    <circle cx="420" cy="110" r="8" fill="#a8701a"/>
+    <text x="420" y="92" fill="#a8701a" font-size="20" text-anchor="middle">시선</text>
+    <rect x="600" y="50" width="460" height="260" rx="2" fill="#ece6d8" stroke="#cfc6b2"/>
+    <ellipse cx="900" cy="150" rx="130" ry="80" fill="#a3245e" fill-opacity=".08" stroke="#a3245e" stroke-dasharray="6 5"/>
+    <ellipse cx="900" cy="150" rx="60" ry="38" fill="#a3245e" fill-opacity=".2" stroke="#a3245e"/>
+    <circle cx="900" cy="150" r="8" fill="#a8701a"/>
+    <text x="900" y="266" fill="#1b1a17" font-size="21" text-anchor="middle">선명 영역이 시선을 따라 이동</text>
     <g font-size="21">
-      <text x="270" y="345" fill="#9aa4b8" text-anchor="middle">시선이 가장자리로 가면 거친 영역을 보게 됨</text>
-      <text x="830" y="345" fill="#9aa4b8" text-anchor="middle">선명 영역을 더 작게 → 절약 폭 큼</text>
+      <text x="270" y="345" fill="#4a463e" text-anchor="middle">시선이 가장자리로 가면 거친 영역을 보게 됨</text>
+      <text x="830" y="345" fill="#4a463e" text-anchor="middle">선명 영역을 더 작게 → 절약 폭 큼</text>
     </g>
   </svg>
   <div class="analogy">
@@ -228,29 +283,29 @@
   <h2>패스스루 MR — 현실 영상 위에 그리기</h2>
   <svg class="fig-svg" viewBox="0 0 1100 340" role="img" aria-label="카메라 현실 영상, 깊이 정보, 가상 물체 세 층을 합성해 화면 하나를 만드는 과정">
     <defs>
-      <marker id="a16" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker>
+      <marker id="a16" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4a463e"/></marker>
     </defs>
     <g font-size="18">
-      <rect x="30" y="30" width="230" height="80" rx="10" fill="#171b25" stroke="#9aa4b8"/>
-      <text x="145" y="64" fill="#e8ecf4" text-anchor="middle" font-weight="700">① 카메라 영상</text>
-      <text x="145" y="90" fill="#9aa4b8" text-anchor="middle">눈 위치로 보정한 현실</text>
-      <rect x="30" y="130" width="230" height="80" rx="10" fill="#171b25" stroke="#ffc44d"/>
-      <text x="145" y="164" fill="#ffc44d" text-anchor="middle" font-weight="700">② 깊이 · 공간 정보</text>
-      <text x="145" y="190" fill="#9aa4b8" text-anchor="middle">벽 · 바닥 · 가구 위치</text>
-      <rect x="30" y="230" width="230" height="80" rx="10" fill="#171b25" stroke="#35d6e6"/>
-      <text x="145" y="264" fill="#35d6e6" text-anchor="middle" font-weight="700">③ 가상 물체</text>
-      <text x="145" y="290" fill="#9aa4b8" text-anchor="middle">Unity 가 렌더링</text>
+      <rect x="30" y="30" width="230" height="80" rx="2" fill="#ece6d8" stroke="#4a463e"/>
+      <text x="145" y="64" fill="#1b1a17" text-anchor="middle" font-weight="700">① 카메라 영상</text>
+      <text x="145" y="90" fill="#4a463e" text-anchor="middle">눈 위치로 보정한 현실</text>
+      <rect x="30" y="130" width="230" height="80" rx="2" fill="#ece6d8" stroke="#a8701a"/>
+      <text x="145" y="164" fill="#a8701a" text-anchor="middle" font-weight="700">② 깊이 · 공간 정보</text>
+      <text x="145" y="190" fill="#4a463e" text-anchor="middle">벽 · 바닥 · 가구 위치</text>
+      <rect x="30" y="230" width="230" height="80" rx="2" fill="#ece6d8" stroke="#0d6b78"/>
+      <text x="145" y="264" fill="#0d6b78" text-anchor="middle" font-weight="700">③ 가상 물체</text>
+      <text x="145" y="290" fill="#4a463e" text-anchor="middle">Unity 가 렌더링</text>
     </g>
-    <g stroke="#9aa4b8" stroke-width="2.5" fill="none" marker-end="url(#a16)">
+    <g stroke="#4a463e" stroke-width="2.5" fill="none" marker-end="url(#a16)">
       <path d="M262,70 C360,70 360,170 440,170"/>
       <path d="M262,170 L440,170"/>
       <path d="M262,270 C360,270 360,170 440,170"/>
     </g>
-    <rect x="450" y="100" width="200" height="140" rx="12" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
-    <text x="550" y="162" fill="#ff5fa2" font-size="21" text-anchor="middle" font-weight="700">합성</text>
-    <text x="550" y="192" fill="#e8ecf4" font-size="17" text-anchor="middle">무엇이 앞에 있나</text>
-    <g font-size="18" fill="#e8ecf4">
-      <text x="700" y="80" fill="#ffc44d" font-weight="700">합성에서 생기는 지각 문제</text>
+    <rect x="450" y="100" width="200" height="140" rx="2" fill="#f1dde6" stroke="#a3245e" stroke-width="2"/>
+    <text x="550" y="162" fill="#a3245e" font-size="21" text-anchor="middle" font-weight="700">합성</text>
+    <text x="550" y="192" fill="#1b1a17" font-size="17" text-anchor="middle">무엇이 앞에 있나</text>
+    <g font-size="18" fill="#1b1a17">
+      <text x="700" y="80" fill="#a8701a" font-weight="700">합성에서 생기는 지각 문제</text>
       <text x="700" y="120">· 가림 : 현실 의자 뒤로 가상 공이 숨어야 함</text>
       <text x="700" y="150">   → 깊이 정보 없으면 공이 의자 «위에» 떠 보임</text>
       <text x="700" y="190">· 조명 : 가상 그림자가 현실 바닥에 맞아야 함</text>
@@ -311,7 +366,7 @@
 </section>
 
 <!-- ========================================================= PART II -->
-<section class="divider part-iii">
+<section class="divider part-iii no-2">
   <div class="kicker">Part II · 10분 + 작업</div>
   <div class="rule"></div>
   <h1>포트폴리오로<br>남기기</h1>
@@ -320,14 +375,57 @@
 
 <section>
   <div class="tag lab">Part II 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>용어 미리보기 (1/2) — 무엇을 남기나</h2>
   <dl class="terms">
-    <dt>케이스 스터디<small>Case study</small></dt><dd>결과물만이 아니라 <b>문제 → 결정 → 검증 → 결과</b> 과정을 보여 주는 포트폴리오 형식</dd>
-    <dt>헤드셋 녹화<small>Headset capture</small></dt><dd>체험자가 보는 화면(1인칭)을 헤드셋 안에서 녹화</dd>
-    <dt>외부 촬영<small>External shot</small></dt><dd>카메라로 체험자의 몸과 동작(3인칭)을 찍은 영상</dd>
-    <dt>캐스팅<small>Casting</small></dt><dd>헤드셋 화면을 휴대폰·PC 로 실시간 전송 — 녹화도 가능</dd>
-    <dt>분할 화면<small>Split screen</small></dt><dd>1인칭 · 3인칭 영상을 한 화면에 나란히 · 시간 맞춰 편집</dd>
-    <dt>기여 명시<small>Contribution</small></dt><dd>팀 작업 중 <b>내가 맡은 부분</b>을 구체적으로 적는 것</dd>
+    <dt>케이스 스터디<small>Case study</small></dt>
+    <dd>
+      <p>완성 사진만이 아니라 <b>문제 → 결정 → 검증 → 결과</b> 과정을 순서대로 보여 주는 포트폴리오 형식 — 음식 사진이 아닌 레시피</p>
+      <p class="ex">«체험자 4명 멀미 호소 → 스냅 턴으로 변경 → SSQ 증가폭 +30 → +12»</p>
+      <p class="why">완성 사진만으로는 내 판단인지, AI · 우연의 결과인지 구별 불가</p>
+      <p class="where">포트폴리오 가이드 7섹션 중 3 · 4 · 5 (설계 근거 · 검증 결과 · 성능 수치)</p>
+    </dd>
+    <dt>기여 명시<small>Contribution</small></dt>
+    <dd>
+      <p>팀 작업 중 <b>내가 맡은 부분</b>을 구체적인 동사와 결과물로 적는 것</p>
+      <p class="ex">«검증 담당 — 플레이테스트 4회 진행 · SSQ 측정과 정리 · 개선 기록표 작성»</p>
+      <p class="why">«팀으로 만들었다» 만 쓰면 보는 사람이 내 실력을 판단할 근거 없음</p>
+      <p class="where">포트폴리오 섹션 1 «한 줄 정의 · 내 역할» · 팀 역할 4종 중 내 칸</p>
+    </dd>
+    <dt>헤드셋 녹화<small>Headset capture</small></dt>
+    <dd>
+      <p>체험자 눈에 보이는 화면(<b>1인칭</b>)을 헤드셋 안에서 그대로 녹화한 영상</p>
+      <p class="ex">텔레포트 지점을 겨냥하는 광선과 도착 장면이 체험자 시점으로 찍힘</p>
+      <p class="why">무엇이 보였는지 보여 주는 유일한 자료 · 단, 한쪽 눈 기준이라 실제 시야보다 좁음</p>
+      <p class="where">Quest : 빠른 설정의 카메라(녹화) 메뉴 · Meta Quest Developer Hub (메뉴는 OS 버전마다 다름)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag lab">Part II 용어</div>
+  <h2>용어 미리보기 (2/2) — 어떻게 찍나</h2>
+  <dl class="terms">
+    <dt>외부 촬영<small>External shot</small></dt>
+    <dd>
+      <p>삼각대에 세운 카메라로 체험자의 <b>몸과 손 동작(3인칭)</b>을 찍은 영상</p>
+      <p class="ex">공을 잡으려고 허리를 숙이는 동작 · 플레이 구역 전체가 한 화면에</p>
+      <p class="why">1인칭만으로는 몸이 어떻게 반응했는지 안 보임 → «관람자가 실제로 이렇게 움직임» 의 근거</p>
+      <p class="where">휴대폰 + 삼각대 · 가로 촬영 · 창을 등지지 않는 자리</p>
+    </dd>
+    <dt>캐스팅<small>Casting</small></dt>
+    <dd>
+      <p>헤드셋 화면을 휴대폰 · PC 로 <b>실시간 전송</b>해 다른 사람이 같이 보게 하는 기능 — TV 화면 미러링과 같은 것</p>
+      <p class="ex">체험 중인 화면을 교실 프로젝터에 띄우고 동시에 PC 에서 화면 녹화</p>
+      <p class="why">전송 · 녹화 중에는 프레임이 떨어질 수 있음 → 성능 측정과 촬영은 따로</p>
+      <p class="where">Meta Horizon 앱의 캐스트 · Quest 빠른 설정의 캐스트 (메뉴 이름은 버전마다 다름)</p>
+    </dd>
+    <dt>분할 화면<small>Split screen</small></dt>
+    <dd>
+      <p>1인칭 · 3인칭 영상을 <b>한 화면에 나란히</b> 놓고 시간을 맞춰 편집한 영상</p>
+      <p class="ex">왼쪽 큰 칸 = 헤드셋 화면 · 오른쪽 작은 칸 = 몸 동작 · 시작 손뼉 1회로 두 영상 맞추기</p>
+      <p class="why">«무엇을 보고 → 어떻게 움직였나» 를 한 번에 전달 · 한쪽만 있으면 반쪽 정보</p>
+      <p class="where">영상 편집 앱의 화면 분할 · PIP(화면 속 화면) 기능</p>
+    </dd>
   </dl>
 </section>
 
@@ -354,29 +452,29 @@
   <h2>시연 영상 — 두 대의 카메라</h2>
   <svg class="fig-svg" viewBox="0 0 1100 330" role="img" aria-label="헤드셋 녹화 1인칭과 삼각대 외부 촬영 3인칭을 분할 화면으로 편집">
     <defs>
-      <marker id="b16" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker>
+      <marker id="b16" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4a463e"/></marker>
     </defs>
-    <rect x="160" y="60" width="200" height="200" fill="rgba(168,224,95,0.06)" stroke="#a8e05f" stroke-width="2" stroke-dasharray="8 6"/>
-    <circle cx="260" cy="160" r="26" fill="#421229" stroke="#ff5fa2" stroke-width="3"/>
-    <text x="260" y="166" fill="#ff5fa2" font-size="16" text-anchor="middle">체험자</text>
-    <rect x="248" y="122" width="24" height="12" rx="3" fill="#ff5fa2"/>
-    <rect x="30" y="140" width="60" height="40" rx="6" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-    <path d="M90,160 L230,160" stroke="#35d6e6" stroke-width="2" stroke-dasharray="6 5"/>
-    <text x="60" y="210" fill="#35d6e6" font-size="16" text-anchor="middle">삼각대</text>
+    <rect x="160" y="60" width="200" height="200" fill="#e3ecd3" stroke="#4f7a16" stroke-width="2" stroke-dasharray="8 6"/>
+    <circle cx="260" cy="160" r="26" fill="#f1dde6" stroke="#a3245e" stroke-width="3"/>
+    <text x="260" y="166" fill="#a3245e" font-size="16" text-anchor="middle">체험자</text>
+    <rect x="248" y="122" width="24" height="12" rx="3" fill="#a3245e"/>
+    <rect x="30" y="140" width="60" height="40" rx="2" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+    <path d="M90,160 L230,160" stroke="#0d6b78" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="60" y="210" fill="#0d6b78" font-size="16" text-anchor="middle">삼각대</text>
     <g font-size="17">
-      <text x="260" y="40" fill="#ff5fa2" text-anchor="middle">① 헤드셋 녹화 (1인칭)</text>
-      <text x="60" y="235" fill="#35d6e6" text-anchor="middle">② 외부 촬영</text>
-      <text x="60" y="258" fill="#35d6e6" text-anchor="middle">(3인칭)</text>
+      <text x="260" y="40" fill="#a3245e" text-anchor="middle">① 헤드셋 녹화 (1인칭)</text>
+      <text x="60" y="235" fill="#0d6b78" text-anchor="middle">② 외부 촬영</text>
+      <text x="60" y="258" fill="#0d6b78" text-anchor="middle">(3인칭)</text>
     </g>
-    <path d="M380,160 L520,160" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#b16)"/>
-    <text x="450" y="148" fill="#9aa4b8" font-size="16" text-anchor="middle">편집</text>
-    <rect x="540" y="60" width="520" height="200" rx="12" fill="#171b25" stroke="#2a3040"/>
-    <rect x="555" y="75" width="300" height="170" rx="6" fill="#421229"/>
-    <text x="705" y="166" fill="#ff5fa2" font-size="20" text-anchor="middle" font-weight="700">1인칭 — 보이는 것</text>
-    <rect x="865" y="75" width="180" height="170" rx="6" fill="#0e3a42"/>
-    <text x="955" y="158" fill="#35d6e6" font-size="18" text-anchor="middle" font-weight="700">3인칭</text>
-    <text x="955" y="182" fill="#e8ecf4" font-size="15" text-anchor="middle">몸 · 손 동작</text>
-    <text x="800" y="300" fill="#e8ecf4" font-size="18" text-anchor="middle">시작할 때 손뼉 1회 → 두 영상의 소리·동작으로 시간 맞추기</text>
+    <path d="M380,160 L520,160" stroke="#4a463e" stroke-width="2.5" marker-end="url(#b16)"/>
+    <text x="450" y="148" fill="#4a463e" font-size="16" text-anchor="middle">편집</text>
+    <rect x="540" y="60" width="520" height="200" rx="2" fill="#ece6d8" stroke="#cfc6b2"/>
+    <rect x="555" y="75" width="300" height="170" rx="2" fill="#f1dde6"/>
+    <text x="705" y="166" fill="#a3245e" font-size="20" text-anchor="middle" font-weight="700">1인칭 — 보이는 것</text>
+    <rect x="865" y="75" width="180" height="170" rx="2" fill="#dcebec"/>
+    <text x="955" y="158" fill="#0d6b78" font-size="18" text-anchor="middle" font-weight="700">3인칭</text>
+    <text x="955" y="182" fill="#1b1a17" font-size="15" text-anchor="middle">몸 · 손 동작</text>
+    <text x="800" y="300" fill="#1b1a17" font-size="18" text-anchor="middle">시작할 때 손뼉 1회 → 두 영상의 소리·동작으로 시간 맞추기</text>
   </svg>
   <div class="analogy">
     <p><b>스포츠 중계</b> : 선수 머리에 단 카메라만 보면 어지럽고 상황을 모름 · 중계 카메라만 보면 선수가 무엇을 봤는지 모름 → 두 화면을 같이 보여야 «무엇을 보고 어떻게 움직였나» 가 전달</p>
@@ -411,7 +509,7 @@
       «몰입감 있는 숲 VR 을 만들었습니다.<br>
       최적화를 통해 부드러운 체험을 구현했고,<br>
       사용자들이 만족했습니다.»<br><br>
-      <span style="color:#ff5a4d">// 근거 · 수치 · 검증 방법 없음<br>
+      <span style="color:var(--trap)">// 근거 · 수치 · 검증 방법 없음<br>
       // 누가 무엇을 했는지 없음</span>
     </div>
     <div class="good">
@@ -428,7 +526,7 @@
 </section>
 
 <!-- ========================================================= PART III -->
-<section class="divider trap">
+<section class="divider trap no-3">
   <div class="kicker">Part III · 15분 + 작업</div>
   <div class="rule"></div>
   <h1>AI 함정 10종<br><em>회고</em></h1>
@@ -466,33 +564,33 @@
   <h2>10종의 공통 패턴</h2>
   <svg class="fig-svg" viewBox="0 0 1100 360" role="img" aria-label="함정 10종을 수학·코드, 렌더링 설정, VR 구조, 몸과 기기 네 묶음으로 분류하고 공통 원인 표시">
     <g font-size="19">
-      <rect x="20" y="30" width="250" height="190" rx="12" fill="#171b25" stroke="#35d6e6" stroke-width="2"/>
-      <text x="145" y="66" fill="#35d6e6" text-anchor="middle" font-weight="700">수학 · 코드</text>
-      <text x="145" y="106" fill="#e8ecf4" text-anchor="middle">#1 짐벌락</text>
-      <text x="145" y="138" fill="#e8ecf4" text-anchor="middle">#2 deltaTime</text>
-      <text x="145" y="170" fill="#e8ecf4" text-anchor="middle">#6 물리 무력화</text>
-      <rect x="290" y="30" width="250" height="190" rx="12" fill="#171b25" stroke="#ffc44d" stroke-width="2"/>
-      <text x="415" y="66" fill="#ffc44d" text-anchor="middle" font-weight="700">렌더링 설정</text>
-      <text x="415" y="106" fill="#e8ecf4" text-anchor="middle">#3 z-fighting</text>
-      <text x="415" y="138" fill="#e8ecf4" text-anchor="middle">#4 그림자 · 색공간</text>
-      <text x="415" y="170" fill="#e8ecf4" text-anchor="middle">#5 밉맵 · 알파</text>
-      <rect x="560" y="30" width="250" height="190" rx="12" fill="#171b25" stroke="#ff5fa2" stroke-width="2"/>
-      <text x="685" y="66" fill="#ff5fa2" text-anchor="middle" font-weight="700">VR 구조</text>
-      <text x="685" y="106" fill="#e8ecf4" text-anchor="middle">#7 Overlay UI</text>
-      <text x="685" y="138" fill="#e8ecf4" text-anchor="middle">#8 카메라 직접 조작</text>
-      <rect x="830" y="30" width="250" height="190" rx="12" fill="#171b25" stroke="#ff5a4d" stroke-width="2"/>
-      <text x="955" y="66" fill="#ff5a4d" text-anchor="middle" font-weight="700">몸 · 기기</text>
-      <text x="955" y="106" fill="#e8ecf4" text-anchor="middle">#9 가속 이동</text>
-      <text x="955" y="138" fill="#e8ecf4" text-anchor="middle">#10 에디터 기준</text>
+      <rect x="20" y="30" width="250" height="190" rx="2" fill="#ece6d8" stroke="#0d6b78" stroke-width="2"/>
+      <text x="145" y="66" fill="#0d6b78" text-anchor="middle" font-weight="700">수학 · 코드</text>
+      <text x="145" y="106" fill="#1b1a17" text-anchor="middle">#1 짐벌락</text>
+      <text x="145" y="138" fill="#1b1a17" text-anchor="middle">#2 deltaTime</text>
+      <text x="145" y="170" fill="#1b1a17" text-anchor="middle">#6 물리 무력화</text>
+      <rect x="290" y="30" width="250" height="190" rx="2" fill="#ece6d8" stroke="#a8701a" stroke-width="2"/>
+      <text x="415" y="66" fill="#a8701a" text-anchor="middle" font-weight="700">렌더링 설정</text>
+      <text x="415" y="106" fill="#1b1a17" text-anchor="middle">#3 z-fighting</text>
+      <text x="415" y="138" fill="#1b1a17" text-anchor="middle">#4 그림자 · 색공간</text>
+      <text x="415" y="170" fill="#1b1a17" text-anchor="middle">#5 밉맵 · 알파</text>
+      <rect x="560" y="30" width="250" height="190" rx="2" fill="#ece6d8" stroke="#a3245e" stroke-width="2"/>
+      <text x="685" y="66" fill="#a3245e" text-anchor="middle" font-weight="700">VR 구조</text>
+      <text x="685" y="106" fill="#1b1a17" text-anchor="middle">#7 Overlay UI</text>
+      <text x="685" y="138" fill="#1b1a17" text-anchor="middle">#8 카메라 직접 조작</text>
+      <rect x="830" y="30" width="250" height="190" rx="2" fill="#ece6d8" stroke="#c2401d" stroke-width="2"/>
+      <text x="955" y="66" fill="#c2401d" text-anchor="middle" font-weight="700">몸 · 기기</text>
+      <text x="955" y="106" fill="#1b1a17" text-anchor="middle">#9 가속 이동</text>
+      <text x="955" y="138" fill="#1b1a17" text-anchor="middle">#10 에디터 기준</text>
     </g>
-    <g stroke="#9aa4b8" stroke-width="2" fill="none">
+    <g stroke="#4a463e" stroke-width="2" fill="none">
       <path d="M145,222 L145,252 L955,252 L955,222"/>
       <path d="M415,222 L415,252"/><path d="M685,222 L685,252"/>
       <path d="M550,252 L550,272"/>
     </g>
-    <rect x="160" y="275" width="780" height="70" rx="12" fill="#431612" stroke="#ff5a4d" stroke-width="2"/>
-    <text x="550" y="306" fill="#e8ecf4" font-size="20" text-anchor="middle" font-weight="700">공통 원인 : 코드는 그럴듯함 · 틀린 곳은 코드 밖</text>
-    <text x="550" y="334" fill="#9aa4b8" font-size="18" text-anchor="middle">수학적 조건 · 설정 화면 · 헤드셋 · 사람의 몸 — AI 가 볼 수 없는 곳</text>
+    <rect x="160" y="275" width="780" height="70" rx="2" fill="#f6e0d6" stroke="#c2401d" stroke-width="2"/>
+    <text x="550" y="306" fill="#1b1a17" font-size="20" text-anchor="middle" font-weight="700">공통 원인 : 코드는 그럴듯함 · 틀린 곳은 코드 밖</text>
+    <text x="550" y="334" fill="#4a463e" font-size="18" text-anchor="middle">수학적 조건 · 설정 화면 · 헤드셋 · 사람의 몸 — AI 가 볼 수 없는 곳</text>
   </svg>
   <aside class="notes">
     - 왼쪽에서 오른쪽으로 갈수록 «에디터에서 안 보이는 정도» 가 커짐
@@ -509,7 +607,7 @@
     <li>질문마다 <b>확인 위치</b> : 코드 · Inspector · Project Settings · 헤드셋 · 체험자</li>
     <li>다음 프로젝트 프롬프트의 <b>[검증 조건] 칸</b>에 이 목록을 붙여 넣기</li>
   </ol>
-  <pre style="font-size:.62em"><code data-trim>[검증 조건 — 내 체크리스트]
+  <pre style="font-size:.62em"><code class="language-plaintext" data-trim>[검증 조건 — 내 체크리스트]
 - (#4) 그림자 켠 광원 수 로그 ≤ 1 · Project Settings Color Space = Linear
 - (#8) 이동 코드가 Camera 가 아닌 XR Origin 의 Transform 만 변경
 - (#10) fps 는 Quest 배포 빌드에서 OVR Metrics 로 30초 측정한 값만 보고
@@ -581,7 +679,7 @@
   </div>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">한 학기 수고하셨습니다</div>
   <div class="rule"></div>
   <h1>개념으로 <em>요구</em>하고<br>몸으로 <em>검증</em>하기</h1>

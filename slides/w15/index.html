@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="../_shared/theme.css">
 <style>
   .reveal svg.fig-svg { display:block; margin:.2em auto 0; width:100%; height:auto; max-height:470px; }
+  .reveal .gfx-txt b, .reveal .vr-txt b, .reveal .trap-txt b, .reveal .lab-txt b { color: inherit; }
   .reveal svg.fig-svg text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
 </style>
 </head>
@@ -51,11 +52,11 @@
       <p class="small">발표 5 · 시연 10 · 질의 5 를 <b>시간 안에</b> · 다음 팀은 옆 스테이지에서 동시에 세팅</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> 근거로 답하기</h4>
+      <h4><span class="step">2</span> 근거로 답하기</h4>
       <p class="small">질의에 기획서 ② 지각적 근거 · ③ 컴포트 등급 · 14주 <b>실측 수치</b>로 답변</p>
     </div>
     <div class="card lab">
-      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 동료 평가</h4>
+      <h4><span class="step">3</span> 동료 평가</h4>
       <p class="small">체험 직후 바로 · <b>관찰한 사실</b>로 강점 1 · 개선 1 · 컴포트 등급 일치 여부</p>
     </div>
   </div>
@@ -65,52 +66,106 @@
 </section>
 
 <section>
+  <div class="tag gfx">운영 · 용어</div>
+  <h2>운영 용어 미리보기 (1/2) — 전시장에서</h2>
+  <dl class="terms">
+    <dt>스포터<small>Spotter</small></dt>
+    <dd>
+      <p>체험자 곁에서 <b>안전만 지켜보는</b> 팀원 1명 — 헤드셋 쓴 사람의 눈 대신 주변을 보는 사람</p>
+      <p class="ex">체험자가 케이블을 밟으려 하거나 관람자에게 팔을 휘두르기 직전 → 어깨를 가볍게 잡아 멈춤</p>
+      <p class="why">헤드셋을 쓴 사람은 실제 공간을 못 봄 → 스포터가 없으면 충돌 사고</p>
+    </dd>
+    <dt>경계 · 가디언<small>Boundary · Guardian</small></dt>
+    <dd>
+      <p>헤드셋에 미리 그려 둔 <b>안전한 플레이 구역의 테두리</b> — 가까이 가면 가상 벽이 나타남</p>
+      <p class="ex">스테이지 2 m × 2 m 를 따라 바닥에 선을 그어 둠 → 손이 다가가면 격자 벽 표시</p>
+      <p class="where">Quest 설정 → 물리적 공간 → 경계(Boundary) · 예전 이름 Guardian — 메뉴 이름은 버전마다 다름</p>
+    </dd>
+    <dt>캐스팅<small>Casting</small></dt>
+    <dd>
+      <p>헤드셋 속 화면을 <b>바깥 화면에 실시간으로 띄우기</b> — 체험자가 보는 것을 모두가 함께 봄</p>
+      <p class="ex">체험자 시야가 교실 공용 화면에 그대로 → 관람자·교수가 함께 관찰</p>
+      <p class="where">헤드셋 빠른 설정 → 캐스트 → 컴퓨터(브라우저) 또는 휴대폰 Meta Horizon 앱</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 세 가지 모두 리허설(14주)에서 이미 해 본 것 — 오늘은 다시 확인만
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">운영 · 용어</div>
+  <h2>운영 용어 미리보기 (2/2) — 빌드와 측정</h2>
+  <dl class="terms">
+    <dt>동결 빌드<small>Frozen build</small></dt>
+    <dd>
+      <p>발표용으로 <b>더 이상 고치지 않기로 확정한</b> 최종 빌드 — 인쇄소에 넘긴 최종 원고</p>
+      <p class="ex">«Team3_final_v1.2.apk» 를 전날 설치 · 당일 아침 수정 금지</p>
+      <p class="why">직전 수정은 새 버그를 부름 · Development Build 로 설치하면 성능이 떨어짐</p>
+      <p class="where">Unity 6 : File → Build Profiles → Android → <b>Development Build 체크 해제</b> 후 빌드</p>
+    </dd>
+    <dt>OVR Metrics Tool<small>성능 오버레이</small></dt>
+    <dd>
+      <p>Quest 화면 구석에 <b>fps · GPU 사용률 등 성능 숫자를 겹쳐 띄우는</b> Meta 공식 앱</p>
+      <p class="ex">질의 시간에 켜고 30초 : 평균 fps 72 · 최저 68</p>
+      <p class="where">Quest 에 OVR Metrics Tool 설치 → 오버레이 켜기 · 항목 이름은 버전마다 다름</p>
+    </dd>
+    <dt>컴포트 등급<small>Comfort rating</small></dt>
+    <dd>
+      <p>멀미 위험을 미리 알리는 <b>세 단계 표시</b> — Comfortable · Moderate · Intense</p>
+      <p class="ex">텔레포트만 쓰는 정적 전시 = Comfortable · 부드러운 이동 + 회전 = Moderate 이상</p>
+      <p class="where">Meta Horizon Store 앱 상세 페이지의 등급 표기 · 기획서 ③ 에 팀이 선언</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag gfx">운영 · 1 ★</div>
   <h2>시간표 — 2 스테이지 교대 (8팀 기준 예시)</h2>
   <svg class="fig-svg" viewBox="0 0 1100 370" role="img" aria-label="14:00부터 17:00까지 세팅, 팀 1~4, 휴식, 팀 5~8, 동료평가 마감 시간표와 스테이지 A·B 교대">
-    <g font-size="17" fill="#9aa4b8">
+    <g font-size="17" fill="#4a463e">
       <text x="140" y="30">14:00</text><text x="190" y="30">14:10</text><text x="434" y="30">15:30</text>
       <text x="520" y="30">15:35</text><text x="764" y="30">16:55</text><text x="1010" y="30">17:00</text>
     </g>
     <g font-size="18">
-      <text x="20" y="84" fill="#35d6e6" font-weight="700">스테이지 A</text>
-      <text x="20" y="164" fill="#ff5fa2" font-weight="700">스테이지 B</text>
-      <text x="20" y="244" fill="#9aa4b8" font-weight="700">전체</text>
+      <text x="20" y="84" fill="#0d6b78" font-weight="700">스테이지 A</text>
+      <text x="20" y="164" fill="#a3245e" font-weight="700">스테이지 B</text>
+      <text x="20" y="244" fill="#4a463e" font-weight="700">전체</text>
     </g>
     <!-- scale: 1 min = 3.05px from x=150 (14:00) ; 180 min -> 699 ; use 3.05 -->
-    <rect x="150" y="215" width="30" height="44" rx="6" fill="#171b25" stroke="#9aa4b8"/>
-    <text x="165" y="300" fill="#9aa4b8" font-size="16" text-anchor="middle">세팅</text>
+    <rect x="150" y="215" width="30" height="44" rx="2" fill="#ece6d8" stroke="#4a463e"/>
+    <text x="165" y="300" fill="#4a463e" font-size="16" text-anchor="middle">세팅</text>
     <!-- teams 1-4: 14:10..15:30 = 80 min, each 20 -->
-    <rect x="181" y="55"  width="60" height="44" rx="6" fill="#0e3a42" stroke="#35d6e6"/><text x="211" y="84" fill="#e8ecf4" font-size="18" text-anchor="middle">1</text>
-    <rect x="242" y="135" width="60" height="44" rx="6" fill="#421229" stroke="#ff5fa2"/><text x="272" y="164" fill="#e8ecf4" font-size="18" text-anchor="middle">2</text>
-    <rect x="303" y="55"  width="60" height="44" rx="6" fill="#0e3a42" stroke="#35d6e6"/><text x="333" y="84" fill="#e8ecf4" font-size="18" text-anchor="middle">3</text>
-    <rect x="364" y="135" width="60" height="44" rx="6" fill="#421229" stroke="#ff5fa2"/><text x="394" y="164" fill="#e8ecf4" font-size="18" text-anchor="middle">4</text>
-    <rect x="425" y="215" width="15" height="44" rx="4" fill="#171b25" stroke="#2a3040"/>
-    <text x="432" y="300" fill="#9aa4b8" font-size="16" text-anchor="middle">휴식</text>
+    <rect x="181" y="55"  width="60" height="44" rx="2" fill="#dcebec" stroke="#0d6b78"/><text x="211" y="84" fill="#1b1a17" font-size="18" text-anchor="middle">1</text>
+    <rect x="242" y="135" width="60" height="44" rx="2" fill="#f1dde6" stroke="#a3245e"/><text x="272" y="164" fill="#1b1a17" font-size="18" text-anchor="middle">2</text>
+    <rect x="303" y="55"  width="60" height="44" rx="2" fill="#dcebec" stroke="#0d6b78"/><text x="333" y="84" fill="#1b1a17" font-size="18" text-anchor="middle">3</text>
+    <rect x="364" y="135" width="60" height="44" rx="2" fill="#f1dde6" stroke="#a3245e"/><text x="394" y="164" fill="#1b1a17" font-size="18" text-anchor="middle">4</text>
+    <rect x="425" y="215" width="15" height="44" rx="2" fill="#ece6d8" stroke="#cfc6b2"/>
+    <text x="432" y="300" fill="#4a463e" font-size="16" text-anchor="middle">휴식</text>
     <!-- teams 5-8: 15:35..16:55 -->
-    <rect x="441" y="55"  width="60" height="44" rx="6" fill="#0e3a42" stroke="#35d6e6"/><text x="471" y="84" fill="#e8ecf4" font-size="18" text-anchor="middle">5</text>
-    <rect x="502" y="135" width="60" height="44" rx="6" fill="#421229" stroke="#ff5fa2"/><text x="532" y="164" fill="#e8ecf4" font-size="18" text-anchor="middle">6</text>
-    <rect x="563" y="55"  width="60" height="44" rx="6" fill="#0e3a42" stroke="#35d6e6"/><text x="593" y="84" fill="#e8ecf4" font-size="18" text-anchor="middle">7</text>
-    <rect x="624" y="135" width="60" height="44" rx="6" fill="#421229" stroke="#ff5fa2"/><text x="654" y="164" fill="#e8ecf4" font-size="18" text-anchor="middle">8</text>
-    <rect x="685" y="215" width="15" height="44" rx="4" fill="#21330f" stroke="#a8e05f"/>
+    <rect x="441" y="55"  width="60" height="44" rx="2" fill="#dcebec" stroke="#0d6b78"/><text x="471" y="84" fill="#1b1a17" font-size="18" text-anchor="middle">5</text>
+    <rect x="502" y="135" width="60" height="44" rx="2" fill="#f1dde6" stroke="#a3245e"/><text x="532" y="164" fill="#1b1a17" font-size="18" text-anchor="middle">6</text>
+    <rect x="563" y="55"  width="60" height="44" rx="2" fill="#dcebec" stroke="#0d6b78"/><text x="593" y="84" fill="#1b1a17" font-size="18" text-anchor="middle">7</text>
+    <rect x="624" y="135" width="60" height="44" rx="2" fill="#f1dde6" stroke="#a3245e"/><text x="654" y="164" fill="#1b1a17" font-size="18" text-anchor="middle">8</text>
+    <rect x="685" y="215" width="15" height="44" rx="2" fill="#e3ecd3" stroke="#4f7a16"/>
     <!-- setup ghost bars -->
-    <g fill="none" stroke="#5f6980" stroke-dasharray="4 4">
-      <rect x="181" y="135" width="60" height="44" rx="6"/>
-      <rect x="242" y="55" width="60" height="44" rx="6"/>
-      <rect x="303" y="135" width="60" height="44" rx="6"/>
-      <rect x="364" y="55" width="60" height="44" rx="6"/>
-      <rect x="441" y="135" width="60" height="44" rx="6"/>
-      <rect x="502" y="55" width="60" height="44" rx="6"/>
-      <rect x="563" y="135" width="60" height="44" rx="6"/>
+    <g fill="none" stroke="#8a8476" stroke-dasharray="4 4">
+      <rect x="181" y="135" width="60" height="44" rx="2"/>
+      <rect x="242" y="55" width="60" height="44" rx="2"/>
+      <rect x="303" y="135" width="60" height="44" rx="2"/>
+      <rect x="364" y="55" width="60" height="44" rx="2"/>
+      <rect x="441" y="135" width="60" height="44" rx="2"/>
+      <rect x="502" y="55" width="60" height="44" rx="2"/>
+      <rect x="563" y="135" width="60" height="44" rx="2"/>
     </g>
-    <g font-size="18" fill="#e8ecf4">
-      <rect x="740" y="55" width="22" height="22" rx="4" fill="#0e3a42" stroke="#35d6e6"/><text x="772" y="73">팀 슬롯 20분 (발표 5 · 시연 10 · 질의 5)</text>
-      <rect x="740" y="95" width="22" height="22" rx="4" fill="none" stroke="#5f6980" stroke-dasharray="4 4"/><text x="772" y="113">다음 팀 세팅 (옆 스테이지)</text>
-      <rect x="740" y="135" width="22" height="22" rx="4" fill="#21330f" stroke="#a8e05f"/><text x="772" y="153">16:55 동료 평가 제출 마감</text>
-      <text x="740" y="210" fill="#9aa4b8">20분 × 8팀 = 160분</text>
-      <text x="740" y="240" fill="#9aa4b8">+ 세팅 10 + 휴식 5 + 마감 5 = 180분</text>
-      <text x="740" y="280" fill="#ffc44d">팀 수 · 공간 확정 후 조정</text>
-      <text x="740" y="310" fill="#9aa4b8">7팀 이하 → 남는 시간은 자유 체험</text>
+    <g font-size="18" fill="#1b1a17">
+      <rect x="740" y="55" width="22" height="22" rx="2" fill="#dcebec" stroke="#0d6b78"/><text x="772" y="73">팀 슬롯 20분 (발표 5 · 시연 10 · 질의 5)</text>
+      <rect x="740" y="95" width="22" height="22" rx="2" fill="none" stroke="#8a8476" stroke-dasharray="4 4"/><text x="772" y="113">다음 팀 세팅 (옆 스테이지)</text>
+      <rect x="740" y="135" width="22" height="22" rx="2" fill="#e3ecd3" stroke="#4f7a16"/><text x="772" y="153">16:55 동료 평가 제출 마감</text>
+      <text x="740" y="210" fill="#4a463e">20분 × 8팀 = 160분</text>
+      <text x="740" y="240" fill="#4a463e">+ 세팅 10 + 휴식 5 + 마감 5 = 180분</text>
+      <text x="740" y="280" fill="#a8701a">팀 수 · 공간 확정 후 조정</text>
+      <text x="740" y="310" fill="#4a463e">7팀 이하 → 남는 시간은 자유 체험</text>
     </g>
   </svg>
   <aside class="notes">
@@ -142,35 +197,35 @@
   <h2>부스 배치</h2>
   <svg class="fig-svg" viewBox="0 0 1100 400" role="img" aria-label="두 스테이지의 플레이 구역, 스포터, 캐스팅 화면, 대기열, 위생 테이블, 관람석 배치">
     <!-- stage A -->
-    <rect x="60" y="40" width="200" height="200" fill="rgba(53,214,230,0.07)" stroke="#35d6e6" stroke-width="2.5" stroke-dasharray="8 6"/>
-    <text x="160" y="30" fill="#35d6e6" font-size="18" text-anchor="middle" font-weight="700">스테이지 A · 2 m × 2 m</text>
-    <circle cx="160" cy="140" r="22" fill="#421229" stroke="#ff5fa2" stroke-width="2.5"/>
-    <text x="160" y="146" fill="#ff5fa2" font-size="15" text-anchor="middle">체험</text>
-    <circle cx="290" cy="140" r="22" fill="#0e3a42" stroke="#35d6e6" stroke-width="2.5"/>
-    <text x="290" y="146" fill="#35d6e6" font-size="15" text-anchor="middle">스포터</text>
+    <rect x="60" y="40" width="200" height="200" fill="#dcebec" stroke="#0d6b78" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <text x="160" y="30" fill="#0d6b78" font-size="18" text-anchor="middle" font-weight="700">스테이지 A · 2 m × 2 m</text>
+    <circle cx="160" cy="140" r="22" fill="#f1dde6" stroke="#a3245e" stroke-width="2.5"/>
+    <text x="160" y="146" fill="#a3245e" font-size="15" text-anchor="middle">체험</text>
+    <circle cx="290" cy="140" r="22" fill="#dcebec" stroke="#0d6b78" stroke-width="2.5"/>
+    <text x="290" y="146" fill="#0d6b78" font-size="15" text-anchor="middle">스포터</text>
     <!-- stage B -->
-    <rect x="440" y="40" width="200" height="200" fill="rgba(255,95,162,0.06)" stroke="#ff5fa2" stroke-width="2.5" stroke-dasharray="8 6"/>
-    <text x="540" y="30" fill="#ff5fa2" font-size="18" text-anchor="middle" font-weight="700">스테이지 B · 다음 팀 세팅</text>
-    <circle cx="670" cy="140" r="22" fill="#0e3a42" stroke="#35d6e6" stroke-width="2.5"/>
-    <text x="670" y="146" fill="#35d6e6" font-size="15" text-anchor="middle">스포터</text>
+    <rect x="440" y="40" width="200" height="200" fill="#f1dde6" stroke="#a3245e" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <text x="540" y="30" fill="#a3245e" font-size="18" text-anchor="middle" font-weight="700">스테이지 B · 다음 팀 세팅</text>
+    <circle cx="670" cy="140" r="22" fill="#dcebec" stroke="#0d6b78" stroke-width="2.5"/>
+    <text x="670" y="146" fill="#0d6b78" font-size="15" text-anchor="middle">스포터</text>
     <!-- screen -->
-    <rect x="200" y="290" width="300" height="20" rx="4" fill="#e8ecf4"/>
-    <text x="350" y="338" fill="#e8ecf4" font-size="17" text-anchor="middle">발표 · 캐스팅 공용 화면</text>
+    <rect x="200" y="290" width="300" height="20" rx="2" fill="#1b1a17"/>
+    <text x="350" y="338" fill="#1b1a17" font-size="17" text-anchor="middle">발표 · 캐스팅 공용 화면</text>
     <!-- queue -->
-    <g fill="#9aa4b8"><circle cx="40" cy="300" r="12"/><circle cx="40" cy="335" r="12"/><circle cx="40" cy="370" r="12"/></g>
-    <text x="64" y="378" fill="#ffc44d" font-size="16">대기 최대 3명</text>
+    <g fill="#4a463e"><circle cx="40" cy="300" r="12"/><circle cx="40" cy="335" r="12"/><circle cx="40" cy="370" r="12"/></g>
+    <text x="64" y="378" fill="#a8701a" font-size="16">대기 최대 3명</text>
     <!-- hygiene -->
-    <rect x="560" y="300" width="110" height="50" rx="6" fill="#21330f" stroke="#a8e05f"/>
-    <text x="615" y="331" fill="#a8e05f" font-size="16" text-anchor="middle">위생 테이블</text>
+    <rect x="560" y="300" width="110" height="50" rx="2" fill="#e3ecd3" stroke="#4f7a16"/>
+    <text x="615" y="331" fill="#4f7a16" font-size="16" text-anchor="middle">위생 테이블</text>
     <!-- labels right -->
-    <g font-size="18" fill="#e8ecf4">
-      <text x="730" y="60" fill="#35d6e6" font-weight="700">스포터 (팀원 1명 고정)</text>
+    <g font-size="18" fill="#1b1a17">
+      <text x="730" y="60" fill="#0d6b78" font-weight="700">스포터 (팀원 1명 고정)</text>
       <text x="730" y="88">케이블 · 가디언 경계 · 주변 사람</text>
       <text x="730" y="114">중단 신호 즉시 대응</text>
-      <text x="730" y="170" fill="#ffc44d" font-weight="700">대기열</text>
+      <text x="730" y="170" fill="#a8701a" font-weight="700">대기열</text>
       <text x="730" y="198">다음 체험자만 대기 · 최대 3명</text>
       <text x="730" y="224">플레이 구역 2 m 밖에서 대기</text>
-      <text x="730" y="280" fill="#a8e05f" font-weight="700">위생 테이블</text>
+      <text x="730" y="280" fill="#4f7a16" font-weight="700">위생 테이블</text>
       <text x="730" y="308">커버 1인 1매 · 알코올 티슈</text>
       <text x="730" y="334">렌즈 직사광선 금지 · 충전 케이블</text>
     </g>
@@ -197,7 +252,7 @@
 </section>
 
 <!-- ========================================================= 평가 -->
-<section class="divider part-ii">
+<section class="divider part-ii next">
   <div class="kicker">평가</div>
   <div class="rule"></div>
   <h1>무엇으로<br><em>채점하는가</em></h1>
@@ -206,14 +261,54 @@
 
 <section>
   <div class="tag vr">평가 · 용어</div>
-  <h2>평가 용어 미리보기</h2>
+  <h2>평가 용어 미리보기 (1/2) — 무엇을 보는가</h2>
   <dl class="terms">
-    <dt>완성도<small>Completeness</small></dt><dd>처음부터 끝까지 막힘·크래시 없이 체험이 성립하는 정도</dd>
-    <dt>지각·컴포트 근거<small>Perceptual rationale</small></dt><dd>설계 결정을 지각 원리와 측정으로 설명할 수 있는 정도 (기획서 ② ③)</dd>
-    <dt>온디바이스 실측<small>On-device measurement</small></dt><dd>현장에서 헤드셋으로 직접 잰 fps — 에디터 수치 불인정</dd>
-    <dt>등급 일치<small>Rating match</small></dt><dd>팀이 선언한 컴포트 등급과 체험자가 느낀 등급이 같은지</dd>
-    <dt>동료 평가<small>Peer review</small></dt><dd>다른 팀 학생이 체험 직후 관찰 근거로 남기는 평가</dd>
-    <dt>프레즌스<small>Presence</small></dt><dd>«그곳에 있다» 는 주관적 느낌 — 오늘 <b>성적 지표로 쓰지 않음</b></dd>
+    <dt>완성도<small>Completeness</small></dt>
+    <dd>
+      <p>처음부터 끝까지 <b>막힘·크래시 없이</b> 체험이 성립하는 정도 — 손님이 끝까지 먹을 수 있는 한 접시</p>
+      <p class="ex">체험자 3명 모두 안내 없이 시작 → 과업 완료 → 종료 · 멈춤 0회</p>
+      <p class="why">30점으로 배점이 가장 큼 · 중간에 멈추면 뒤의 설계는 아무도 못 봄</p>
+    </dd>
+    <dt>지각·컴포트 근거<small>Perceptual rationale</small></dt>
+    <dd>
+      <p>설계 결정을 <b>지각 원리 + 측정 숫자</b>로 설명할 수 있는 정도 (기획서 ② ③)</p>
+      <p class="ex">«스냅 회전 22.5° 사용 → 시야 흐름(벡션) 감소 → 14주 SSQ 전후 차이 작음»</p>
+      <p class="why">25점 · «느낌상 편해요» 는 근거로 불인정</p>
+    </dd>
+    <dt>온디바이스 실측<small>On-device measurement</small></dt>
+    <dd>
+      <p>PC 에디터가 아니라 <b>현장 헤드셋에서 직접 잰</b> 성능 숫자 — 자동차 검사소의 계측기 값</p>
+      <p class="ex">Quest 3 위 OVR Metrics 오버레이 30초 : 평균 72 fps · GPU 사용률 85%</p>
+      <p class="why">에디터 fps 는 PC 성능이라 헤드셋보다 훨씬 높게 나옴 → 성능 15점은 현장 숫자로만</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 세 축 모두 «말» 이 아니라 «관찰·숫자» 로 확인한다는 공통점 강조
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">평가 · 용어</div>
+  <h2>평가 용어 미리보기 (2/2) — 누가 어떻게 보는가</h2>
+  <dl class="terms">
+    <dt>등급 일치<small>Rating match</small></dt>
+    <dd>
+      <p>팀이 <b>선언한</b> 컴포트 등급과 체험자가 <b>실제로 느낀</b> 등급이 같은지</p>
+      <p class="ex">선언 Comfortable · 체험자 2명이 Moderate 로 체감 → 불일치</p>
+      <p class="why">등급은 관람자에게 하는 약속 — 불일치 = 멀미에 약한 사람에게 잘못된 안내</p>
+    </dd>
+    <dt>동료 평가<small>Peer review</small></dt>
+    <dd>
+      <p>다른 팀 학생이 체험 <b>직후</b> 관찰 근거로 남기는 평가 — 강점 1 · 개선 1 · 등급 일치</p>
+      <p class="ex">«2분경 바닥이 사라지는 장면에서 몸이 앞으로 쏠림» (언제 · 무엇이 · 얼마나)</p>
+      <p class="where">«팀프로젝트 가이드북» 동료평가 양식 · 익명 제출</p>
+    </dd>
+    <dt>프레즌스<small>Presence</small></dt>
+    <dd>
+      <p>«정말 <b>그곳에 있다</b>» 는 주관적 느낌 — 영화관에서 화면 속에 빨려 든 듯한 순간</p>
+      <p class="ex">가상 절벽 끝에서 실제로 발이 움츠러듦</p>
+      <p class="why">사후 설문 점수가 믿을 만하지 않음 (평가 · 3) → 오늘 <b>성적 지표로 쓰지 않음</b></p>
+    </dd>
   </dl>
 </section>
 
@@ -265,6 +360,31 @@
 </section>
 
 <section>
+  <div class="tag trap">평가 · 3 용어 풀이</div>
+  <h2>용어 풀이 — 요구 특성 · 사후 설문 · SSQ</h2>
+  <dl class="terms">
+    <dt>요구 특성<small>Demand characteristics</small></dt>
+    <dd>
+      <p>참가자가 <b>«진행자가 듣고 싶어 하는 답»</b>을 눈치채고 거기에 맞춰 답하는 경향</p>
+      <p class="ex">만든 팀이 옆에서 «어땠어요? 몰입되죠?» 하고 물으면 → «네, 좋았어요»</p>
+      <p class="why">설문 점수가 작품이 아니라 분위기를 재게 됨 → 동료 평가는 익명 · 관찰 사실 위주</p>
+    </dd>
+    <dt>사후 설문<small>Post-experience questionnaire</small></dt>
+    <dd>
+      <p>체험이 <b>끝난 뒤</b> 기억을 떠올려 답하는 설문 — 그 순간이 아니라 회상을 잼</p>
+      <p class="ex">«체험 중 그곳에 있는 느낌이 들었다 (1~7점)»</p>
+      <p class="why">기억은 마지막 장면·기분에 끌려감 → 체험 중 행동 관찰과 함께 써야 함</p>
+    </dd>
+    <dt>SSQ<small>Simulator Sickness Questionnaire</small></dt>
+    <dd>
+      <p>멀미 증상 16개(메스꺼움 · 눈 피로 · 어지러움 등)를 0~3 으로 체크하는 <b>표준 멀미 설문</b></p>
+      <p class="ex">체험 전후 두 번 작성 → 점수 차이 = 이 체험이 만든 멀미</p>
+      <p class="where">Kennedy et al. (1993) · 평가 · 2 예상 질문의 «SSQ 전후» 가 바로 이 설문</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag lab">동료 평가 · 1</div>
   <h2>동료 평가 쓰는 법</h2>
   <div class="vs">
@@ -273,7 +393,7 @@
       강점 : 재밌어요! 그래픽 예뻐요<br>
       개선 : 좀 어지러웠음<br>
       컴포트 등급 : 일치<br><br>
-      <span style="color:#ff5a4d">// 언제 · 무엇이 · 얼마나 없음<br>// 팀이 고칠 수 없음</span>
+      <span class="trap-txt">// 언제 · 무엇이 · 얼마나 없음<br>// 팀이 고칠 수 없음</span>
     </div>
     <div class="good">
       <h4>관찰 근거 평가</h4>
@@ -347,7 +467,7 @@
   <p class="small">→ 학기 내내 배운 지각 이론이 관람자에게는 <b>«아무 문제 없음»</b> 으로만 보임 · 잘된 VR 설계는 눈에 띄지 않음</p>
 </section>
 
-<section class="divider part-iii">
+<section class="divider part-iii next">
   <div class="kicker">다음 주</div>
   <div class="rule"></div>
   <h1>피드백과 <em>학기 정리</em></h1>

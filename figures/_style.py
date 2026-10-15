@@ -28,26 +28,33 @@ OUT = pathlib.Path(__file__).parent / "out"
 OUT.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------- 색 체계
-BG      = "#0b0d12"   # 슬라이드 배경
-BG_SOFT = "#12151d"
-CARD    = "#171b25"
-LINE    = "#2a3040"
-FG      = "#e8ecf4"
-DIM     = "#9aa4b8"
-FAINT   = "#5f6980"
+# 에디토리얼(잡지 지면) 테마 — theme.css 의 :root 변수와 1:1 대응.
+# 미색 지면 위에 먹색 글자·인쇄 잉크 톤 강조색. 반투명 채움은 지면에서
+# 묻히지 않도록 다크 시절보다 alpha 를 조금 높게 잡는다.
+BG      = "#f5f1e8"   # --paper   지면
+BG_SOFT = "#ece6d8"   # --paper-2 라벨 상자 · 패널
+CARD    = "#fbf8f1"   # --bg-card
+LINE    = "#cfc6b2"   # --hair    괘선 · 축
+GRID    = "#e2dac8"   # --paper-3 보조 격자
+FG      = "#1b1a17"   # --ink     본문 먹
+DIM     = "#4a463e"   # --ink-2
+FAINT   = "#8a8476"   # --ink-3
 
-GFX  = "#35d6e6"   # 그래픽스 이론
-VR   = "#ff5fa2"   # 지각 / HMD
-TRAP = "#ff5a4d"   # AI 함정
-LAB  = "#a8e05f"   # 실습
-WARN = "#ffc44d"
+GFX  = "#0d6b78"   # 청록 — 그래픽스 이론
+VR   = "#a3245e"   # 자주 — 지각 / HMD
+TRAP = "#c2401d"   # 주홍 — AI 함정
+LAB  = "#4f7a16"   # 올리브 — 실습
+WARN = "#a8701a"   # 황토 — 비유 · 주의
+PURPLE = "#6a4c9c" # 보조 (보라)
 
-AX_X, AX_Y, AX_Z = "#ff5a4d", "#a8e05f", "#4d9cff"   # Unity 축 색
+AX_X, AX_Y, AX_Z = "#c2401d", "#4f7a16", "#1f5fa8"   # Unity 축 색 (지면용 톤)
 
 # ---------------------------------------------------------------- 폰트
 _installed = {f.name for f in fm.fontManager.ttflist}
 SANS = next((n for n in ("Pretendard", "Pretendard Variable", "Malgun Gothic", "Gulim")
              if n in _installed), "sans-serif")
+SERIF = next((n for n in ("Noto Serif CJK KR", "Nanum Myeongjo")
+              if n in _installed), SANS)   # 시스템의 Noto Serif KR 은 가변폰트라 굵기 선택 불가 → 정적 CJK OTF 우선
 MONO = next((n for n in ("JetBrains Mono", "D2Coding", "Consolas")
              if n in _installed), "monospace")
 
@@ -68,15 +75,37 @@ plt.rcParams.update({
     "axes.edgecolor":     LINE,
     "xtick.color":        FAINT,
     "ytick.color":        FAINT,
-    "grid.color":         "#1e2431",
+    "grid.color":         GRID,
     "grid.linewidth":     0.8,
     "axes.titlesize":     15,
     "axes.titleweight":   "bold",
+    "figure.titleweight": "bold",
     "axes.titlecolor":    FG,
     "legend.frameon":     False,
     "legend.labelcolor":  DIM,
     "lines.solid_capstyle": "round",
 })
+
+
+# 제목성 텍스트(축 제목 · suptitle)는 슬라이드 h2 와 같은 세리프로.
+from matplotlib.axes import Axes as _Axes
+from matplotlib.figure import FigureBase as _FigureBase
+_set_title, _suptitle = _Axes.set_title, _FigureBase.suptitle
+
+
+def _title_serif(self, *a, **kw):
+    if not any(k in kw for k in ("fontfamily", "family", "fontname")):
+        kw["fontfamily"] = SERIF
+    return _set_title(self, *a, **kw)
+
+
+def _suptitle_serif(self, *a, **kw):
+    if not any(k in kw for k in ("fontfamily", "family", "fontname")):
+        kw["fontfamily"] = SERIF
+    return _suptitle(self, *a, **kw)
+
+
+_Axes.set_title, _FigureBase.suptitle = _title_serif, _suptitle_serif
 
 
 def canvas(figsize=(9, 5), ncols=1, nrows=1, **kw):
@@ -149,3 +178,10 @@ def save(fig, name, svg=True, png=True, dpi=200, pad=0.28):
     for p in made:
         print(f"  -> {p.relative_to(OUT.parent.parent)}  ({p.stat().st_size // 1024} KB)")
     return made
+
+
+def tint(color, alpha):
+    """채움만 반투명, 테두리는 불투명하게 — facecolor=tint(GFX, 0.12), edgecolor=GFX.
+    (alpha= 를 따로 주면 테두리까지 흐려져 미색 지면에서 윤곽이 사라진다.)"""
+    from matplotlib.colors import to_rgba
+    return to_rgba(color, alpha)

@@ -15,6 +15,7 @@
   .reveal table.tight td, .reveal table.tight th { padding: .38em .6em; }
   .reveal table.cat td:first-child { white-space:nowrap; }
   .reveal pre.big { font-size:.62em; }
+  .reveal dl.terms dd p { line-height: 1.42; }
 </style>
 </head>
 <body>
@@ -62,11 +63,11 @@
       <p class="small">요청마다 AI 에게 <b>보여 줄 파일 · 숨길 정보</b>를 골라 목록으로 적기 · 토큰 양을 대략 계산</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정 규칙화</h4>
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:var(--trap)">2</span> 함정 규칙화</h4>
       <p class="small">AI 함정 #1~#6 을 <b>«재발 방지 규칙»</b> 문장으로 바꿔 규칙 파일에 넣기 · AI 코드 리뷰 체크리스트로 검수</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> 실기 검증 설계</h4>
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:var(--vr)">3</span> 실기 검증 설계</h4>
       <p class="small">에디터로는 확인 불가한 VR 결함(프레임 · 멀미 · 손 닿는 거리)을 <b>헤드셋 측정 항목표</b>로 작성</p>
     </div>
   </div>
@@ -119,16 +120,81 @@
 
 <section>
   <div class="tag gfx">Part I 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>용어 미리보기 (1/3) — AI 의 작동</h2>
   <dl class="terms">
-    <dt>LLM<small>Large Language Model</small></dt><dd>방대한 글을 학습해 <b>다음에 올 글자 조각을 예측</b>하는 AI 모델 — 코딩 AI 의 본체</dd>
-    <dt>토큰<small>Token</small></dt><dd>AI 가 글을 읽고 쓰는 단위 조각 — 단어 일부·기호 하나 크기 · 사용량·요금의 단위</dd>
-    <dt>컨텍스트<small>Context</small></dt><dd>AI 가 답을 만들 때 <b>눈앞에 놓인 모든 글</b> — 내 질문 · 첨부 파일 · 이전 대화 · 규칙</dd>
-    <dt>컨텍스트 윈도우<small>Context window</small></dt><dd>AI 가 한 번에 볼 수 있는 컨텍스트의 <b>최대 토큰 수</b></dd>
-    <dt>시스템 프롬프트<small>System prompt</small></dt><dd>대화 맨 앞에 깔려 <b>모든 답에 적용되는 기본 지시</b> — 사용자 질문보다 앞에 위치</dd>
-    <dt>할루시네이션<small>Hallucination</small></dt><dd>AI 가 <b>없는 사실을 그럴듯하게 지어내는</b> 현상 — 없는 함수·틀린 설정 이름</dd>
-    <dt>코딩 에이전트<small>Coding agent</small></dt><dd>파일을 직접 읽고 고치고 명령을 실행하는 AI 도구 — 예 : OpenCode</dd>
-    <dt>컨텍스트 엔지니어링<small>Context engineering</small></dt><dd>AI 에게 <b>무엇을 보여 주고 무엇을 감출지</b> 설계하는 일</dd>
+    <dt>LLM<small>Large Language Model</small></dt>
+    <dd>
+      <p>방대한 글을 읽고 <b>«다음에 올 글 조각»</b> 을 예측하도록 학습된 AI 모델 — 초대형 자동완성</p>
+      <p class="ex"><code>transform.position +=</code> 다음에 인터넷에서 가장 흔히 온 코드를 이어 붙임</p>
+      <p class="why">«그럴듯함» ≠ «정확함» → 흔한 예제의 실수까지 그대로 재현 = AI 함정의 출처</p>
+      <p class="where">ChatGPT · Claude · Gemini 등 · 코딩 도구 설정의 «모델» 선택 항목</p>
+    </dd>
+    <dt>토큰<small>Token</small></dt>
+    <dd>
+      <p>AI 가 글을 읽고 쓰는 단위 조각 — 단어 일부·기호 하나 크기의 레고 블록</p>
+      <p class="ex">영어 약 4글자 ≈ 1토큰 · C# 스크립트 200줄 ≈ 2,000~3,000토큰</p>
+      <p class="why">요금 · 사용량 한도 · 한 번에 볼 수 있는 양이 모두 토큰으로 계산</p>
+      <p class="where">도구 화면의 토큰 사용량 표시 · OpenAI Tokenizer 웹 페이지에서 직접 세어 보기</p>
+    </dd>
+    <dt>할루시네이션<small>Hallucination</small></dt>
+    <dd>
+      <p>AI 가 <b>없는 사실을 그럴듯하게 지어내는</b> 현상 — 모르는 길을 아는 척하는 행인</p>
+      <p class="ex">Unity 6 에 없는 메서드 이름 · XRI 2.x 시절 클래스를 3.x 코드에 사용</p>
+      <p class="why">말투로는 진짜와 구분 불가 → 컴파일·공식 문서 확인 없이는 그대로 통과</p>
+      <p class="where">Console 컴파일 오류 · 노란 obsolete 경고 · Unity Scripting API 문서 검색</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 지금 외울 필요 없음 · 각 슬라이드에서 비유와 함께 다시 풀어 줌
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>용어 미리보기 (2/3) — 컨텍스트</h2>
+  <dl class="terms">
+    <dt>컨텍스트<small>Context</small></dt>
+    <dd>
+      <p>AI 가 답을 만들 때 <b>눈앞에 놓인 모든 글</b> — 시험장 책상 위 자료</p>
+      <p class="ex">시스템 프롬프트 + 규칙 파일 + 첨부 파일 + 이전 대화 + 이번 질문</p>
+      <p class="why">컨텍스트에 없는 정보는 모름 → 빈칸은 «인터넷에 흔한 것» 으로 채움</p>
+      <p class="where">채팅 도구의 첨부 목록 · 코딩 에이전트가 «읽은 파일» 로 보여 주는 목록</p>
+    </dd>
+    <dt>컨텍스트 윈도우<small>Context window</small></dt>
+    <dd>
+      <p>AI 가 한 번에 볼 수 있는 컨텍스트의 <b>최대 토큰 수</b> — 책상 넓이</p>
+      <p class="ex">128,000토큰 윈도우 ≈ 2,400토큰짜리 스크립트 약 53개 분량</p>
+      <p class="why">넘치면 오래된 대화부터 잘리거나 요약 → 처음 말한 제약 소실</p>
+      <p class="where">모델 설명 페이지의 «context length» · 도구의 컨텍스트 사용률 표시 (도구마다 다름)</p>
+    </dd>
+    <dt>시스템 프롬프트<small>System prompt</small></dt>
+    <dd>
+      <p>대화 맨 앞에 깔려 <b>모든 답에 적용되는 기본 지시</b> — 신입 사원 업무 매뉴얼</p>
+      <p class="ex">«너는 코딩 도우미 · 파일을 고치기 전에 계획부터 말할 것» 같은 문장</p>
+      <p class="why">사용자 눈에 안 보이는 곳에서 답의 말투·행동을 좌우</p>
+      <p class="where">도구 회사가 내장 · 사용자는 규칙 파일(예 : AGENTS.md)로 덧붙임</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>용어 미리보기 (3/3) — 도구와 설계</h2>
+  <dl class="terms">
+    <dt>코딩 에이전트<small>Coding agent</small></dt>
+    <dd>
+      <p>파일을 직접 읽고 고치고 명령까지 실행하는 AI 도구 — 키보드를 맡긴 조수</p>
+      <p class="ex">«PlayerMover.cs 이동을 Rigidbody 로 바꿔» → 파일을 열어 수정까지 진행</p>
+      <p class="why">스스로 파일을 고름 → «수정 범위» 제약이 없으면 무관한 파일까지 바뀜</p>
+      <p class="where">OpenCode 등 (터미널·에디터 안에서 실행) · 바뀐 내용은 버전 관리(git)로 확인</p>
+    </dd>
+    <dt>컨텍스트 엔지니어링<small>Context engineering</small></dt>
+    <dd>
+      <p>AI 에게 <b>무엇을 보여 주고 무엇을 감출지</b> 설계하는 일 — 정비소에 증상만 정확히 말하기</p>
+      <p class="ex">스크립트 40개 중 관련 4개 + 규칙 파일 + 에러 로그만 첨부</p>
+      <p class="why">같은 모델이라도 컨텍스트에 따라 «한 번에 통과» vs «열 번째 재요청»</p>
+      <p class="where">오늘 실습의 «줄 것 · 감출 것 목록» · 프롬프트 플레이북 3절</p>
+    </dd>
   </dl>
 </section>
 
@@ -175,28 +241,28 @@
   <div class="tag gfx">컨텍스트 · 3 ★</div>
   <h3 style="margin-bottom:.4em">책상 위에 실제로 놓이는 것</h3>
   <svg class="dia" viewBox="0 0 1160 470" role="img" aria-label="컨텍스트 윈도우 안에 시스템 프롬프트, 규칙 파일, 첨부 파일, 이전 대화, 이번 질문이 쌓이는 구조">
-    <rect x="30" y="20" width="700" height="430" rx="16" fill="none" stroke="#35d6e6" stroke-width="3" stroke-dasharray="10 6"/>
-    <text x="50" y="52" fill="#35d6e6" font-size="22" font-weight="700">컨텍스트 윈도우 (책상 넓이)</text>
+    <rect x="30" y="20" width="700" height="430" rx="0" fill="none" stroke="#0d6b78" stroke-width="3" stroke-dasharray="10 6"/>
+    <text x="50" y="52" fill="#0d6b78" font-size="22" font-weight="700">컨텍스트 윈도우 (책상 넓이)</text>
     <g font-size="20">
-      <rect x="60" y="72" width="640" height="52" rx="10" fill="#171b25" stroke="#9aa4b8"/>
-      <text x="80" y="105" fill="#e8ecf4">① 시스템 프롬프트 — 도구가 깔아 둔 기본 지시</text>
-      <rect x="60" y="134" width="640" height="52" rx="10" fill="#21330f" stroke="#a8e05f"/>
-      <text x="80" y="167" fill="#a8e05f">② 규칙 파일 — 우리 팀의 재발 방지 규칙</text>
-      <rect x="60" y="196" width="640" height="76" rx="10" fill="#0e3a42" stroke="#35d6e6"/>
-      <text x="80" y="229" fill="#35d6e6">③ 첨부 파일 · 에러 로그</text>
-      <text x="80" y="256" fill="#9aa4b8" font-size="18">고른 만큼만 — 많을수록 비싸고 흐려짐</text>
-      <rect x="60" y="282" width="640" height="76" rx="10" fill="#431612" stroke="#ff5a4d"/>
-      <text x="80" y="315" fill="#ff5a4d">④ 이전 대화 — 실패한 시도·틀린 가설까지 누적</text>
-      <text x="80" y="342" fill="#9aa4b8" font-size="18">길어질수록 오래된 부분이 잘리거나 요약됨</text>
-      <rect x="60" y="368" width="640" height="62" rx="10" fill="#171b25" stroke="#ffc44d"/>
-      <text x="80" y="406" fill="#ffc44d">⑤ 이번 질문 (명세 4칸)</text>
+      <rect x="60" y="72" width="640" height="52" rx="0" fill="#ece6d8" stroke="#4a463e"/>
+      <text x="80" y="105" fill="#1b1a17">① 시스템 프롬프트 — 도구가 깔아 둔 기본 지시</text>
+      <rect x="60" y="134" width="640" height="52" rx="0" fill="#e3ecd3" stroke="#4f7a16"/>
+      <text x="80" y="167" fill="#4f7a16">② 규칙 파일 — 우리 팀의 재발 방지 규칙</text>
+      <rect x="60" y="196" width="640" height="76" rx="0" fill="#dcebec" stroke="#0d6b78"/>
+      <text x="80" y="229" fill="#0d6b78">③ 첨부 파일 · 에러 로그</text>
+      <text x="80" y="256" fill="#4a463e" font-size="18">고른 만큼만 — 많을수록 비싸고 흐려짐</text>
+      <rect x="60" y="282" width="640" height="76" rx="0" fill="#f6e0d6" stroke="#c2401d"/>
+      <text x="80" y="315" fill="#c2401d">④ 이전 대화 — 실패한 시도·틀린 가설까지 누적</text>
+      <text x="80" y="342" fill="#4a463e" font-size="18">길어질수록 오래된 부분이 잘리거나 요약됨</text>
+      <rect x="60" y="368" width="640" height="62" rx="0" fill="#ece6d8" stroke="#a8701a"/>
+      <text x="80" y="406" fill="#a8701a">⑤ 이번 질문 (명세 4칸)</text>
     </g>
-    <g font-size="20" fill="#e8ecf4">
+    <g font-size="20" fill="#1b1a17">
       <text x="770" y="110">사람이 고를 수 있는 것</text>
-      <text x="770" y="145" fill="#a8e05f">② 규칙 · ③ 첨부 · ⑤ 질문</text>
+      <text x="770" y="145" fill="#4f7a16">② 규칙 · ③ 첨부 · ⑤ 질문</text>
       <text x="770" y="215">사람이 정리해야 하는 것</text>
-      <text x="770" y="250" fill="#ff5a4d">④ 이전 대화</text>
-      <text x="770" y="285" fill="#9aa4b8" font-size="18">→ 새 세션 · 요약 넘기기</text>
+      <text x="770" y="250" fill="#c2401d">④ 이전 대화</text>
+      <text x="770" y="285" fill="#4a463e" font-size="18">→ 새 세션 · 요약 넘기기</text>
       <text x="770" y="355">AI 의 답 = ①~⑤ 전체의</text>
       <text x="770" y="390">«그럴듯한 다음 조각»</text>
     </g>
@@ -238,6 +304,33 @@
     - Antigravity 등 다른 도구도 비슷한 규칙 파일 기능 있음 — 학생이 쓰는 도구 이름으로 바꿔 설명
     - 매뉴얼이 길면 신입도 안 읽는다 → 규칙 파일은 짧게 (한 화면 안)
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">컨텍스트 · 용어 풀이</div>
+  <h2>용어 풀이 — 세션 · 중간 망각 · 규칙 파일</h2>
+  <dl class="terms">
+    <dt>세션<small>Session</small></dt>
+    <dd>
+      <p>AI 와 주고받은 대화 한 묶음 — 새 세션 = 책상을 비우고 다시 시작</p>
+      <p class="ex">같은 오류로 3번 실패 → 새 세션 + 지금까지의 결론 5줄 요약</p>
+      <p class="why">긴 세션에는 실패한 코드·틀린 가설이 쌓여 다음 답을 오염</p>
+      <p class="where">채팅 도구의 «새 대화» · 코딩 에이전트의 새 세션 명령 (도구마다 다름)</p>
+    </dd>
+    <dt>중간 망각<small>Lost in the middle</small></dt>
+    <dd>
+      <p>긴 컨텍스트에서 앞·뒤 정보는 잘 쓰고 <b>가운데 정보는 덜 쓰는</b> 경향 (Liu 외, 2024)</p>
+      <p class="ex">긴 대화 중간에 말한 «Linear 색공간» 제약이 어느새 무시됨</p>
+      <p class="why">중요한 제약은 규칙 파일이나 질문 끝에 다시 적어야 안전 · 정도는 모델마다 다름</p>
+    </dd>
+    <dt>규칙 파일<small>Rules file</small></dt>
+    <dd>
+      <p>프로젝트 폴더에 두면 코딩 에이전트가 <b>매 요청마다 자동으로 읽는</b> 텍스트 파일 — 팀이 덧붙인 매뉴얼</p>
+      <p class="ex">«회전 누적에 eulerAngles 금지 → Quaternion 곱 (#1)» 같은 한 줄 규칙</p>
+      <p class="why">같은 제약을 매번 다시 말하지 않아도 함정 재발 차단</p>
+      <p class="where">OpenCode : 프로젝트 루트 <code>AGENTS.md</code> · 파일 이름·위치는 도구마다 다름</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -288,34 +381,34 @@
   <div class="tag gfx">컨텍스트 · 8 ★</div>
   <h3 style="margin-bottom:.4em">파일 단위 컨텍스트 설계</h3>
   <svg class="dia" viewBox="0 0 1160 460" role="img" aria-label="프로젝트 전체 파일 중 관련 파일 3개와 규칙 파일만 골라 AI 에게 넘기는 구조">
-    <text x="40" y="40" fill="#9aa4b8" font-size="22" font-weight="700">프로젝트 Assets/Scripts (40개)</text>
+    <text x="40" y="40" fill="#4a463e" font-size="22" font-weight="700">프로젝트 Assets/Scripts (40개)</text>
     <g font-size="19">
-      <rect x="40" y="60" width="430" height="370" rx="14" fill="#12151d" stroke="#2a3040" stroke-width="2"/>
-      <text x="64" y="100" fill="#5f6980">CameraFollow.cs</text>
-      <text x="64" y="135" fill="#35d6e6" font-weight="700">▶ PlayerMover.cs  ← 수정 대상</text>
-      <text x="64" y="170" fill="#35d6e6" font-weight="700">▶ PlayerInput.cs  ← 호출함</text>
-      <text x="64" y="205" fill="#5f6980">UIScore.cs</text>
-      <text x="64" y="240" fill="#5f6980">LightSwitcher.cs</text>
-      <text x="64" y="275" fill="#35d6e6" font-weight="700">▶ WallTrigger.cs  ← 충돌 대상</text>
-      <text x="64" y="310" fill="#5f6980">DepthCueToggle.cs</text>
-      <text x="64" y="345" fill="#5f6980">MipmapDemo.cs</text>
-      <text x="64" y="380" fill="#5f6980">… 32개 더</text>
+      <rect x="40" y="60" width="430" height="370" rx="0" fill="#ece6d8" stroke="#cfc6b2" stroke-width="2"/>
+      <text x="64" y="100" fill="#8a8476">CameraFollow.cs</text>
+      <text x="64" y="135" fill="#0d6b78" font-weight="700">▶ PlayerMover.cs  ← 수정 대상</text>
+      <text x="64" y="170" fill="#0d6b78" font-weight="700">▶ PlayerInput.cs  ← 호출함</text>
+      <text x="64" y="205" fill="#8a8476">UIScore.cs</text>
+      <text x="64" y="240" fill="#8a8476">LightSwitcher.cs</text>
+      <text x="64" y="275" fill="#0d6b78" font-weight="700">▶ WallTrigger.cs  ← 충돌 대상</text>
+      <text x="64" y="310" fill="#8a8476">DepthCueToggle.cs</text>
+      <text x="64" y="345" fill="#8a8476">MipmapDemo.cs</text>
+      <text x="64" y="380" fill="#8a8476">… 32개 더</text>
     </g>
-    <g stroke="#ffc44d" stroke-width="3" fill="none">
+    <g stroke="#a8701a" stroke-width="3" fill="none">
       <path d="M 480 200 L 640 200" marker-end="url(#ar9a)"/>
     </g>
-    <defs><marker id="ar9a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker></defs>
-    <text x="560" y="185" text-anchor="middle" fill="#ffc44d" font-size="19">고르기</text>
+    <defs><marker id="ar9a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8701a"/></marker></defs>
+    <text x="560" y="185" text-anchor="middle" fill="#a8701a" font-size="19">고르기</text>
     <g font-size="20">
-      <rect x="660" y="60" width="470" height="370" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-      <text x="685" y="100" fill="#35d6e6" font-weight="700">AI 에게 넘기는 묶음</text>
-      <text x="685" y="145" fill="#a8e05f">AGENTS.md (규칙 파일)</text>
-      <text x="685" y="180" fill="#e8ecf4">PlayerMover.cs</text>
-      <text x="685" y="215" fill="#e8ecf4">PlayerInput.cs</text>
-      <text x="685" y="250" fill="#e8ecf4">WallTrigger.cs</text>
-      <text x="685" y="285" fill="#e8ecf4">에러·측정 로그 (해당 부분만)</text>
-      <text x="685" y="320" fill="#ffc44d">명세 4칸</text>
-      <text x="685" y="385" fill="#9aa4b8" font-size="18">약 40개 중 4개 · 토큰 약 1/10 이하</text>
+      <rect x="660" y="60" width="470" height="370" rx="0" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+      <text x="685" y="100" fill="#0d6b78" font-weight="700">AI 에게 넘기는 묶음</text>
+      <text x="685" y="145" fill="#4f7a16">AGENTS.md (규칙 파일)</text>
+      <text x="685" y="180" fill="#1b1a17">PlayerMover.cs</text>
+      <text x="685" y="215" fill="#1b1a17">PlayerInput.cs</text>
+      <text x="685" y="250" fill="#1b1a17">WallTrigger.cs</text>
+      <text x="685" y="285" fill="#1b1a17">에러·측정 로그 (해당 부분만)</text>
+      <text x="685" y="320" fill="#a8701a">명세 4칸</text>
+      <text x="685" y="385" fill="#4a463e" font-size="18">약 40개 중 4개 · 토큰 약 1/10 이하</text>
     </g>
   </svg>
   <aside class="notes">
@@ -411,23 +504,23 @@
   <div class="tag lab">루프 · 1 ★</div>
   <h3 style="margin-bottom:.4em">반복 루프 — 한 바퀴의 구조</h3>
   <svg class="dia" viewBox="0 0 1160 440" role="img" aria-label="명세, 생성, 실행, 측정, 판정, 피드백으로 도는 반복 루프">
-    <defs><marker id="ar9b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker></defs>
+    <defs><marker id="ar9b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4a463e"/></marker></defs>
     <g font-size="22" text-anchor="middle">
-      <rect x="40" y="60" width="200" height="90" rx="14" fill="#21330f" stroke="#a8e05f" stroke-width="2"/>
-      <text x="140" y="113" fill="#a8e05f" font-weight="700">① 명세</text>
-      <rect x="320" y="60" width="200" height="90" rx="14" fill="#171b25" stroke="#9aa4b8" stroke-width="2"/>
-      <text x="420" y="113" fill="#e8ecf4" font-weight="700">② AI 생성</text>
-      <rect x="600" y="60" width="200" height="90" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-      <text x="700" y="113" fill="#35d6e6" font-weight="700">③ 실행</text>
-      <rect x="880" y="60" width="240" height="90" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-      <text x="1000" y="113" fill="#35d6e6" font-weight="700">④ 측정</text>
-      <rect x="880" y="250" width="240" height="90" rx="14" fill="#3a2d0e" stroke="#ffc44d" stroke-width="2"/>
-      <text x="1000" y="303" fill="#ffc44d" font-weight="700">⑤ 합격선 판정</text>
-      <rect x="320" y="250" width="420" height="90" rx="14" fill="#431612" stroke="#ff5a4d" stroke-width="2"/>
-      <text x="530" y="290" fill="#ff5a4d" font-weight="700">⑥ 피드백 작성</text>
-      <text x="530" y="322" fill="#e8ecf4" font-size="18">로그 원문 붙이기 / 증상 요약</text>
+      <rect x="40" y="60" width="200" height="90" rx="0" fill="#e3ecd3" stroke="#4f7a16" stroke-width="2"/>
+      <text x="140" y="113" fill="#4f7a16" font-weight="700">① 명세</text>
+      <rect x="320" y="60" width="200" height="90" rx="0" fill="#ece6d8" stroke="#4a463e" stroke-width="2"/>
+      <text x="420" y="113" fill="#1b1a17" font-weight="700">② AI 생성</text>
+      <rect x="600" y="60" width="200" height="90" rx="0" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+      <text x="700" y="113" fill="#0d6b78" font-weight="700">③ 실행</text>
+      <rect x="880" y="60" width="240" height="90" rx="0" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+      <text x="1000" y="113" fill="#0d6b78" font-weight="700">④ 측정</text>
+      <rect x="880" y="250" width="240" height="90" rx="0" fill="#f3e7cf" stroke="#a8701a" stroke-width="2"/>
+      <text x="1000" y="303" fill="#a8701a" font-weight="700">⑤ 합격선 판정</text>
+      <rect x="320" y="250" width="420" height="90" rx="0" fill="#f6e0d6" stroke="#c2401d" stroke-width="2"/>
+      <text x="530" y="290" fill="#c2401d" font-weight="700">⑥ 피드백 작성</text>
+      <text x="530" y="322" fill="#1b1a17" font-size="18">로그 원문 붙이기 / 증상 요약</text>
     </g>
-    <g stroke="#9aa4b8" stroke-width="3" fill="none">
+    <g stroke="#4a463e" stroke-width="3" fill="none">
       <path d="M 240 105 L 315 105" marker-end="url(#ar9b)"/>
       <path d="M 520 105 L 595 105" marker-end="url(#ar9b)"/>
       <path d="M 800 105 L 875 105" marker-end="url(#ar9b)"/>
@@ -436,10 +529,10 @@
       <path d="M 320 295 L 140 295 L 140 155" marker-end="url(#ar9b)"/>
     </g>
     <g font-size="19">
-      <text x="800" y="285" fill="#ff5a4d">불합격</text>
-      <text x="1120" y="400" fill="#a8e05f" text-anchor="end">합격 → 로그에 기록 · 다음 기능</text>
-      <path d="M 1000 340 L 1000 372" stroke="#a8e05f" stroke-width="3" marker-end="url(#ar9b)"/>
-      <text x="150" y="235" fill="#9aa4b8">명세 보강</text>
+      <text x="800" y="285" fill="#c2401d">불합격</text>
+      <text x="1120" y="400" fill="#4f7a16" text-anchor="end">합격 → 로그에 기록 · 다음 기능</text>
+      <path d="M 1000 340 L 1000 372" stroke="#4f7a16" stroke-width="3" marker-end="url(#ar9b)"/>
+      <text x="150" y="235" fill="#4a463e">명세 보강</text>
     </g>
   </svg>
   <aside class="notes">
@@ -496,6 +589,34 @@ rb 는 Awake 에서 GetComponent 로 할당.
     - 왼쪽 정답 예 : 다른 오브젝트에 같은 스크립트가 붙어 있고 거기엔 Rigidbody 가 없는 경우가 흔함 → «씬의 Player 에는» 이라는 단서가 범위를 좁힘
     - 오른쪽 : 4주차 함정 #3 — far 를 줄여도 변화가 없다는 기록이 near 를 가리킴
   </aside>
+</section>
+
+<section>
+  <div class="tag lab">루프 · 용어 풀이</div>
+  <h2>용어 풀이 — 에러 로그를 읽는 낱말</h2>
+  <dl class="terms">
+    <dt>스택 트레이스<small>Stack trace</small></dt>
+    <dd>
+      <p>오류가 났을 때 «어떤 함수가 어떤 함수를 불러 여기까지 왔는가» 를 적은 호출 경로 목록 — 사고 경위서</p>
+      <p class="ex"><code>PlayerMover.FixedUpdate () (at Assets/Scripts/PlayerMover.cs:27)</code> → 27행</p>
+      <p class="why">줄 번호·함수 이름 = 원인 범위를 좁히는 핵심 단서 → 요약하지 말고 원문 그대로</p>
+      <p class="where">Unity Console 창에서 에러 클릭 → 아래 칸에 표시 · 줄 더블클릭 = 해당 코드로 이동</p>
+    </dd>
+    <dt>NullReferenceException<small>빈 참조 오류</small></dt>
+    <dd>
+      <p>비어 있는(null) 변수의 기능을 쓰려 할 때 나는 오류 — 빈 상자에서 물건 꺼내기</p>
+      <p class="ex"><code>rb</code> 에 Rigidbody 가 안 들어간 채 <code>rb.MovePosition</code> 호출</p>
+      <p class="why">오류 줄은 «쓰는 곳» · 원인은 보통 «넣는 곳» (Awake 의 GetComponent · Inspector 연결)</p>
+      <p class="where">Console 빨간 오류 · Inspector 에서 None 으로 표시된 칸</p>
+    </dd>
+    <dt>재현 절차<small>Repro steps</small></dt>
+    <dd>
+      <p>결함을 다시 일으키는 단계별 순서 — 누가 따라 해도 같은 증상이 나와야 함</p>
+      <p class="ex">«Play → W 키 3초 → 벽에 돌진 → 10회 중 3회 통과»</p>
+      <p class="why">재현이 안 되면 AI 도 사람도 고쳤는지 판정 불가</p>
+      <p class="where">증상 요약의 [조건] 칸 · 플레이북 4절 검증 조건</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -570,33 +691,61 @@ rb 는 Awake 에서 GetComponent 로 할당.
 </section>
 
 <section>
+  <div class="tag trap">함정 · 용어 풀이</div>
+  <h2>용어 풀이 — 카탈로그에 다시 나온 낱말</h2>
+  <dl class="terms">
+    <dt>짐벌락<small>Gimbal lock</small></dt>
+    <dd>
+      <p>회전을 세 각도(오일러각)로 다루다 두 축이 겹쳐 한 방향의 회전을 잃는 현상 (2주)</p>
+      <p class="ex">피치 90° 에서 요와 롤이 같은 회전처럼 동작</p>
+      <p class="why">특정 각도에서 카메라·포탑이 갑자기 튀거나 잠김</p>
+      <p class="where">Inspector Rotation X 를 90 으로 두고 Y · Z 를 돌려 보기 · 해결 = Quaternion</p>
+    </dd>
+    <dt>z-fighting<small>깊이 다툼</small></dt>
+    <dd>
+      <p>거의 같은 깊이의 두 면이 픽셀마다 앞뒤를 다투며 번갈아 보이는 깜빡임 (4주)</p>
+      <p class="ex">near 0.01 · far 2000 에서 150 m 앞 바닥과 길 데칼</p>
+      <p class="why">깊이 정밀도는 카메라 가까이에 몰림 → 먼 곳일수록 앞뒤 구분 실패</p>
+      <p class="where">Camera Inspector → Clipping Planes (Near · Far)</p>
+    </dd>
+    <dt>CCD<small>Continuous Collision Detection</small></dt>
+    <dd>
+      <p>빠른 물체가 프레임 사이에 벽을 건너뛰지 않도록 <b>이동 경로 전체</b>를 검사하는 충돌 판정 (7주)</p>
+      <p class="ex">초속 50 m 공 · 물리 스텝 0.02 s → 한 스텝 1 m 이동 → 두께 0.2 m 벽을 건너뜀</p>
+      <p class="why">기본 판정(Discrete)은 스텝 끝 위치만 확인 → 터널링(벽 통과)</p>
+      <p class="where">Rigidbody → Collision Detection = Continuous · Continuous Dynamic · Continuous Speculative</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag trap">함정 · 분류 ★</div>
   <h3 style="margin-bottom:.4em">함정이 드러나는 곳 — 세 단계</h3>
   <svg class="dia" viewBox="0 0 1160 450" role="img" aria-label="함정이 드러나는 위치를 화면에서 바로, 측정해야, 기기와 몸에서만의 세 단계로 분류">
     <g font-size="22">
-      <rect x="30" y="40" width="350" height="340" rx="16" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-      <text x="205" y="85" text-anchor="middle" fill="#35d6e6" font-weight="700">① 화면에서 바로</text>
-      <text x="205" y="118" text-anchor="middle" fill="#9aa4b8" font-size="18">에디터 Game 뷰로 발견</text>
-      <text x="60" y="180" fill="#e8ecf4">#1 회전 잠김</text>
-      <text x="60" y="220" fill="#e8ecf4">#5 투명 앞뒤 뒤바뀜</text>
-      <text x="60" y="260" fill="#e8ecf4">#6 벽 통과 (느릴 때)</text>
-      <rect x="405" y="40" width="350" height="340" rx="16" fill="#3a2d0e" stroke="#ffc44d" stroke-width="2"/>
-      <text x="580" y="85" text-anchor="middle" fill="#ffc44d" font-weight="700">② 측정해야</text>
-      <text x="580" y="118" text-anchor="middle" fill="#9aa4b8" font-size="18">조건을 바꿔 숫자로 비교</text>
-      <text x="435" y="180" fill="#e8ecf4">#2 fps 바꿔 거리 비교</text>
-      <text x="435" y="220" fill="#e8ecf4">#3 멀리서 · 움직일 때</text>
-      <text x="435" y="260" fill="#e8ecf4">#5 밉맵 (카메라 이동)</text>
-      <text x="435" y="300" fill="#e8ecf4">#6 빠를 때 터널링</text>
-      <rect x="780" y="40" width="350" height="340" rx="16" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
-      <text x="955" y="85" text-anchor="middle" fill="#ff5fa2" font-weight="700">③ 기기 · 몸에서만</text>
-      <text x="955" y="118" text-anchor="middle" fill="#9aa4b8" font-size="18">헤드셋 실기 검증</text>
-      <text x="810" y="180" fill="#e8ecf4">#4 프레임 급락</text>
-      <text x="810" y="220" fill="#9aa4b8">#7 Overlay UI (10주)</text>
-      <text x="810" y="260" fill="#9aa4b8">#8 카메라 직접 조작 (11주)</text>
-      <text x="810" y="300" fill="#9aa4b8">#9 가속 이동 멀미 (12주)</text>
-      <text x="810" y="340" fill="#9aa4b8">#10 에디터 기준 최적화 (14주)</text>
+      <rect x="30" y="40" width="350" height="340" rx="0" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+      <text x="205" y="85" text-anchor="middle" fill="#0d6b78" font-weight="700">① 화면에서 바로</text>
+      <text x="205" y="118" text-anchor="middle" fill="#4a463e" font-size="18">에디터 Game 뷰로 발견</text>
+      <text x="60" y="180" fill="#1b1a17">#1 회전 잠김</text>
+      <text x="60" y="220" fill="#1b1a17">#5 투명 앞뒤 뒤바뀜</text>
+      <text x="60" y="260" fill="#1b1a17">#6 벽 통과 (느릴 때)</text>
+      <rect x="405" y="40" width="350" height="340" rx="0" fill="#f3e7cf" stroke="#a8701a" stroke-width="2"/>
+      <text x="580" y="85" text-anchor="middle" fill="#a8701a" font-weight="700">② 측정해야</text>
+      <text x="580" y="118" text-anchor="middle" fill="#4a463e" font-size="18">조건을 바꿔 숫자로 비교</text>
+      <text x="435" y="180" fill="#1b1a17">#2 fps 바꿔 거리 비교</text>
+      <text x="435" y="220" fill="#1b1a17">#3 멀리서 · 움직일 때</text>
+      <text x="435" y="260" fill="#1b1a17">#5 밉맵 (카메라 이동)</text>
+      <text x="435" y="300" fill="#1b1a17">#6 빠를 때 터널링</text>
+      <rect x="780" y="40" width="350" height="340" rx="0" fill="#f1dde6" stroke="#a3245e" stroke-width="2"/>
+      <text x="955" y="85" text-anchor="middle" fill="#a3245e" font-weight="700">③ 기기 · 몸에서만</text>
+      <text x="955" y="118" text-anchor="middle" fill="#4a463e" font-size="18">헤드셋 실기 검증</text>
+      <text x="810" y="180" fill="#1b1a17">#4 프레임 급락</text>
+      <text x="810" y="220" fill="#4a463e">#7 Overlay UI (10주)</text>
+      <text x="810" y="260" fill="#4a463e">#8 카메라 직접 조작 (11주)</text>
+      <text x="810" y="300" fill="#4a463e">#9 가속 이동 멀미 (12주)</text>
+      <text x="810" y="340" fill="#4a463e">#10 에디터 기준 최적화 (14주)</text>
     </g>
-    <text x="580" y="425" text-anchor="middle" fill="#ff5fa2" font-size="21">오른쪽으로 갈수록 AI 도 에디터도 못 봄 → 학기 후반 함정은 대부분 ③ — Part II 의 주제</text>
+    <text x="580" y="425" text-anchor="middle" fill="#a3245e" font-size="21">오른쪽으로 갈수록 AI 도 에디터도 못 봄 → 학기 후반 함정은 대부분 ③ — Part II 의 주제</text>
   </svg>
 </section>
 
@@ -743,16 +892,78 @@ public class Turret : MonoBehaviour {
 
 <section>
   <div class="tag vr">Part II 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>용어 미리보기 (1/3) — 헤드셋에서 재기</h2>
   <dl class="terms">
-    <dt>실기 검증<small>On-device test</small></dt><dd>헤드셋에 빌드를 넣고 <b>실제로 써서</b> 확인하는 검증</dd>
-    <dt>온디바이스<small>On-device</small></dt><dd>PC 가 아닌 헤드셋 칩에서 직접 실행되는 상태</dd>
-    <dt>프레임타임<small>Frame time</small></dt><dd>한 장면을 그리는 데 걸린 시간 (ms) — 90Hz 면 11.1 ms 안</dd>
-    <dt>사이버멀미<small>Cybersickness</small></dt><dd>가상 환경에서 생기는 어지럼·메스꺼움·눈 피로</dd>
-    <dt>컴포트<small>Comfort</small></dt><dd>멀미·피로 없이 체험을 지속할 수 있는 정도</dd>
-    <dt>스케일<small>Scale</small></dt><dd>가상 물체의 크기가 실제 크기와 맞는 정도 — 1 unit = 1 m 약속</dd>
-    <dt>OVR Metrics Tool</dt><dd>헤드셋 화면 위에 프레임률·CPU·GPU 수치를 띄워 주는 Meta 도구</dd>
-    <dt>SSQ<small>Simulator Sickness Questionnaire</small></dt><dd>멀미 증상 16개를 0~3점으로 묻는 표준 설문 (12·14주)</dd>
+    <dt>실기 검증<small>On-device test</small></dt>
+    <dd>
+      <p>헤드셋에 빌드를 넣고 <b>실제로 써서</b> 확인하는 검증 — 온라인 쇼핑한 신발을 직접 신어 보기</p>
+      <p class="ex">«90Hz 유지» 를 OVR Metrics Tool 로 1분 측정 · 체험자 2명이 5분씩 체험</p>
+      <p class="why">프레임 · 멀미 · 손 닿는 거리는 에디터 화면에 나타나지 않음</p>
+      <p class="where">File → Build Profiles → Android → Build And Run 후 헤드셋 안에서</p>
+    </dd>
+    <dt>온디바이스<small>On-device</small></dt>
+    <dd>
+      <p>PC 가 아닌 <b>헤드셋 안 칩</b>에서 앱이 직접 실행되는 상태</p>
+      <p class="ex">Quest 3 = 휴대폰급 칩 (Snapdragon XR2 Gen 2) · 배터리 · 발열 제한</p>
+      <p class="why">에디터 Play 에서 90fps 이상이던 씬이 헤드셋에서 60fps 대로 떨어질 수 있음</p>
+      <p class="where">Android 빌드를 헤드셋에 설치해 실행 · PC 연결(Quest Link) 실행은 온디바이스 아님</p>
+    </dd>
+    <dt>프레임타임<small>Frame time</small></dt>
+    <dd>
+      <p>한 장면을 그리는 데 걸린 시간 (ms) — 주사율이 정한 마감 시간 안에 끝나야 함</p>
+      <p class="ex">90Hz → 1000 ÷ 90 ≈ 11.1 ms · 72Hz → 13.9 ms</p>
+      <p class="why">마감을 넘기면 프레임을 놓침 → 화면이 머리를 늦게 따라옴 → 멀미 요인</p>
+      <p class="where">OVR Metrics Tool 오버레이 · Unity Profiler (CPU · GPU 시간)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>용어 미리보기 (2/3) — 몸의 반응</h2>
+  <dl class="terms">
+    <dt>사이버멀미<small>Cybersickness</small></dt>
+    <dd>
+      <p>가상 환경에서 생기는 어지럼 · 메스꺼움 · 눈 피로 — 화면 속 움직임과 몸의 감각이 어긋날 때</p>
+      <p class="ex">가만히 서 있는데 화면만 앞으로 미끄러지는 연속 이동</p>
+      <p class="why">화면 캡처·에디터로는 측정 불가 → 사람의 몸이 측정기</p>
+      <p class="where">체험 기록지 · 12·14주 SSQ 설문</p>
+    </dd>
+    <dt>컴포트<small>Comfort</small></dt>
+    <dd>
+      <p>멀미·피로 없이 체험을 <b>계속할 수 있는 정도</b></p>
+      <p class="ex">순간 이동(텔레포트) = 컴포트 높음 · 가속하는 연속 이동 = 낮음</p>
+      <p class="why">기능이 완벽해도 5분 안에 헤드셋을 벗으면 실패한 경험</p>
+      <p class="where">XRI Teleportation Provider · Continuous Move Provider 의 속도 설정 (12주)</p>
+    </dd>
+    <dt>SSQ<small>Simulator Sickness Questionnaire</small></dt>
+    <dd>
+      <p>멀미 증상 16개를 0~3점으로 묻는 표준 설문 (Kennedy 외, 1993)</p>
+      <p class="ex">메스꺼움 · 눈의 피로 · 어지러움 등 문항을 체험 전후 비교</p>
+      <p class="why">«괜찮았어요» 대신 점수 → 수정 전후 효과를 숫자로 판정</p>
+      <p class="where">12·14주 실기 · 체험 기록지에 첨부</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>용어 미리보기 (3/3) — 크기와 도구</h2>
+  <dl class="terms">
+    <dt>스케일<small>Scale</small></dt>
+    <dd>
+      <p>가상 물체 크기가 실제 크기와 맞는 정도 — 1 unit = 1 m 약속</p>
+      <p class="ex">문 높이 2 · 책상 0.75 · 문이 1.5 면 몸이 거인처럼 느껴짐</p>
+      <p class="why">모니터로는 크기 판단 불가 · 헤드셋에서는 몸이 바로 알아챔</p>
+      <p class="where">Transform → Scale · 기본 Cube (1 m 정육면체) 를 옆에 두고 비교</p>
+    </dd>
+    <dt>OVR Metrics Tool<small>Meta 성능 측정 도구</small></dt>
+    <dd>
+      <p>헤드셋 화면 위에 프레임률 · CPU · GPU 수치를 겹쳐 띄워 주는 Meta 도구 — 자동차 계기판</p>
+      <p class="ex">시야 구석에 «FPS 90 · GPU 72%» 같은 숫자 표시</p>
+      <p class="why">헤드셋 안 성능을 숫자로 기록 → «가볍다» 대신 합격선 판정</p>
+      <p class="where">Meta Horizon Store 에서 설치 · 앱 안에서 오버레이 켬 (메뉴는 버전마다 다름)</p>
+    </dd>
   </dl>
 </section>
 
@@ -776,25 +987,25 @@ public class Turret : MonoBehaviour {
   <h3 style="margin-bottom:.4em">에디터에서 보이지 않는 결함 세 가지</h3>
   <svg class="dia" viewBox="0 0 1160 450" role="img" aria-label="프레임 예산, 멀미, 손 닿는 거리와 스케일 세 영역">
     <g font-size="22">
-      <circle cx="210" cy="190" r="150" fill="#431612" stroke="#ff5a4d" stroke-width="3"/>
-      <text x="210" y="160" text-anchor="middle" fill="#ff5a4d" font-weight="700">프레임 예산</text>
-      <text x="210" y="198" text-anchor="middle" fill="#e8ecf4" font-size="19">에디터 90fps 이상</text>
-      <text x="210" y="226" text-anchor="middle" fill="#e8ecf4" font-size="19">헤드셋 60fps 대</text>
-      <circle cx="580" cy="190" r="150" fill="#421229" stroke="#ff5fa2" stroke-width="3"/>
-      <text x="580" y="160" text-anchor="middle" fill="#ff5fa2" font-weight="700">멀미 · 컴포트</text>
-      <text x="580" y="198" text-anchor="middle" fill="#e8ecf4" font-size="19">화면은 정상</text>
-      <text x="580" y="226" text-anchor="middle" fill="#e8ecf4" font-size="19">몸이 거부</text>
-      <circle cx="950" cy="190" r="150" fill="#21330f" stroke="#a8e05f" stroke-width="3"/>
-      <text x="950" y="160" text-anchor="middle" fill="#a8e05f" font-weight="700">손 닿는 거리 · 스케일</text>
-      <text x="950" y="198" text-anchor="middle" fill="#e8ecf4" font-size="19">모니터로는 크기 판단 불가</text>
-      <text x="950" y="226" text-anchor="middle" fill="#e8ecf4" font-size="19">팔이 닿는가 · 문이 작은가</text>
+      <circle cx="210" cy="190" r="150" fill="#f6e0d6" stroke="#c2401d" stroke-width="3"/>
+      <text x="210" y="160" text-anchor="middle" fill="#c2401d" font-weight="700">프레임 예산</text>
+      <text x="210" y="198" text-anchor="middle" fill="#1b1a17" font-size="19">에디터 90fps 이상</text>
+      <text x="210" y="226" text-anchor="middle" fill="#1b1a17" font-size="19">헤드셋 60fps 대</text>
+      <circle cx="580" cy="190" r="150" fill="#f1dde6" stroke="#a3245e" stroke-width="3"/>
+      <text x="580" y="160" text-anchor="middle" fill="#a3245e" font-weight="700">멀미 · 컴포트</text>
+      <text x="580" y="198" text-anchor="middle" fill="#1b1a17" font-size="19">화면은 정상</text>
+      <text x="580" y="226" text-anchor="middle" fill="#1b1a17" font-size="19">몸이 거부</text>
+      <circle cx="950" cy="190" r="150" fill="#e3ecd3" stroke="#4f7a16" stroke-width="3"/>
+      <text x="950" y="160" text-anchor="middle" fill="#4f7a16" font-weight="700">손 닿는 거리 · 스케일</text>
+      <text x="950" y="198" text-anchor="middle" fill="#1b1a17" font-size="19">모니터로는 크기 판단 불가</text>
+      <text x="950" y="226" text-anchor="middle" fill="#1b1a17" font-size="19">팔이 닿는가 · 문이 작은가</text>
     </g>
-    <g font-size="19" fill="#9aa4b8" text-anchor="middle">
+    <g font-size="19" fill="#4a463e" text-anchor="middle">
       <text x="210" y="378">측정 : OVR Metrics Tool</text>
       <text x="580" y="378">측정 : 체험자 기록 · SSQ</text>
       <text x="950" y="378">측정 : 줄자 · 체험자 동작</text>
     </g>
-    <text x="580" y="430" text-anchor="middle" fill="#ffc44d" font-size="21">공통점 : AI 는 코드만 봄 · 에디터는 PC 화면만 봄 → 판정은 사람과 헤드셋 몫</text>
+    <text x="580" y="430" text-anchor="middle" fill="#a8701a" font-size="21">공통점 : AI 는 코드만 봄 · 에디터는 PC 화면만 봄 → 판정은 사람과 헤드셋 몫</text>
   </svg>
 </section>
 
@@ -811,6 +1022,33 @@ public class Turret : MonoBehaviour {
   </table>
   <p class="small">이유 : 예산을 넘으면 프레임을 놓침 → 화면이 머리 움직임을 늦게 따라옴 → 3주차 motion-to-photon 지연 증가 → 멀미 요인</p>
   <div class="note">수치 : 수업 내부 기준선 (5~16주 계획 1-5) · 앱 성격·기기 설정마다 조정 · 12주 프로파일링에서 실측</div>
+</section>
+
+<section>
+  <div class="tag vr">실기 · 용어 풀이</div>
+  <h2>용어 풀이 — 드로우콜 · 전정계 · 지연</h2>
+  <dl class="terms">
+    <dt>드로우콜<small>Draw call</small></dt>
+    <dd>
+      <p>CPU 가 GPU 에게 «이 물체 묶음을 그려라» 라고 보내는 명령 한 번 — 주방에 넣는 주문서 한 장</p>
+      <p class="ex">재질이 제각각인 물체 150개 ≈ 드로우콜 150회 안팎 (묶어 그리기로 감소)</p>
+      <p class="why">명령마다 CPU 준비 비용 → Quest 에서는 개수 자체가 병목</p>
+      <p class="where">Game 뷰 Stats 창의 Batches · Frame Debugger 단계 수</p>
+    </dd>
+    <dt>전정계<small>Vestibular system</small></dt>
+    <dd>
+      <p>속귀 안에서 머리의 회전·가속을 느끼는 감각 기관 — 몸속 수평계</p>
+      <p class="ex">눈을 감고 회전의자를 돌려도 «돌고 있다» 를 앎</p>
+      <p class="why">화면은 움직이는데 전정계는 «정지» → 감각 불일치 → 멀미 설명 이론의 핵심</p>
+    </dd>
+    <dt>motion-to-photon 지연<small>Motion-to-photon latency</small></dt>
+    <dd>
+      <p>머리를 움직인 순간부터 그 움직임이 반영된 빛이 눈에 닿기까지 걸린 시간 (3주)</p>
+      <p class="ex">90Hz 에서 프레임 하나를 놓치면 약 11 ms 추가</p>
+      <p class="why">지연이 길면 세상이 머리를 늦게 따라와 출렁임 → 멀미</p>
+      <p class="where">헤드셋 런타임이 재투영(timewarp)으로 일부 보정 · 놓친 프레임 수는 OVR Metrics 로 확인</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -949,7 +1187,7 @@ public class Turret : MonoBehaviour {
   </table>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">다음 주</div>
   <div class="rule"></div>
   <h1>인터랙션 <em>설계</em></h1>

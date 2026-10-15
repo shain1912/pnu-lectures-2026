@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-10-15T14:44:48.180986</dc:date>
+    <dc:date>2026-10-15T15:32:23.504138</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -26,7 +26,7 @@ L 911.112657 330.126889
 L 911.112657 0 
 L 0 0 
 z
-" style="fill: #0b0d12"/>
+" style="fill: #f5f1e8"/>
   </g>
   <g id="axes_1">
    <g id="patch_2">
@@ -35,13 +35,13 @@ L 812.52 275.184
 L 812.52 20.16 
 L 20.16 20.16 
 z
-" style="fill: #0b0d12"/>
+" style="fill: #f5f1e8"/>
    </g>
    <g id="matplotlib.axis_1"/>
    <g id="matplotlib.axis_2"/>
    <g id="text_1">
     <!-- 실시간 그림자 3개 -->
-    <g style="fill: #ff5a4d" transform="translate(107.701296 85.328561) scale(0.135 -0.135)">
+    <g style="fill: #c2401d" transform="translate(107.701296 85.328561) scale(0.135 -0.135)">
      <defs>
       <path id="Pretendard-Bold-1ce4" d="M 4925 5113 
 L 4131 5113 
@@ -257,7 +257,7 @@ z
    </g>
    <g id="text_2">
     <!-- 13.8 ms  →  90Hz 유지 실패 -->
-    <g style="fill: #ff5a4d" transform="translate(729.418829 85.328561) scale(0.135 -0.135)">
+    <g style="fill: #c2401d" transform="translate(729.418829 85.328561) scale(0.135 -0.135)">
      <defs>
       <path id="Pretendard-Bold-32ca" d="M 2306 4525 
 L 1419 4525 
@@ -530,7 +530,7 @@ z
    </g>
    <g id="text_3">
     <!-- 그림자 1개 + 나머지 베이크 -->
-    <g style="fill: #a8e05f" transform="translate(59.953484 152.987989) scale(0.135 -0.135)">
+    <g style="fill: #4f7a16" transform="translate(59.953484 152.987989) scale(0.135 -0.135)">
      <defs>
       <path id="Pretendard-Bold-362b" d="M 1700 694 
 L 2481 694 
@@ -680,7 +680,7 @@ z
    </g>
    <g id="text_4">
     <!-- 9.2 ms  →  여유 1.9 ms -->
-    <g style="fill: #a8e05f" transform="translate(632.513477 152.987989) scale(0.135 -0.135)">
+    <g style="fill: #4f7a16" transform="translate(632.513477 152.987989) scale(0.135 -0.135)">
      <defs>
       <path id="Pretendard-Bold-32cb" d="M 356 0 
 L 3594 0 
@@ -751,7 +751,7 @@ z
    </g>
    <g id="text_5">
     <!-- 90Hz 예산 11.1 ms -->
-    <g style="fill: #ffc44d" transform="translate(564.897031 40.978286) scale(0.135 -0.135)">
+    <g style="fill: #a8701a" transform="translate(564.897031 40.978286) scale(0.135 -0.135)">
      <defs>
       <path id="Pretendard-Bold-2008" d="M 5100 5113 
 L 4338 5113 
@@ -836,7 +836,7 @@ z
    </g>
    <g id="text_6">
     <!-- 베이크가 가능한 조건 -->
-    <g style="fill: #a8e05f" transform="translate(97.109968 217.347063) scale(0.13 -0.13)">
+    <g style="fill: #4f7a16" transform="translate(97.109968 217.347063) scale(0.13 -0.13)">
      <defs>
       <path id="Pretendard-Bold-600" d="M 4656 5113 
 L 3856 5113 
@@ -992,7 +992,7 @@ z
    </g>
    <g id="text_7">
     <!-- 광원 Mode = Baked · 물체 Static · Lightmap UV 존재 -->
-    <g style="fill: #9aa4b8" transform="translate(220.320627 217.347063) scale(0.13 -0.13)">
+    <g style="fill: #4a463e" transform="translate(220.320627 217.347063) scale(0.13 -0.13)">
      <defs>
       <path id="Pretendard-Regular-711" d="M 3306 4700 
 L 538 4700 
@@ -1597,7 +1597,7 @@ z
    </g>
    <g id="text_8">
     <!-- 베이크로 사라지는 비용 -->
-    <g style="fill: #a8e05f" transform="translate(85.875124 243.36992) scale(0.13 -0.13)">
+    <g style="fill: #4f7a16" transform="translate(85.875124 243.36992) scale(0.13 -0.13)">
      <defs>
       <path id="Pretendard-Bold-125c" d="M 5375 713 
 L 3156 713 
@@ -1772,7 +1772,7 @@ z
    </g>
    <g id="text_9">
     <!-- 그림자맵 생성 패스 · 광원별 음영 계산 → 텍스처 샘플 1회로 대체 -->
-    <g style="fill: #9aa4b8" transform="translate(220.320627 243.36992) scale(0.13 -0.13)">
+    <g style="fill: #4a463e" transform="translate(220.320627 243.36992) scale(0.13 -0.13)">
      <defs>
       <path id="Pretendard-Regular-7f8" d="M 4606 4456 
 L 775 4456 
@@ -2491,7 +2491,7 @@ z
    </g>
    <g id="text_10">
     <!-- 베이크로 해결 불가 -->
-    <g style="fill: #ff5a4d" transform="translate(108.344812 269.392777) scale(0.13 -0.13)">
+    <g style="fill: #c2401d" transform="translate(108.344812 269.392777) scale(0.13 -0.13)">
      <defs>
       <path id="Pretendard-Bold-2f74" d="M 2913 4244 
 L 1938 4244 
@@ -2619,7 +2619,7 @@ z
    </g>
    <g id="text_11">
     <!-- 움직이는 물체의 그림자 · 켜고 끄는 조명 → 라이트 프로브와 혼합 -->
-    <g style="fill: #9aa4b8" transform="translate(220.320627 269.392777) scale(0.13 -0.13)">
+    <g style="fill: #4a463e" transform="translate(220.320627 269.392777) scale(0.13 -0.13)">
      <defs>
       <path id="Pretendard-Regular-20c0" d="M 2756 4944 
 C 1550 4944 788 4556 788 3894 
@@ -3148,7 +3148,7 @@ L 371.062286 98.228571
 L 371.062286 62.837486 
 L 220.320627 62.837486 
 z
-" clip-path="url(#pf93a6141d6)" style="fill: #ff5a4d; opacity: 0.3; stroke: #ff5a4d; stroke-width: 1.8; stroke-linejoin: miter"/>
+" clip-path="url(#pfa644031c9)" style="fill: #c2401d; fill-opacity: 0.3; stroke: #c2401d; stroke-width: 1.8; stroke-linejoin: miter"/>
    </g>
    <g id="patch_4">
     <path d="M 371.062286 98.228571 
@@ -3156,7 +3156,7 @@ L 514.62577 98.228571
 L 514.62577 62.837486 
 L 371.062286 62.837486 
 z
-" clip-path="url(#pf93a6141d6)" style="fill: #35d6e6; opacity: 0.3; stroke: #35d6e6; stroke-width: 1.8; stroke-linejoin: miter"/>
+" clip-path="url(#pfa644031c9)" style="fill: #0d6b78; fill-opacity: 0.3; stroke: #0d6b78; stroke-width: 1.8; stroke-linejoin: miter"/>
    </g>
    <g id="patch_5">
     <path d="M 514.62577 98.228571 
@@ -3164,7 +3164,7 @@ L 658.189254 98.228571
 L 658.189254 62.837486 
 L 514.62577 62.837486 
 z
-" clip-path="url(#pf93a6141d6)" style="fill: #35d6e6; opacity: 0.3; stroke: #35d6e6; stroke-width: 1.8; stroke-linejoin: miter"/>
+" clip-path="url(#pfa644031c9)" style="fill: #0d6b78; fill-opacity: 0.3; stroke: #0d6b78; stroke-width: 1.8; stroke-linejoin: miter"/>
    </g>
    <g id="patch_6">
     <path d="M 658.189254 98.228571 
@@ -3172,7 +3172,7 @@ L 715.614648 98.228571
 L 715.614648 62.837486 
 L 658.189254 62.837486 
 z
-" clip-path="url(#pf93a6141d6)" style="fill: #5f6980; opacity: 0.3; stroke: #5f6980; stroke-width: 1.8; stroke-linejoin: miter"/>
+" clip-path="url(#pfa644031c9)" style="fill: #8a8476; fill-opacity: 0.3; stroke: #8a8476; stroke-width: 1.8; stroke-linejoin: miter"/>
    </g>
    <g id="patch_7">
     <path d="M 220.320627 165.888 
@@ -3180,7 +3180,7 @@ L 270.567847 165.888
 L 270.567847 130.496914 
 L 220.320627 130.496914 
 z
-" clip-path="url(#pf93a6141d6)" style="fill: #ffc44d; opacity: 0.3; stroke: #ffc44d; stroke-width: 1.8; stroke-linejoin: miter"/>
+" clip-path="url(#pfa644031c9)" style="fill: #a8701a; fill-opacity: 0.3; stroke: #a8701a; stroke-width: 1.8; stroke-linejoin: miter"/>
    </g>
    <g id="patch_8">
     <path d="M 270.567847 165.888 
@@ -3188,7 +3188,7 @@ L 381.829547 165.888
 L 381.829547 130.496914 
 L 270.567847 130.496914 
 z
-" clip-path="url(#pf93a6141d6)" style="fill: #35d6e6; opacity: 0.3; stroke: #35d6e6; stroke-width: 1.8; stroke-linejoin: miter"/>
+" clip-path="url(#pfa644031c9)" style="fill: #0d6b78; fill-opacity: 0.3; stroke: #0d6b78; stroke-width: 1.8; stroke-linejoin: miter"/>
    </g>
    <g id="patch_9">
     <path d="M 381.829547 165.888 
@@ -3196,7 +3196,7 @@ L 493.091247 165.888
 L 493.091247 130.496914 
 L 381.829547 130.496914 
 z
-" clip-path="url(#pf93a6141d6)" style="fill: #35d6e6; opacity: 0.3; stroke: #35d6e6; stroke-width: 1.8; stroke-linejoin: miter"/>
+" clip-path="url(#pfa644031c9)" style="fill: #0d6b78; fill-opacity: 0.3; stroke: #0d6b78; stroke-width: 1.8; stroke-linejoin: miter"/>
    </g>
    <g id="patch_10">
     <path d="M 493.091247 165.888 
@@ -3204,16 +3204,16 @@ L 550.516641 165.888
 L 550.516641 130.496914 
 L 493.091247 130.496914 
 z
-" clip-path="url(#pf93a6141d6)" style="fill: #5f6980; opacity: 0.3; stroke: #5f6980; stroke-width: 1.8; stroke-linejoin: miter"/>
+" clip-path="url(#pfa644031c9)" style="fill: #8a8476; fill-opacity: 0.3; stroke: #8a8476; stroke-width: 1.8; stroke-linejoin: miter"/>
    </g>
    <g id="line2d_1">
     <path d="M 618.709296 184.104 
 L 618.709296 46.182857 
-" clip-path="url(#pf93a6141d6)" style="fill: none; stroke-dasharray: 13.2,8.8; stroke-dashoffset: 0; stroke: #ffc44d; stroke-width: 2.2"/>
+" clip-path="url(#pfa644031c9)" style="fill: none; stroke-dasharray: 13.2,8.8; stroke-dashoffset: 0; stroke: #a8701a; stroke-width: 2.2"/>
    </g>
    <g id="text_12">
     <!-- 그림자맵 3장 -->
-    <g style="fill: #ff5a4d" transform="translate(263.258839 84.973336) scale(0.125 -0.125)">
+    <g style="fill: #c2401d" transform="translate(263.258839 84.973336) scale(0.125 -0.125)">
      <defs>
       <path id="Pretendard-Regular-32cc" d="M 1988 -63 
 C 2888 -63 3569 488 3563 1231 
@@ -3286,7 +3286,7 @@ z
    </g>
    <g id="text_13">
     <!-- 4.2 ms -->
-    <g style="fill: #9aa4b8" transform="translate(275.897081 111.304338) scale(0.12 -0.12)">
+    <g style="fill: #4a463e" transform="translate(275.897081 111.304338) scale(0.12 -0.12)">
      <defs>
       <path id="Consolas-26b" d="M 3353 903 
 L 2656 903 
@@ -3454,7 +3454,7 @@ z
    </g>
    <g id="text_14">
     <!-- 왼쪽 눈 -->
-    <g style="fill: #35d6e6" transform="translate(425.071567 84.973336) scale(0.125 -0.125)">
+    <g style="fill: #0d6b78" transform="translate(425.071567 84.973336) scale(0.125 -0.125)">
      <defs>
       <path id="Pretendard-Regular-207c" d="M 2031 4825 
 C 1200 4825 625 4381 625 3706 
@@ -3571,7 +3571,7 @@ z
    </g>
    <g id="text_15">
     <!-- 4 ms -->
-    <g style="fill: #9aa4b8" transform="translate(429.647778 111.304338) scale(0.12 -0.12)">
+    <g style="fill: #4a463e" transform="translate(429.647778 111.304338) scale(0.12 -0.12)">
      <use xlink:href="#Consolas-26b"/>
      <use xlink:href="#Consolas-3" transform="translate(54.984375 0)"/>
      <use xlink:href="#Consolas-8f" transform="translate(109.96875 0)"/>
@@ -3580,7 +3580,7 @@ z
    </g>
    <g id="text_16">
     <!-- 오른쪽 눈 -->
-    <g style="fill: #35d6e6" transform="translate(563.233684 84.973336) scale(0.125 -0.125)">
+    <g style="fill: #0d6b78" transform="translate(563.233684 84.973336) scale(0.125 -0.125)">
      <defs>
       <path id="Pretendard-Regular-2024" d="M 2756 4688 
 C 1575 4681 725 4106 725 3231 
@@ -3641,7 +3641,7 @@ z
    </g>
    <g id="text_17">
     <!-- 4 ms -->
-    <g style="fill: #9aa4b8" transform="translate(573.211262 111.304338) scale(0.12 -0.12)">
+    <g style="fill: #4a463e" transform="translate(573.211262 111.304338) scale(0.12 -0.12)">
      <use xlink:href="#Consolas-26b"/>
      <use xlink:href="#Consolas-3" transform="translate(54.984375 0)"/>
      <use xlink:href="#Consolas-8f" transform="translate(109.96875 0)"/>
@@ -3650,7 +3650,7 @@ z
    </g>
    <g id="text_18">
     <!-- 그 외 -->
-    <g style="fill: #5f6980" transform="translate(674.530857 84.973336) scale(0.125 -0.125)">
+    <g style="fill: #8a8476" transform="translate(674.530857 84.973336) scale(0.125 -0.125)">
      <defs>
       <path id="Pretendard-Regular-2078" d="M 2044 4688 
 C 1169 4681 538 4156 544 3381 
@@ -3686,7 +3686,7 @@ z
    </g>
    <g id="text_19">
     <!-- 1.6 ms -->
-    <g style="fill: #9aa4b8" transform="translate(667.107576 111.304338) scale(0.12 -0.12)">
+    <g style="fill: #4a463e" transform="translate(667.107576 111.304338) scale(0.12 -0.12)">
      <defs>
       <path id="Consolas-268" d="M 3116 0 
 L 550 0 
@@ -3762,7 +3762,7 @@ z
    </g>
    <g id="text_20">
     <!-- 맵 1장 -->
-    <g style="fill: #ffc44d" transform="translate(230.332909 152.632765) scale(0.125 -0.125)">
+    <g style="fill: #a8701a" transform="translate(230.332909 152.632765) scale(0.125 -0.125)">
      <use xlink:href="#Pretendard-Regular-13f5"/>
      <use xlink:href="#Pretendard-Regular-2" transform="translate(86.421875 0)"/>
      <use xlink:href="#Pretendard-Regular-32ca" transform="translate(111.515625 0)"/>
@@ -3771,7 +3771,7 @@ z
    </g>
    <g id="text_21">
     <!-- 1.4 ms -->
-    <g style="fill: #9aa4b8" transform="translate(225.649862 178.963767) scale(0.12 -0.12)">
+    <g style="fill: #4a463e" transform="translate(225.649862 178.963767) scale(0.12 -0.12)">
      <use xlink:href="#Consolas-268"/>
      <use xlink:href="#Consolas-15c" transform="translate(54.984375 0)"/>
      <use xlink:href="#Consolas-26b" transform="translate(109.96875 0)"/>
@@ -3782,7 +3782,7 @@ z
    </g>
    <g id="text_22">
     <!-- 왼쪽 눈 -->
-    <g style="fill: #35d6e6" transform="translate(308.426236 152.632765) scale(0.125 -0.125)">
+    <g style="fill: #0d6b78" transform="translate(308.426236 152.632765) scale(0.125 -0.125)">
      <use xlink:href="#Pretendard-Regular-207c"/>
      <use xlink:href="#Pretendard-Regular-24bd" transform="translate(86.421875 0)"/>
      <use xlink:href="#Pretendard-Regular-2" transform="translate(172.84375 0)"/>
@@ -3791,7 +3791,7 @@ z
    </g>
    <g id="text_23">
     <!-- 3.1 ms -->
-    <g style="fill: #9aa4b8" transform="translate(306.404322 178.963767) scale(0.12 -0.12)">
+    <g style="fill: #4a463e" transform="translate(306.404322 178.963767) scale(0.12 -0.12)">
      <defs>
       <path id="Consolas-26a" d="M 3072 1241 
 Q 3072 972 2962 736 
@@ -3850,7 +3850,7 @@ z
    </g>
    <g id="text_24">
     <!-- 오른쪽 눈 -->
-    <g style="fill: #35d6e6" transform="translate(414.286569 152.632765) scale(0.125 -0.125)">
+    <g style="fill: #0d6b78" transform="translate(414.286569 152.632765) scale(0.125 -0.125)">
      <use xlink:href="#Pretendard-Regular-2024"/>
      <use xlink:href="#Pretendard-Regular-1378" transform="translate(86.421875 0)"/>
      <use xlink:href="#Pretendard-Regular-24bd" transform="translate(172.84375 0)"/>
@@ -3860,7 +3860,7 @@ z
    </g>
    <g id="text_25">
     <!-- 3.1 ms -->
-    <g style="fill: #9aa4b8" transform="translate(417.666022 178.963767) scale(0.12 -0.12)">
+    <g style="fill: #4a463e" transform="translate(417.666022 178.963767) scale(0.12 -0.12)">
      <use xlink:href="#Consolas-26a"/>
      <use xlink:href="#Consolas-15c" transform="translate(54.984375 0)"/>
      <use xlink:href="#Consolas-268" transform="translate(109.96875 0)"/>
@@ -3871,7 +3871,7 @@ z
    </g>
    <g id="text_26">
     <!-- 그 외 -->
-    <g style="fill: #5f6980" transform="translate(509.432851 152.632765) scale(0.125 -0.125)">
+    <g style="fill: #8a8476" transform="translate(509.432851 152.632765) scale(0.125 -0.125)">
      <use xlink:href="#Pretendard-Regular-7f8"/>
      <use xlink:href="#Pretendard-Regular-2" transform="translate(86.421875 0)"/>
      <use xlink:href="#Pretendard-Regular-2078" transform="translate(111.515625 0)"/>
@@ -3879,7 +3879,7 @@ z
    </g>
    <g id="text_27">
     <!-- 1.6 ms -->
-    <g style="fill: #9aa4b8" transform="translate(502.009569 178.963767) scale(0.12 -0.12)">
+    <g style="fill: #4a463e" transform="translate(502.009569 178.963767) scale(0.12 -0.12)">
      <use xlink:href="#Consolas-268"/>
      <use xlink:href="#Consolas-15c" transform="translate(54.984375 0)"/>
      <use xlink:href="#Consolas-26d" transform="translate(109.96875 0)"/>
@@ -3891,7 +3891,7 @@ z
   </g>
   <g id="text_28">
    <!-- 수치 예시 — 실제 값은 씬·기기에 따라 상이 · VR 은 눈 두 개분을 한 프레임에 처리 -->
-   <g style="fill: #9aa4b8" transform="translate(204.834414 306.951752) scale(0.125 -0.125)">
+   <g style="fill: #4a463e" transform="translate(204.834414 306.951752) scale(0.125 -0.125)">
     <defs>
      <path id="Pretendard-Regular-1c18" d="M 3013 4531 
 L 3013 4850 
@@ -4591,7 +4591,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="pf93a6141d6">
+  <clipPath id="pfa644031c9">
    <rect x="20.16" y="20.16" width="792.36" height="255.024"/>
   </clipPath>
  </defs>

@@ -167,7 +167,7 @@
         '<b class="trap-txt">자이로만</b> ' + timeV.textContent + " 후 " + gEnd.toFixed(1) + "°" +
         (k ? '　<b class="lab-txt">융합</b> ' + fEnd.toFixed(1) + "°" : "") +
         '　│　<b class="vr-txt">이동 중 오차</b> 최대 ' + pred.lag.toFixed(1) + "°" +
-        '　<b style="color:#ffc44d">정지 직후 오버슈트</b> ' + pred.over.toFixed(1) + "°" +
+        '　<b style="color:#a8701a">정지 직후 오버슈트</b> ' + pred.over.toFixed(1) + "°" +
         '　<span class="muted">' + predTxt + "</span>";
     }
 
@@ -521,8 +521,8 @@
       state.tpd = !state.tpd;
       realHead.visible = !state.tpd;
       if (tpdBtn) tpdBtn.textContent = state.tpd ? "Tracked Pose Driver 켬" : "Tracked Pose Driver 끔 (AI 2차 수정)";
-      if (tpdBtn) tpdBtn.style.color = state.tpd ? "" : "#ff5a4d";
-      if (tpdBtn) tpdBtn.style.borderColor = state.tpd ? "" : "#ff5a4d";
+      if (tpdBtn) tpdBtn.style.color = state.tpd ? "" : "#c2401d";
+      if (tpdBtn) tpdBtn.style.borderColor = state.tpd ? "" : "#c2401d";
       flash(state.tpd ? "트래킹 복구" : "트래킹 끔 → 머리를 돌려도 화면 고정 = 감각 충돌");
     });
     on("[data-mode]", function () { state.floor = !state.floor; setMode(); });
@@ -576,9 +576,9 @@
       var lp = cam.position;
       var mismatch = state.tpd ? 0 : Math.abs(p.yaw - cam.rotation.y) * 180 / Math.PI;
       out.innerHTML =
-        '<b style="color:#e8ecf4">Main Camera</b> 로컬 (' + f2(lp.x) + ", " + f2(lp.y) + ", " + f2(lp.z) + ")" +
+        '<b style="color:#1b1a17">Main Camera</b> 로컬 (' + f2(lp.x) + ", " + f2(lp.y) + ", " + f2(lp.z) + ")" +
         '　월드 (' + f2(c.x) + ", " + f2(c.y) + ", " + f2(c.z) + ")" +
-        '　<b style="color:#ffc44d">눈높이</b> ' + c.y.toFixed(2) + " m" +
+        '　<b style="color:#a8701a">눈높이</b> ' + c.y.toFixed(2) + " m" +
         (state.floor ? "" : ' <span class="trap-txt">(실제 1.60 m 와 다름)</span>') +
         (state.tpd ? "" : '　<b class="trap-txt">머리 회전 − 화면 회전 = ' + mismatch.toFixed(0) + "°</b>");
 

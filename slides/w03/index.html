@@ -11,13 +11,22 @@
 <style>
   /* 인라인 SVG 도해 — viewBox 1단위 = 슬라이드 1px (글자 16px 이상 유지) */
   .reveal svg.dg { display: block; margin: .25em auto 0; max-width: 100%; height: auto; overflow: visible; }
-  .reveal svg.dg text { font-family: var(--sans); fill: #e8ecf4; font-size: 18px; }
-  .reveal svg.dg .dim { fill: #9aa4b8; }
+  .reveal svg.dg text { font-family: var(--sans); fill: var(--ink); font-size: 18px; }
+  .reveal svg.dg .dim { fill: var(--ink-2); }
   .reveal svg.dg .s { font-size: 16px; }
   .reveal svg.dg .b { font-weight: 700; }
-  .reveal svg.dg .cg { fill: #35d6e6; } .reveal svg.dg .cv { fill: #ff5fa2; }
-  .reveal svg.dg .ct { fill: #ff5a4d; } .reveal svg.dg .cl { fill: #a8e05f; }
-  .reveal svg.dg .cw { fill: #ffc44d; } .reveal svg.dg .cb { fill: #4d9cff; }
+  .reveal svg.dg .cg { fill: var(--gfx); } .reveal svg.dg .cv { fill: var(--vr); }
+  .reveal svg.dg .ct { fill: var(--trap); } .reveal svg.dg .cl { fill: var(--lab); }
+  .reveal svg.dg .cw { fill: var(--analogy); } .reveal svg.dg .cb { fill: var(--ink-2); }
+  /* 용어 풀이 전용 장 — 항목이 길어 조금 더 넓게 */
+  .reveal section.gloss dl.terms { margin-top: .2em; }
+  /* 섹션 오프너 하단 각주가 지면 밖으로 밀리지 않게 */
+  .reveal section.divider { box-sizing: border-box; }
+  /* 오프너 번호 — 색(part-*)과 실제 파트 순서를 분리 · «다음 주» 오프너는 번호 없음 */
+  .reveal section.divider.no-1::after { content: "I"; }
+  .reveal section.divider.no-2::after { content: "II"; }
+  .reveal section.divider.no-3::after { content: "III"; }
+  .reveal section.divider.next::after { content: none; }
 </style>
 </head>
 <body>
@@ -62,11 +71,11 @@
       <p>빈 게임오브젝트에 부품(컴포넌트)을 붙여 <b>회전하는 큐브</b> 조립 · 각 부품이 맡은 기능 설명 가능</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정</h4>
+      <h4><span class="step">2</span> 함정</h4>
       <p>AI가 쓴 이동 코드에서 <b><code>Time.deltaTime</code> 누락</b> 찾기 · 30fps / 120fps 측정으로 결함 증명 가능</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> VR</h4>
+      <h4><span class="step">3</span> VR</h4>
       <p>90Hz 헤드셋의 <b>프레임 예산 11.1ms</b> 직접 계산 · 프레임을 놓치면 멀미가 나는 이유 설명 가능</p>
     </div>
   </div>
@@ -88,20 +97,102 @@
 
 <section>
   <div class="tag gfx">Part I 용어 미리보기</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>이번 파트 용어 미리보기 (1/3) — 작업 화면</h2>
   <dl class="terms">
-    <dt>씬<small>Scene</small></dt><dd>게임의 한 장면을 담은 파일 · 물체들이 놓이는 <b>무대 하나</b></dd>
-    <dt>게임오브젝트<small>GameObject</small></dt><dd>씬 안 모든 물체의 기본 틀 · 그 자체로는 기능 없는 <b>빈 판</b></dd>
-    <dt>컴포넌트<small>Component</small></dt><dd>게임오브젝트에 끼워 기능을 더하는 <b>부품</b></dd>
-    <dt>트랜스폼<small>Transform</small></dt><dd>위치·회전·크기를 담는 부품 · 모든 게임오브젝트에 기본 장착</dd>
-    <dt>스크립트<small>Script (C#)</small></dt><dd>C# 언어로 내가 직접 만드는 <b>행동 부품</b></dd>
-    <dt>프레임<small>Frame</small></dt><dd>화면에 한 번 그려지는 <b>정지 그림 한 장</b></dd>
-    <dt>fps<small>frames per second</small></dt><dd>1초에 그리는 프레임 수 · 60fps = 1초에 60장</dd>
-    <dt>deltaTime<small>Time.deltaTime</small></dt><dd>직전 프레임 한 장을 만드는 데 걸린 시간(초)</dd>
+    <dt>씬<small>Scene</small></dt>
+    <dd>
+      <p>게임의 한 장면을 담은 파일 · 물체들이 놓이는 <b>무대 하나</b></p>
+      <p class="ex">타이틀 화면 = <code>Title.unity</code>, 1스테이지 = <code>Stage1.unity</code> · 씬을 바꾸면 무대 위 물체가 통째로 바뀜</p>
+      <p class="why">저장 단위 — 씬 저장(Ctrl+S)을 빠뜨리면 배치한 물체가 전부 사라짐</p>
+      <p class="where">Project 창 Assets 폴더의 <code>.unity</code> 파일 · 빌드에 넣을 씬 목록은 File → Build Profiles</p>
+    </dd>
+    <dt>Hierarchy 창<small>계층 창</small></dt>
+    <dd>
+      <p>지금 열린 씬에 놓인 물체 이름을 줄줄이 적은 <b>출연진 명단</b></p>
+      <p class="ex">Main Camera · Directional Light · Cube 세 줄 = 새 씬의 기본 명단</p>
+      <p class="why">물체를 고르고, 이름을 바꾸고, 부모·자식으로 묶는 곳 — 여기서 안 보이면 씬에 없는 것</p>
+      <p class="where">에디터 기본 배치 왼쪽 · 닫았다면 Window → General → Hierarchy</p>
+    </dd>
+    <dt>Inspector 창<small>속성 창</small></dt>
+    <dd>
+      <p>명단에서 고른 물체 하나의 <b>프로필 카드</b> — 붙은 부품과 숫자 설정값을 모두 보여 줌</p>
+      <p class="ex">Cube 선택 → Transform · Mesh Filter · Mesh Renderer · Box Collider 네 칸</p>
+      <p class="why">코드를 안 열고 값(위치·속도·색)을 바꾸는 곳 — 디자이너가 가장 오래 보는 창</p>
+      <p class="where">에디터 기본 배치 오른쪽 · 맨 아래 Add Component 버튼으로 부품 추가</p>
+    </dd>
   </dl>
   <aside class="notes">
     - 지금 다 외울 필요 없음 — 각 용어가 처음 등장하는 슬라이드에서 다시 풀이
-    - 앞의 5개 = «무엇으로 만드는가», 뒤의 3개 = «언제·얼마나 자주 움직이는가» 로 묶어 소개
+    - 1/3 = 에디터 화면에서 «어디를 보는가», 2/3 = «무엇으로 만드는가», 3/3 = «언제·얼마나 자주 움직이는가»
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어 미리보기</div>
+  <h2>이번 파트 용어 미리보기 (2/3) — 만드는 재료</h2>
+  <dl class="terms">
+    <dt>게임오브젝트<small>GameObject</small></dt>
+    <dd>
+      <p>씬 안 모든 물체의 기본 틀 · 그 자체로는 아무 기능 없는 <b>빈 판</b></p>
+      <p class="ex">Create Empty 로 만든 «GameObject» — 이름과 위치만 있고 화면엔 안 보임</p>
+      <p class="where">Hierarchy 빈 곳 우클릭 → Create Empty · 또는 3D Object → Cube</p>
+    </dd>
+    <dt>컴포넌트<small>Component</small></dt>
+    <dd>
+      <p>게임오브젝트에 끼워 기능을 더하는 <b>부품</b> — 보이기 · 떨어지기 · 부딪히기가 각각 부품 하나</p>
+      <p class="why">기능이 안 될 때 먼저 볼 곳 — 부품이 빠졌거나 체크박스가 꺼진 경우가 대부분</p>
+      <p class="where">Inspector 의 칸 하나 = 부품 하나 · 칸 제목 옆 체크박스로 켜고 끔</p>
+    </dd>
+    <dt>트랜스폼<small>Transform</small></dt>
+    <dd>
+      <p>위치 · 회전 · 크기 세 묶음 숫자를 담는 부품 · 모든 게임오브젝트에 <b>기본 장착</b></p>
+      <p class="ex">Position (0, 1, 0) = 원점에서 위로 1 m · Scale (2, 2, 2) = 두 배 크기</p>
+      <p class="where">Inspector 맨 위 칸 · Position / Rotation / Scale</p>
+    </dd>
+    <dt>스크립트<small>Script (C#)</small></dt>
+    <dd>
+      <p>C# 언어로 내가 직접 만드는 <b>행동 부품</b> — 회전·점프처럼 Unity 에 없는 동작</p>
+      <p class="why">파일 이름과 안의 클래스 이름이 다르면 부품으로 붙일 수 없음 — 이름을 바꿀 땐 둘 다</p>
+      <p class="where">Project 창 우클릭 → Create → Scripting → MonoBehaviour Script (Unity 6 · 이전 버전은 C# Script)</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 레고 비유를 미리 한 줄로 : 게임오브젝트 = 빈 판, 컴포넌트 = 끼우는 부품, 스크립트 = 내가 깎아 만든 부품
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어 미리보기</div>
+  <h2>이번 파트 용어 미리보기 (3/3) — 시간</h2>
+  <dl class="terms" style="font-size:.68em">
+    <dt>프레임<small>Frame</small></dt>
+    <dd>
+      <p>화면에 한 번 그려지는 <b>정지 그림 한 장</b> — 플립북의 한 페이지</p>
+      <p class="ex">공이 굴러가는 1초 = 정지 그림 60장을 빠르게 넘긴 것 (60fps 일 때)</p>
+      <p class="why">게임 코드 <code>Update()</code> 가 «프레임마다 한 번» 실행되는 이유 — 움직임의 최소 단위</p>
+    </dd>
+    <dt>fps<small>frames per second</small></dt>
+    <dd>
+      <p>1초에 그리는 프레임 수 — 플립북을 1초에 몇 장 넘기는가</p>
+      <p class="ex">60fps = 1초에 60장 = 한 장에 약 16.7ms · 30 아래로 떨어지면 끊겨 보임</p>
+      <p class="where">Game 뷰 오른쪽 위 Stats 버튼 → FPS 숫자 (에디터 기준 값)</p>
+    </dd>
+    <dt>deltaTime<small>Time.deltaTime</small></dt>
+    <dd>
+      <p>직전 프레임 한 장을 만드는 데 걸린 시간(초) — «방금 한 장에 몇 초 썼나»</p>
+      <p class="ex">60fps 면 약 0.0167 · 30fps 면 약 0.033 — PC 가 느릴수록 큰 값</p>
+      <p class="why">이동량에 곱하지 않으면 빠른 PC 일수록 캐릭터가 빨라짐 → 오늘의 AI 함정</p>
+      <p class="where">코드에서 <code>Time.deltaTime</code> 로 읽음 · 창에 따로 표시되지 않음</p>
+    </dd>
+    <dt>프레임률 종속<small>Frame-rate dependent</small></dt>
+    <dd>
+      <p>게임 속 속도가 <b>PC 의 fps 에 따라 달라지는</b> 결함</p>
+      <p class="ex">매 프레임 5cm 이동 → 30fps 노트북 초당 150cm · 120fps 데스크톱 초당 600cm</p>
+      <p class="why">개발자 PC 에서는 정상처럼 보여 화면만으로는 발견 어려움 — fps 를 바꿔 재야 드러남</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 3/3 의 네 용어가 오늘 도입 질문의 답 — 지금은 이름만 익혀 두기
   </aside>
 </section>
 
@@ -153,17 +244,60 @@
 
 <section>
   <div class="tag gfx">구조 · 3</div>
-  <h2>자주 쓰는 기본 부품</h2>
+  <h2>자주 쓰는 기본 부품 (1/2) — 보이게 하기</h2>
   <dl class="terms">
-    <dt>트랜스폼<small>Transform</small></dt><dd>위치·회전·크기 · 모든 게임오브젝트에 <b>반드시 1개</b>, 뗄 수 없음</dd>
-    <dt>메시 렌더러<small>MeshRenderer</small></dt><dd>모양 데이터(<span class="t">메시</span> : 삼각형을 이어 붙인 3D 모양)를 화면에 그리는 부품</dd>
-    <dt>리지드바디<small>Rigidbody</small></dt><dd>질량·중력·힘을 받아 <b>물리 법칙대로</b> 움직이게 하는 부품</dd>
-    <dt>콜라이더<small>Collider</small></dt><dd>부딪힘을 판정하는 <b>보이지 않는 외곽선</b></dd>
-    <dt>내 스크립트<small>MyScript.cs</small></dt><dd>내가 만든 행동 부품 · 예 : 회전, 점프</dd>
+    <dt>트랜스폼<small>Transform</small></dt>
+    <dd>
+      <p>위치·회전·크기 · 모든 게임오브젝트에 <b>반드시 1개</b>, 뗄 수 없음</p>
+      <p class="ex">Rotation Y 를 0 → 90 으로 바꾸면 물체가 위에서 볼 때 시계 방향 90° 회전</p>
+      <p class="why">부모가 있으면 여기 숫자는 <b>부모 기준</b> — 값이 이상해 보이면 부모부터 확인</p>
+      <p class="where">Inspector 맨 위 칸 · 칸 오른쪽 ⋮ 메뉴 → Reset 으로 0 · 0 · 1 초기화</p>
+    </dd>
+    <dt>메시<small>Mesh</small></dt>
+    <dd>
+      <p>작은 삼각형을 이어 붙여 만든 <b>3D 모양 데이터</b> — 종이접기 전개도처럼 모양만 있고 색은 없음</p>
+      <p class="ex">기본 Cube = 면 6개 × 삼각형 2개 = 삼각형 12개</p>
+      <p class="where">Inspector 의 Mesh Filter 칸 → Mesh 항목 · Scene 뷰 Shading Mode → Wireframe 으로 삼각형 보기</p>
+    </dd>
+    <dt>메시 렌더러<small>MeshRenderer</small></dt>
+    <dd>
+      <p>Mesh Filter 가 넘겨준 모양에 <b>재질(머티리얼)을 입혀 화면에 그리는</b> 부품</p>
+      <p class="why">체크를 끄면 물체는 그대로 있는데 <b>안 보이기만</b> 함 — 부딪힘·물리는 계속 동작</p>
+      <p class="where">Inspector 의 Mesh Renderer 칸 → Materials 목록 · Lighting → Cast Shadows</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 메시 = 모양(전개도), 메시 렌더러 = 그 모양에 색을 칠해 화면에 그리는 화가 — 둘은 짝으로 붙음
+    - Scene 뷰를 Wireframe 으로 바꿔 Cube·Sphere 의 삼각형 수를 비교해 보기
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">구조 · 3</div>
+  <h2>자주 쓰는 기본 부품 (2/2) — 움직이고 부딪히게 하기</h2>
+  <dl class="terms" style="margin-bottom:.3em">
+    <dt>리지드바디<small>Rigidbody</small></dt>
+    <dd>
+      <p>질량·중력·힘을 받아 <b>물리 법칙대로</b> 움직이게 하는 부품 — 붙이는 순간 아래로 떨어짐</p>
+      <p class="why">붙인 물체를 Transform 으로 직접 옮기면 물리와 싸워 덜덜 떨림 → 힘(AddForce)으로 밀기</p>
+      <p class="where">Add Component → Physics → Rigidbody · Mass · Use Gravity · Is Kinematic</p>
+    </dd>
+    <dt>콜라이더<small>Collider</small></dt>
+    <dd>
+      <p>부딪힘을 판정하는 <b>보이지 않는 외곽선</b> — 실제 모양보다 단순한 상자·공·캡슐</p>
+      <p class="ex">Box · Sphere · Capsule Collider · 선택하면 Scene 뷰에 초록 선으로 표시</p>
+      <p class="where">Inspector 의 ○○ Collider 칸 · Is Trigger 체크 = 막지 않고 «닿았다» 신호만</p>
+    </dd>
+    <dt>내 스크립트<small>MyScript.cs</small></dt>
+    <dd>
+      <p>내가 만든 행동 부품 · 예 : 회전, 점프</p>
+      <p class="ex">Spinner.cs 를 Cube 에 끌어다 놓으면 Inspector 에 «Spinner» 칸 생성</p>
+      <p class="where">Project 창의 .cs 파일 → Hierarchy 물체나 Inspector 빈 곳으로 드래그</p>
+    </dd>
   </dl>
   <div class="key">
-    <p class="small">예 : <b>떨어져 튕기는 공</b> = 빈 게임오브젝트 + MeshRenderer(보임) + SphereCollider(부딪힘) + Rigidbody(떨어짐)<br>
-    부품 하나를 빼면 <b>그 기능만</b> 사라짐 — Collider 를 빼면 바닥을 뚫고 계속 떨어짐</p>
+    <p class="small"><b>튕기는 공</b> = 빈 판 + MeshRenderer(보임) + SphereCollider(부딪힘) + Rigidbody(떨어짐)<br>
+    부품 하나를 빼면 <b>그 기능만</b> 사라짐 — Collider 를 빼면 바닥을 뚫고 떨어짐</p>
   </div>
   <aside class="notes">
     - 공 예시를 실제로 조립하면서 Collider 를 꺼 보기 → 바닥을 통과해 떨어지는 모습 확인
@@ -177,10 +311,6 @@
   <p class="small">Hierarchy 창에서 물체를 다른 물체 위로 끌어다 놓으면 → <b>부모·자식</b> 관계 형성<br>
   이 관계 전체를 나무 모양으로 그린 것 = <span class="t">씬 그래프</span>(Scene Graph)<br>
   자식의 위치 = <b>부모 기준의 상대 위치</b>로 저장 → 부모가 움직이면 자식도 함께 이동</p>
-  <dl class="terms">
-    <dt>로컬 좌표<small>Local</small></dt><dd>부모 기준 위치 · Inspector 에 표시되는 값</dd>
-    <dt>월드 좌표<small>World</small></dt><dd>씬 전체 기준의 절대 위치 · 부모들의 변환을 차례로 곱해 계산 (2주차 행렬 곱)</dd>
-  </dl>
   <div class="analogy">
     <p><b>쟁반 위의 컵</b> — 쟁반을 들고 걸으면 컵은 스스로 움직이지 않아도 함께 이동. 컵의 위치는 «쟁반 왼쪽 끝에서 10cm» 처럼 쟁반 기준으로 기억</p>
   </div>
@@ -190,45 +320,76 @@
   </aside>
 </section>
 
+<section class="gloss">
+  <div class="tag gfx">구조 · 4 용어 풀이</div>
+  <h2>씬 그래프 · 로컬 좌표 · 월드 좌표</h2>
+  <dl class="terms">
+    <dt>씬 그래프<small>Scene Graph</small></dt>
+    <dd>
+      <p>씬 안 물체들의 부모·자식 관계를 <b>가계도처럼</b> 그린 나무 구조</p>
+      <p class="ex">Car 아래 Wheel L · Wheel R, Wheel L 아래 Bolt — Car 를 옮기면 바퀴·볼트가 전부 따라옴</p>
+      <p class="why">자식만 따로 옮기려다 부모를 잡으면 묶인 물체 전체가 움직임 — 무엇이 누구 밑인지 먼저 확인</p>
+      <p class="where">Hierarchy 창의 들여쓰기 · 물체를 다른 물체 위로 드래그해 묶기, 맨 위 빈 곳으로 드래그해 풀기</p>
+    </dd>
+    <dt>로컬 좌표<small>Local</small></dt>
+    <dd>
+      <p>부모 기준 위치 — «쟁반 왼쪽 끝에서 10cm» 처럼 <b>부모에서 잰</b> 거리</p>
+      <p class="ex">쟁반을 150cm 옮겨도 컵의 로컬 값은 그대로 10cm</p>
+      <p class="where">Inspector 의 Transform 에 표시되는 값 · 코드 <code>transform.localPosition</code></p>
+    </dd>
+    <dt>월드 좌표<small>World</small></dt>
+    <dd>
+      <p>씬 전체 기준의 절대 위치 — 방 원점에서 잰 거리 · 부모들의 변환을 차례로 곱해 계산 (2주차 행렬 곱)</p>
+      <p class="ex">쟁반 이동 전 110cm → 이동 후 260cm</p>
+      <p class="why">«두 물체 사이 거리» 처럼 서로 다른 부모의 물체를 비교할 땐 반드시 월드 값</p>
+      <p class="where">Inspector 엔 직접 안 보임 · 코드 <code>transform.position</code></p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 다음 장 도해의 분홍 화살표 = 로컬, 황토 화살표 = 월드
+    - Inspector 숫자를 보고 «왜 위치가 0 인데 화면 가운데가 아니지?» 하는 혼란 = 로컬/월드 혼동
+  </aside>
+</section>
+
 <section>
   <div class="tag gfx">구조 · 4 도해</div>
   <h2>쟁반과 컵 — 로컬은 그대로, 월드는 바뀜</h2>
   <svg class="dg" width="1180" height="410" viewBox="0 0 1180 410" role="img" aria-label="쟁반을 옮겨도 컵의 로컬 좌표는 10 cm 그대로, 월드 좌표는 110 cm 에서 260 cm 로">
     <defs>
-      <marker id="d31-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5fa2"/></marker>
-      <marker id="d31-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker>
-      <marker id="d31-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker>
+      <marker id="d31-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a3245e"/></marker>
+      <marker id="d31-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8701a"/></marker>
+      <marker id="d31-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4a463e"/></marker>
     </defs>
-    <line x1="60" y1="70" x2="60" y2="360" stroke="#5f6980" stroke-width="3"/>
+    <line x1="60" y1="70" x2="60" y2="360" stroke="#8a8476" stroke-width="3"/>
     <text x="60" y="386" text-anchor="middle" class="s dim">방 원점 (0)</text>
     <text x="200" y="40" class="dim">처음</text>
     <text x="690" y="40" class="cg b">쟁반을 들고 옮긴 뒤</text>
-    <line x1="300" y1="100" x2="750" y2="100" stroke="#9aa4b8" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#d31-d)"/>
+    <line x1="300" y1="100" x2="750" y2="100" stroke="#4a463e" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#d31-d)"/>
     <text x="525" y="88" text-anchor="middle" class="dim">쟁반(부모) +150 cm 이동</text>
     <!-- 처음 -->
     <g opacity=".75">
-      <rect x="200" y="230" width="280" height="12" rx="4" fill="#35d6e6"/>
-      <polygon points="245,170 295,170 290,230 250,230" fill="#171b25" stroke="#e8ecf4" stroke-width="2.5"/>
+      <rect x="200" y="230" width="280" height="12" rx="2" fill="#0d6b78"/>
+      <polygon points="245,170 295,170 290,230 250,230" fill="#ece6d8" stroke="#1b1a17" stroke-width="2.5"/>
     </g>
-    <circle cx="200" cy="236" r="7" fill="#e8ecf4"/>
+    <circle cx="200" cy="236" r="7" fill="#1b1a17"/>
     <text x="200" y="268" text-anchor="middle" class="s cg">쟁반 원점</text>
-    <g stroke="#ff5fa2" stroke-width="1.5" stroke-dasharray="3 4"><line x1="200" y1="228" x2="200" y2="140"/><line x1="270" y1="170" x2="270" y2="140"/></g>
-    <line x1="200" y1="148" x2="266" y2="148" stroke="#ff5fa2" stroke-width="3" marker-end="url(#d31-v)"/>
+    <g stroke="#a3245e" stroke-width="1.5" stroke-dasharray="3 4"><line x1="200" y1="228" x2="200" y2="140"/><line x1="270" y1="170" x2="270" y2="140"/></g>
+    <line x1="200" y1="148" x2="266" y2="148" stroke="#a3245e" stroke-width="3" marker-end="url(#d31-v)"/>
     <text x="110" y="154" text-anchor="middle" class="cv b">로컬 10 cm</text>
-    <line x1="60" y1="300" x2="266" y2="300" stroke="#ffc44d" stroke-width="3.5" marker-end="url(#d31-w)"/>
+    <line x1="60" y1="300" x2="266" y2="300" stroke="#a8701a" stroke-width="3.5" marker-end="url(#d31-w)"/>
     <text x="165" y="292" text-anchor="middle" class="cw b">월드 110 cm</text>
-    <line x1="270" y1="232" x2="270" y2="300" stroke="#ffc44d" stroke-width="1.5" stroke-dasharray="3 4"/>
+    <line x1="270" y1="232" x2="270" y2="300" stroke="#a8701a" stroke-width="1.5" stroke-dasharray="3 4"/>
     <!-- 옮긴 뒤 -->
-    <rect x="690" y="230" width="280" height="12" rx="4" fill="#35d6e6"/>
-    <polygon points="735,170 785,170 780,230 740,230" fill="#171b25" stroke="#e8ecf4" stroke-width="2.5"/>
-    <circle cx="690" cy="236" r="7" fill="#e8ecf4"/>
+    <rect x="690" y="230" width="280" height="12" rx="2" fill="#0d6b78"/>
+    <polygon points="735,170 785,170 780,230 740,230" fill="#ece6d8" stroke="#1b1a17" stroke-width="2.5"/>
+    <circle cx="690" cy="236" r="7" fill="#1b1a17"/>
     <text x="690" y="268" text-anchor="middle" class="s cg">쟁반 원점</text>
-    <g stroke="#ff5fa2" stroke-width="1.5" stroke-dasharray="3 4"><line x1="690" y1="228" x2="690" y2="140"/><line x1="760" y1="170" x2="760" y2="140"/></g>
-    <line x1="690" y1="148" x2="756" y2="148" stroke="#ff5fa2" stroke-width="3" marker-end="url(#d31-v)"/>
+    <g stroke="#a3245e" stroke-width="1.5" stroke-dasharray="3 4"><line x1="690" y1="228" x2="690" y2="140"/><line x1="760" y1="170" x2="760" y2="140"/></g>
+    <line x1="690" y1="148" x2="756" y2="148" stroke="#a3245e" stroke-width="3" marker-end="url(#d31-v)"/>
     <text x="800" y="154" class="cv b">로컬 10 cm · 그대로</text>
-    <line x1="60" y1="350" x2="756" y2="350" stroke="#ffc44d" stroke-width="3.5" marker-end="url(#d31-w)"/>
+    <line x1="60" y1="350" x2="756" y2="350" stroke="#a8701a" stroke-width="3.5" marker-end="url(#d31-w)"/>
     <text x="780" y="356" class="cw b">월드 260 cm · 바뀜</text>
-    <line x1="760" y1="232" x2="760" y2="350" stroke="#ffc44d" stroke-width="1.5" stroke-dasharray="3 4"/>
+    <line x1="760" y1="232" x2="760" y2="350" stroke="#a8701a" stroke-width="1.5" stroke-dasharray="3 4"/>
     <text x="1150" y="400" text-anchor="end" class="s dim">로컬 = 쟁반(부모) 기준 · 월드 = 방(씬) 기준 · 그림 길이는 비율 아님</text>
   </svg>
   <aside class="notes">
@@ -252,11 +413,7 @@
 <section>
   <div class="tag gfx">구조 · 6</div>
   <h2>상속과 조합 — 기능을 늘리는 두 가지 방법</h2>
-  <dl class="terms">
-    <dt>클래스<small>Class</small></dt><dd>물체의 <b>설계도</b> · 어떤 데이터와 동작을 가지는지 정의</dd>
-    <dt>상속<small>Inheritance</small></dt><dd>기존 설계도를 <b>물려받아</b> 기능을 덧붙인 새 설계도 작성 (FlyingEnemy ← Enemy)</dd>
-    <dt>조합<small>Composition</small></dt><dd>설계도를 늘리지 않고 <b>부품을 골라 붙여</b> 기능 구성</dd>
-  </dl>
+  <p class="small">기능을 늘리는 방법 ① <b>상속</b> = 설계도를 물려받아 새 설계도 만들기 · ② <b>조합</b> = 부품을 골라 붙이기 (용어 풀이는 다음 장)</p>
   <p class="small">이동 방식 3가지(걷기·날기·헤엄) × 공격 방식 4가지 → 상속으로는 설계도 <b>최대 12개</b>, 조합으로는 부품 <b>7개</b>(3 + 4)로 해결</p>
   <div class="analogy">
     <p>상속 = <b>완제품 장난감 라인업</b> — «날면서 폭탄 쏘는 로봇» 이 필요하면 신상품을 따로 출시해야 함<br>
@@ -265,6 +422,35 @@
   <aside class="notes">
     - 조합의 수가 곱셈으로 늘어나는 «조합 폭발» 을 숫자로 먼저 보여준 뒤 다음 장 도해로
     - "새 적이 필요할 때마다 장난감 공장에 신상품 주문을 넣는 방식 vs 레고 상자에서 부품 꺼내는 방식"
+  </aside>
+</section>
+
+<section class="gloss">
+  <div class="tag gfx">구조 · 6 용어 풀이</div>
+  <h2>클래스 · 상속 · 조합</h2>
+  <dl class="terms">
+    <dt>클래스<small>Class</small></dt>
+    <dd>
+      <p>물체의 <b>설계도</b> — 어떤 숫자(데이터)를 갖고 무슨 동작을 하는지 적어 둔 틀 · 실제 물체는 이 설계도로 찍어 낸 것</p>
+      <p class="ex"><code>public class Spinner</code> = «Spinner 라는 설계도» · 큐브 3개에 붙이면 Spinner 3개가 따로 돎</p>
+      <p class="where">.cs 파일 하나 = 클래스 하나 · 파일 이름과 클래스 이름 일치 필수</p>
+    </dd>
+    <dt>상속<small>Inheritance</small></dt>
+    <dd>
+      <p>기존 설계도를 <b>물려받아</b> 기능을 덧붙인 새 설계도 작성 (FlyingEnemy ← Enemy)</p>
+      <p class="ex">이동 3종 × 공격 4종 = 설계도 최대 12개 · 새 공격 1종 추가 → 3개 더</p>
+      <p class="why">조합이 늘수록 설계도가 <b>곱셈으로</b> 불어남 · 두 부모의 기능을 동시에 물려받기 불가</p>
+      <p class="where">코드의 콜론 <code>class Spinner : MonoBehaviour</code> — Unity 에서는 주로 이 한 번만 사용</p>
+    </dd>
+    <dt>조합<small>Composition</small></dt>
+    <dd>
+      <p>설계도를 늘리지 않고 <b>부품을 골라 붙여</b> 기능 구성 — 레고 방식</p>
+      <p class="ex">걷기·날기·헤엄 3개 + 공격 4개 = 부품 7개로 12가지 적 전부</p>
+      <p class="where">Inspector 의 부품 목록 자체 · Add Component 로 붙이고 ⋮ → Remove Component 로 떼기</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - Unity 가 상속 대신 조합을 기본으로 삼은 이유 = 다음 장 도해
   </aside>
 </section>
 
@@ -306,12 +492,8 @@ public class Spinner : MonoBehaviour   // ← 이 상속 = "부품 자격증"
 <section>
   <div class="tag gfx">구조 · 9</div>
   <h2>Unity 가 내 코드를 부르는 방식</h2>
-  <dl class="terms">
-    <dt>MonoBehaviour<small>MonoBehaviour</small></dt><dd>Unity 가 제공하는 «부품 자격» 클래스 · 이를 상속해야 게임오브젝트에 붙일 수 있음</dd>
-    <dt>이벤트 함수<small>Event Function</small></dt><dd>정해진 이름으로 만들어 두면 Unity 가 알맞은 때에 <b>자동 호출</b>하는 함수 (Awake, Start, Update …)</dd>
-    <dt>Start<small>Start()</small></dt><dd>오브젝트가 활성화된 뒤 <b>첫 Update 직전에 1회</b></dd>
-    <dt>Update<small>Update()</small></dt><dd><b>매 프레임 1회</b></dd>
-  </dl>
+  <p class="small">내 코드 = 정해진 이름의 함수(<code>Start</code>, <code>Update</code> …)를 <b>만들어 두기만</b> 하는 쪽<br>
+  부르는 시점 결정 = <b>Unity</b> 쪽 · 용어 풀이는 다음 장</p>
   <div class="analogy">
     <p><b>연극 배우와 무대감독</b> — 배우(내 스크립트)는 스스로 무대에 나가지 않고 무대감독(Unity)의 큐 신호에 맞춰 연기. Start = 첫 등장 큐, Update = 매 장면 반복되는 큐</p>
     <p>큐 이름이 틀리면(<code>update</code> 처럼 소문자) 신호가 오지 않아 <b>오류 없이 아무 일도 안 일어남</b></p>
@@ -319,6 +501,54 @@ public class Spinner : MonoBehaviour   // ← 이 상속 = "부품 자격증"
   <aside class="notes">
     - "여러분이 Update 를 부르는 게 아니라, Unity 가 큐 사인을 줄 때 여러분 코드가 무대에 나가는 겁니다"
     - 대소문자 오타가 오류 메시지 없이 조용히 실패하는 대표 사례 — 초보자가 가장 많이 헤매는 지점
+  </aside>
+</section>
+
+<section class="gloss">
+  <div class="tag gfx">구조 · 9 용어 풀이 (1/2)</div>
+  <h2>MonoBehaviour · 이벤트 함수</h2>
+  <dl class="terms">
+    <dt>MonoBehaviour<small>MonoBehaviour</small></dt>
+    <dd>
+      <p>Unity 가 제공하는 «부품 자격» 클래스 · 이를 상속해야 게임오브젝트에 붙일 수 있음 — 배우 협회 등록증</p>
+      <p class="ex"><code>public class Spinner : MonoBehaviour</code> 의 콜론 뒤 단어</p>
+      <p class="why">빠뜨리면 스크립트를 끌어다 놓을 때 «부품으로 붙일 수 없다» 는 경고만 뜨고 안 붙음</p>
+      <p class="where">새 스크립트 템플릿에 이미 적혀 있음 — 지우지 말 것</p>
+    </dd>
+    <dt>이벤트 함수<small>Event Function</small></dt>
+    <dd>
+      <p>정해진 이름으로 만들어 두면 Unity 가 알맞은 때에 <b>자동 호출</b>하는 함수 — 무대감독의 큐 목록</p>
+      <p class="ex">Awake · Start · Update · FixedUpdate · LateUpdate · OnCollisionEnter (부딪힌 순간)</p>
+      <p class="why">이름이 한 글자라도 다르면(<code>update</code>) 오류 없이 <b>그냥 안 불림</b></p>
+      <p class="where">Unity 매뉴얼 «Order of execution for event functions» 에 전체 순서표</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 이벤트 함수 이름은 직접 지은 이름이 아니라 Unity 와 맺은 약속 — 철자·대소문자까지 그대로
+  </aside>
+</section>
+
+<section class="gloss">
+  <div class="tag gfx">구조 · 9 용어 풀이 (2/2)</div>
+  <h2>Start · Update</h2>
+  <dl class="terms">
+    <dt>Start<small>Start()</small></dt>
+    <dd>
+      <p>오브젝트가 활성화된 뒤 <b>첫 Update 직전에 1회</b> — 첫 등장 큐</p>
+      <p class="ex">게임 시작 시 점수를 0 으로, 체력을 100 으로 맞춰 두는 코드</p>
+      <p class="why">여기 넣은 코드는 딱 한 번만 실행 — 계속 바뀌어야 하는 값을 넣으면 멈춘 것처럼 보임</p>
+      <p class="where">새 스크립트 템플릿에 빈 <code>void Start() { }</code> 기본 포함</p>
+    </dd>
+    <dt>Update<small>Update()</small></dt>
+    <dd>
+      <p><b>매 프레임 1회</b> — 플립북 한 장마다 한 번씩 오는 큐</p>
+      <p class="ex">60fps 면 1초에 60번 · 30fps 면 1초에 30번 실행</p>
+      <p class="why">실행 횟수가 PC 마다 다름 → 이동량에 <code>Time.deltaTime</code> 을 곱해야 하는 이유 (뒤에서)</p>
+      <p class="where">새 스크립트 템플릿에 빈 <code>void Update() { }</code> 기본 포함</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - Update 의 «실행 횟수가 PC 마다 다름» 이 오늘 후반 함정의 씨앗 — 표시만 해 두기
   </aside>
 </section>
 
@@ -401,6 +631,38 @@ public class Spinner : MonoBehaviour   // ← 이 상속 = "부품 자격증"
   </aside>
 </section>
 
+<section class="gloss">
+  <div class="tag gfx">루프 용어 풀이</div>
+  <h2>vsync · 캐싱 · 떨림</h2>
+  <dl class="terms">
+    <dt>vsync<small>Vertical Sync · 수직 동기화</small></dt>
+    <dd>
+      <p>모니터가 그림을 바꾸는 순간에 맞춰 새 그림을 넘겨주는 장치 — 버스 출발 시각에 맞춰 짐 싣기</p>
+      <p class="ex">60Hz 모니터 + vsync 켬 → 아무리 빠른 PC 라도 60fps 에서 멈춤</p>
+      <p class="why">끄면 그림이 바뀌는 도중에 화면이 갱신돼 위아래가 어긋난 줄(티어링)이 생길 수 있음</p>
+      <p class="where">Edit → Project Settings → Quality → VSync Count · 코드 <code>QualitySettings.vSyncCount</code></p>
+    </dd>
+    <dt>캐싱<small>Caching</small></dt>
+    <dd>
+      <p>한 번 찾은 것을 변수에 저장해 두고 재사용 — 전화번호를 연락처에 저장</p>
+      <p class="ex"><code>Awake</code> 에서 <code>rb = GetComponent&lt;Rigidbody&gt;()</code> 한 번 → 이후 매 프레임 <code>rb</code> 만 사용</p>
+      <p class="why">매 프레임 새로 찾으면 그만큼 시간 낭비 → VR 프레임 예산을 갉아먹음</p>
+      <p class="where">Window → Analysis → Profiler 에서 GetComponent·Find 가 쓴 시간 확인 (12주차)</p>
+    </dd>
+    <dt>떨림<small>Jitter</small></dt>
+    <dd>
+      <p>화면 속 물체나 카메라가 프레임마다 미세하게 <b>앞뒤로 덜덜</b> 흔들려 보이는 현상</p>
+      <p class="ex">카메라가 어떤 프레임엔 1칸 뒤, 어떤 프레임엔 제자리 → 캐릭터가 부르르 떨림</p>
+      <p class="why">코드 오류 메시지가 없어 원인을 찾기 어려움 — 실행 순서부터 의심</p>
+      <p class="where">Game 뷰에서 카메라가 움직이는 캐릭터를 따라갈 때 · 실습 5번에서 직접 재현</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - vsync 는 Part II 의 «정시 출발 버스» 비유와 같은 장치 — VR 헤드셋은 런타임이 화면 타이밍을 직접 관리
+    - 떨림은 바로 다음 장(카메라 추적)의 주제
+  </aside>
+</section>
+
 <section>
   <div class="tag trap">루프 · 5</div>
   <h2>카메라 추적은 왜 LateUpdate 인가</h2>
@@ -424,51 +686,51 @@ public class Spinner : MonoBehaviour   // ← 이 상속 = "부품 자격증"
   <div class="tag trap">루프 · 5 도해</div>
   <h2>한 프레임 안의 순서 — 카메라가 한 박자 늦는 이유</h2>
 <svg class="dg" width="1180" height="350" viewBox="0 0 1180 350" role="img" aria-label="Update 와 LateUpdate 에서 카메라 추적 실행 순서 비교">
-<defs><marker id="d32-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker></defs>
+<defs><marker id="d32-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4a463e"/></marker></defs>
 <text x="430" y="26" text-anchor="middle" class="b">프레임 N</text>
 <text x="935" y="26" text-anchor="middle" class="b">프레임 N+1</text>
-<line x1="683" y1="8" x2="683" y2="300" stroke="#2a3040" stroke-width="2" stroke-dasharray="6 5"/>
+<line x1="683" y1="8" x2="683" y2="300" stroke="#cfc6b2" stroke-width="2" stroke-dasharray="6 5"/>
 <text x="10" y="80" class="ct b">카메라 추적을</text><text x="10" y="106" class="ct b">Update 에</text>
 <text x="10" y="226" class="cl b">카메라 추적을</text><text x="10" y="252" class="cl b">LateUpdate 에</text>
-<rect x="195" y="50" width="150" height="72" rx="10" fill="#3a2d0e" stroke="#ffc44d" stroke-width="2.5"/>
+<rect x="195" y="50" width="150" height="72" rx="2" fill="#f3e7cf" stroke="#a8701a" stroke-width="2.5"/>
 <text x="270.0" y="80" text-anchor="middle" class="s b">카메라 Update</text>
 <text x="270.0" y="106" text-anchor="middle" class="s dim">x = 0 을 봄</text>
-<rect x="355" y="50" width="150" height="72" rx="10" fill="#0e3a42" stroke="#35d6e6" stroke-width="2.5"/>
+<rect x="355" y="50" width="150" height="72" rx="2" fill="#dcebec" stroke="#0d6b78" stroke-width="2.5"/>
 <text x="430.0" y="80" text-anchor="middle" class="s b">플레이어 Update</text>
 <text x="430.0" y="106" text-anchor="middle" class="s dim">x : 0 → 1</text>
-<rect x="515" y="50" width="150" height="72" rx="10" fill="#12151d" stroke="#5f6980" stroke-width="2.5"/>
+<rect x="515" y="50" width="150" height="72" rx="2" fill="#ece6d8" stroke="#8a8476" stroke-width="2.5"/>
 <text x="590.0" y="80" text-anchor="middle" class="s b">렌더링</text>
 <text x="590.0" y="106" text-anchor="middle" class="s ct b">오차 1칸 ✗</text>
-<rect x="700" y="50" width="150" height="72" rx="10" fill="#0e3a42" stroke="#35d6e6" stroke-width="2.5"/>
+<rect x="700" y="50" width="150" height="72" rx="2" fill="#dcebec" stroke="#0d6b78" stroke-width="2.5"/>
 <text x="775.0" y="80" text-anchor="middle" class="s b">플레이어 Update</text>
 <text x="775.0" y="106" text-anchor="middle" class="s dim">x : 1 → 2</text>
-<rect x="860" y="50" width="150" height="72" rx="10" fill="#3a2d0e" stroke="#ffc44d" stroke-width="2.5"/>
+<rect x="860" y="50" width="150" height="72" rx="2" fill="#f3e7cf" stroke="#a8701a" stroke-width="2.5"/>
 <text x="935.0" y="80" text-anchor="middle" class="s b">카메라 Update</text>
 <text x="935.0" y="106" text-anchor="middle" class="s dim">x = 2 를 봄</text>
-<rect x="1020" y="50" width="150" height="72" rx="10" fill="#12151d" stroke="#5f6980" stroke-width="2.5"/>
+<rect x="1020" y="50" width="150" height="72" rx="2" fill="#ece6d8" stroke="#8a8476" stroke-width="2.5"/>
 <text x="1095.0" y="80" text-anchor="middle" class="s b">렌더링</text>
 <text x="1095.0" y="106" text-anchor="middle" class="s cl b">오차 0</text>
-<rect x="195" y="196" width="150" height="72" rx="10" fill="#0e3a42" stroke="#35d6e6" stroke-width="2.5"/>
+<rect x="195" y="196" width="150" height="72" rx="2" fill="#dcebec" stroke="#0d6b78" stroke-width="2.5"/>
 <text x="270.0" y="226" text-anchor="middle" class="s b">플레이어 Update</text>
 <text x="270.0" y="252" text-anchor="middle" class="s dim">x : 0 → 1</text>
-<rect x="355" y="196" width="150" height="72" rx="10" fill="#3a2d0e" stroke="#ffc44d" stroke-width="2.5"/>
+<rect x="355" y="196" width="150" height="72" rx="2" fill="#f3e7cf" stroke="#a8701a" stroke-width="2.5"/>
 <text x="430.0" y="226" text-anchor="middle" class="s b">카메라 LateUpdate</text>
 <text x="430.0" y="252" text-anchor="middle" class="s dim">x = 1 을 봄</text>
-<rect x="515" y="196" width="150" height="72" rx="10" fill="#12151d" stroke="#5f6980" stroke-width="2.5"/>
+<rect x="515" y="196" width="150" height="72" rx="2" fill="#ece6d8" stroke="#8a8476" stroke-width="2.5"/>
 <text x="590.0" y="226" text-anchor="middle" class="s b">렌더링</text>
 <text x="590.0" y="252" text-anchor="middle" class="s cl b">오차 0 ✓</text>
-<rect x="700" y="196" width="150" height="72" rx="10" fill="#0e3a42" stroke="#35d6e6" stroke-width="2.5"/>
+<rect x="700" y="196" width="150" height="72" rx="2" fill="#dcebec" stroke="#0d6b78" stroke-width="2.5"/>
 <text x="775.0" y="226" text-anchor="middle" class="s b">플레이어 Update</text>
 <text x="775.0" y="252" text-anchor="middle" class="s dim">x : 1 → 2</text>
-<rect x="860" y="196" width="150" height="72" rx="10" fill="#3a2d0e" stroke="#ffc44d" stroke-width="2.5"/>
+<rect x="860" y="196" width="150" height="72" rx="2" fill="#f3e7cf" stroke="#a8701a" stroke-width="2.5"/>
 <text x="935.0" y="226" text-anchor="middle" class="s b">카메라 LateUpdate</text>
 <text x="935.0" y="252" text-anchor="middle" class="s dim">x = 2 를 봄</text>
-<rect x="1020" y="196" width="150" height="72" rx="10" fill="#12151d" stroke="#5f6980" stroke-width="2.5"/>
+<rect x="1020" y="196" width="150" height="72" rx="2" fill="#ece6d8" stroke="#8a8476" stroke-width="2.5"/>
 <text x="1095.0" y="226" text-anchor="middle" class="s b">렌더링</text>
 <text x="1095.0" y="252" text-anchor="middle" class="s cl b">오차 0 ✓</text>
 <text x="195" y="154" class="s ct">Update 끼리 순서는 정해져 있지 않음 → 오차 1 · 0 · 1 … 프레임마다 바뀜 = 떨림(jitter)</text>
 <text x="195" y="300" class="s cl">LateUpdate = 모든 Update 가 끝난 뒤 → 언제나 이동을 마친 위치 → 오차 항상 0</text>
-<line x1="195" y1="330" x2="1166" y2="330" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d32-d)"/>
+<line x1="195" y1="330" x2="1166" y2="330" stroke="#4a463e" stroke-width="2.5" marker-end="url(#d32-d)"/>
 <text x="10" y="336" class="s dim">시간 순서 →</text>
 </svg>  <div class="analogy" style="margin-top:.5em"><p>위 줄 = 모델이 아직 걸어가는 중에 누른 셔터 · 아래 줄 = 모두 자리 잡은 뒤 누른 셔터</p></div>
   <aside class="notes">
@@ -537,36 +799,36 @@ public class Spinner : MonoBehaviour   // ← 이 상속 = "부품 자격증"
 <text x="290" y="30" text-anchor="middle" class="ct b">deltaTime 없음</text>
 <text x="290" y="56" text-anchor="middle" class="s dim">speed = 5 cm / 프레임 · 1초 이동 거리 (cm)</text>
 <text x="150" y="124" text-anchor="end" class="s">노트북 30fps</text>
-<rect x="160" y="96" width="92.5" height="44" rx="4" fill="#ff5a4d"/>
+<rect x="160" y="96" width="92.5" height="44" rx="2" fill="#c2401d"/>
 <text x="262.5" y="125" class="b">150 cm</text>
 <text x="150" y="194" text-anchor="end" class="s">데스크톱 120fps</text>
-<rect x="160" y="166" width="370.0" height="44" rx="4" fill="#ff5a4d"/>
-<text x="520.0" y="195" text-anchor="end" class="b" style="fill:#0b0d12">600 cm</text>
-<line x1="160" y1="86" x2="160" y2="222" stroke="#5f6980" stroke-width="2"/>
-<line x1="160" y1="222" x2="530" y2="222" stroke="#2a3040" stroke-width="2"/>
-<line x1="160.0" y1="222" x2="160.0" y2="230" stroke="#5f6980" stroke-width="2"/>
+<rect x="160" y="166" width="370.0" height="44" rx="2" fill="#c2401d"/>
+<text x="520.0" y="195" text-anchor="end" class="b" style="fill:#f5f1e8">600 cm</text>
+<line x1="160" y1="86" x2="160" y2="222" stroke="#8a8476" stroke-width="2"/>
+<line x1="160" y1="222" x2="530" y2="222" stroke="#cfc6b2" stroke-width="2"/>
+<line x1="160.0" y1="222" x2="160.0" y2="230" stroke="#8a8476" stroke-width="2"/>
 <text x="160.0" y="250" text-anchor="middle" class="s dim">0</text>
-<line x1="345.0" y1="222" x2="345.0" y2="230" stroke="#5f6980" stroke-width="2"/>
+<line x1="345.0" y1="222" x2="345.0" y2="230" stroke="#8a8476" stroke-width="2"/>
 <text x="345.0" y="250" text-anchor="middle" class="s dim">300</text>
-<line x1="530.0" y1="222" x2="530.0" y2="230" stroke="#5f6980" stroke-width="2"/>
+<line x1="530.0" y1="222" x2="530.0" y2="230" stroke="#8a8476" stroke-width="2"/>
 <text x="530.0" y="250" text-anchor="middle" class="s dim">600</text>
 <text x="290" y="296" text-anchor="middle" class="ct b">같은 코드인데 4배 차이</text>
-<line x1="590" y1="16" x2="590" y2="310" stroke="#2a3040" stroke-width="2"/>
+<line x1="590" y1="16" x2="590" y2="310" stroke="#cfc6b2" stroke-width="2"/>
 <text x="890" y="30" text-anchor="middle" class="cl b">deltaTime 있음</text>
 <text x="890" y="56" text-anchor="middle" class="s dim">speed = 5 cm / 초 · 1초 이동 거리 (cm)</text>
 <text x="760" y="124" text-anchor="end" class="s">노트북 30fps</text>
-<rect x="770" y="96" width="275.0" height="44" rx="4" fill="#a8e05f"/>
+<rect x="770" y="96" width="275.0" height="44" rx="2" fill="#4f7a16"/>
 <text x="1055.0" y="125" class="b">5 cm</text>
 <text x="760" y="194" text-anchor="end" class="s">데스크톱 120fps</text>
-<rect x="770" y="166" width="275.0" height="44" rx="4" fill="#a8e05f"/>
+<rect x="770" y="166" width="275.0" height="44" rx="2" fill="#4f7a16"/>
 <text x="1055.0" y="195" class="b">5 cm</text>
-<line x1="770" y1="86" x2="770" y2="222" stroke="#5f6980" stroke-width="2"/>
-<line x1="770" y1="222" x2="1100" y2="222" stroke="#2a3040" stroke-width="2"/>
-<line x1="770.0" y1="222" x2="770.0" y2="230" stroke="#5f6980" stroke-width="2"/>
+<line x1="770" y1="86" x2="770" y2="222" stroke="#8a8476" stroke-width="2"/>
+<line x1="770" y1="222" x2="1100" y2="222" stroke="#cfc6b2" stroke-width="2"/>
+<line x1="770.0" y1="222" x2="770.0" y2="230" stroke="#8a8476" stroke-width="2"/>
 <text x="770.0" y="250" text-anchor="middle" class="s dim">0</text>
-<line x1="935.0" y1="222" x2="935.0" y2="230" stroke="#5f6980" stroke-width="2"/>
+<line x1="935.0" y1="222" x2="935.0" y2="230" stroke="#8a8476" stroke-width="2"/>
 <text x="935.0" y="250" text-anchor="middle" class="s dim">3</text>
-<line x1="1100.0" y1="222" x2="1100.0" y2="230" stroke="#5f6980" stroke-width="2"/>
+<line x1="1100.0" y1="222" x2="1100.0" y2="230" stroke="#8a8476" stroke-width="2"/>
 <text x="1100.0" y="250" text-anchor="middle" class="s dim">6</text>
 <text x="890" y="296" text-anchor="middle" class="cl b">어느 PC 든 같은 거리</text>
 <text x="590" y="350" text-anchor="middle" class="s dim">주의 : 두 그래프는 눈금이 다름 (왼쪽 0~600 cm · 오른쪽 0~6 cm) · 값은 시간 · 1, 2 의 표 그대로</text>
@@ -621,8 +883,8 @@ public class Spinner : MonoBehaviour   // ← 이 상속 = "부품 자격증"
       &nbsp;&nbsp;transform.Translate(<br>
       &nbsp;&nbsp;&nbsp;&nbsp;Vector3.forward * speed);<br>
       }<br><br>
-      <span style="color:#5f6980">// 프레임마다 speed 만큼</span><br>
-      <span style="color:#5f6980">// = PC 성능이 곧 속도</span>
+      <span style="color:var(--ink-3)">// 프레임마다 speed 만큼</span><br>
+      <span style="color:var(--ink-3)">// = PC 성능이 곧 속도</span>
     </div>
     <div class="good">
       <h4>필요한 코드</h4>
@@ -631,7 +893,7 @@ public class Spinner : MonoBehaviour   // ← 이 상속 = "부품 자격증"
       &nbsp;&nbsp;&nbsp;&nbsp;Vector3.forward * speed<br>
       &nbsp;&nbsp;&nbsp;&nbsp;* <b>Time.deltaTime</b>);<br>
       }<br><br>
-      <span style="color:#a8e05f">// 초당 speed 만큼</span>
+      <span style="color:var(--lab)">// 초당 speed 만큼</span>
     </div>
   </div>
   <div class="key trap" style="margin-top:.9em">
@@ -666,10 +928,7 @@ public class Spinner : MonoBehaviour   // ← 이 상속 = "부품 자격증"
 <section>
   <div class="tag lab">시간 · 5</div>
   <h2>물리에는 왜 별도 시계가 필요한가</h2>
-  <dl class="terms">
-    <dt>물리 엔진<small>Physics Engine</small></dt><dd>중력·충돌·반발을 계산해 Rigidbody 를 움직이는 Unity 내부 계산기</dd>
-    <dt>고정 타임스텝<small>Fixed Timestep</small></dt><dd>fps 와 무관하게 <b>항상 같은 간격</b>으로 물리를 계산하는 방식 · Unity 기본값 0.02초(초당 50번)</dd>
-  </dl>
+  <p class="small"><span class="t">물리 엔진</span>은 화면 fps 와 따로 <b>항상 같은 간격</b>(<span class="t">고정 타임스텝</span>, 기본 0.02초)으로 계산 — 용어 풀이는 다음 장</p>
   <p class="small">이유 : 물리 계산은 간격이 들쭉날쭉하면 결과가 달라짐<br>
   간격이 길어짐 → 빠른 공이 한 번에 너무 멀리 이동 → <b>벽을 뚫고 지나감</b>(터널링) · 튀는 높이도 PC 마다 달라짐</p>
   <div class="analogy">
@@ -682,37 +941,67 @@ public class Spinner : MonoBehaviour   // ← 이 상속 = "부품 자격증"
   </aside>
 </section>
 
+<section class="gloss">
+  <div class="tag lab">시간 · 5 용어 풀이</div>
+  <h2>물리 엔진 · 고정 타임스텝 · 터널링</h2>
+  <dl class="terms">
+    <dt>물리 엔진<small>Physics Engine</small></dt>
+    <dd>
+      <p>중력·충돌·반발을 계산해 Rigidbody 를 움직이는 Unity 내부 계산기 — 공을 떨어뜨리는 코드를 직접 안 써도 되는 이유</p>
+      <p class="ex">기본 중력 (0, −9.81, 0) — 1초에 초속 9.81m 씩 빨라지며 떨어짐</p>
+      <p class="where">Edit → Project Settings → Physics (중력·충돌 설정) · 3D 물리는 NVIDIA PhysX 기반</p>
+    </dd>
+    <dt>고정 타임스텝<small>Fixed Timestep</small></dt>
+    <dd>
+      <p>fps 와 무관하게 <b>항상 같은 간격</b>으로 물리를 계산하는 방식 — 메트로놈 박자</p>
+      <p class="ex">기본값 0.02초 = 초당 50번 · <code>FixedUpdate</code> 가 이 박자로 호출</p>
+      <p class="why">간격을 크게 늘리면 물리가 거칠어지고, 너무 줄이면 계산량이 늘어 fps 하락</p>
+      <p class="where">Edit → Project Settings → Time → Fixed Timestep</p>
+    </dd>
+    <dt>터널링<small>Tunneling</small></dt>
+    <dd>
+      <p>빠른 물체가 검사와 검사 사이에 벽을 <b>건너뛰어</b> 통과해 버리는 현상</p>
+      <p class="ex">총알·던진 공처럼 0.02초에 벽 두께보다 멀리 가는 물체</p>
+      <p class="why">바닥을 뚫고 떨어진 물체는 되돌아오지 못함 — 오류 메시지 없이 «사라지는» 버그</p>
+      <p class="where">Rigidbody → Collision Detection 을 Discrete 에서 Continuous 계열로 (계산 비용 증가)</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 다음 장 도해 = 터널링 장면 · 공 번호 = 메트로놈 박자(FixedUpdate)
+  </aside>
+</section>
+
 <section>
   <div class="tag lab">시간 · 5 도해</div>
   <h2>터널링 — 검사 사이에 벽을 건너뛴 공</h2>
 <svg class="dg" width="1180" height="420" viewBox="0 0 1180 420" role="img" aria-label="터널링: 빠른 공이 검사 시점 사이에 벽을 건너뜀">
-<defs><pattern id="d33-h" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="12" height="12" fill="#1c2230"/><line x1="0" y1="0" x2="0" y2="12" stroke="#5f6980" stroke-width="4"/></pattern></defs>
-<rect x="640" y="56" width="30" height="300" fill="url(#d33-h)" stroke="#9aa4b8" stroke-width="2"/>
+<defs><pattern id="d33-h" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="12" height="12" fill="#ece6d8"/><line x1="0" y1="0" x2="0" y2="12" stroke="#8a8476" stroke-width="4"/></pattern></defs>
+<rect x="640" y="56" width="30" height="300" fill="url(#d33-h)" stroke="#4a463e" stroke-width="2"/>
 <text x="655" y="40" text-anchor="middle" class="b">벽 (Collider)</text>
 <text x="10" y="120" class="cl b">느린 공</text><text x="10" y="146" class="s dim">한 번에 조금 이동</text>
 <text x="10" y="280" class="ct b">빠른 공</text><text x="10" y="306" class="s dim">한 번에 크게 이동</text>
-<line x1="240" y1="130" x2="634" y2="130" stroke="#a8e05f" stroke-width="2" stroke-dasharray="4 6" opacity=".6"/>
-<circle cx="240" cy="130" r="16" fill="#21330f" stroke="#a8e05f" stroke-width="2.5"/>
+<line x1="240" y1="130" x2="634" y2="130" stroke="#4f7a16" stroke-width="2" stroke-dasharray="4 6" opacity=".6"/>
+<circle cx="240" cy="130" r="16" fill="#e3ecd3" stroke="#4f7a16" stroke-width="2.5"/>
 <text x="240" y="174" text-anchor="middle" class="s dim">1</text>
-<circle cx="320" cy="130" r="16" fill="#21330f" stroke="#a8e05f" stroke-width="2.5"/>
+<circle cx="320" cy="130" r="16" fill="#e3ecd3" stroke="#4f7a16" stroke-width="2.5"/>
 <text x="320" y="174" text-anchor="middle" class="s dim">2</text>
-<circle cx="400" cy="130" r="16" fill="#21330f" stroke="#a8e05f" stroke-width="2.5"/>
+<circle cx="400" cy="130" r="16" fill="#e3ecd3" stroke="#4f7a16" stroke-width="2.5"/>
 <text x="400" y="174" text-anchor="middle" class="s dim">3</text>
-<circle cx="480" cy="130" r="16" fill="#21330f" stroke="#a8e05f" stroke-width="2.5"/>
+<circle cx="480" cy="130" r="16" fill="#e3ecd3" stroke="#4f7a16" stroke-width="2.5"/>
 <text x="480" y="174" text-anchor="middle" class="s dim">4</text>
-<circle cx="560" cy="130" r="16" fill="#21330f" stroke="#a8e05f" stroke-width="2.5"/>
+<circle cx="560" cy="130" r="16" fill="#e3ecd3" stroke="#4f7a16" stroke-width="2.5"/>
 <text x="560" y="174" text-anchor="middle" class="s dim">5</text>
-<circle cx="634" cy="130" r="16" fill="#a8e05f" stroke="#a8e05f" stroke-width="2.5"/>
-<text x="634" y="174" text-anchor="middle" class="s dim">6</text>
+<circle cx="634" cy="130" r="16" fill="#4f7a16" stroke="#4f7a16" stroke-width="2.5"/>
+<text x="624" y="174" text-anchor="middle" class="s dim">6</text>
 <text x="694" y="136" class="cl b">겹침 발견 → 충돌 ✓ 튕겨 나옴</text>
-<line x1="240" y1="290" x2="1020" y2="290" stroke="#ff5a4d" stroke-width="2" stroke-dasharray="4 6" opacity=".7"/>
-<circle cx="240" cy="290" r="16" fill="#431612" stroke="#ff5a4d" stroke-width="2.5"/>
+<line x1="240" y1="290" x2="1020" y2="290" stroke="#c2401d" stroke-width="2" stroke-dasharray="4 6" opacity=".7"/>
+<circle cx="240" cy="290" r="16" fill="#f6e0d6" stroke="#c2401d" stroke-width="2.5"/>
 <text x="240" y="334" text-anchor="middle" class="s dim">1</text>
-<circle cx="500" cy="290" r="16" fill="#431612" stroke="#ff5a4d" stroke-width="2.5"/>
+<circle cx="500" cy="290" r="16" fill="#f6e0d6" stroke="#c2401d" stroke-width="2.5"/>
 <text x="500" y="334" text-anchor="middle" class="s dim">2</text>
-<circle cx="760" cy="290" r="16" fill="#431612" stroke="#ff5a4d" stroke-width="2.5"/>
+<circle cx="760" cy="290" r="16" fill="#f6e0d6" stroke="#c2401d" stroke-width="2.5"/>
 <text x="760" y="334" text-anchor="middle" class="s dim">3</text>
-<circle cx="1020" cy="290" r="16" fill="#431612" stroke="#ff5a4d" stroke-width="2.5"/>
+<circle cx="1020" cy="290" r="16" fill="#f6e0d6" stroke="#c2401d" stroke-width="2.5"/>
 <text x="1020" y="334" text-anchor="middle" class="s dim">4</text>
 <text x="626" y="250" text-anchor="end" class="s ct b">2 와 3 사이 = 검사 안 함</text>
 <text x="690" y="360" class="s ct">2 에서도 3 에서도 벽과 안 겹침 → 그대로 통과 ✗</text>
@@ -743,8 +1032,7 @@ public class Spinner : MonoBehaviour   // ← 이 상속 = "부품 자격증"
     <tr><td><code>Time.time</code></td><td>게임 시작 후 흐른 총 시간</td><td>주기적 동작, 깜빡임 같은 반복 애니메이션</td></tr>
   </table>
   <div class="key" style="margin-top:1em">
-    <p><code>FixedUpdate</code> 안에서 <code>Time.deltaTime</code> 사용 시
-    Unity가 자동으로 <code>fixedDeltaTime</code> 값 반환<br>
+    <p><code>FixedUpdate</code> 안의 <code>Time.deltaTime</code> = 자동으로 <code>fixedDeltaTime</code> 값<br>
     헷갈리면 <b><code>deltaTime</code> 사용</b> — 두 경우 모두 정상</p>
   </div>
   <aside class="notes">
@@ -789,20 +1077,66 @@ void FixedUpdate() { rb.AddForce(Vector3.up); }
 
 <section>
   <div class="tag vr">Part II 용어 미리보기</div>
-  <h2>이번 파트 용어 미리보기</h2>
-  <dl class="terms" style="font-size:.66em">
-    <dt>지연<small>Latency</small></dt><dd>원인(움직임·입력)과 결과(화면 변화) 사이의 시간 차</dd>
-    <dt>motion-to-photon<small>Motion-to-Photon Latency</small></dt><dd>고개를 움직인 순간부터 그 움직임이 반영된 빛(photon)이 화면에서 나오기까지의 지연</dd>
-    <dt>전정계<small>Vestibular System</small></dt><dd>속귀(내이)의 균형 감각 기관 · 머리의 회전·기울기 감지</dd>
-    <dt>주사율<small>Refresh Rate (Hz)</small></dt><dd>화면이 1초에 새 그림으로 바뀌는 횟수 · 90Hz = 1초에 90번</dd>
-    <dt>프레임 예산<small>Frame Budget</small></dt><dd>한 프레임을 완성해야 하는 제한 시간 · 90Hz 면 약 11.1ms</dd>
-    <dt>프레임 드랍<small>Frame Drop</small></dt><dd>제한 시간 안에 그림을 완성하지 못해 한 장을 놓치는 현상</dd>
-    <dt>vsync<small>Vertical Sync</small></dt><dd>화면 교체 시점에 맞춰 그림을 내보내는 동기화 장치</dd>
-    <dt>리프로젝션<small>Reprojection · 재투영</small></dt><dd>놓친 프레임 대신 직전 프레임을 <b>지금 머리 방향에 맞게 비틀어</b> 보여주는 안전장치</dd>
+  <h2>이번 파트 용어 미리보기 (1/2) — 늦게 보이는 세상</h2>
+  <dl class="terms">
+    <dt>지연<small>Latency</small></dt>
+    <dd>
+      <p>원인(움직임·입력)과 결과(화면 변화) 사이의 시간 차 — 생방송이 몇 초 늦게 나오는 것</p>
+      <p class="ex">버튼을 누르고 0.1초(100ms) 뒤 캐릭터가 점프 = 지연 100ms</p>
+      <p class="why">fps 가 높아도 지연이 길면 «매끄럽지만 늦은» 화면 — VR 에서는 멀미</p>
+    </dd>
+    <dt>motion-to-photon<small>Motion-to-Photon Latency</small></dt>
+    <dd>
+      <p>고개를 움직인 순간부터 그 움직임이 반영된 빛(photon)이 화면에서 나오기까지의 지연</p>
+      <p class="ex">흔히 인용되는 목표 20ms 미만 = 0.02초 안에 화면이 고개를 따라와야 함</p>
+      <p class="why">VR 지연 중 몸이 직접 느끼는 바로 그 값 — 센서·계산·렌더링·화면 점등을 모두 합한 시간</p>
+      <p class="where">앱 안에서 직접 표시되지 않음 · 기기 제조사 측정치나 논문 수치로 확인</p>
+    </dd>
+    <dt>전정계<small>Vestibular System</small></dt>
+    <dd>
+      <p>속귀(내이)의 균형 감각 기관 · 머리의 회전·기울기 감지 — 눈을 감아도 몸이 도는 걸 아는 이유</p>
+      <p class="ex">회전의자를 돌다 멈추면 세상이 계속 도는 느낌 = 전정계가 아직 «돈다» 고 보고</p>
+      <p class="why">눈이 본 움직임과 전정계가 느낀 움직임이 어긋나면 멀미 (2주차 감각 충돌)</p>
+    </dd>
   </dl>
   <aside class="notes">
     - Part I 의 fps 와 Part II 의 주사율(Hz)은 거의 같은 개념 — fps 는 «그리는 쪽», Hz 는 «화면 쪽» 의 횟수
     - 전정계 = 2주차 감각 충돌에서 다룬 기관
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어 미리보기</div>
+  <h2>이번 파트 용어 미리보기 (2/2) — 화면 교체 시간표</h2>
+  <dl class="terms">
+    <dt>주사율<small>Refresh Rate (Hz)</small></dt>
+    <dd>
+      <p>화면이 1초에 새 그림으로 바뀌는 횟수 · 90Hz = 1초에 90번 — 정시 출발 버스의 배차</p>
+      <p class="ex">일반 모니터 60Hz · Quest 계열 약 72 / 90 / 120Hz 중 선택</p>
+      <p class="where">앱이 헤드셋에 요청 · 설정 위치는 XR 플러그인·버전마다 다름</p>
+    </dd>
+    <dt>프레임 예산<small>Frame Budget</small></dt>
+    <dd>
+      <p>한 프레임을 완성해야 하는 제한 시간 · 90Hz 면 약 11.1ms — 버스 출발 전까지 남은 시간</p>
+      <p class="ex">1000ms ÷ 72 ≈ 13.9ms · ÷ 90 ≈ 11.1ms · ÷ 120 ≈ 8.3ms</p>
+      <p class="why">로직·물리·두 눈 렌더링을 전부 이 안에 끝내야 함 — 넘기면 프레임 드랍</p>
+    </dd>
+    <dt>프레임 드랍<small>Frame Drop</small></dt>
+    <dd>
+      <p>제한 시간 안에 그림을 완성하지 못해 한 장을 놓치는 현상 — 짐을 못 싣고 떠난 버스</p>
+      <p class="why">모니터에선 잠깐 끊김, VR 에선 고개를 돌릴 때 세상이 덜컥 → 어지럼</p>
+      <p class="where">Quest : OVR Metrics Tool 의 스테일 프레임 수 (14주차에 실측)</p>
+    </dd>
+    <dt>리프로젝션<small>Reprojection · 재투영</small></dt>
+    <dd>
+      <p>놓친 프레임 대신 직전 프레임을 <b>지금 머리 방향에 맞게 비틀어</b> 보여주는 안전장치</p>
+      <p class="why">머리 회전만 맞춰 줌 — 움직이는 물체·몸 이동은 못 맞춰 흔들림·잔상</p>
+      <p class="where">Meta Quest : 타임워프(ATW) 로 항상 동작 · 이름·종류는 플랫폼마다 다름</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - vsync 는 Part I «루프 용어 풀이» 에서 다룸 — 버스 출발 시각 = 화면 교체 시각
+    - 리프로젝션은 지각 · 8 에서 다시 등장
   </aside>
 </section>
 
@@ -1122,7 +1456,7 @@ void Report() { Debug.Log($"{Application.targetFrameRate}fps → {transform.posi
   </table>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">다음 주</div>
   <div class="rule"></div>
   <h1>렌더링 <em>파이프라인</em></h1>

@@ -12,8 +12,9 @@
   /* 1주차 덱 전용 — 인라인 SVG 도해 */
   .reveal svg.dia { display:block; width:100%; height:auto; margin:.2em auto 0; }
   .reveal svg.dia text { font-family: "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif; }
-  .reveal .swatch { display:inline-block; width:1.1em; height:1.1em; border-radius:4px; vertical-align:-.18em; margin-right:.35em; border:1px solid #2a3040; }
+  .reveal .swatch { display:inline-block; width:1.1em; height:1.1em; border-radius:0; vertical-align:-.18em; margin-right:.35em; border:1px solid var(--ink-3); }
   .reveal .tight li { margin-bottom:.25em; }
+  .reveal dl.terms { font-size:.69em; }
 </style>
 </head>
 <body>
@@ -64,11 +65,11 @@
       <p class="small">3D 장면 데이터가 <b>픽셀 하나의 색</b>이 되기까지 다섯 단계를 순서대로 말하고, 각 단계를 배울 주차 짚기</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">2</span> VR 시스템 분해</h4>
+      <h4><span class="step" style="color:var(--vr);border-color:var(--vr)">2</span> VR 시스템 분해</h4>
       <p class="small">트래킹 → 가상 세계 → 렌더링 → 디스플레이 → <b>사람</b>으로 이어지는 고리를 그리고, 사람이 왜 «부품» 인지 설명</p>
     </div>
     <div class="card lab">
-      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">3</span> 첫 명세와 검증</h4>
+      <h4><span class="step" style="color:var(--lab);border-color:var(--lab)">3</span> 첫 명세와 검증</h4>
       <p class="small">Unity 프로젝트를 만들고, AI 의 씬 설명을 <b>Hierarchy 와 대조해 틀린 곳 찾기</b> · 명세 4칸으로 첫 요청 작성</p>
     </div>
   </div>
@@ -78,7 +79,7 @@
 </section>
 
 <!-- ========================================================= 오리엔테이션 -->
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">Orientation · 20분</div>
   <div class="rule"></div>
   <h1>이 수업의 <em>명제</em></h1>
@@ -156,11 +157,11 @@
       <p class="small">이론 강의로 원리 이해 · 용어 확보</p>
     </div>
     <div class="card lab">
-      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">2</span> 명세</h4>
+      <h4><span class="step" style="color:var(--lab);border-color:var(--lab)">2</span> 명세</h4>
       <p class="small">그 개념을 <b>정확한 용어</b>로 AI 에게 요구 · 용어를 모르면 이 단계에서 막힘</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 검증</h4>
+      <h4><span class="step" style="color:var(--trap);border-color:var(--trap)">3</span> 검증</h4>
       <p class="small">결과가 이론적으로 맞는지 확인 · 틀렸다면 <b>어디가 왜</b> → 재요청</p>
     </div>
   </div>
@@ -211,43 +212,43 @@
   <div class="tag lab">운영 · 4</div>
   <h2>지각 실험실 — 한 학기 동안 키우는 씬 하나</h2>
   <svg class="dia" viewBox="0 0 1160 330" role="img" aria-label="지각 실험실 씬 누적 일정">
-    <line x1="60" y1="120" x2="1110" y2="120" stroke="#2a3040" stroke-width="6" stroke-linecap="round"/>
-    <g font-size="20" fill="#e8ecf4" text-anchor="middle">
-      <circle cx="80" cy="120" r="16" fill="#a8e05f"/>
-      <text x="80" y="70" font-weight="700" fill="#a8e05f">1주</text>
-      <text x="80" y="175">뼈대</text><text x="80" y="200" fill="#9aa4b8" font-size="17">바닥·큐브·눈높이</text>
+    <line x1="60" y1="120" x2="1110" y2="120" stroke="#cfc6b2" stroke-width="6" stroke-linecap="round"/>
+    <g font-size="20" fill="#1b1a17" text-anchor="middle">
+      <circle cx="80" cy="120" r="16" fill="#4f7a16"/>
+      <text x="80" y="70" font-weight="700" fill="#4f7a16">1주</text>
+      <text x="80" y="175">뼈대</text><text x="80" y="200" fill="#4a463e" font-size="17">바닥·큐브·눈높이</text>
 
-      <circle cx="225" cy="120" r="13" fill="#35d6e6"/>
+      <circle cx="225" cy="120" r="13" fill="#0d6b78"/>
       <text x="225" y="70" font-weight="700">2주</text>
       <text x="225" y="175">좌표계 체인</text>
 
-      <circle cx="360" cy="120" r="13" fill="#35d6e6"/>
+      <circle cx="360" cy="120" r="13" fill="#0d6b78"/>
       <text x="360" y="70" font-weight="700">3주</text>
-      <text x="360" y="175">프레임 독립성</text><text x="360" y="200" fill="#9aa4b8" font-size="17">측정</text>
+      <text x="360" y="175">프레임 독립성</text><text x="360" y="200" fill="#4a463e" font-size="17">측정</text>
 
-      <circle cx="495" cy="120" r="13" fill="#35d6e6"/>
+      <circle cx="495" cy="120" r="13" fill="#0d6b78"/>
       <text x="495" y="70" font-weight="700">4주</text>
-      <text x="495" y="175">z-fighting</text><text x="495" y="200" fill="#9aa4b8" font-size="17">재현·해결</text>
+      <text x="495" y="175">z-fighting</text><text x="495" y="200" fill="#4a463e" font-size="17">재현·해결</text>
 
-      <circle cx="630" cy="120" r="13" fill="#35d6e6"/>
+      <circle cx="630" cy="120" r="13" fill="#0d6b78"/>
       <text x="630" y="70" font-weight="700">5주</text>
-      <text x="630" y="175">깊이 단서</text><text x="630" y="200" fill="#9aa4b8" font-size="17">스위치</text>
+      <text x="630" y="175">깊이 단서</text><text x="630" y="200" fill="#4a463e" font-size="17">스위치</text>
 
-      <circle cx="765" cy="120" r="13" fill="#35d6e6"/>
+      <circle cx="765" cy="120" r="13" fill="#0d6b78"/>
       <text x="765" y="70" font-weight="700">6·7주</text>
-      <text x="765" y="175">앨리어싱</text><text x="765" y="200" fill="#9aa4b8" font-size="17">물리 오차</text>
+      <text x="765" y="175">앨리어싱</text><text x="765" y="200" fill="#4a463e" font-size="17">물리 오차</text>
 
-      <circle cx="900" cy="120" r="16" fill="#ffc44d"/>
-      <text x="900" y="70" font-weight="700" fill="#ffc44d">8주</text>
-      <text x="900" y="175">중간 시연</text><text x="900" y="200" fill="#9aa4b8" font-size="17">= 실험실 완성판</text>
+      <circle cx="900" cy="120" r="16" fill="#a8701a"/>
+      <text x="900" y="70" font-weight="700" fill="#a8701a">8주</text>
+      <text x="900" y="175">중간 시연</text><text x="900" y="200" fill="#4a463e" font-size="17">= 실험실 완성판</text>
 
-      <circle cx="1060" cy="120" r="22" fill="#ff5fa2"/>
-      <text x="1060" y="128" font-size="22" fill="#0b0d12" font-weight="700">★</text>
-      <text x="1060" y="70" font-weight="700" fill="#ff5fa2">11·12주</text>
-      <text x="1060" y="175" fill="#ff5fa2">VR 로 포팅</text><text x="1060" y="200" fill="#9aa4b8" font-size="17">내 실험실에 입장</text>
+      <circle cx="1060" cy="120" r="22" fill="#a3245e"/>
+      <text x="1060" y="128" font-size="22" fill="#f5f1e8" font-weight="700">★</text>
+      <text x="1060" y="70" font-weight="700" fill="#a3245e">11·12주</text>
+      <text x="1060" y="175" fill="#a3245e">VR 로 포팅</text><text x="1060" y="200" fill="#4a463e" font-size="17">내 실험실에 입장</text>
     </g>
-    <rect x="60" y="245" width="1050" height="62" rx="12" fill="rgba(168,224,95,0.08)" stroke="#3c5220"/>
-    <text x="585" y="284" font-size="20" fill="#e8ecf4" text-anchor="middle">매주 새 프로젝트 대신 <tspan fill="#a8e05f" font-weight="700">같은 씬</tspan>에 그 주 개념을 검증하는 장치를 하나씩 추가</text>
+    <rect x="60" y="245" width="1050" height="62" fill="#e3ecd3" stroke="none"/>
+    <text x="585" y="284" font-size="20" fill="#1b1a17" text-anchor="middle">매주 새 프로젝트 대신 <tspan fill="#4f7a16" font-weight="700">같은 씬</tspan>에 그 주 개념을 검증하는 장치를 하나씩 추가</text>
   </svg>
   <div class="analogy">
     <p><b>과학 실험실 실험대</b> : 예쁜 전시품이 아니라 매주 새 장치를 올려 측정하는 작업대 · 학기 말엔 그 실험대 위에 직접 올라섬</p>
@@ -315,21 +316,102 @@
 
 <section>
   <div class="tag gfx">Part I 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>용어 미리보기 (1/3) — 화면 쪽</h2>
   <dl class="terms">
-    <dt>픽셀<small>Pixel</small></dt><dd>화면을 이루는 가장 작은 색 칸 하나 — picture element 의 줄임말</dd>
-    <dt>해상도<small>Resolution</small></dt><dd>화면의 가로 × 세로 픽셀 개수 — 예 : 1920 × 1080</dd>
-    <dt>렌더링<small>Rendering</small></dt><dd>3D 장면 데이터를 계산해 <b>픽셀 색 배열(이미지)</b>로 만드는 과정</dd>
-    <dt>메시<small>Mesh</small></dt><dd>삼각형을 이어 붙여 만든 3D 물체의 겉모양 데이터</dd>
-    <dt>정점<small>Vertex</small></dt><dd>삼각형의 꼭짓점 하나 — 위치 (x, y, z) 등을 담은 점</dd>
-    <dt>파이프라인<small>Pipeline</small></dt><dd>여러 계산 단계를 정해진 순서로 잇는 작업 흐름 — 조립 라인</dd>
-    <dt>프레임<small>Frame</small></dt><dd>화면에 한 번 그려지는 정지 그림 한 장 — 초당 장수 = fps</dd>
-    <dt>GPU<small>Graphics Processing Unit</small></dt><dd>같은 계산을 동시에 대량으로 처리하는 그래픽 전용 칩</dd>
+    <dt>픽셀<small>Pixel</small></dt>
+    <dd>
+      <p>화면을 이루는 가장 작은 색 칸 하나 — 모자이크의 타일 한 장 (picture element 의 줄임말)</p>
+      <p class="ex">칸 하나 = 숫자 세 개 (R, G, B) · 주황 = (255, 140, 0)</p>
+      <p class="why">그래픽스의 최종 결과물 = 이 칸마다 들어갈 색 → 모든 이론이 결국 이 색을 정하는 방법</p>
+    </dd>
+    <dt>해상도<small>Resolution</small></dt>
+    <dd>
+      <p>화면의 가로 칸 수 × 세로 칸 수 — 칸이 많을수록 그림이 촘촘하고 매끈</p>
+      <p class="ex">FHD 1920 × 1080 ≈ 207만 칸 · Quest 3 한 눈 2064 × 2208 ≈ 456만 칸</p>
+      <p class="why">칸 수만큼 색 계산이 늘어남 → VR 은 모니터보다 약 4.4배 많은 칸을 칠해야 함</p>
+      <p class="where">Unity : Game 뷰 상단 해상도 드롭다운 (Free Aspect → 1920x1080 등)</p>
+    </dd>
+    <dt>프레임<small>Frame</small></dt>
+    <dd>
+      <p>화면에 한 번 그려지는 정지 그림 한 장 — 플립북의 종이 한 장 · 1초에 몇 장인가 = fps · 모자라면 끊김</p>
+      <p class="ex">90 fps = 1초에 90장 → 한 장에 쓸 수 있는 시간 약 11.1 ms</p>
+      <p class="where">Unity : Game 뷰 오른쪽 위 Stats 버튼 → FPS · ms 표시</p>
+    </dd>
+    <dt>GPU<small>Graphics Processing Unit</small></dt>
+    <dd>
+      <p>쉬운 계산 수억 개를 동시에 나눠 처리하는 그래픽 전용 칩 — 초등학생 수천 명이 곱셈을 나눠 푸는 교실</p>
+      <p class="ex">Quest 3 의 GPU = 헤드셋 안 모바일 칩 (Snapdragon XR2 Gen 2) · PC 그래픽카드보다 여유 적음</p>
+      <p class="where">Unity : Window → Analysis → Profiler → GPU 사용량 모듈</p>
+    </dd>
   </dl>
   <aside class="notes">
     - 지금 외울 필요 없음 · 슬라이드마다 다시 풀어 줌
     - 학기 용어집 : syllabus/용어집.md (매주 누적)
   </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>용어 미리보기 (2/3) — 장면과 계산</h2>
+  <dl class="terms">
+    <dt>메시<small>Mesh</small></dt>
+    <dd>
+      <p>작은 삼각형을 이어 붙여 만든 3D 물체의 겉껍질 데이터 — 속이 빈 종이 공예 모형</p>
+      <p class="ex">정육면체 = 삼각형 12개 · Unity 기본 Sphere = 삼각형 약 770개</p>
+      <p class="where">Unity : Inspector 의 Mesh Filter 컴포넌트 · Scene 뷰 Shading Mode → Wireframe</p>
+    </dd>
+    <dt>정점<small>Vertex</small></dt>
+    <dd>
+      <p>삼각형의 꼭짓점 하나 — 위치 (x, y, z) 와 방향·색 같은 정보를 함께 담은 점</p>
+      <p class="ex">정육면체 꼭짓점 8개 · 의자 앉는 면 중심 (0, 0.5, 0)</p>
+      <p class="where">Unity : Game 뷰 Stats 창의 Verts(정점 수) · Tris(삼각형 수)</p>
+    </dd>
+    <dt>렌더링<small>Rendering</small></dt>
+    <dd>
+      <p>3D 장면의 숫자들을 계산해 <b>픽셀 색 배열(이미지 한 장)</b>로 바꾸는 일 — 촬영장 촬영을 계산으로 하기</p>
+      <p class="ex">입력 : 메시 · 재질 · 광원 · 카메라 → 출력 : 1920 × 1080 칸의 색</p>
+      <p class="where">Unity : Game 뷰에 보이는 화면 = 매 프레임의 렌더링 결과</p>
+    </dd>
+    <dt>파이프라인<small>Pipeline</small></dt>
+    <dd>
+      <p>여러 계산 단계를 정해진 순서로 이어 흘려보내는 작업 흐름 — 자동차 조립 라인</p>
+      <p class="ex">좌표 변환 → 투영 → 래스터화 → 셰이딩 → 깊이 판정</p>
+      <p class="why">결과가 틀리면 «어느 단계에서?» 로 범위를 좁혀야 원인을 찾음</p>
+      <p class="where">Unity : Project Settings → Graphics → Default Render Pipeline (URP 에셋)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>용어 미리보기 (3/3) — 파이프라인 안쪽</h2>
+  <dl class="terms">
+    <dt>좌표계<small>Local · World · View</small></dt>
+    <dd>
+      <p>위치를 말할 때의 «기준점» — 물체 자신 기준(로컬) · 씬 전체 기준(월드) · 카메라 기준(뷰)</p>
+      <p class="ex">로컬 (0, 0.5, 0) 인 점 + 의자를 월드 (3, 0, 2) 에 배치 → 월드 (3, 0.5, 2)</p>
+      <p class="where">Unity : Inspector 의 Transform Position = 부모 기준 값 · Scene 뷰 툴바 Local / Global 전환</p>
+    </dd>
+    <dt>프래그먼트<small>Fragment</small></dt>
+    <dd>
+      <p>래스터화(삼각형 → 칸 고르기)로 뽑힌 칸 하나 — 아직 색이 확정되지 않은 «색칠 후보»</p>
+      <p class="ex">이번 장 그림 : 112칸 중 중심점이 삼각형 안인 37칸 = 프래그먼트 37개</p>
+      <p class="why">뒤의 셰이딩·깊이 판정은 이 후보 하나하나를 대상으로 실행</p>
+    </dd>
+    <dt>셰이더<small>Shader</small></dt>
+    <dd>
+      <p>칸(또는 꼭짓점)마다 GPU 에서 실행되는 작은 프로그램 — 칸마다 «무슨 색인가» 를 계산</p>
+      <p class="ex">밝기 = 바탕색 × cos θ → 0.8 × 0.5 = 0.4</p>
+      <p class="where">Unity : Material 의 Inspector 맨 위 Shader 드롭다운 (Universal Render Pipeline/Lit)</p>
+    </dd>
+    <dt>깊이 버퍼<small>Depth buffer</small></dt>
+    <dd>
+      <p>칸마다 «지금까지 가장 가까운 거리» 를 적어 두는 표 — 더 가까운 후보만 색을 덮어씀</p>
+      <p class="ex">벽 5 m · 의자 2 m 가 같은 칸 → 2 &lt; 5 → 의자 색 남김</p>
+      <p class="why">거리를 유한한 칸 수로 적음 → 거의 같은 거리면 깜빡임 (4주 z-fighting)</p>
+      <p class="where">Unity : Camera 의 Clipping Planes (Near · Far) 가 정밀도를 좌우</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -421,44 +503,44 @@
   <svg class="dia" viewBox="0 0 1180 420" role="img" aria-label="렌더링 파이프라인 다섯 단계와 배울 주차">
     <defs>
       <marker id="ar1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-        <path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/>
+        <path d="M0,0 L10,5 L0,10 z" fill="#4a463e"/>
       </marker>
     </defs>
     <!-- 입력 -->
-    <rect x="10" y="20" width="250" height="56" rx="10" fill="#171b25" stroke="#2a3040"/>
-    <text x="135" y="55" font-size="19" fill="#e8ecf4" text-anchor="middle">입력 : 메시 · 재질 · 광원 · 카메라</text>
+    <rect x="10" y="20" width="250" height="56" fill="#ece6d8" stroke="#cfc6b2"/>
+    <text x="135" y="55" font-size="19" fill="#1b1a17" text-anchor="middle">입력 : 메시 · 재질 · 광원 · 카메라</text>
     <!-- 출력 -->
-    <rect x="920" y="20" width="250" height="56" rx="10" fill="#171b25" stroke="#2a3040"/>
-    <text x="1045" y="55" font-size="19" fill="#e8ecf4" text-anchor="middle">출력 : 픽셀 색 배열 1장</text>
+    <rect x="920" y="20" width="250" height="56" fill="#ece6d8" stroke="#cfc6b2"/>
+    <text x="1045" y="55" font-size="19" fill="#1b1a17" text-anchor="middle">출력 : 픽셀 색 배열 1장</text>
 
     <g font-size="20" text-anchor="middle">
       <!-- 1 -->
-      <rect x="10" y="130" width="205" height="120" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-      <text x="112" y="172" fill="#35d6e6" font-weight="700">① 좌표 변환</text>
-      <text x="112" y="203" fill="#e8ecf4" font-size="18">물체를 세상에 배치</text>
-      <text x="112" y="230" fill="#9aa4b8" font-size="17">카메라 기준으로</text>
+      <rect x="10" y="130" width="205" height="120" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+      <text x="112" y="172" fill="#0d6b78" font-weight="700">① 좌표 변환</text>
+      <text x="112" y="203" fill="#1b1a17" font-size="18">물체를 세상에 배치</text>
+      <text x="112" y="230" fill="#4a463e" font-size="17">카메라 기준으로</text>
       <!-- 2 -->
-      <rect x="250" y="130" width="205" height="120" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-      <text x="352" y="172" fill="#35d6e6" font-weight="700">② 투영</text>
-      <text x="352" y="203" fill="#e8ecf4" font-size="18">3D → 2D 화면</text>
-      <text x="352" y="230" fill="#9aa4b8" font-size="17">멀수록 작게</text>
+      <rect x="250" y="130" width="205" height="120" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+      <text x="352" y="172" fill="#0d6b78" font-weight="700">② 투영</text>
+      <text x="352" y="203" fill="#1b1a17" font-size="18">3D → 2D 화면</text>
+      <text x="352" y="230" fill="#4a463e" font-size="17">멀수록 작게</text>
       <!-- 3 -->
-      <rect x="490" y="130" width="205" height="120" rx="14" fill="#171b25" stroke="#ffc44d" stroke-width="2"/>
-      <text x="592" y="172" fill="#ffc44d" font-weight="700">③ 래스터화</text>
-      <text x="592" y="203" fill="#e8ecf4" font-size="18">삼각형이 덮는</text>
-      <text x="592" y="230" fill="#e8ecf4" font-size="18">픽셀 고르기</text>
+      <rect x="490" y="130" width="205" height="120" fill="#ece6d8" stroke="#a8701a" stroke-width="2"/>
+      <text x="592" y="172" fill="#a8701a" font-weight="700">③ 래스터화</text>
+      <text x="592" y="203" fill="#1b1a17" font-size="18">삼각형이 덮는</text>
+      <text x="592" y="230" fill="#1b1a17" font-size="18">픽셀 고르기</text>
       <!-- 4 -->
-      <rect x="730" y="130" width="205" height="120" rx="14" fill="#171b25" stroke="#a8e05f" stroke-width="2"/>
-      <text x="832" y="172" fill="#a8e05f" font-weight="700">④ 셰이딩</text>
-      <text x="832" y="203" fill="#e8ecf4" font-size="18">픽셀마다 색 계산</text>
-      <text x="832" y="230" fill="#9aa4b8" font-size="17">빛 × 방향 × 재질</text>
+      <rect x="730" y="130" width="205" height="120" fill="#ece6d8" stroke="#4f7a16" stroke-width="2"/>
+      <text x="832" y="172" fill="#4f7a16" font-weight="700">④ 셰이딩</text>
+      <text x="832" y="203" fill="#1b1a17" font-size="18">픽셀마다 색 계산</text>
+      <text x="832" y="230" fill="#4a463e" font-size="17">빛 × 방향 × 재질</text>
       <!-- 5 -->
-      <rect x="970" y="130" width="200" height="120" rx="14" fill="#171b25" stroke="#a8e05f" stroke-width="2"/>
-      <text x="1070" y="172" fill="#a8e05f" font-weight="700">⑤ 깊이 판정</text>
-      <text x="1070" y="203" fill="#e8ecf4" font-size="18">가장 앞의 색만</text>
-      <text x="1070" y="230" fill="#e8ecf4" font-size="18">남기기</text>
+      <rect x="970" y="130" width="200" height="120" fill="#ece6d8" stroke="#4f7a16" stroke-width="2"/>
+      <text x="1070" y="172" fill="#4f7a16" font-weight="700">⑤ 깊이 판정</text>
+      <text x="1070" y="203" fill="#1b1a17" font-size="18">가장 앞의 색만</text>
+      <text x="1070" y="230" fill="#1b1a17" font-size="18">남기기</text>
     </g>
-    <g stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#ar1)">
+    <g stroke="#4a463e" stroke-width="2.5" marker-end="url(#ar1)">
       <line x1="217" y1="190" x2="246" y2="190"/>
       <line x1="457" y1="190" x2="486" y2="190"/>
       <line x1="697" y1="190" x2="726" y2="190"/>
@@ -468,19 +550,19 @@
     </g>
     <!-- 주차 -->
     <g font-size="19" text-anchor="middle" font-weight="700">
-      <text x="112" y="285" fill="#e8ecf4">2주</text>
-      <text x="352" y="285" fill="#e8ecf4">4주</text>
-      <text x="592" y="285" fill="#e8ecf4">4주</text>
-      <text x="832" y="285" fill="#e8ecf4">5 · 6주</text>
-      <text x="1070" y="285" fill="#e8ecf4">4주</text>
+      <text x="112" y="285" fill="#1b1a17">2주</text>
+      <text x="352" y="285" fill="#1b1a17">4주</text>
+      <text x="592" y="285" fill="#1b1a17">4주</text>
+      <text x="832" y="285" fill="#1b1a17">5 · 6주</text>
+      <text x="1070" y="285" fill="#1b1a17">4주</text>
     </g>
     <!-- 묶음 -->
-    <path d="M14,312 L14,326 L451,326 L451,312" fill="none" stroke="#35d6e6" stroke-width="2"/>
-    <text x="232" y="356" font-size="18" fill="#35d6e6" text-anchor="middle">꼭짓점(정점) 단위 계산 — 정점 셰이더</text>
-    <path d="M734,312 L734,326 L1166,326 L1166,312" fill="none" stroke="#a8e05f" stroke-width="2"/>
-    <text x="950" y="356" font-size="18" fill="#a8e05f" text-anchor="middle">픽셀(프래그먼트) 단위 계산</text>
-    <text x="592" y="356" font-size="18" fill="#ffc44d" text-anchor="middle">점 → 칸 전환</text>
-    <text x="590" y="400" font-size="17" fill="#9aa4b8" text-anchor="middle">④ ⑤ 순서는 GPU 최적화로 바뀌기도 함 (깊이를 먼저 보고 가려진 픽셀의 색 계산 생략)</text>
+    <path d="M14,312 L14,326 L451,326 L451,312" fill="none" stroke="#0d6b78" stroke-width="2"/>
+    <text x="232" y="356" font-size="18" fill="#0d6b78" text-anchor="middle">꼭짓점(정점) 단위 계산 — 정점 셰이더</text>
+    <path d="M734,312 L734,326 L1166,326 L1166,312" fill="none" stroke="#4f7a16" stroke-width="2"/>
+    <text x="950" y="356" font-size="18" fill="#4f7a16" text-anchor="middle">픽셀(프래그먼트) 단위 계산</text>
+    <text x="592" y="356" font-size="18" fill="#a8701a" text-anchor="middle">점 → 칸 전환</text>
+    <text x="590" y="400" font-size="17" fill="#4a463e" text-anchor="middle">④ ⑤ 순서는 GPU 최적화로 바뀌기도 함 (깊이를 먼저 보고 가려진 픽셀의 색 계산 생략)</text>
   </svg>
   <aside class="notes">
     - 이 그림이 학기 전반부(2~6주)의 목차
@@ -541,23 +623,23 @@
     </div>
     <div>
       <svg class="dia" viewBox="0 0 640 330" role="img" aria-label="거리에 따라 화면 위 크기가 줄어드는 원근 투영">
-        <text x="330" y="30" font-size="18" fill="#e8ecf4" text-anchor="middle">화면 위 높이 : <tspan fill="#35d6e6">2 m → 0.5</tspan> · <tspan fill="#a8e05f">4 m → 0.25</tspan></text>
-        <line x1="40" y1="260" x2="620" y2="260" stroke="#2a3040" stroke-width="2"/>
-        <circle cx="60" cy="260" r="10" fill="#ff5fa2"/>
-        <text x="60" y="296" font-size="18" fill="#ff5fa2" text-anchor="middle">눈</text>
-        <line x1="180" y1="80" x2="180" y2="280" stroke="#ffc44d" stroke-width="3"/>
-        <text x="180" y="306" font-size="17" fill="#ffc44d" text-anchor="middle">화면 (f = 1)</text>
-        <rect x="292" y="140" width="16" height="120" fill="#35d6e6"/>
-        <text x="300" y="296" font-size="17" fill="#e8ecf4" text-anchor="middle">2 m</text>
-        <rect x="532" y="140" width="16" height="120" fill="#a8e05f"/>
-        <text x="540" y="296" font-size="17" fill="#e8ecf4" text-anchor="middle">4 m</text>
+        <text x="330" y="30" font-size="18" fill="#1b1a17" text-anchor="middle">화면 위 높이 : <tspan fill="#0d6b78">2 m → 0.5</tspan> · <tspan fill="#4f7a16">4 m → 0.25</tspan></text>
+        <line x1="40" y1="260" x2="620" y2="260" stroke="#cfc6b2" stroke-width="2"/>
+        <circle cx="60" cy="260" r="10" fill="#a3245e"/>
+        <text x="60" y="296" font-size="18" fill="#a3245e" text-anchor="middle">눈</text>
+        <line x1="180" y1="80" x2="180" y2="280" stroke="#a8701a" stroke-width="3"/>
+        <text x="180" y="306" font-size="17" fill="#a8701a" text-anchor="middle">화면 (f = 1)</text>
+        <rect x="292" y="140" width="16" height="120" fill="#0d6b78"/>
+        <text x="300" y="296" font-size="17" fill="#1b1a17" text-anchor="middle">2 m</text>
+        <rect x="532" y="140" width="16" height="120" fill="#4f7a16"/>
+        <text x="540" y="296" font-size="17" fill="#1b1a17" text-anchor="middle">4 m</text>
         <g stroke-width="2" stroke-dasharray="6 5">
-          <line x1="60" y1="260" x2="300" y2="140" stroke="#35d6e6"/>
-          <line x1="60" y1="260" x2="540" y2="140" stroke="#a8e05f"/>
+          <line x1="60" y1="260" x2="300" y2="140" stroke="#0d6b78"/>
+          <line x1="60" y1="260" x2="540" y2="140" stroke="#4f7a16"/>
         </g>
-        <rect x="183" y="200" width="10" height="60" fill="#35d6e6"/>
-        <rect x="167" y="230" width="10" height="30" fill="#a8e05f"/>
-        <text x="555" y="125" font-size="16" fill="#9aa4b8" text-anchor="middle">높이 1 m</text>
+        <rect x="183" y="200" width="10" height="60" fill="#0d6b78"/>
+        <rect x="167" y="230" width="10" height="30" fill="#4f7a16"/>
+        <text x="555" y="125" font-size="16" fill="#4a463e" text-anchor="middle">높이 1 m</text>
       </svg>
     </div>
   </div>
@@ -586,159 +668,159 @@
     </div>
     <div>
       <svg class="dia" viewBox="0 0 572 344" style="max-height:355px" role="img" aria-label="삼각형이 덮는 픽셀 칸 선택">
-<rect x="20" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="58" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="96" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="134" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="172" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="210" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="248" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="286" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="324" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="362" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="400" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="438" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="476" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="514" y="20" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="20" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="58" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="96" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="134" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="172" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="210" y="58" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="229.0" cy="77.0" r="3.5" fill="#35d6e6"/>
-<rect x="248" y="58" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="267.0" cy="77.0" r="3.5" fill="#35d6e6"/>
-<rect x="286" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="324" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="362" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="400" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="438" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="476" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="514" y="58" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="20" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="58" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="96" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="134" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="172" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="210" y="96" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="229.0" cy="115.0" r="3.5" fill="#35d6e6"/>
-<rect x="248" y="96" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="267.0" cy="115.0" r="3.5" fill="#35d6e6"/>
-<rect x="286" y="96" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="305.0" cy="115.0" r="3.5" fill="#35d6e6"/>
-<rect x="324" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="362" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="400" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="438" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="476" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="514" y="96" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="20" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="58" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="96" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="134" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="172" y="134" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="191.0" cy="153.0" r="3.5" fill="#35d6e6"/>
-<rect x="210" y="134" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="229.0" cy="153.0" r="3.5" fill="#35d6e6"/>
-<rect x="248" y="134" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="267.0" cy="153.0" r="3.5" fill="#35d6e6"/>
-<rect x="286" y="134" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="305.0" cy="153.0" r="3.5" fill="#35d6e6"/>
-<rect x="324" y="134" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="343.0" cy="153.0" r="3.5" fill="#35d6e6"/>
-<rect x="362" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="400" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="438" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="476" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="514" y="134" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="20" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="58" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="96" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="134" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="153.0" cy="191.0" r="3.5" fill="#35d6e6"/>
-<rect x="172" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="191.0" cy="191.0" r="3.5" fill="#35d6e6"/>
-<rect x="210" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="229.0" cy="191.0" r="3.5" fill="#35d6e6"/>
-<rect x="248" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="267.0" cy="191.0" r="3.5" fill="#35d6e6"/>
-<rect x="286" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="305.0" cy="191.0" r="3.5" fill="#35d6e6"/>
-<rect x="324" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="343.0" cy="191.0" r="3.5" fill="#35d6e6"/>
-<rect x="362" y="172" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="381.0" cy="191.0" r="3.5" fill="#35d6e6"/>
-<rect x="400" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="438" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="476" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="514" y="172" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="20" y="210" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="58" y="210" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="96" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="115.0" cy="229.0" r="3.5" fill="#35d6e6"/>
-<rect x="134" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="153.0" cy="229.0" r="3.5" fill="#35d6e6"/>
-<rect x="172" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="191.0" cy="229.0" r="3.5" fill="#35d6e6"/>
-<rect x="210" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="229.0" cy="229.0" r="3.5" fill="#35d6e6"/>
-<rect x="248" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="267.0" cy="229.0" r="3.5" fill="#35d6e6"/>
-<rect x="286" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="305.0" cy="229.0" r="3.5" fill="#35d6e6"/>
-<rect x="324" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="343.0" cy="229.0" r="3.5" fill="#35d6e6"/>
-<rect x="362" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="381.0" cy="229.0" r="3.5" fill="#35d6e6"/>
-<rect x="400" y="210" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="419.0" cy="229.0" r="3.5" fill="#35d6e6"/>
-<rect x="438" y="210" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="476" y="210" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="514" y="210" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="20" y="248" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="58" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="77.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="96" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="115.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="134" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="153.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="172" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="191.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="210" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="229.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="248" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="267.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="286" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="305.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="324" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="343.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="362" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="381.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="400" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="419.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="438" y="248" width="38" height="38" fill="#0e3a42" stroke="#2a3040" stroke-width="1.5"/>
-<circle cx="457.0" cy="267.0" r="3.5" fill="#35d6e6"/>
-<rect x="476" y="248" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="514" y="248" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="20" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="58" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="96" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="134" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="172" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="210" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="248" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="286" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="324" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="362" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="400" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="438" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="476" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<rect x="514" y="286" width="38" height="38" fill="none" stroke="#2a3040" stroke-width="1.5"/>
-<polygon points="69.4,270.8 491.2,301.2 255.6,42.8" fill="none" stroke="#ffc44d" stroke-width="3"/>
-<circle cx="69.4" cy="270.8" r="6" fill="#ffc44d"/>
-<circle cx="491.2" cy="301.2" r="6" fill="#ffc44d"/>
-<circle cx="255.6" cy="42.8" r="6" fill="#ffc44d"/>
+<rect x="20" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="58" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="96" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="134" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="172" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="210" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="248" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="286" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="324" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="362" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="400" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="438" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="476" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="514" y="20" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="20" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="58" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="96" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="134" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="172" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="210" y="58" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="229.0" cy="77.0" r="3.5" fill="#0d6b78"/>
+<rect x="248" y="58" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="267.0" cy="77.0" r="3.5" fill="#0d6b78"/>
+<rect x="286" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="324" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="362" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="400" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="438" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="476" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="514" y="58" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="20" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="58" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="96" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="134" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="172" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="210" y="96" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="229.0" cy="115.0" r="3.5" fill="#0d6b78"/>
+<rect x="248" y="96" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="267.0" cy="115.0" r="3.5" fill="#0d6b78"/>
+<rect x="286" y="96" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="305.0" cy="115.0" r="3.5" fill="#0d6b78"/>
+<rect x="324" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="362" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="400" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="438" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="476" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="514" y="96" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="20" y="134" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="58" y="134" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="96" y="134" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="134" y="134" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="172" y="134" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="191.0" cy="153.0" r="3.5" fill="#0d6b78"/>
+<rect x="210" y="134" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="229.0" cy="153.0" r="3.5" fill="#0d6b78"/>
+<rect x="248" y="134" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="267.0" cy="153.0" r="3.5" fill="#0d6b78"/>
+<rect x="286" y="134" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="305.0" cy="153.0" r="3.5" fill="#0d6b78"/>
+<rect x="324" y="134" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="343.0" cy="153.0" r="3.5" fill="#0d6b78"/>
+<rect x="362" y="134" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="400" y="134" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="438" y="134" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="476" y="134" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="514" y="134" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="20" y="172" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="58" y="172" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="96" y="172" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="134" y="172" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="153.0" cy="191.0" r="3.5" fill="#0d6b78"/>
+<rect x="172" y="172" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="191.0" cy="191.0" r="3.5" fill="#0d6b78"/>
+<rect x="210" y="172" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="229.0" cy="191.0" r="3.5" fill="#0d6b78"/>
+<rect x="248" y="172" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="267.0" cy="191.0" r="3.5" fill="#0d6b78"/>
+<rect x="286" y="172" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="305.0" cy="191.0" r="3.5" fill="#0d6b78"/>
+<rect x="324" y="172" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="343.0" cy="191.0" r="3.5" fill="#0d6b78"/>
+<rect x="362" y="172" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="381.0" cy="191.0" r="3.5" fill="#0d6b78"/>
+<rect x="400" y="172" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="438" y="172" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="476" y="172" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="514" y="172" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="20" y="210" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="58" y="210" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="96" y="210" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="115.0" cy="229.0" r="3.5" fill="#0d6b78"/>
+<rect x="134" y="210" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="153.0" cy="229.0" r="3.5" fill="#0d6b78"/>
+<rect x="172" y="210" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="191.0" cy="229.0" r="3.5" fill="#0d6b78"/>
+<rect x="210" y="210" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="229.0" cy="229.0" r="3.5" fill="#0d6b78"/>
+<rect x="248" y="210" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="267.0" cy="229.0" r="3.5" fill="#0d6b78"/>
+<rect x="286" y="210" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="305.0" cy="229.0" r="3.5" fill="#0d6b78"/>
+<rect x="324" y="210" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="343.0" cy="229.0" r="3.5" fill="#0d6b78"/>
+<rect x="362" y="210" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="381.0" cy="229.0" r="3.5" fill="#0d6b78"/>
+<rect x="400" y="210" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="419.0" cy="229.0" r="3.5" fill="#0d6b78"/>
+<rect x="438" y="210" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="476" y="210" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="514" y="210" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="20" y="248" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="58" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="77.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="96" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="115.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="134" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="153.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="172" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="191.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="210" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="229.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="248" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="267.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="286" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="305.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="324" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="343.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="362" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="381.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="400" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="419.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="438" y="248" width="38" height="38" fill="#dcebec" stroke="#cfc6b2" stroke-width="1.5"/>
+<circle cx="457.0" cy="267.0" r="3.5" fill="#0d6b78"/>
+<rect x="476" y="248" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="514" y="248" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="20" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="58" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="96" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="134" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="172" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="210" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="248" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="286" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="324" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="362" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="400" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="438" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="476" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<rect x="514" y="286" width="38" height="38" fill="none" stroke="#cfc6b2" stroke-width="1.5"/>
+<polygon points="69.4,270.8 491.2,301.2 255.6,42.8" fill="none" stroke="#a8701a" stroke-width="3"/>
+<circle cx="69.4" cy="270.8" r="6" fill="#a8701a"/>
+<circle cx="491.2" cy="301.2" r="6" fill="#a8701a"/>
+<circle cx="255.6" cy="42.8" r="6" fill="#a8701a"/>
       </svg>
     </div>
   </div>
@@ -846,7 +928,7 @@
     <div class="bad">
       <h4>이렇게 물으면</h4>
       "내 Unity 씬 구조 설명해 줘"
-      <div style="margin-top:.9em;color:#8a93a8">↓ AI 의 답 (예)</div>
+      <div style="margin-top:.9em;color:var(--ink-3)">↓ AI 의 답 (예)</div>
       <div style="margin-top:.5em">
         · Main Camera, Directional Light<br>
         · <b>Plane</b> 바닥과 <b>Player</b> 오브젝트<br>
@@ -859,8 +941,8 @@
       · Main Camera<br>
       · Directional Light<br>
       · Global Volume<br><br>
-      <span style="color:#ff5a4d">Plane · Player · EventSystem = 존재하지 않음</span><br><br>
-      <span style="color:#a8e05f">→ 문장은 매끄럽고 확신에 차 있음<br>→ 틀린 곳이 눈에 띄지 않음</span>
+      <span style="color:var(--trap);font-weight:700">Plane · Player · EventSystem = 존재하지 않음</span><br><br>
+      <span style="color:var(--lab);font-weight:700">→ 문장은 매끄럽고 확신에 차 있음<br>→ 틀린 곳이 눈에 띄지 않음</span>
     </div>
   </div>
   <p class="xs muted" style="margin-top:.6em">템플릿·Unity 버전에 따라 기본 오브젝트는 다를 수 있음 → 각자 자기 Hierarchy 가 정답</p>
@@ -895,6 +977,38 @@
   </div>
 </section>
 
+<section>
+  <div class="tag trap">함정 #0 용어 풀이</div>
+  <h2>용어 풀이 — AI 와 일할 때 쓰는 말</h2>
+  <dl class="terms">
+    <dt>프롬프트<small>Prompt</small></dt>
+    <dd>
+      <p>AI 에게 보내는 요청 문장 전체 — 주문서 한 장</p>
+      <p class="ex">«내 Unity 씬 구조 설명해 줘» · «쿼터니언으로 누적, 초당 45° 회전»</p>
+      <p class="why">이 수업에서는 프롬프트 자체가 채점 대상 → 용어가 정확할수록 점수와 결과 모두 정확</p>
+    </dd>
+    <dt>컨텍스트<small>Context</small></dt>
+    <dd>
+      <p>AI 가 답을 만들 때 참고할 수 있는 배경 정보 전부 — 수리 기사에게 보낸 집 사진·평면도</p>
+      <p class="ex">Unity 버전 · 템플릿 이름 · Hierarchy 목록 붙여 넣기</p>
+      <p class="why">없으면 AI 는 «흔한 씬» 으로 빈칸을 채움 → 함정 #0</p>
+      <p class="where">채팅형 : 직접 붙여 넣은 것만 · 에이전트형 : 읽은 프로젝트 파일까지</p>
+    </dd>
+    <dt>환각<small>Hallucination</small></dt>
+    <dd>
+      <p>AI 가 사실이 아닌 내용을 자신 있는 말투로 지어내는 현상 — 모른다는 말 대신 그럴듯한 추측</p>
+      <p class="ex">내 씬에 없는 Plane · Player · EventSystem 을 «있다» 고 설명</p>
+      <p class="why">문장이 매끄러워 눈에 안 띔 → Hierarchy·Inspector 와 1:1 대조로만 발견</p>
+    </dd>
+    <dt>명세<small>Specification</small></dt>
+    <dd>
+      <p>원하는 결과를 숫자와 조건으로 적은 요청서 — 목표 · 제약 · 검증 조건 · 비목표의 4칸</p>
+      <p class="ex">«큐브 한 변 1 m · y = 0.5 · 카메라 (0, 1.6, 0)» 처럼 확인 가능한 값</p>
+      <p class="why">검증 조건이 없으면 결과가 맞았는지 판정할 기준이 없음</p>
+    </dd>
+  </dl>
+</section>
+
 <!-- ========================================================= PART II -->
 <section class="divider part-ii">
   <div class="kicker">Part II · 30분</div>
@@ -905,16 +1019,64 @@
 
 <section>
   <div class="tag vr">Part II 용어</div>
-  <h2>이번 파트 용어 미리보기</h2>
+  <h2>용어 미리보기 (1/2) — 장비 쪽</h2>
   <dl class="terms">
-    <dt>VR<small>Virtual Reality</small></dt><dd>인공적인 감각 자극으로 «실제로 그곳에 있다» 는 경험을 만드는 기술</dd>
-    <dt>HMD<small>Head-Mounted Display</small></dt><dd>머리에 쓰는 디스플레이 — Quest 3 같은 VR 헤드셋</dd>
-    <dt>트래킹<small>Tracking</small></dt><dd>센서로 머리·손의 위치와 회전을 매 순간 측정하는 일</dd>
-    <dt>6DoF<small>6 Degrees of Freedom</small></dt><dd>위치 3방향(앞뒤·좌우·위아래) + 회전 3방향을 모두 추적 · 회전만이면 3DoF</dd>
-    <dt>지각<small>Perception</small></dt><dd>감각 신호를 뇌가 해석해 «무엇이 어디에 있다» 로 알아차리는 과정</dd>
-    <dt>전정계<small>Vestibular system</small></dt><dd>귀 안쪽의 균형 감각 기관 — 머리의 회전·가속을 느낌</dd>
-    <dt>몰입<small>Immersion</small></dt><dd>시스템이 감각을 얼마나 넓고 정확하게 대신하는지 — <b>장비의 속성</b></dd>
-    <dt>프레즌스<small>Presence</small></dt><dd>«내가 지금 그곳에 있다» 는 사용자의 느낌 — <b>사람의 경험</b></dd>
+    <dt>VR<small>Virtual Reality</small></dt>
+    <dd>
+      <p>진짜 대신 만든 화면·소리 자극으로 «지금 그곳에 있다» 는 경험을 만드는 기술</p>
+      <p class="ex">교실 바닥에 서 있는데 높은 건물 가장자리에서 저절로 뒷걸음질</p>
+      <p class="why">목표가 «멋진 화면» 이 아니라 «사람의 반응» → 판단 기준이 화면이 아니라 사람</p>
+    </dd>
+    <dt>HMD<small>Head-Mounted Display</small></dt>
+    <dd>
+      <p>머리에 쓰는 디스플레이 — 눈앞 몇 cm 의 화면 두 장 + 확대 렌즈 + 센서를 한 몸에 담은 장치</p>
+      <p class="ex">Quest 3 : 한 눈 2064 × 2208 · 72~120Hz · 수평 시야 약 110°</p>
+      <p class="where">Unity : XR Origin 아래 Main Camera = HMD 위치·방향을 그대로 따라가는 카메라 (11주)</p>
+    </dd>
+    <dt>트래킹<small>Tracking</small></dt>
+    <dd>
+      <p>센서로 머리·손이 어디에 있고 어느 쪽을 향하는지 매 순간 재는 일 — 몸의 실시간 GPS</p>
+      <p class="ex">고개를 오른쪽으로 30° 돌림 → 센서 측정 → 가상 카메라도 30° 회전</p>
+      <p class="why">측정이 늦거나 틀리면 세상이 고개를 따라 끌려오는 느낌 → 멀미</p>
+      <p class="where">Unity XRI : Main Camera 의 Tracked Pose Driver 컴포넌트</p>
+    </dd>
+    <dt>6DoF<small>6 Degrees of Freedom</small></dt>
+    <dd>
+      <p>위치 3방향(앞뒤·좌우·위아래) + 회전 3방향을 모두 추적 · 회전만 추적하면 3DoF</p>
+      <p class="ex">3DoF : 고개 돌리기만 반영 · 6DoF : 몸을 숙여 바닥 물건을 들여다보기까지 반영</p>
+      <p class="where">Unity : Tracked Pose Driver 의 Tracking Type (Rotation And Position / Rotation Only)</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>용어 미리보기 (2/2) — 사람 쪽</h2>
+  <dl class="terms">
+    <dt>지각<small>Perception</small></dt>
+    <dd>
+      <p>눈·귀로 들어온 신호를 뇌가 해석해 «무엇이 어디에 있다» 고 알아차리는 과정 — 받은 그대로가 아니라 추론</p>
+      <p class="ex">같은 (118, 118, 118) 회색 두 칸이 그림자 때문에 다른 밝기로 보임 (오늘 착시 실험)</p>
+      <p class="why">VR 은 화면 숫자가 아니라 뇌의 해석을 설계하는 일</p>
+    </dd>
+    <dt>전정계<small>Vestibular system</small></dt>
+    <dd>
+      <p>귀 안쪽의 균형 감각 기관 — 머리의 회전과 가속(속도 변화)을 느끼는 몸속 수평계</p>
+      <p class="ex">회전의자를 돌다 멈추면 눈을 감아도 계속 도는 느낌</p>
+      <p class="why">헤드셋으로는 자극 불가 → 화면만 움직이고 몸은 정지하면 신호 충돌 → 멀미</p>
+    </dd>
+    <dt>몰입<small>Immersion</small></dt>
+    <dd>
+      <p>장비가 감각을 얼마나 넓고 정확하게 대신하는지 — <b>장비의 속성</b> · 사양표에 숫자로 적힘</p>
+      <p class="ex">시야각 110° · 해상도 · 주사율 120Hz · 트래킹 지연 몇 ms</p>
+      <p class="why">몰입이 높아도 콘텐츠가 어긋나면 «그곳에 있다» 는 느낌은 안 생김 → 프레즌스와 구분</p>
+    </dd>
+    <dt>프레즌스<small>Presence</small></dt>
+    <dd>
+      <p>«내가 지금 그곳에 있다» 는 사용자의 느낌 — <b>사람의 경험</b> · 같은 장비라도 사람마다 다름</p>
+      <p class="ex">가상 절벽 앞에서 머리로는 교실인 줄 알면서도 다리가 굳음</p>
+      <p class="where">측정 : 체험 후 설문 · 몸의 반응(뒷걸음, 심박) 관찰 — 11·14주차</p>
+    </dd>
   </dl>
 </section>
 
@@ -943,44 +1105,44 @@
   <svg class="dia" viewBox="0 0 1180 470" role="img" aria-label="VR 시스템 루프 : 트래킹, 가상 세계 생성, 렌더링, 디스플레이, 감각 기관, 뇌, 움직임">
     <defs>
       <marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-        <path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/>
+        <path d="M0,0 L10,5 L0,10 z" fill="#4a463e"/>
       </marker>
     </defs>
-    <rect x="150" y="10" width="880" height="190" rx="18" fill="rgba(53,214,230,0.05)" stroke="#1d5a66" stroke-dasharray="8 6"/>
-    <text x="170" y="40" font-size="18" fill="#35d6e6" font-weight="700">기계 — 하드웨어 + 소프트웨어</text>
-    <rect x="150" y="260" width="880" height="190" rx="18" fill="rgba(255,95,162,0.05)" stroke="#6e2545" stroke-dasharray="8 6"/>
-    <text x="170" y="437" font-size="18" fill="#ff5fa2" font-weight="700">인간 — 마지막 부품</text>
+    <rect x="150" y="10" width="880" height="190" fill="none" stroke="#0d6b78" stroke-dasharray="8 6"/>
+    <text x="170" y="40" font-size="18" fill="#0d6b78" font-weight="700">기계 — 하드웨어 + 소프트웨어</text>
+    <rect x="150" y="260" width="880" height="190" fill="none" stroke="#a3245e" stroke-dasharray="8 6"/>
+    <text x="170" y="437" font-size="18" fill="#a3245e" font-weight="700">인간 — 마지막 부품</text>
 
     <g font-size="20" text-anchor="middle">
-      <rect x="180" y="65" width="230" height="100" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-      <text x="295" y="105" fill="#35d6e6" font-weight="700">트래킹</text>
-      <text x="295" y="138" fill="#e8ecf4" font-size="17">IMU · 카메라 센서</text>
+      <rect x="180" y="65" width="230" height="100" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+      <text x="295" y="105" fill="#0d6b78" font-weight="700">트래킹</text>
+      <text x="295" y="138" fill="#1b1a17" font-size="17">IMU · 카메라 센서</text>
 
-      <rect x="475" y="65" width="230" height="100" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-      <text x="590" y="105" fill="#35d6e6" font-weight="700">가상 세계 생성</text>
-      <text x="590" y="138" fill="#e8ecf4" font-size="17">Unity 씬 · 물리 · 규칙</text>
+      <rect x="475" y="65" width="230" height="100" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+      <text x="590" y="105" fill="#0d6b78" font-weight="700">가상 세계 생성</text>
+      <text x="590" y="138" fill="#1b1a17" font-size="17">Unity 씬 · 물리 · 규칙</text>
 
-      <rect x="770" y="65" width="230" height="100" rx="14" fill="#0e3a42" stroke="#35d6e6" stroke-width="2"/>
-      <text x="885" y="105" fill="#35d6e6" font-weight="700">렌더링</text>
-      <text x="885" y="138" fill="#e8ecf4" font-size="17">GPU · 두 눈 각각</text>
+      <rect x="770" y="65" width="230" height="100" fill="#dcebec" stroke="#0d6b78" stroke-width="2"/>
+      <text x="885" y="105" fill="#0d6b78" font-weight="700">렌더링</text>
+      <text x="885" y="138" fill="#1b1a17" font-size="17">GPU · 두 눈 각각</text>
 
-      <rect x="1040" y="185" width="130" height="100" rx="14" fill="#171b25" stroke="#ffc44d" stroke-width="2"/>
-      <text x="1105" y="225" fill="#ffc44d" font-weight="700">디스플레이</text>
-      <text x="1105" y="256" fill="#e8ecf4" font-size="17">+ 렌즈</text>
+      <rect x="1040" y="185" width="130" height="100" fill="#ece6d8" stroke="#a8701a" stroke-width="2"/>
+      <text x="1105" y="225" fill="#a8701a" font-weight="700">디스플레이</text>
+      <text x="1105" y="256" fill="#1b1a17" font-size="17">+ 렌즈</text>
 
-      <rect x="770" y="300" width="230" height="100" rx="14" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
-      <text x="885" y="340" fill="#ff5fa2" font-weight="700">감각 기관</text>
-      <text x="885" y="373" fill="#e8ecf4" font-size="17">눈 · 귀 · 전정계</text>
+      <rect x="770" y="300" width="230" height="100" fill="#f1dde6" stroke="#a3245e" stroke-width="2"/>
+      <text x="885" y="340" fill="#a3245e" font-weight="700">감각 기관</text>
+      <text x="885" y="373" fill="#1b1a17" font-size="17">눈 · 귀 · 전정계</text>
 
-      <rect x="475" y="300" width="230" height="100" rx="14" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
-      <text x="590" y="340" fill="#ff5fa2" font-weight="700">뇌 — 지각</text>
-      <text x="590" y="373" fill="#e8ecf4" font-size="17">해석 · 판단 · 느낌</text>
+      <rect x="475" y="300" width="230" height="100" fill="#f1dde6" stroke="#a3245e" stroke-width="2"/>
+      <text x="590" y="340" fill="#a3245e" font-weight="700">뇌 — 지각</text>
+      <text x="590" y="373" fill="#1b1a17" font-size="17">해석 · 판단 · 느낌</text>
 
-      <rect x="180" y="300" width="230" height="100" rx="14" fill="#421229" stroke="#ff5fa2" stroke-width="2"/>
-      <text x="295" y="340" fill="#ff5fa2" font-weight="700">몸의 움직임</text>
-      <text x="295" y="373" fill="#e8ecf4" font-size="17">고개 돌림 · 손 뻗기</text>
+      <rect x="180" y="300" width="230" height="100" fill="#f1dde6" stroke="#a3245e" stroke-width="2"/>
+      <text x="295" y="340" fill="#a3245e" font-weight="700">몸의 움직임</text>
+      <text x="295" y="373" fill="#1b1a17" font-size="17">고개 돌림 · 손 뻗기</text>
     </g>
-    <g stroke="#9aa4b8" stroke-width="2.5" fill="none" marker-end="url(#ar2)">
+    <g stroke="#4a463e" stroke-width="2.5" fill="none" marker-end="url(#ar2)">
       <line x1="412" y1="115" x2="471" y2="115"/>
       <line x1="707" y1="115" x2="766" y2="115"/>
       <path d="M1002,115 Q1105,115 1105,181"/>
@@ -989,8 +1151,8 @@
       <line x1="473" y1="350" x2="414" y2="350"/>
       <path d="M178,350 Q80,350 80,240 Q80,115 176,115"/>
     </g>
-    <text x="40" y="246" font-size="17" fill="#9aa4b8" text-anchor="middle" transform="rotate(-90 40 246)">다시 센서로</text>
-    <text x="590" y="240" font-size="19" fill="#e8ecf4" text-anchor="middle">한 바퀴에 걸리는 시간 = <tspan fill="#ffc44d" font-weight="700">motion-to-photon 지연</tspan> (3 · 11주)</text>
+    <text x="40" y="246" font-size="17" fill="#4a463e" text-anchor="middle" transform="rotate(-90 40 246)">다시 센서로</text>
+    <text x="590" y="240" font-size="19" fill="#1b1a17" text-anchor="middle">한 바퀴에 걸리는 시간 = <tspan fill="#a8701a" font-weight="700">motion-to-photon 지연</tspan> (3 · 11주)</text>
   </svg>
   <aside class="notes">
     - LaValle Ch.2 의 VR 시스템 그림을 단순화 : 기계 쪽 3단계 + 디스플레이 + 사람 쪽 3단계
@@ -1046,10 +1208,34 @@
     <tr><td class="vr-txt"><b>고유감각</b></td><td>눈 감고도 손 위치를 앎</td><td>손·컨트롤러 트래킹</td><td>가상 손 위치 어긋남 → 어색함</td><td>10·11</td></tr>
     <tr><td class="vr-txt"><b>시간</b></td><td>움직임과 화면의 어긋남에 민감</td><td>예측 · 재투영</td><td>지연 → 세상이 끌려옴</td><td>3·11</td></tr>
   </table>
-  <dl class="terms">
-    <dt>고유감각<small>Proprioception</small></dt><dd>눈을 감아도 내 팔다리가 어디 있는지 아는 몸속 감각</dd>
-  </dl>
   <div class="note">LaValle Ch.2.3 · Ch.5 · 수치는 개인차·기기에 따라 다름</div>
+</section>
+
+<section>
+  <div class="tag vr">VR · 5 용어 풀이</div>
+  <h2>용어 풀이 — 사양표의 낯선 말</h2>
+  <dl class="terms">
+    <dt>고유감각<small>Proprioception</small></dt>
+    <dd>
+      <p>눈을 감아도 내 팔다리가 어디 있는지 아는 몸속 감각 — 근육·관절이 보내는 위치 신호</p>
+      <p class="ex">눈 감고 검지로 코끝 짚기 · 어두운 방에서 스위치 찾기</p>
+      <p class="why">가상 손이 실제 손보다 몇 cm 만 어긋나도 «내 손이 아닌» 어색함</p>
+      <p class="where">Quest : 손 추적(Hand Tracking) · 컨트롤러 위치 → Unity XRI 의 손·컨트롤러 오브젝트</p>
+    </dd>
+    <dt>중심와<small>Fovea</small></dt>
+    <dd>
+      <p>눈 안쪽 망막 한가운데의 아주 좁은 선명한 구역 — 시선이 닿은 약 2° 만 또렷, 나머지는 흐릿</p>
+      <p class="ex">팔을 뻗은 엄지손톱 하나 크기 ≈ 2° → 그 바깥 글자는 읽기 어려움</p>
+      <p class="why">헤드셋은 화면 전체를 같은 해상도로 그림 → 안 보는 곳에도 계산 낭비 (6주)</p>
+    </dd>
+    <dt>재투영<small>Reprojection</small></dt>
+    <dd>
+      <p>새 그림이 늦을 때 직전 그림을 최신 고개 방향에 맞춰 살짝 돌려 다시 보여 주는 응급 처치</p>
+      <p class="ex">90Hz 중 한 장을 못 그림 → 직전 프레임을 고개가 돈 만큼 밀어서 표시</p>
+      <p class="why">세상이 끌려오는 느낌(지연)을 줄임 · 대신 가장자리 일그러짐이 생기기도 함</p>
+      <p class="where">Meta : Asynchronous TimeWarp · Application SpaceWarp (이름·기본값은 버전마다 다름)</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -1201,15 +1387,37 @@
     <tr><td class="lab-txt"><b>4</b></td><td><b>Git</b> + <b>GitHub</b> 계정</td><td>터미널 <code>git --version</code></td></tr>
     <tr><td class="lab-txt"><b>5</b></td><td><b>AI 코딩 도구</b> 1개 이상</td><td>도구에서 «안녕» 에 응답</td></tr>
   </table>
-  <dl class="terms">
-    <dt>LTS<small>Long-Term Support</small></dt><dd>오래 버그 수정을 보장하는 안정판 — 학기 내내 같은 버전 유지</dd>
-    <dt>Android Build Support</dt><dd>Quest 는 안드로이드 기반 → 헤드셋용 앱을 만드는 데 필요한 추가 모듈 (11주차)</dd>
-  </dl>
-  <p class="xs muted">상세 절차 · Windows / macOS 분기 : setup/환경설치-가이드.md · 막히면 setup/트러블슈팅-FAQ.md</p>
+  <p class="xs muted">상세 절차 · Windows / macOS 분기 : setup/환경설치-가이드.md · 막히면 setup/트러블슈팅-FAQ.md · 낯선 말은 다음 장</p>
   <aside class="notes">
     - 정확한 Unity 6 LTS 버전 번호는 실습실 설치본과 맞춰 PLATO 공지 (확인 필요)
     - Android 모듈은 용량이 큼 → 오늘 집에서 마무리해도 됨 · 11주 전에는 반드시
   </aside>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1 용어 풀이</div>
+  <h2>용어 풀이 — 설치 화면의 낯선 말</h2>
+  <dl class="terms">
+    <dt>Unity Hub</dt>
+    <dd>
+      <p>Unity 에디터 여러 버전과 프로젝트 목록을 한곳에서 관리하는 런처 — 게임 런처 같은 시작 화면</p>
+      <p class="ex">Installs 탭 : 설치된 에디터 버전 · Projects 탭 : PerceptionLab 등 내 프로젝트</p>
+      <p class="why">프로젝트마다 맞는 에디터 버전이 다름 → 다른 버전으로 열면 변환 경고·깨짐</p>
+    </dd>
+    <dt>LTS<small>Long-Term Support</small></dt>
+    <dd>
+      <p>오랫동안 버그 수정을 보장하는 안정판 — 새 기능보다 «안 깨짐» 을 우선한 버전</p>
+      <p class="ex">Unity 6 LTS (6000.0.x) · 끝자리만 바뀌는 업데이트는 버그 수정 위주</p>
+      <p class="why">학기 중 버전이 바뀌면 메뉴·설정 이름이 달라져 AI 답과 화면이 어긋남 → 학기 내내 같은 버전</p>
+      <p class="where">Unity Hub : Installs 에서 버전 이름 옆 «LTS» 표시</p>
+    </dd>
+    <dt>Android<br>Build Support</dt>
+    <dd>
+      <p>Unity 로 안드로이드용 앱을 만들게 해 주는 추가 모듈 — Quest 의 운영체제가 안드로이드 기반</p>
+      <p class="ex">이 모듈 없이는 Build Settings 에서 Android 를 고를 수 없음 → 헤드셋에 앱 설치 불가</p>
+      <p class="where">Unity Hub : Installs → 버전 옆 톱니 → Add modules → Android Build Support (OpenJDK · SDK &amp; NDK 체크)</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -1222,9 +1430,7 @@
         <li>이름 <code>PerceptionLab</code> · 경로에 한글·공백 없는 폴더</li>
         <li>열린 뒤 확인 : Project Settings → Player → <b>Color Space = Linear</b></li>
       </ul>
-      <dl class="terms">
-        <dt>URP<small>Universal Render Pipeline</small></dt><dd>Unity 의 범용 렌더링 방식 — PC·모바일·Quest 모두 지원 · 이 수업 기준</dd>
-      </dl>
+      <p class="xs muted">URP · 템플릿 · Color Space 풀이 → 다음 장</p>
     </div>
     <div>
       <table style="font-size:.66em">
@@ -1241,6 +1447,33 @@
   <div class="analogy">
     <p><b>촬영장 비유 재사용</b> : Scene 뷰 = 감독이 세트를 걸어 다니며 보는 시점 · Game 뷰 = 실제 카메라에 찍히는 화면 → 둘이 다르면 «카메라가 어디를 보나» 부터 확인</p>
   </div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 2 용어 풀이</div>
+  <h2>용어 풀이 — 프로젝트 설정의 낯선 말</h2>
+  <dl class="terms">
+    <dt>URP<small>Universal Render Pipeline</small></dt>
+    <dd>
+      <p>Unity 가 픽셀 색을 계산하는 방식 중 하나 — PC·모바일·Quest 를 모두 지원하는 범용 렌더링 «엔진 설정 묶음»</p>
+      <p class="ex">Part I 의 파이프라인 다섯 단계를 실제로 실행하는 주체 = URP · 다른 갈래 : Built-in · HDRP</p>
+      <p class="why">파이프라인마다 재질·셰이더 이름이 다름 → AI 가 Built-in 기준 답을 주면 분홍색 재질 같은 오류</p>
+      <p class="where">Unity : Project Settings → Graphics → Default Render Pipeline 칸의 URP 에셋 · 이 수업 기준</p>
+    </dd>
+    <dt>템플릿<small>Template</small></dt>
+    <dd>
+      <p>새 프로젝트를 만들 때 미리 깔아 주는 출발 세트 — 기본 설정·패키지·예제 씬이 들어 있음</p>
+      <p class="ex">Universal 3D 템플릿 → Main Camera · Directional Light · Global Volume 이 든 씬</p>
+      <p class="where">Unity Hub : New project 화면 왼쪽 템플릿 목록 (이름은 Hub 버전마다 다름)</p>
+    </dd>
+    <dt>색공간<small>Color Space</small></dt>
+    <dd>
+      <p>밝기 숫자를 계산할 때 쓰는 «자» 의 종류 — Linear = 빛의 실제 양대로 더하고 곱하는 방식</p>
+      <p class="ex">Gamma 로 두면 조명 두 개를 겹친 밝기가 실제보다 어둡거나 과하게 계산됨</p>
+      <p class="why">5주차 AI 함정 #4 (색공간 혼동)의 원인 · 오늘 Linear 로 맞춰 두면 예방</p>
+      <p class="where">Unity : Project Settings → Player → Other Settings → Rendering → Color Space</p>
+    </dd>
+  </dl>
 </section>
 
 <section>
@@ -1270,6 +1503,33 @@ git push -u origin main</code></pre>
 </section>
 
 <section>
+  <div class="tag lab">실습 · 3 용어 풀이</div>
+  <h2>용어 풀이 — Git 의 낯선 말</h2>
+  <dl class="terms">
+    <dt>커밋<small>Commit</small></dt>
+    <dd>
+      <p>지금 프로젝트 상태를 설명 한 줄과 함께 사진 찍듯 저장한 기록 — 게임의 세이브 포인트</p>
+      <p class="ex"><code>git commit -m "1주차: 빈 URP 프로젝트"</code> → 언제든 이 상태로 복귀 가능</p>
+      <p class="why">AI 가 여러 파일을 한꺼번에 고친 뒤 망가져도 직전 커밋으로 되돌리면 끝</p>
+      <p class="where">터미널 <code>git log</code> · GitHub 저장소 페이지의 Commits 목록</p>
+    </dd>
+    <dt>저장소 · push<small>Repository · Push</small></dt>
+    <dd>
+      <p>저장소 = 커밋 기록이 쌓이는 프로젝트 폴더 · push = 내 컴퓨터의 커밋을 인터넷(GitHub) 저장소로 올리기</p>
+      <p class="ex"><code>git push -u origin main</code> → github.com/내아이디/PerceptionLab 에 파일 표시</p>
+      <p class="why">노트북이 고장 나도 GitHub 에 사본 · 과제 제출 = 이 저장소 주소</p>
+    </dd>
+    <dt>.gitignore</dt>
+    <dd>
+      <p>«이 파일·폴더는 기록하지 말 것» 목록을 적은 텍스트 파일 — 이삿짐에서 빼 둘 물건 목록</p>
+      <p class="ex">Unity 가 자동으로 다시 만드는 <code>Library</code> · <code>Temp</code> 폴더 (수 GB) 제외</p>
+      <p class="why">없이 커밋하면 용량 초과로 push 실패</p>
+      <p class="where">GitHub 공식 gitignore 모음의 <code>Unity.gitignore</code> 를 프로젝트 맨 위 폴더에 복사</p>
+    </dd>
+  </dl>
+</section>
+
+<section>
   <div class="tag lab">실습 · 4</div>
   <h2>AI 코딩 도구의 세 갈래</h2>
   <table style="font-size:.64em">
@@ -1294,11 +1554,11 @@ git push -u origin main</code></pre>
     <div class="bad">
       <h4>1차 : 컨텍스트 없이</h4>
       "Unity 씬 구조를 설명해 줘"<br><br>
-      <span style="color:#8a93a8">→ 일반론 · 없는 오브젝트 등장 가능<br>→ 함정 #0 재현</span>
+      <span style="color:var(--ink-3)">→ 일반론 · 없는 오브젝트 등장 가능<br>→ 함정 #0 재현</span>
     </div>
     <div class="good">
       <h4>2차 : 컨텍스트 + 제약</h4>
-      <span style="color:#e8ecf4">"Unity 6 LTS · Universal 3D 템플릿.<br>
+      <span>"Unity 6 LTS · Universal 3D 템플릿.<br>
       아래 Hierarchy 의 각 오브젝트가<br>
       무슨 역할인지, 어떤 컴포넌트를<br>
       가졌을지 설명해 줘.<br>
@@ -1395,7 +1655,7 @@ git push -u origin main</code></pre>
   </table>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">다음 주</div>
   <div class="rule"></div>
   <h1>그래픽스 <em>수학</em> 기초</h1>

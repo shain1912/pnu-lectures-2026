@@ -9,15 +9,20 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
 <link rel="stylesheet" href="../_shared/theme.css">
 <style>
-  /* 인라인 SVG 도해 — viewBox 1단위 = 슬라이드 1px (글자 16px 이상 유지) */
+  /* 인라인 SVG 도해 — viewBox 1단위 = 슬라이드 1px (글자 16px 이상 유지) · 지면 팔레트 */
+  .reveal { --zax: #2a5a9e; }
   .reveal svg.dg { display: block; margin: .25em auto 0; max-width: 100%; height: auto; overflow: visible; }
-  .reveal svg.dg text { font-family: var(--sans); fill: #e8ecf4; font-size: 18px; }
-  .reveal svg.dg .dim { fill: #9aa4b8; }
+  .reveal svg.dg text { font-family: var(--sans); fill: var(--ink); font-size: 18px; }
+  .reveal svg.dg .dim { fill: var(--ink-2); }
   .reveal svg.dg .s { font-size: 16px; }
   .reveal svg.dg .b { font-weight: 700; }
-  .reveal svg.dg .cg { fill: #35d6e6; } .reveal svg.dg .cv { fill: #ff5fa2; }
-  .reveal svg.dg .ct { fill: #ff5a4d; } .reveal svg.dg .cl { fill: #a8e05f; }
-  .reveal svg.dg .cw { fill: #ffc44d; } .reveal svg.dg .cb { fill: #4d9cff; }
+  .reveal svg.dg .cg { fill: var(--gfx); } .reveal svg.dg .cv { fill: var(--vr); }
+  .reveal svg.dg .ct { fill: var(--trap); } .reveal svg.dg .cl { fill: var(--lab); }
+  .reveal svg.dg .cw { fill: var(--analogy); } .reveal svg.dg .cb { fill: var(--zax); }
+  .reveal .z-txt { color: var(--zax); }
+  .reveal .hljs-bullet, .reveal .hljs-section, .reveal .hljs-link { color: var(--ink-2); }
+  /* 색 글자 안의 굵은 글씨도 같은 색 유지 */
+  .reveal .gfx-txt b, .reveal .vr-txt b, .reveal .trap-txt b, .reveal .lab-txt b, .reveal .z-txt b { color: inherit; }
 </style>
 </head>
 <body>
@@ -74,7 +79,7 @@
       <p class="small">회전·이동의 <b>순서</b>를 바꿨을 때 물체가 어디로 가는지 그림으로 예측</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 판별</h4>
+      <h4><span class="step">3</span> 판별</h4>
       <p class="small">AI 회전 코드에서 <b>짐벌락</b> 원인 줄과 VR <b>멀미</b> 원인 줄을 찾아 고치도록 요구</p>
     </div>
   </div>
@@ -97,20 +102,70 @@
 
 <section>
   <div class="tag gfx">Part I · 용어 미리보기</div>
-  <h2>이번 파트에서 쓰는 말 8개</h2>
-  <dl class="terms" style="font-size:.7em">
-    <dt>벡터<small>Vector</small></dt><dd><b>방향과 길이</b>를 함께 가진 화살표 · 숫자 묶음 (x, y, z)</dd>
-    <dt>스칼라<small>Scalar</small></dt><dd>방향 없는 <b>숫자 하나</b> — 길이, 속력, 각도, 온도</dd>
-    <dt>정규화<small>Normalize</small></dt><dd>방향은 그대로 두고 <b>길이만 1</b>로 맞추는 일</dd>
-    <dt>내적<small>Dot product</small></dt><dd>두 화살표가 <b>얼마나 같은 쪽</b>을 보는지를 숫자 하나로</dd>
-    <dt>외적<small>Cross product</small></dt><dd>두 화살표 모두에 <b>수직인</b> 새 화살표를 만드는 계산</dd>
-    <dt>법선<small>Normal</small></dt><dd>면에 수직으로 선 화살표 = <b>면이 바라보는 방향</b></dd>
-    <dt>행렬<small>Matrix</small></dt><dd>숫자를 표로 묶은 것 · 좌표를 넣으면 <b>새 좌표가 나오는 변환 기계</b></dd>
-    <dt>동차좌표<small>Homogeneous coord.</small></dt><dd>좌표 끝에 <b>숫자 하나(w)를 더 붙여</b> 이동까지 행렬로 처리하는 방식</dd>
+  <h2>용어 미리보기 (1/2) — 화살표와 숫자</h2>
+  <dl class="terms">
+    <dt>벡터<small>Vector</small></dt>
+    <dd>
+      <p><b>«어느 쪽으로 얼마나»</b>를 담은 화살표 — 숫자 세 개 (x, y, z) 로 적음</p>
+      <p class="ex">(3, 0, 0) = 오른쪽으로 3칸 · (0, 1, 0) = 위로 1칸</p>
+      <p class="where">Unity : 모든 위치·방향이 <code>Vector3</code> — Inspector Transform 의 Position 칸 세 숫자</p>
+    </dd>
+    <dt>스칼라<small>Scalar</small></dt>
+    <dd>
+      <p>방향 없이 <b>크기만 있는 숫자 하나</b> — 길이, 속력, 각도, 밝기</p>
+      <p class="ex">속력 5 m/s (스칼라) vs 동쪽으로 5 m/s (벡터)</p>
+      <p class="where">C# 의 <code>float</code> · Light 의 Intensity, Camera 의 Field of View 같은 숫자 칸 하나</p>
+    </dd>
+    <dt>정규화<small>Normalize</small></dt>
+    <dd>
+      <p>방향은 그대로 두고 <b>길이만 1</b>로 줄이거나 늘리는 일 — 나침반 바늘처럼 «쪽»만 남김</p>
+      <p class="ex">(3, 4, 0) → 길이 5 로 나눔 → (0.6, 0.8, 0)</p>
+      <p class="why">빠뜨리면 거리가 멀수록 내적·조명 값이 커짐 → 판정·밝기가 틀어짐</p>
+    </dd>
+    <dt>내적<small>Dot product</small></dt>
+    <dd>
+      <p>두 화살표가 <b>얼마나 같은 쪽</b>을 보는지를 숫자 하나로 — 같은 방향 1 · 직각 0 · 반대 −1</p>
+      <p class="ex">정면 (0, 0, 1) · 대상 방향 (0, 0, 1) = 1 → 바로 앞</p>
+      <p class="where"><code>Vector3.Dot(a, b)</code> · 시야 판정, 조명 밝기 계산</p>
+    </dd>
   </dl>
   <aside class="notes">
     - 지금 외울 필요 없음 — 각 용어가 처음 나오는 슬라이드에서 그림과 함께 다시 설명
     - "이 단어가 나오면 이 표를 떠올리면 된다" 정도로 훑고 넘어가기
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">Part I · 용어 미리보기</div>
+  <h2>용어 미리보기 (2/2) — 면과 변환</h2>
+  <dl class="terms">
+    <dt>외적<small>Cross product</small></dt>
+    <dd>
+      <p>두 화살표 <b>모두와 직각</b>으로 선 새 화살표를 만드는 계산 — 두 손가락이 만든 면에 세운 엄지</p>
+      <p class="ex">오른쪽 (1, 0, 0) × 위 (0, 1, 0) = 앞 (0, 0, 1)</p>
+      <p class="where"><code>Vector3.Cross(a, b)</code> · 면 방향 구하기, 좌우 판정</p>
+    </dd>
+    <dt>법선<small>Normal</small></dt>
+    <dd>
+      <p>면이 <b>바라보는 방향</b>을 가리키는 길이 1 화살표 — 면에 꽂은 이쑤시개 방향</p>
+      <p class="ex">바닥 법선 (0, 1, 0) = 위쪽 · 정면 벽 법선 (0, 0, −1) = 나를 보는 쪽</p>
+      <p class="why">조명 밝기의 기준 — 법선이 뒤집히면 밝아야 할 면이 까맣게 나옴</p>
+    </dd>
+    <dt>행렬<small>Matrix</small></dt>
+    <dd>
+      <p>숫자를 가로·세로 표로 묶은 것 — 좌표를 넣으면 <b>새 좌표가 나오는 변환 기계</b></p>
+      <p class="ex">[[2, 0], [0, 1]] 에 (3, 4) 를 넣으면 (6, 4) — 가로만 2배</p>
+      <p class="where"><code>Matrix4x4</code> · <code>transform.localToWorldMatrix</code> (Transform 세 줄이 합쳐진 4×4 표)</p>
+    </dd>
+    <dt>동차좌표<small>Homogeneous coord.</small></dt>
+    <dd>
+      <p>좌표 끝에 <b>숫자 하나(w)를 더 붙인</b> 적는 법 — 이동까지 행렬 곱 하나로 처리하려는 요령</p>
+      <p class="ex">점 (1, 2, 3) → (1, 2, 3, <b>1</b>) · 방향 (0, 0, 1) → (0, 0, 1, <b>0</b>)</p>
+      <p class="where"><code>Vector4</code> · 셰이더의 <code>float4(위치, 1)</code></p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 앞 장과 같은 방식으로 훑기만
   </aside>
 </section>
 
@@ -155,14 +210,10 @@
       <div class="math-block">\[ \hat{\mathbf{v}} = \left(\tfrac{3}{5}, \tfrac{4}{5}, 0\right) = (0.6,\ 0.8,\ 0) \]</div>
     </div>
     <div>
-      <dl class="terms" style="margin-top:0">
-        <dt>크기<small>Magnitude</small></dt><dd>화살표의 길이 · 스칼라(숫자 하나)</dd>
-        <dt>단위 벡터<small>Unit vector</small></dt><dd>길이가 정확히 1 인 벡터 · <b>순수한 방향</b></dd>
-        <dt>정규화<small>.normalized</small></dt><dd>길이로 나눠 단위 벡터로 만드는 일</dd>
-      </dl>
-      <div class="analogy">
+      <div class="analogy" style="margin-top:.4em">
         <p>정규화 = <b>나침반 바늘</b> — «얼마나 멀리»는 지우고 «어느 쪽»만 남김</p>
       </div>
+      <p class="small muted">용어 세 개(크기 · 단위 벡터 · 정규화)는 다음 장 «용어 풀이»</p>
     </div>
   </div>
   <p class="small">왜 필요한가 : 내적·조명 계산은 <b>길이가 1 이라는 전제</b> → 정규화를 빠뜨리면 거리에 따라 결과가 커지거나 작아짐</p>
@@ -170,6 +221,37 @@
     - (3,4,0) 은 3-4-5 직각삼각형 — 손으로 계산 가능한 대표 예
     - 비유 : 나침반은 목적지까지의 거리를 알려주지 않고 방향만 알려줌 → 정규화된 벡터
     - 다음 슬라이드 시야각 코드에서 .normalized 를 붙이는 이유가 바로 이것
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">벡터 · 2 용어 풀이</div>
+  <h2>용어 풀이 — 크기 · 단위 벡터 · 정규화</h2>
+  <dl class="terms">
+    <dt>크기<small>Magnitude</small></dt>
+    <dd>
+      <p>화살표의 <b>길이</b> — 방향은 빼고 «얼마나 긴가»만 남긴 숫자 하나(스칼라)</p>
+      <p class="ex">(3, 4, 0) 의 크기 = √(9 + 16 + 0) = 5 · 두 물체 사이 거리 = 위치 차이 벡터의 크기</p>
+      <p class="where"><code>v.magnitude</code> · 두 점 사이 거리는 <code>Vector3.Distance(a, b)</code></p>
+    </dd>
+    <dt>단위 벡터<small>Unit vector</small></dt>
+    <dd>
+      <p>길이가 <b>정확히 1</b> 인 벡터 — 거리 정보 없이 <b>순수한 방향</b>만 담은 화살표</p>
+      <p class="ex">(0.6, 0.8, 0) · Unity 의 <code>Vector3.up</code> = (0, 1, 0)</p>
+      <p class="why">내적 결과를 «−1 ~ 1 사이 같은 쪽 정도»로 읽으려면 두 화살표 모두 단위 벡터여야 함</p>
+      <p class="where"><code>transform.forward</code> · <code>transform.right</code> 는 항상 단위 벡터로 나옴</p>
+    </dd>
+    <dt>정규화<small>.normalized</small></dt>
+    <dd>
+      <p>벡터를 자기 길이로 나눠 <b>단위 벡터로 만드는 일</b> — 방향은 그대로, 길이만 1</p>
+      <p class="ex">(0, 0, 10) → (0, 0, 1) · 적까지의 화살표 (6, 0, 8) → (0.6, 0, 0.8)</p>
+      <p class="why">빠뜨리면 멀리 있는 적일수록 내적 값이 커져 시야 밖인데 «보인다» 판정</p>
+      <p class="where"><code>v.normalized</code> (새 값 반환) · <code>v.Normalize()</code> (자기 자신을 바꿈)</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - normalized 와 Normalize() 의 차이 : 앞은 원본을 그대로 두고 새 벡터를 돌려줌, 뒤는 원본을 바꿈
+    - 길이 0 인 벡터는 정규화 불가 — Unity 는 (0,0,0) 을 그대로 돌려줌
   </aside>
 </section>
 
@@ -182,7 +264,7 @@
         <tr><th>축</th><th>방향</th><th>Unity 이름</th></tr>
         <tr><td class="trap-txt"><b>X</b></td><td>오른쪽</td><td><code>Vector3.right</code></td></tr>
         <tr><td class="lab-txt"><b>Y</b></td><td><b>위</b></td><td><code>Vector3.up</code></td></tr>
-        <tr><td style="color:#4d9cff"><b>Z</b></td><td>앞 (화면 안쪽)</td><td><code>Vector3.forward</code></td></tr>
+        <tr><td class="z-txt"><b>Z</b></td><td>앞 (화면 안쪽)</td><td><code>Vector3.forward</code></td></tr>
       </table>
       <p class="small"><b>왼손</b> 엄지 = X · 검지 = Y · 중지 = Z → Unity 축과 일치 = <span class="t">왼손 좌표계</span></p>
       <div class="analogy" style="margin-top:.4em">
@@ -205,6 +287,37 @@
     - 실제로 왼손을 들어 엄지·검지·중지를 서로 직각으로 펴 보게 하기
     - 오른손으로 같은 동작 → Z(중지)가 반대쪽 → 이것이 오른손 좌표계
     - 비유 : 지도마다 "북쪽이 위"라는 약속이 있듯, 3D 도구마다 "어느 축이 위인가" 약속이 다름
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">벡터 · 3 용어 풀이</div>
+  <h2>용어 풀이 — 원점 · 좌표계 · 왼손 좌표계</h2>
+  <dl class="terms">
+    <dt>원점<small>Origin</small></dt>
+    <dd>
+      <p>모든 위치를 재는 <b>출발 기준점</b> — 좌표 (0, 0, 0) · 지도의 «여기가 0 km» 표지석</p>
+      <p class="ex">원점에서 오른쪽 2, 위 1 떨어진 점 = (2, 1, 0)</p>
+      <p class="why">기준점이 바뀌면 같은 물체의 위치 숫자가 전부 바뀜 — 점은 바뀌고 벡터는 그대로</p>
+      <p class="where">Scene 뷰 격자 한가운데 · Transform 컴포넌트 ⋮ 메뉴 → Reset 하면 Position (0, 0, 0)</p>
+    </dd>
+    <dt>좌표계<small>Coordinate system</small></dt>
+    <dd>
+      <p>원점 하나 + 서로 직각인 <b>축 세 개(X·Y·Z)</b>의 약속 — 숫자 (x, y, z) 를 공간의 한 자리로 바꾸는 규칙</p>
+      <p class="ex">Unity : Y 가 위 · Blender : Z 가 위 → 같은 (0, 1, 0) 이 한쪽에선 위, 한쪽에선 앞</p>
+      <p class="where">Scene 뷰 오른쪽 위 축 기즈모 — 빨강 X · 초록 Y · 파랑 Z</p>
+    </dd>
+    <dt>왼손 좌표계<small>Left-handed</small></dt>
+    <dd>
+      <p>왼손 엄지 = X(오른쪽) · 검지 = Y(위) 일 때 중지가 <b>화면 안쪽</b>을 가리키는 약속 — 오른손이면 중지가 화면 바깥쪽</p>
+      <p class="ex">Unity · Unreal = 왼손 · Blender · Maya · OpenGL = 오른손</p>
+      <p class="why">손이 다르면 Z 방향과 외적·회전 방향이 거울처럼 뒤집힘 → 가져온 모델이 눕거나 뒤를 봄</p>
+      <p class="where">FBX Import Settings → Model 탭 → <b>Bake Axis Conversion</b> (축 변환을 모델에 굽기)</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - Bake Axis Conversion : Blender 등 다른 좌표계에서 온 FBX 의 축 차이를 메시 자체에 반영하는 옵션 — 루트에 −90° 회전이 붙는 문제를 줄임
+    - 실습 때 Blender 모델이 누워 오면 이 옵션 또는 Blender 내보내기의 Forward/Up 설정을 먼저 확인
   </aside>
 </section>
 
@@ -236,10 +349,7 @@
         <p>a 를 바닥선으로 두고 햇빛을 바로 위에서 비추면, 길이 1 막대 b 의 그림자 = 0.6</p>
         <p>막대가 a 와 나란하면 그림자 1 · 직각으로 서면 0 · 뒤로 누우면 음수</p>
       </div>
-      <dl class="terms">
-        <dt>투영<small>Projection</small></dt><dd>한 화살표를 다른 화살표 위에 <b>그림자처럼 눕힌 것</b></dd>
-        <dt>cos θ<small>cosine</small></dt><dd>각도 θ 를 −1 ~ 1 숫자로 바꾼 값</dd>
-      </dl>
+      <p class="small muted">용어 «투영 · cos θ» 는 다음 장 «용어 풀이»</p>
     </div>
   </div>
   <aside class="notes">
@@ -251,53 +361,78 @@
 </section>
 
 <section>
+  <div class="tag gfx">벡터 · 5 용어 풀이</div>
+  <h2>용어 풀이 — 투영 · cos θ</h2>
+  <dl class="terms">
+    <dt>투영<small>Projection</small></dt>
+    <dd>
+      <p>한 화살표를 다른 화살표 위에 <b>그림자처럼 눕힌 것</b> — «저 방향으로 따지면 얼마만큼인가»</p>
+      <p class="ex">길이 1 막대 b = (0.6, 0.8, 0) 을 바닥선 a = (1, 0, 0) 위에 눕히면 그림자 길이 0.6</p>
+      <p class="why">경사면 미끄러짐·벽 따라 미끄러지기·«앞으로 얼마나 다가왔나» 계산이 전부 투영</p>
+      <p class="where"><code>Vector3.Project(b, a)</code> (그림자 화살표) · <code>Vector3.ProjectOnPlane</code> (바닥면에 눕히기)</p>
+    </dd>
+    <dt>cos θ<small>cosine · 코사인</small></dt>
+    <dd>
+      <p>두 화살표 사이 <b>각도 θ 를 −1 ~ 1 숫자로 바꾼 값</b> — 반지름 1 원 위 점의 가로 위치</p>
+      <p class="ex">cos 0° = 1 (같은 방향) · cos 30° ≈ 0.866 · cos 60° = 0.5 · cos 90° = 0 · cos 180° = −1</p>
+      <p class="why">길이 1 인 두 벡터의 내적 = cos θ → 각도를 따로 구하지 않고 숫자 비교만으로 «시야 안» 판정</p>
+      <p class="where"><code>Mathf.Cos</code> 는 <b>라디안</b>을 받음 → 도(°) 는 <code>Mathf.Deg2Rad</code> 를 곱해 넣기</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 라디안 : 각도를 재는 다른 단위 — 180° = π(약 3.14) 라디안
+    - Mathf.Cos(60) 처럼 도를 그대로 넣는 실수가 AI 코드에도 흔함 → 결과가 엉뚱한 숫자
+  </aside>
+</section>
+
+<section>
   <div class="tag gfx">벡터 · 5 도해</div>
   <h2>그림으로 — 햇빛 아래 막대 그림자</h2>
   <svg class="dg" width="1180" height="420" viewBox="0 0 1180 420" role="img" aria-label="내적은 햇빛 아래 막대 그림자의 길이">
     <defs>
-      <marker id="d22-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#35d6e6"/></marker>
-      <marker id="d22-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5fa2"/></marker>
-      <marker id="d22-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker>
+      <marker id="d22-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0d6b78"/></marker>
+      <marker id="d22-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a3245e"/></marker>
+      <marker id="d22-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8701a"/></marker>
     </defs>
     <!-- 왼쪽 : 손계산 예 -->
-    <circle cx="560" cy="58" r="26" fill="#ffc44d"/>
+    <circle cx="560" cy="58" r="26" fill="#a8701a"/>
     <text x="520" y="64" text-anchor="end" class="cw">햇빛 · 바로 위에서 수직으로</text>
-    <g stroke="#ffc44d" stroke-width="2" stroke-dasharray="6 6" opacity=".75">
+    <g stroke="#a8701a" stroke-width="2" stroke-dasharray="6 6" opacity=".75">
       <line x1="490" y1="120" x2="490" y2="318" marker-end="url(#d22-w)"/>
       <line x1="550" y1="120" x2="550" y2="318" marker-end="url(#d22-w)"/>
       <line x1="610" y1="120" x2="610" y2="318" marker-end="url(#d22-w)"/>
       <line x1="288" y1="90" x2="288" y2="326"/>
     </g>
-    <line x1="40" y1="330" x2="620" y2="330" stroke="#5f6980" stroke-width="2"/>
-    <line x1="90" y1="330" x2="288" y2="330" stroke="#ffc44d" stroke-width="14"/>
-    <line x1="90" y1="330" x2="284" y2="71" stroke="#ff5fa2" stroke-width="6" marker-end="url(#d22-v)"/>
-    <path d="M140,330 A50,50 0 0 0 120,290" fill="none" stroke="#9aa4b8" stroke-width="2"/>
+    <line x1="40" y1="330" x2="620" y2="330" stroke="#8a8476" stroke-width="2"/>
+    <line x1="90" y1="330" x2="288" y2="330" stroke="#a8701a" stroke-width="14"/>
+    <line x1="90" y1="330" x2="284" y2="71" stroke="#a3245e" stroke-width="6" marker-end="url(#d22-v)"/>
+    <path d="M140,330 A50,50 0 0 0 120,290" fill="none" stroke="#4a463e" stroke-width="2"/>
     <text x="150" y="314" class="s dim">θ ≈ 53°</text>
     <text x="160" y="180" text-anchor="end" class="cv b">막대 b</text>
     <text x="160" y="204" text-anchor="end" class="s dim">(0.6, 0.8, 0) · 길이 1</text>
     <text x="300" y="316" class="cw b">그림자 = a·b = 0.6</text>
-    <line x1="90" y1="372" x2="416" y2="372" stroke="#35d6e6" stroke-width="4" marker-end="url(#d22-g)"/>
+    <line x1="90" y1="372" x2="416" y2="372" stroke="#0d6b78" stroke-width="4" marker-end="url(#d22-g)"/>
     <text x="430" y="378" class="cg">a = (1, 0, 0) · 바닥선, 길이 1</text>
     <!-- 오른쪽 : 세 경우 -->
-    <line x1="650" y1="40" x2="650" y2="400" stroke="#2a3040" stroke-width="2"/>
+    <line x1="650" y1="40" x2="650" y2="400" stroke="#cfc6b2" stroke-width="2"/>
     <text x="910" y="70" text-anchor="middle" class="b">막대 기울기에 따라</text>
-    <g stroke="#5f6980" stroke-width="2">
+    <g stroke="#8a8476" stroke-width="2">
       <line x1="680" y1="280" x2="830" y2="280"/><line x1="860" y1="280" x2="990" y2="280"/><line x1="1030" y1="280" x2="1160" y2="280"/>
     </g>
     <!-- 나란히 -->
     <text x="750" y="150" text-anchor="middle">나란히</text>
-    <line x1="700" y1="280" x2="800" y2="280" stroke="#ffc44d" stroke-width="14"/>
-    <line x1="700" y1="280" x2="796" y2="280" stroke="#ff5fa2" stroke-width="4" marker-end="url(#d22-v)"/>
+    <line x1="700" y1="280" x2="800" y2="280" stroke="#a8701a" stroke-width="14"/>
+    <line x1="700" y1="280" x2="796" y2="280" stroke="#a3245e" stroke-width="4" marker-end="url(#d22-v)"/>
     <text x="750" y="325" text-anchor="middle" class="cw">그림자 1</text>
     <!-- 직각 -->
     <text x="910" y="150" text-anchor="middle">직각</text>
-    <line x1="910" y1="280" x2="910" y2="184" stroke="#ff5fa2" stroke-width="4" marker-end="url(#d22-v)"/>
-    <circle cx="910" cy="280" r="7" fill="#ffc44d"/>
+    <line x1="910" y1="280" x2="910" y2="184" stroke="#a3245e" stroke-width="4" marker-end="url(#d22-v)"/>
+    <circle cx="910" cy="280" r="7" fill="#a8701a"/>
     <text x="910" y="325" text-anchor="middle" class="cw">그림자 0</text>
     <!-- 뒤로 기움 -->
     <text x="1095" y="150" text-anchor="middle">뒤로 기움</text>
-    <line x1="1060" y1="280" x2="1120" y2="280" stroke="#ffc44d" stroke-width="14"/>
-    <line x1="1120" y1="280" x2="1063" y2="204" stroke="#ff5fa2" stroke-width="4" marker-end="url(#d22-v)"/>
+    <line x1="1060" y1="280" x2="1120" y2="280" stroke="#a8701a" stroke-width="14"/>
+    <line x1="1120" y1="280" x2="1063" y2="204" stroke="#a3245e" stroke-width="4" marker-end="url(#d22-v)"/>
     <text x="1095" y="325" text-anchor="middle" class="cw">그림자 −0.6 (뒤쪽)</text>
     <text x="910" y="390" text-anchor="middle" class="s dim">a 는 모두 오른쪽 방향 · 결과 범위 1 ~ 0 ~ −1</text>
   </svg>
@@ -380,10 +515,7 @@ if (d > Mathf.Cos(60f * 0.5f * Mathf.Deg2Rad))   // = 0.866
         <p>외적 = <b>두 손가락이 만든 면에 수직으로 선 엄지</b></p>
         <p>검지 = a, 중지 = b 쪽으로 펴면 엄지가 결과 방향 — Unity(왼손 좌표계)는 <b>왼손</b>, Blender 는 오른손</p>
       </div>
-      <dl class="terms">
-        <dt>수직<small>Perpendicular</small></dt><dd>서로 90° 를 이루는 관계</dd>
-        <dt>법선<small>Normal</small></dt><dd>면에 수직인 화살표 = <b>면이 바라보는 쪽</b> · 조명 계산의 기준</dd>
-      </dl>
+      <p class="small muted">용어 «수직 · 법선» 은 다음 장 «용어 풀이»</p>
     </div>
   </div>
   <aside class="notes">
@@ -394,47 +526,71 @@ if (d > Mathf.Cos(60f * 0.5f * Mathf.Deg2Rad))   // = 0.866
 </section>
 
 <section>
+  <div class="tag gfx">벡터 · 8 용어 풀이</div>
+  <h2>용어 풀이 — 수직 · 법선</h2>
+  <dl class="terms">
+    <dt>수직<small>Perpendicular</small></dt>
+    <dd>
+      <p>두 방향이 서로 <b>90°</b> 로 만나는 관계 — 바닥과 그 위에 똑바로 선 기둥</p>
+      <p class="ex">오른쪽 (1, 0, 0) 과 위 (0, 1, 0) · 내적 = 1×0 + 0×1 + 0×0 = <b>0</b></p>
+      <p class="why">«내적 0 = 수직» 한 줄로 직각 여부를 숫자로 확인 · 외적 결과는 언제나 두 재료 모두에 수직</p>
+      <p class="where">Scene 뷰 축 기즈모의 X·Y·Z 세 화살표 = 서로 수직인 세 방향</p>
+    </dd>
+    <dt>법선<small>Normal</small></dt>
+    <dd>
+      <p>면에 수직으로 선 길이 1 화살표 = <b>면이 바라보는 쪽</b> — 면에 꽂은 이쑤시개 방향</p>
+      <p class="ex">바닥 법선 (0, 1, 0) = 위 · 삼각형 두 변 (1, 0, 0) × (0, 1, 0) = (0, 0, 1) → 앞을 보는 면</p>
+      <p class="why">조명 밝기 = 빛 방향과 법선의 내적 → 법선이 뒤집히면 밝아야 할 면이 어둡게, 뒷면으로 취급돼 사라지기도 함</p>
+      <p class="where">모델 Import Settings → Model 탭 → <b>Normals</b> (Import / Calculate) · 코드 <code>mesh.normals</code></p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 외적 순서를 바꾸면(b×a) 법선이 반대 → 면이 뒤집힌 것처럼 보이는 원인 — 5주차 조명에서 다시
+  </aside>
+</section>
+
+<section>
   <div class="tag gfx">벡터 · 8 도해</div>
   <h2>왼손으로 확인 — Unity 축과 외적 방향</h2>
   <svg class="dg" width="1180" height="420" viewBox="0 0 1180 420" role="img" aria-label="왼손 손가락과 Unity 축, 외적 방향">
     <defs>
-      <marker id="d25-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5a4d"/></marker>
-      <marker id="d25-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8e05f"/></marker>
-      <marker id="d25-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4d9cff"/></marker>
-      <marker id="d25-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#35d6e6"/></marker>
-      <marker id="d25-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5fa2"/></marker>
-      <marker id="d25-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker>
+      <marker id="d25-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c2401d"/></marker>
+      <marker id="d25-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f7a16"/></marker>
+      <marker id="d25-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2a5a9e"/></marker>
+      <marker id="d25-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0d6b78"/></marker>
+      <marker id="d25-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a3245e"/></marker>
+      <marker id="d25-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8701a"/></marker>
     </defs>
     <!-- 왼쪽 : 좌표계 -->
     <text x="300" y="40" text-anchor="middle" class="b">Unity 축 = 왼손 세 손가락</text>
     <g stroke-linecap="round" stroke-width="30" opacity=".22">
-      <line x1="230" y1="300" x2="400" y2="300" stroke="#ff5a4d"/>
-      <line x1="230" y1="300" x2="230" y2="135" stroke="#a8e05f"/>
-      <line x1="230" y1="300" x2="350" y2="206" stroke="#4d9cff"/>
+      <line x1="230" y1="300" x2="400" y2="300" stroke="#c2401d"/>
+      <line x1="230" y1="300" x2="230" y2="135" stroke="#4f7a16"/>
+      <line x1="230" y1="300" x2="350" y2="206" stroke="#2a5a9e"/>
     </g>
-    <circle cx="230" cy="300" r="40" fill="#2a3040"/>
+    <circle cx="230" cy="300" r="40" fill="#cfc6b2"/>
     <text x="230" y="364" text-anchor="middle" class="s dim">손바닥</text>
-    <line x1="230" y1="300" x2="430" y2="300" stroke="#ff5a4d" stroke-width="4" marker-end="url(#d25-r)"/>
-    <line x1="230" y1="300" x2="230" y2="105" stroke="#a8e05f" stroke-width="4" marker-end="url(#d25-l)"/>
-    <line x1="230" y1="300" x2="372" y2="188" stroke="#4d9cff" stroke-width="4" marker-end="url(#d25-b)"/>
+    <line x1="230" y1="300" x2="430" y2="300" stroke="#c2401d" stroke-width="4" marker-end="url(#d25-r)"/>
+    <line x1="230" y1="300" x2="230" y2="105" stroke="#4f7a16" stroke-width="4" marker-end="url(#d25-l)"/>
+    <line x1="230" y1="300" x2="372" y2="188" stroke="#2a5a9e" stroke-width="4" marker-end="url(#d25-b)"/>
     <text x="442" y="306" class="ct b">엄지 = X</text>
     <text x="442" y="330" class="s dim">오른쪽</text>
     <text x="230" y="88" text-anchor="middle" class="cl b">검지 = Y · 위</text>
     <text x="384" y="180" class="cb b">중지 = Z</text>
     <text x="384" y="204" class="s dim">앞 · 화면 안쪽</text>
-    <line x1="590" y1="30" x2="590" y2="360" stroke="#2a3040" stroke-width="2"/>
+    <line x1="590" y1="30" x2="590" y2="360" stroke="#cfc6b2" stroke-width="2"/>
     <!-- 오른쪽 : 외적 -->
     <text x="880" y="40" text-anchor="middle" class="b">외적 a × b 의 방향</text>
     <g stroke-linecap="round" stroke-width="30" opacity=".22">
-      <line x1="800" y1="300" x2="970" y2="300" stroke="#35d6e6"/>
-      <line x1="800" y1="300" x2="800" y2="135" stroke="#ff5fa2"/>
-      <line x1="800" y1="300" x2="920" y2="206" stroke="#ffc44d"/>
+      <line x1="800" y1="300" x2="970" y2="300" stroke="#0d6b78"/>
+      <line x1="800" y1="300" x2="800" y2="135" stroke="#a3245e"/>
+      <line x1="800" y1="300" x2="920" y2="206" stroke="#a8701a"/>
     </g>
-    <circle cx="800" cy="300" r="40" fill="#2a3040"/>
+    <circle cx="800" cy="300" r="40" fill="#cfc6b2"/>
     <text x="800" y="364" text-anchor="middle" class="s dim">손바닥</text>
-    <line x1="800" y1="300" x2="1000" y2="300" stroke="#35d6e6" stroke-width="4" marker-end="url(#d25-g)"/>
-    <line x1="800" y1="300" x2="800" y2="105" stroke="#ff5fa2" stroke-width="4" marker-end="url(#d25-v)"/>
-    <line x1="800" y1="300" x2="942" y2="188" stroke="#ffc44d" stroke-width="4" marker-end="url(#d25-w)"/>
+    <line x1="800" y1="300" x2="1000" y2="300" stroke="#0d6b78" stroke-width="4" marker-end="url(#d25-g)"/>
+    <line x1="800" y1="300" x2="800" y2="105" stroke="#a3245e" stroke-width="4" marker-end="url(#d25-v)"/>
+    <line x1="800" y1="300" x2="942" y2="188" stroke="#a8701a" stroke-width="4" marker-end="url(#d25-w)"/>
     <text x="1012" y="306" class="cg b">검지 = a</text>
     <text x="1012" y="330" class="s dim">(1, 0, 0) 오른쪽</text>
     <text x="800" y="88" text-anchor="middle" class="cv b">중지 = b · (0, 1, 0) 위</text>
@@ -511,16 +667,42 @@ if (d > Mathf.Cos(60f * 0.5f * Mathf.Deg2Rad))   // = 0.866
         <p>행렬 = <b>변환 기계</b> — 입구에 좌표 (3, 4) 를 넣으면 출구로 (6, 4) 가 나옴</p>
         <p>기계 안 숫자만 바꾸면 회전 기계, 스케일 기계로 교체</p>
       </div>
-      <dl class="terms">
-        <dt>선형변환<small>Linear transform</small></dt><dd>직선은 직선으로, 원점은 원점에 남기는 변환 — 스케일·회전</dd>
-        <dt>기저 벡터<small>Basis vector</small></dt><dd>좌표의 기준 화살표 · 2D 에서 \( \mathbf{i}=(1,0) \), \( \mathbf{j}=(0,1) \)</dd>
-      </dl>
+      <p class="small muted">용어 «변환 · 선형변환 · 기저 벡터» 는 다음 장 «용어 풀이»</p>
     </div>
   </div>
   <aside class="notes">
     - 비유 : 자판기처럼 입구(좌표)와 출구(새 좌표)가 있는 기계, 내부 설정이 행렬의 숫자
     - 손계산 : 위 줄 (2,0)·(3,4) = 6, 아래 줄 (0,1)·(3,4) = 4 — 내적과 같은 계산법
     - 다음 슬라이드 : 기계 안 숫자를 어떻게 정하는가 = 기저 벡터
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">변환 · 2 용어 풀이</div>
+  <h2>용어 풀이 — 변환 · 선형변환 · 기저 벡터</h2>
+  <dl class="terms">
+    <dt>변환<small>Transform</small></dt>
+    <dd>
+      <p>물체의 <b>모든 점</b>을 같은 규칙으로 새 자리로 옮기는 일 — 크기·방향·위치 바꾸기의 총칭</p>
+      <p class="ex">«가로 2배» 규칙 → (3, 4) 는 (6, 4) · (1, 1) 은 (2, 1) — 점마다 같은 규칙 적용</p>
+      <p class="where">Inspector 맨 위 <b>Transform</b> 컴포넌트 — Position · Rotation · Scale 세 줄</p>
+    </dd>
+    <dt>선형변환<small>Linear transform</small></dt>
+    <dd>
+      <p>직선은 직선으로, <b>원점은 원점에</b> 남기는 변환 — 고무판을 늘리거나 돌리기만 하고 밀지는 않음</p>
+      <p class="ex">스케일 · 회전 = 선형 · 이동 (원점이 (3, 0) 으로 감) = 선형 아님</p>
+      <p class="why">2×2·3×3 행렬로는 선형변환만 가능 → 이동을 넣으려고 4×4 와 동차좌표가 등장</p>
+    </dd>
+    <dt>기저 벡터<small>Basis vector</small></dt>
+    <dd>
+      <p>좌표를 재는 <b>기준 화살표</b> — 2D 에서 i = (1, 0) 오른쪽 한 칸 · j = (0, 1) 위 한 칸</p>
+      <p class="ex">(3, 4) = i 를 3번 + j 를 4번 · i, j 가 어디로 가는지만 알면 모든 점의 행선지가 정해짐</p>
+      <p class="where"><code>transform.right / up / forward</code> = 이 물체의 기저 벡터 · Scene 뷰 툴바 Global ↔ Local 전환으로 확인</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - Local 기즈모로 바꾸면 이동 화살표가 물체와 함께 기울어짐 = 물체 자신의 기저 벡터
+    - 다음 장 «열 = 기저 벡터의 도착지» 로 바로 연결
   </aside>
 </section>
 
@@ -600,7 +782,7 @@ if (d > Mathf.Cos(60f * 0.5f * Mathf.Deg2Rad))   // = 0.866
   <div class="tag gfx">변환 · 7</div>
   <h3 style="margin-bottom:.45em">한 차원 추가로 이동 흡수</h3>
   <video src="../../figures/out/w02-homogeneous.mp4"
-         style="width:100%;max-height:590px;border-radius:14px;border:1px solid var(--line)"
+         style="width:100%;max-height:590px;border-radius:0;border:1px solid var(--ink)"
          controls muted playsinline data-autoplay></video>
   <aside class="notes">
     - 길이 40초
@@ -614,22 +796,45 @@ if (d > Mathf.Cos(60f * 0.5f * Mathf.Deg2Rad))   // = 0.866
   <div class="tag gfx">변환 · 8</div>
   <h2>동차좌표 — 4×4 행렬을 쓰는 이유</h2>
   <div class="math-block">\[ \begin{bmatrix} 1 & 0 & 0 & t_x \\ 0 & 1 & 0 & t_y \\ 0 & 0 & 1 & t_z \\ 0 & 0 & 0 & 1 \end{bmatrix}
-  \begin{bmatrix} x \\ y \\ z \\ \color{#ffc44d}{1} \end{bmatrix} =
-  \begin{bmatrix} x + t_x \\ y + t_y \\ z + t_z \\ \color{#ffc44d}{1} \end{bmatrix} \]</div>
+  \begin{bmatrix} x \\ y \\ z \\ \color{#a8701a}{1} \end{bmatrix} =
+  \begin{bmatrix} x + t_x \\ y + t_y \\ z + t_z \\ \color{#a8701a}{1} \end{bmatrix} \]</div>
   <div class="cols">
     <div class="key" style="margin-top:0">
       <p class="small">마지막 성분 <b>w = 1</b> → 4번째 열 \( (t_x, t_y, t_z) \) 이 결과에 더해짐<br>
       이동·회전·스케일을 <b>모두 같은 4×4 곱셈</b>으로 통일 → GPU 가 한 방식으로 처리</p>
     </div>
-    <dl class="terms" style="margin-top:0">
-      <dt>동차좌표<small>Homogeneous</small></dt><dd>(x, y, z) 끝에 w 를 붙인 (x, y, z, w)</dd>
-      <dt>w 성분<small>w component</small></dt><dd>이동을 받을지 말지 정하는 <b>네 번째 숫자</b></dd>
-    </dl>
+    <div>
+      <p class="small" style="margin:0">4주차 원근투영 행렬도 같은 4×4 틀 — 이때는 w 가 1 이외의 값(깊이)이 되어 «멀수록 작게» 효과를 만듦</p>
+      <p class="small muted" style="margin-top:.5em">용어 «동차좌표 · w 성분» 은 다음 장 «용어 풀이»</p>
+    </div>
   </div>
-  <p class="small">4주차 원근투영 행렬도 같은 4×4 틀 — 이때는 w 가 1 이외의 값(깊이)이 되어 «멀수록 작게» 효과를 만듦</p>
   <aside class="notes">
     - 손으로 확인 : 첫 줄 (1,0,0,tx)·(x,y,z,1) = x + tx — w=1 이 tx 를 끌어들임
     - 3×3 회전행렬은 4×4 의 왼쪽 위 3×3 칸에 그대로 들어감
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">변환 · 8 용어 풀이</div>
+  <h2>용어 풀이 — 동차좌표 · w 성분</h2>
+  <dl class="terms">
+    <dt>동차좌표<small>Homogeneous coord.</small></dt>
+    <dd>
+      <p>(x, y, z) 끝에 <b>네 번째 숫자 w</b> 를 붙여 (x, y, z, w) 로 적는 법 — 한 차원 위에서 보면 이동도 «기울이기» 한 번으로 처리됨</p>
+      <p class="ex">점 (1, 2, 3) → (1, 2, 3, 1) · 오른쪽 5 이동 행렬과 곱하면 (6, 2, 3, 1)</p>
+      <p class="why">이동·회전·스케일이 모두 4×4 곱셈 하나로 통일 → 부모-자식 체인을 곱셈 연쇄로 계산 가능</p>
+      <p class="where"><code>Matrix4x4</code> · <code>Vector4</code> · 셰이더 코드의 <code>float4(pos, 1.0)</code></p>
+    </dd>
+    <dt>w 성분<small>w component</small></dt>
+    <dd>
+      <p>이동을 <b>받을지 말지</b> 정하는 꼬리표 숫자 — 1 이면 장소(점), 0 이면 방향</p>
+      <p class="ex">(1, 2, 3, <b>1</b>) 은 오른쪽 5 이동 후 (6, 2, 3) · (1, 2, 3, <b>0</b>) 은 그대로 (1, 2, 3)</p>
+      <p class="why">법선·빛 방향 같은 «방향»에 이동을 적용하면 원점에서 멀수록 방향이 기울어 조명이 틀어짐</p>
+      <p class="where"><code>MultiplyPoint</code> = w 1 취급 · <code>MultiplyVector</code> = w 0 취급</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 4주차 원근투영에서는 w 에 깊이가 들어가고, 마지막에 x, y, z 를 w 로 나눔 = «멀수록 작게»
   </aside>
 </section>
 
@@ -638,8 +843,8 @@ if (d > Mathf.Cos(60f * 0.5f * Mathf.Deg2Rad))   // = 0.866
   <h2>w = 1 은 점, w = 0 은 방향</h2>
   <p class="small">예 : x 방향 5 이동 행렬 \( T(5,0,0) \) 에 같은 (1, 2, 3) 을 넣되 w 만 다르게</p>
   <div class="cols">
-    <div class="math-block" style="font-size:.8em;margin:0">\[ T \begin{bmatrix} 1 \\ 2 \\ 3 \\ \color{#ffc44d}{1} \end{bmatrix} = \begin{bmatrix} 6 \\ 2 \\ 3 \\ 1 \end{bmatrix} \;\text{점 : 이동 적용} \]</div>
-    <div class="math-block" style="font-size:.8em;margin:0">\[ T \begin{bmatrix} 1 \\ 2 \\ 3 \\ \color{#ffc44d}{0} \end{bmatrix} = \begin{bmatrix} 1 \\ 2 \\ 3 \\ 0 \end{bmatrix} \;\text{방향 : 이동 무시} \]</div>
+    <div class="math-block" style="font-size:.8em;margin:0">\[ T \begin{bmatrix} 1 \\ 2 \\ 3 \\ \color{#a8701a}{1} \end{bmatrix} = \begin{bmatrix} 6 \\ 2 \\ 3 \\ 1 \end{bmatrix} \;\text{점 : 이동 적용} \]</div>
+    <div class="math-block" style="font-size:.8em;margin:0">\[ T \begin{bmatrix} 1 \\ 2 \\ 3 \\ \color{#a8701a}{0} \end{bmatrix} = \begin{bmatrix} 1 \\ 2 \\ 3 \\ 0 \end{bmatrix} \;\text{방향 : 이동 무시} \]</div>
   </div>
   <div class="analogy">
     <p>w = <b>꼬리표</b> — «이건 장소다(1)» 이면 이사할 때 함께 옮기고, «이건 방향이다(0)» 이면 그대로 둠</p>
@@ -720,9 +925,19 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
   <div class="tag trap">순서 · 4</div>
   <h2>행렬 곱의 <span class="trap-txt">교환법칙 불성립</span></h2>
   <div class="math-block">\[ R \cdot T \;\neq\; T \cdot R \]</div>
-  <dl class="terms">
-    <dt>변환 합성<small>Composition</small></dt><dd>여러 변환을 차례로 적용 = 행렬을 <b>곱해서 하나로 합치기</b></dd>
-    <dt>비가환<small>Non-commutative</small></dt><dd>곱하는 <b>순서를 바꾸면 결과가 달라지는</b> 성질 (3×4 = 4×3 과 달리)</dd>
+  <dl class="terms" style="font-size:.66em">
+    <dt>변환 합성<small>Composition</small></dt>
+    <dd>
+      <p>여러 변환을 차례로 적용하는 것 = 행렬을 <b>곱해서 하나로 합치기</b> — 여러 번 갈아타는 노선을 표 한 장으로</p>
+      <p class="ex">회전 R 다음 이동 T → 합친 행렬 M = T · R 하나로 모든 정점 처리</p>
+      <p class="where"><code>Matrix4x4.TRS(위치, 회전, 스케일)</code> = 세 변환을 합성한 4×4 하나</p>
+    </dd>
+    <dt>비가환<small>Non-commutative</small></dt>
+    <dd>
+      <p>곱하는 <b>순서를 바꾸면 결과가 달라지는</b> 성질 — 숫자 곱 3×4 = 4×3 과 달리</p>
+      <p class="ex">순서 · 2 손계산 : R·T 결과 (0, 4) ≠ T·R 결과 (3, 1)</p>
+      <p class="why">AI 코드에서 곱셈 두 항의 자리만 바뀌어도 물체가 엉뚱한 곳으로 감</p>
+    </dd>
   </dl>
   <p class="small">읽는 방향 주의 : \( M = R \cdot T \) 를 점에 곱하면 <b>오른쪽 T 가 먼저</b>, 그 다음 R — 점에 가까운 쪽부터 적용</p>
   <div class="key">
@@ -743,16 +958,16 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
       <h4>제자리 회전</h4>
       transform.Rotate(<br>
       &nbsp;&nbsp;Vector3.up, 55f);<br><br>
-      <span style="color:#8a93a8">// 위치 그대로, 방향만</span><br>
-      <span style="color:#8a93a8">// = T · R (회전 먼저)</span>
+      <span style="color:var(--ink-3)">// 위치 그대로, 방향만</span><br>
+      <span style="color:var(--ink-3)">// = T · R (회전 먼저)</span>
     </div>
     <div class="good">
       <h4>원점 기준 회전</h4>
       transform.RotateAround(<br>
       &nbsp;&nbsp;Vector3.zero,<br>
       &nbsp;&nbsp;Vector3.up, 55f);<br><br>
-      <span style="color:#8a93a8">// 위치까지 변경 (호를 그림)</span><br>
-      <span style="color:#8a93a8">// = R · T (이동된 물체를 돌림)</span>
+      <span style="color:var(--ink-3)">// 위치까지 변경 (호를 그림)</span><br>
+      <span style="color:var(--ink-3)">// = R · T (이동된 물체를 돌림)</span>
     </div>
   </div>
   <div class="key trap" style="margin-top:.9em">
@@ -781,7 +996,7 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
     <tr><th>Rotation 칸</th><th>이름</th><th>머리로 하면</th><th>예</th></tr>
     <tr><td class="trap-txt"><b>X</b></td><td>피치 (Pitch)</td><td>고개 <b>끄덕</b> — 위·아래 보기</td><td>30</td></tr>
     <tr><td class="lab-txt"><b>Y</b></td><td>요 (Yaw)</td><td>고개 <b>도리도리</b> — 좌·우 보기</td><td>45</td></tr>
-    <tr><td style="color:#4d9cff"><b>Z</b></td><td>롤 (Roll)</td><td>고개 <b>갸웃</b> — 옆으로 기울이기</td><td>0</td></tr>
+    <tr><td class="z-txt"><b>Z</b></td><td>롤 (Roll)</td><td>고개 <b>갸웃</b> — 옆으로 기울이기</td><td>0</td></tr>
   </table>
   <div class="key trap">
     <p class="small"><b>문제는 «차례»</b> — 어떤 순서로 돌릴지 정하지 않으면 같은 숫자에서 다른 결과<br>
@@ -790,6 +1005,36 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
   <aside class="notes">
     - 학생들에게 고개로 직접 : 끄덕(피치) · 도리도리(요) · 갸웃(롤)
     - Unity 문서 : Z, X, Y 축 순서로 회전 (world 축 기준) — 자기 축 기준으로 말하면 Y → X → Z 와 같은 결과
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">회전 · 1 용어 풀이</div>
+  <h2>용어 풀이 — 오일러각 · 피치/요/롤 · 월드 축과 자기 축</h2>
+  <dl class="terms">
+    <dt>오일러각<small>Euler angles</small></dt>
+    <dd>
+      <p>회전을 <b>«X 몇 도, Y 몇 도, Z 몇 도»</b> 세 숫자로 적는 법 — 정해진 차례대로 하나씩 돌린 결과</p>
+      <p class="ex">(30, 45, 0) = 고개를 30° 숙이고 45° 옆으로 돌린 자세</p>
+      <p class="why">읽기 쉬운 대신 순서·축 기준에 따라 결과가 바뀌고, 특정 자세에서 짐벌락</p>
+      <p class="where">Inspector Transform → <b>Rotation</b> 칸 · 코드 <code>transform.eulerAngles</code>, <code>Quaternion.Euler(x, y, z)</code></p>
+    </dd>
+    <dt>피치 · 요 · 롤<small>Pitch · Yaw · Roll</small></dt>
+    <dd>
+      <p>머리 움직임으로 부르는 세 회전 이름 — 피치 = <b>끄덕</b>(X) · 요 = <b>도리도리</b>(Y) · 롤 = <b>갸웃</b>(Z)</p>
+      <p class="ex">VR 에서 천장 보기 = 피치 +, 옆 사람 보기 = 요, 고개 기울이기 = 롤</p>
+      <p class="where">비행·드론·카메라 앱에서도 같은 이름 · Unity 축 X·Y·Z 와 짝지어 기억</p>
+    </dd>
+    <dt>월드 축 · 자기 축<small>World · Local (Self) space</small></dt>
+    <dd>
+      <p>월드 축 = 씬 전체에 고정된 방향 (방 안의 동서남북) · 자기 축 = 물체에 붙어 함께 도는 방향 (내 몸 기준 앞·옆)</p>
+      <p class="ex">비행기가 옆으로 누운 뒤 «위로» 돌기 : 월드 위(하늘) vs 비행기 자기 위(지금은 옆쪽)</p>
+      <p class="why">같은 «Y 90°» 라도 기준 축이 다르면 다른 자세 → 도입 질문 A·B 가 갈린 이유</p>
+      <p class="where"><code>transform.Rotate(…, Space.Self)</code>(기본값) vs <code>Space.World</code> · Scene 뷰 툴바 Global / Local</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 다음 두 장(회전 순서 도해 · 도입 질문의 답)이 이 세 용어를 모두 씀
   </aside>
 </section>
 
@@ -836,13 +1081,13 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
   <h2>도입 질문의 답 — 두 큐브의 정면 추적</h2>
 <svg class="dg" width="1180" height="440" viewBox="0 0 1180 440" role="img" aria-label="도입 질문 A와 B의 큐브 회전 결과 비교">
 <defs>
-<marker id="d21-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4d9cff"/></marker>
-<marker id="d21-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8e05f"/></marker>
-<marker id="d21-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker>
-<g id="d21-cube" stroke="#5f6980" stroke-width="2" stroke-linejoin="round">
-<polygon points="-49,-24 -21,-46 49,-46 21,-24" fill="#252c3d"/>
-<polygon points="21,-24 49,-46 49,24 21,46" fill="#151a24"/>
-<rect x="-49" y="-24" width="70" height="70" fill="#1c2230"/>
+<marker id="d21-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2a5a9e"/></marker>
+<marker id="d21-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f7a16"/></marker>
+<marker id="d21-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4a463e"/></marker>
+<g id="d21-cube" stroke="#8a8476" stroke-width="2" stroke-linejoin="round">
+<polygon points="-49,-24 -21,-46 49,-46 21,-24" fill="#e2dac8"/>
+<polygon points="21,-24 49,-46 49,24 21,46" fill="#d6ccb6"/>
+<rect x="-49" y="-24" width="70" height="70" fill="#ece6d8"/>
 </g></defs>
 <text x="320" y="36" text-anchor="middle" class="dim">시작</text>
 <text x="570" y="36" text-anchor="middle" class="dim">1단계 후</text>
@@ -850,63 +1095,63 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
 <use href="#d21-cube" x="320" y="150"/>
 <use href="#d21-cube" x="570" y="150"/>
 <use href="#d21-cube" x="820" y="150"/>
-<line x1="320" y1="150" x2="320" y2="70" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<line x1="320" y1="150" x2="320" y2="70" stroke="#4f7a16" stroke-width="5" marker-end="url(#d21-l)"/>
 <text x="310" y="78" text-anchor="end" class="cl b">위</text>
 
-<line x1="320" y1="150" x2="380" y2="102" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<line x1="320" y1="150" x2="380" y2="102" stroke="#2a5a9e" stroke-width="5" marker-end="url(#d21-b)"/>
 <text x="386" y="98" text-anchor="start" class="cb b">정면</text>
 
-<line x1="570" y1="150" x2="630" y2="102" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<line x1="570" y1="150" x2="630" y2="102" stroke="#4f7a16" stroke-width="5" marker-end="url(#d21-l)"/>
 <text x="636" y="98" text-anchor="start" class="cl b">위</text>
 
-<line x1="570" y1="150" x2="570" y2="230" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<line x1="570" y1="150" x2="570" y2="230" stroke="#2a5a9e" stroke-width="5" marker-end="url(#d21-b)"/>
 <text x="580" y="222" text-anchor="start" class="cb b">정면</text>
 
-<line x1="820" y1="150" x2="900" y2="150" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<line x1="820" y1="150" x2="900" y2="150" stroke="#4f7a16" stroke-width="5" marker-end="url(#d21-l)"/>
 <text x="908" y="156" text-anchor="start" class="cl b">위</text>
 
-<line x1="820" y1="150" x2="820" y2="230" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<line x1="820" y1="150" x2="820" y2="230" stroke="#2a5a9e" stroke-width="5" marker-end="url(#d21-b)"/>
 <text x="830" y="222" text-anchor="start" class="cb b">정면</text>
 
-<line x1="420" y1="150" x2="492" y2="150" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d21-d)"/>
+<line x1="420" y1="150" x2="492" y2="150" stroke="#4a463e" stroke-width="2.5" marker-end="url(#d21-d)"/>
 <text x="456.0" y="138" text-anchor="middle" class="b">X 90°</text>
 <text x="456.0" y="176" text-anchor="middle" class="s dim">월드 X축</text>
-<line x1="670" y1="150" x2="742" y2="150" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d21-d)"/>
+<line x1="670" y1="150" x2="742" y2="150" stroke="#4a463e" stroke-width="2.5" marker-end="url(#d21-d)"/>
 <text x="706.0" y="138" text-anchor="middle" class="b">Y 90°</text>
 <text x="706.0" y="176" text-anchor="middle" class="s dim">월드 Y축</text>
 <use href="#d21-cube" x="320" y="330"/>
 <use href="#d21-cube" x="570" y="330"/>
 <use href="#d21-cube" x="820" y="330"/>
-<line x1="320" y1="330" x2="320" y2="250" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<line x1="320" y1="330" x2="320" y2="250" stroke="#4f7a16" stroke-width="5" marker-end="url(#d21-l)"/>
 <text x="310" y="258" text-anchor="end" class="cl b">위</text>
 
-<line x1="320" y1="330" x2="380" y2="282" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<line x1="320" y1="330" x2="380" y2="282" stroke="#2a5a9e" stroke-width="5" marker-end="url(#d21-b)"/>
 <text x="386" y="278" text-anchor="start" class="cb b">정면</text>
 
-<line x1="570" y1="330" x2="630" y2="282" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<line x1="570" y1="330" x2="630" y2="282" stroke="#4f7a16" stroke-width="5" marker-end="url(#d21-l)"/>
 <text x="636" y="278" text-anchor="start" class="cl b">위</text>
 
-<line x1="570" y1="330" x2="570" y2="410" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<line x1="570" y1="330" x2="570" y2="410" stroke="#2a5a9e" stroke-width="5" marker-end="url(#d21-b)"/>
 <text x="580" y="402" text-anchor="start" class="cb b">정면</text>
 
-<line x1="820" y1="330" x2="880" y2="282" stroke="#a8e05f" stroke-width="5" marker-end="url(#d21-l)"/>
+<line x1="820" y1="330" x2="880" y2="282" stroke="#4f7a16" stroke-width="5" marker-end="url(#d21-l)"/>
 <text x="886" y="278" text-anchor="start" class="cl b">위</text>
 
-<line x1="820" y1="330" x2="900" y2="330" stroke="#4d9cff" stroke-width="5" marker-end="url(#d21-b)"/>
+<line x1="820" y1="330" x2="900" y2="330" stroke="#2a5a9e" stroke-width="5" marker-end="url(#d21-b)"/>
 <text x="908" y="336" text-anchor="start" class="cb b">정면</text>
 
-<line x1="420" y1="330" x2="492" y2="330" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d21-d)"/>
+<line x1="420" y1="330" x2="492" y2="330" stroke="#4a463e" stroke-width="2.5" marker-end="url(#d21-d)"/>
 <text x="456.0" y="318" text-anchor="middle" class="b">X 90°</text>
 <text x="456.0" y="356" text-anchor="middle" class="s dim">자기 X축</text>
-<line x1="670" y1="330" x2="742" y2="330" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d21-d)"/>
+<line x1="670" y1="330" x2="742" y2="330" stroke="#4a463e" stroke-width="2.5" marker-end="url(#d21-d)"/>
 <text x="706.0" y="318" text-anchor="middle" class="b">Y 90°</text>
 <text x="706.0" y="356" text-anchor="middle" class="s dim">자기 위쪽 축</text>
 <text x="16" y="130" class="b">A · 인스펙터</text><text x="16" y="156">(90, 90, 0)</text><text x="16" y="182" class="s dim">월드 축 기준</text>
 <text x="16" y="300" class="b">B · Rotate 두 번</text><text x="16" y="326" class="s">Rotate(90, 0, 0)</text><text x="16" y="348" class="s">→ Rotate(0, 90, 0)</text><text x="16" y="372" class="s dim">자기 축 기준</text>
-<rect x="968" y="112" width="200" height="76" rx="10" fill="#171b25" stroke="#4d9cff" stroke-width="2"/>
+<rect x="968" y="112" width="200" height="76" rx="2" fill="#ece6d8" stroke="#2a5a9e" stroke-width="2"/>
 <text x="1068" y="144" text-anchor="middle" class="cb b">정면 → 아래</text>
 <text x="1068" y="172" text-anchor="middle" class="s dim">위 → 오른쪽</text>
-<rect x="968" y="292" width="200" height="76" rx="10" fill="#171b25" stroke="#4d9cff" stroke-width="2"/>
+<rect x="968" y="292" width="200" height="76" rx="2" fill="#ece6d8" stroke="#2a5a9e" stroke-width="2"/>
 <text x="1068" y="324" text-anchor="middle" class="cb b">정면 → 오른쪽</text>
 <text x="1068" y="352" text-anchor="middle" class="s dim">위 → 화면 안쪽</text>
 <text x="590" y="430" text-anchor="middle" class="s dim">파랑 = 큐브의 정면(자기 Z) · 초록 = 큐브의 위(자기 Y) · 오른쪽 위 대각선 = 화면 안쪽 · 큐브 모양은 90° 회전해도 같아 보여 화살표로 구분</text>
@@ -922,10 +1167,10 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
   <h2>짐벌락 — 회전축 하나의 상실</h2>
   <div class="cols wide-left">
     <div>
-      <p class="small">세 개의 링이 겹친 장치 : 바깥부터 <b class="lab-txt">Y</b> → <b class="trap-txt">X</b> → <b style="color:#4d9cff">Z</b> (Unity 순서와 같음)</p>
+      <p class="small">세 개의 링이 겹친 장치 : 바깥부터 <b class="lab-txt">Y</b> → <b class="trap-txt">X</b> → <b class="z-txt">Z</b> (Unity 순서와 같음)</p>
       <p class="small">가운데 링(<b class="trap-txt">X</b>, 피치)을 <b>90°</b> 로 세우는 순간</p>
       <div class="key trap">
-        <p class="small">바깥 링(<b class="lab-txt">Y</b>)과 안쪽 링(<b style="color:#4d9cff">Z</b>)이 <b>같은 축으로 회전</b><br>
+        <p class="small">바깥 링(<b class="lab-txt">Y</b>)과 안쪽 링(<b class="z-txt">Z</b>)이 <b>같은 축으로 회전</b><br>
         손잡이는 세 개, 실제로 돌 수 있는 방향은 두 개 → <b class="trap-txt">자유도 3 → 2</b></p>
       </div>
       <p class="small">오일러각 표현 자체의 구조적 한계 — <b>어떤 순서를 골라도</b> 반드시 생기는 지점 존재</p>
@@ -935,15 +1180,35 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
         <p><b>카메라 짐벌</b>(흔들림 방지 손잡이)에서 두 모터 축이 일직선으로 겹치면, 두 모터를 돌려도 같은 방향으로만 돌고 한 방향은 아예 못 돌림</p>
         <p class="small">한계 : 실제 짐벌은 기계가 걸리는 것, 오일러각은 <b>숫자 표현</b>의 문제 → 표현만 바꾸면(쿼터니언) 사라짐</p>
       </div>
-      <dl class="terms" style="font-size:.66em">
-        <dt>짐벌락<small>Gimbal lock</small></dt><dd>두 회전축이 겹쳐 한 방향 회전을 잃는 상태</dd>
-        <dt>자유도<small>DoF</small></dt><dd>독립적으로 움직일 수 있는 방향의 개수</dd>
-      </dl>
+      <p class="small muted">용어 «짐벌락 · 자유도» 는 다음 장 «용어 풀이»</p>
     </div>
   </div>
   <aside class="notes">
     - 비유 : 스마트폰 짐벌 스태빌라이저를 써 본 학생에게 질문 — 특정 자세에서 한쪽으로 안 돌아가는 경험
     - 고개로 해 보기 : 고개를 끝까지 들어 천장을 보면(피치 90°), 도리도리(요)와 갸웃(롤)이 거의 같은 움직임
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">회전 · 4 용어 풀이</div>
+  <h2>용어 풀이 — 짐벌락 · 자유도</h2>
+  <dl class="terms">
+    <dt>짐벌락<small>Gimbal lock</small></dt>
+    <dd>
+      <p>세 회전축 중 <b>두 축이 한 줄로 겹쳐</b> 한 방향 회전을 잃는 상태 — 손잡이는 셋인데 실제로는 둘만 움직임</p>
+      <p class="ex">Inspector Rotation X = 90 으로 두고 Y 와 Z 를 각각 바꿔 보면 → 둘 다 같은 방향으로 돎</p>
+      <p class="why">오일러각을 누적하는 회전 코드가 이 자세 근처에서 갑자기 튀거나 멈춤 → VR 에서는 화면이 홱 돌아 멀미</p>
+      <p class="where">Inspector Transform → Rotation 칸 · 코드 <code>transform.eulerAngles</code> 를 더해 가는 곳</p>
+    </dd>
+    <dt>자유도<small>DoF · Degrees of Freedom</small></dt>
+    <dd>
+      <p>서로 따로따로 움직일 수 있는 <b>방향의 개수</b> — 손잡이가 몇 개 «살아 있는가»</p>
+      <p class="ex">회전 자유도 3 (끄덕·도리도리·갸웃) · 짐벌락이면 2 · Quest 3 머리 추적 = 회전 3 + 위치 3 = 6DoF</p>
+      <p class="where">XR 카메라의 Tracked Pose Driver → Tracking Type (Rotation And Position = 6DoF · Rotation Only = 3DoF)</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 자유도 개념은 Part II 의 3DoF / 6DoF 헤드셋 구분에 그대로 다시 등장
   </aside>
 </section>
 
@@ -955,33 +1220,33 @@ m.MultiplyVector(v);  // w=0 취급 — 이동 무시 (법선, forward, 빛의 �
     <text x="850" y="20" text-anchor="middle" class="ct b">짐벌락 : 가운데 링 X 를 90°</text>
     <!-- 왼쪽 정상 -->
     <g fill="none" stroke-width="3" stroke-dasharray="8 7">
-      <line x1="270" y1="60" x2="270" y2="410" stroke="#a8e05f"/>
-      <line x1="95" y1="235" x2="445" y2="235" stroke="#ff5a4d"/>
-      <line x1="120" y1="355" x2="420" y2="115" stroke="#4d9cff"/>
+      <line x1="270" y1="60" x2="270" y2="410" stroke="#4f7a16"/>
+      <line x1="95" y1="235" x2="445" y2="235" stroke="#c2401d"/>
+      <line x1="120" y1="355" x2="420" y2="115" stroke="#2a5a9e"/>
     </g>
     <g fill="none" stroke-width="7">
-      <circle cx="270" cy="235" r="160" stroke="#a8e05f"/>
-      <ellipse cx="270" cy="235" rx="125" ry="40" stroke="#ff5a4d"/>
-      <ellipse cx="270" cy="235" rx="82" ry="26" stroke="#4d9cff" transform="rotate(-38.7 270 235)"/>
+      <circle cx="270" cy="235" r="160" stroke="#4f7a16"/>
+      <ellipse cx="270" cy="235" rx="125" ry="40" stroke="#c2401d"/>
+      <ellipse cx="270" cy="235" rx="82" ry="26" stroke="#2a5a9e" transform="rotate(-38.7 270 235)"/>
     </g>
-    <rect x="258" y="223" width="24" height="24" rx="4" fill="#e8ecf4"/>
+    <rect x="258" y="223" width="24" height="24" rx="2" fill="#1b1a17"/>
     <text x="270" y="50" text-anchor="middle" class="s cl b">Y 바깥 링 · 요</text>
     <text x="452" y="241" class="s ct b">X 가운데 · 피치</text>
     <text x="428" y="110" class="s cb b">Z 안쪽 · 롤</text>
     <text x="270" y="442" text-anchor="middle">회전축 세 개가 모두 다른 방향 → <tspan class="cl b">자유도 3</tspan></text>
-    <line x1="570" y1="30" x2="570" y2="420" stroke="#2a3040" stroke-width="2"/>
+    <line x1="570" y1="30" x2="570" y2="420" stroke="#cfc6b2" stroke-width="2"/>
     <!-- 오른쪽 짐벌락 -->
     <g fill="none" stroke-width="3" stroke-dasharray="8 7">
-      <line x1="845" y1="60" x2="845" y2="410" stroke="#a8e05f"/>
-      <line x1="855" y1="60" x2="855" y2="410" stroke="#4d9cff"/>
-      <line x1="675" y1="235" x2="1025" y2="235" stroke="#ff5a4d"/>
+      <line x1="845" y1="60" x2="845" y2="410" stroke="#4f7a16"/>
+      <line x1="855" y1="60" x2="855" y2="410" stroke="#2a5a9e"/>
+      <line x1="675" y1="235" x2="1025" y2="235" stroke="#c2401d"/>
     </g>
     <g fill="none" stroke-width="7">
-      <circle cx="850" cy="235" r="160" stroke="#a8e05f"/>
-      <circle cx="850" cy="235" r="125" stroke="#ff5a4d"/>
-      <ellipse cx="850" cy="235" rx="26" ry="82" stroke="#4d9cff"/>
+      <circle cx="850" cy="235" r="160" stroke="#4f7a16"/>
+      <circle cx="850" cy="235" r="125" stroke="#c2401d"/>
+      <ellipse cx="850" cy="235" rx="26" ry="82" stroke="#2a5a9e"/>
     </g>
-    <rect x="838" y="223" width="24" height="24" rx="4" fill="#e8ecf4"/>
+    <rect x="838" y="223" width="24" height="24" rx="2" fill="#1b1a17"/>
     <text x="850" y="50" text-anchor="middle" class="s b"><tspan class="cl">Y 축</tspan> = <tspan class="cb">Z 축</tspan> · 한 줄로 겹침</text>
     <text x="1032" y="241" class="s ct b">X = 90°</text>
     <text x="850" y="442" text-anchor="middle">바깥·안쪽 링이 같은 축으로 돎 → <tspan class="ct b">자유도 2</tspan></text>
@@ -1079,6 +1344,36 @@ transform.rotation = q * transform.rotation;  // 월드 축 기준으로 추가 
 </section>
 
 <section>
+  <div class="tag gfx">회전 · 8 용어 풀이</div>
+  <h2>용어 풀이 — 쿼터니언 · 보간 · Slerp</h2>
+  <dl class="terms">
+    <dt>쿼터니언<small>Quaternion</small></dt>
+    <dd>
+      <p>회전을 <b>«축 하나 + 그 축 둘레로 돈 각도»</b>로 기억하는 네 숫자 (x, y, z, w) — 문손잡이에 꽂아 한 번에 돌리기</p>
+      <p class="ex">Y축 둘레 90° = (0, 0.707, 0, 0.707) · 회전 없음 = (0, 0, 0, 1)</p>
+      <p class="why">차례가 없어 짐벌락이 없고 중간 자세가 매끄러움 — 다만 네 숫자를 사람이 직접 고치면 안 됨</p>
+      <p class="where"><code>transform.rotation</code> · Inspector ⋮ 메뉴 → <b>Debug</b> 모드로 바꾸면 네 숫자가 그대로 보임</p>
+    </dd>
+    <dt>보간<small>Interpolation</small></dt>
+    <dd>
+      <p>두 값 사이의 <b>중간 값을 만들어 채우는 일</b> — 처음과 끝 사진 사이에 중간 프레임 그려 넣기</p>
+      <p class="ex">위치 (0, 0, 0) 과 (10, 0, 0) 의 30% 지점 = (3, 0, 0)</p>
+      <p class="where"><code>Vector3.Lerp(a, b, t)</code> · t = 0 이면 처음, 1 이면 끝</p>
+    </dd>
+    <dt>Slerp<small>Spherical linear interpolation</small></dt>
+    <dd>
+      <p>회전용 보간 — 두 자세 사이를 <b>공 표면을 따라 일정한 속도</b>로 돌려 중간 자세를 만듦</p>
+      <p class="ex">정면 → 오른쪽 90° 사이 t = 0.5 → 정확히 45° 자세</p>
+      <p class="why">오일러각 세 숫자를 따로 보간하면 축이 제멋대로 돌며 덜컹거림 → 회전은 Slerp</p>
+      <p class="where"><code>Quaternion.Slerp(a, b, t)</code> · 일정 각속도로 다가가기는 <code>Quaternion.RotateTowards</code></p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - Lerp(직선 보간)로 쿼터니언을 섞어도 대개 비슷하지만 큰 각도에서 속도가 고르지 않음 → Slerp 권장
+  </aside>
+</section>
+
+<section>
   <div class="tag lab">회전 · 9</div>
   <h2>Unity 실무 규칙 네 줄</h2>
   <pre><code class="language-csharp" data-trim>// 만들 때 — 사람이 읽는 각도로
@@ -1117,11 +1412,10 @@ transform.eulerAngles += new Vector3(0, speed * Time.deltaTime, 0);
       <p class="small">숫자 예 : 부모 위치 (10, 0, 0) · 자식 localPosition (0, 2, 0) · 회전·스케일 없음<br>
       → 자식의 월드 position = <b>(10, 2, 0)</b></p>
     </div>
-    <dl class="terms" style="margin-top:.4em">
-      <dt>부모-자식<small>Parent-child</small></dt><dd>Hierarchy 에서 끌어다 넣은 관계 · <b>부모가 움직이면 자식도 함께</b></dd>
-      <dt>로컬 좌표<small>localPosition</small></dt><dd>부모를 기준(원점)으로 잰 위치 — 기차 안 좌석 번호</dd>
-      <dt>월드 좌표<small>position</small></dt><dd>씬 전체의 원점 기준 위치 — 지도 위 GPS 위치</dd>
-    </dl>
+    <div class="key" style="margin-top:.4em">
+      <p class="small">기차 = 부모 · 좌석 번호 = 로컬 좌표 · 지도 위 GPS = 월드 좌표<br>
+      세 용어의 자세한 풀이는 다음 장</p>
+    </div>
   </div>
   <aside class="notes">
     - 비유 : 기차 안에서 걷는 사람 — 내 걸음(로컬)은 기차 기준, 땅에서 보면(월드) 기차 이동이 더해짐
@@ -1130,36 +1424,65 @@ transform.eulerAngles += new Vector3(0, speed * Time.deltaTime, 0);
 </section>
 
 <section>
+  <div class="tag gfx">계층 · 1 용어 풀이</div>
+  <h2>용어 풀이 — 부모-자식 · 로컬 좌표 · 월드 좌표</h2>
+  <dl class="terms">
+    <dt>부모-자식<small>Parent-child</small></dt>
+    <dd>
+      <p>한 오브젝트를 다른 오브젝트 <b>밑에 매단 관계</b> — 부모가 움직이·돌·커지면 자식도 함께</p>
+      <p class="ex">자동차(부모) 밑 바퀴 4개(자식) → 자동차만 옮겨도 바퀴가 따라옴</p>
+      <p class="where">Hierarchy 창에서 끌어다 다른 오브젝트 위에 놓기 · 코드 <code>transform.SetParent(부모)</code></p>
+    </dd>
+    <dt>로컬 좌표<small>localPosition</small></dt>
+    <dd>
+      <p><b>부모를 원점으로</b> 잰 위치 — 기차 안 좌석 번호 (기차가 어디 있든 «3호차 12번»)</p>
+      <p class="ex">부모 (10, 0, 0) 밑 자식 localPosition (0, 2, 0) → 부모가 움직여도 이 값은 (0, 2, 0) 그대로</p>
+      <p class="why">Inspector 의 Position 칸은 <b>로컬 값</b> — 월드 위치라고 착각하면 배치가 어긋남</p>
+      <p class="where">Inspector Transform → Position (부모가 있을 때) · 코드 <code>transform.localPosition</code></p>
+    </dd>
+    <dt>월드 좌표<small>position</small></dt>
+    <dd>
+      <p>씬 전체의 원점 기준 위치 — 지도 위 <b>GPS 위치</b></p>
+      <p class="ex">위 예의 자식 월드 위치 = (10, 2, 0) · 부모가 (20, 0, 0) 으로 가면 (20, 2, 0)</p>
+      <p class="where">코드 <code>transform.position</code> · 부모가 없으면 Inspector 값 = 월드 값</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - Inspector 에서 월드 위치를 직접 볼 방법이 없음 → 디버그 시 Debug.Log(transform.position)
+  </aside>
+</section>
+
+<section>
   <div class="tag gfx">계층 · 1 도해</div>
   <h2>기차 안에서 걷는 사람 — 로컬 + 부모 = 월드</h2>
   <svg class="dg" width="1180" height="420" viewBox="0 0 1180 420" role="img" aria-label="기차 이동 100 m 와 승객 걸음 2 m 가 더해져 월드 이동 102 m">
     <defs>
-      <marker id="d24-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#35d6e6"/></marker>
-      <marker id="d24-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff5fa2"/></marker>
-      <marker id="d24-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc44d"/></marker>
+      <marker id="d24-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0d6b78"/></marker>
+      <marker id="d24-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a3245e"/></marker>
+      <marker id="d24-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a8701a"/></marker>
     </defs>
     <text x="30" y="30" class="dim">땅(월드)에서 본 모습</text>
     <text x="1150" y="30" text-anchor="end" class="s dim">그림 속 길이는 비율 아님</text>
-    <line x1="30" y1="302" x2="1150" y2="302" stroke="#5f6980" stroke-width="3"/>
+    <line x1="30" y1="302" x2="1150" y2="302" stroke="#8a8476" stroke-width="3"/>
     <!-- 출발 -->
     <text x="60" y="158" class="dim">출발</text>
-    <rect x="60" y="170" width="340" height="110" rx="14" fill="none" stroke="#5f6980" stroke-width="2.5" stroke-dasharray="8 6"/>
-    <circle cx="120" cy="290" r="12" fill="none" stroke="#5f6980" stroke-width="2.5" stroke-dasharray="4 4"/>
-    <circle cx="340" cy="290" r="12" fill="none" stroke="#5f6980" stroke-width="2.5" stroke-dasharray="4 4"/>
-    <g stroke="#9aa4b8" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="150" cy="210" r="11"/><line x1="150" y1="221" x2="150" y2="250"/><line x1="150" y1="250" x2="140" y2="272"/><line x1="150" y1="250" x2="160" y2="272"/></g>
+    <rect x="60" y="170" width="340" height="110" rx="2" fill="none" stroke="#8a8476" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <circle cx="120" cy="290" r="12" fill="none" stroke="#8a8476" stroke-width="2.5" stroke-dasharray="4 4"/>
+    <circle cx="340" cy="290" r="12" fill="none" stroke="#8a8476" stroke-width="2.5" stroke-dasharray="4 4"/>
+    <g stroke="#4a463e" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="150" cy="210" r="11"/><line x1="150" y1="221" x2="150" y2="250"/><line x1="150" y1="250" x2="140" y2="272"/><line x1="150" y1="250" x2="160" y2="272"/></g>
     <!-- 잠시 뒤 -->
     <text x="640" y="158" class="cg b">잠시 뒤</text>
-    <rect x="640" y="170" width="340" height="110" rx="14" fill="#171b25" stroke="#35d6e6" stroke-width="3"/>
-    <circle cx="700" cy="290" r="12" fill="#0b0d12" stroke="#35d6e6" stroke-width="3"/>
-    <circle cx="920" cy="290" r="12" fill="#0b0d12" stroke="#35d6e6" stroke-width="3"/>
-    <g stroke="#5f6980" stroke-width="3" stroke-linecap="round" fill="none" stroke-dasharray="3 5"><circle cx="730" cy="210" r="11"/><line x1="730" y1="221" x2="730" y2="250"/><line x1="730" y1="250" x2="720" y2="272"/><line x1="730" y1="250" x2="740" y2="272"/></g>
-    <g stroke="#ff5fa2" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="850" cy="210" r="11"/><line x1="850" y1="221" x2="850" y2="250"/><line x1="850" y1="250" x2="840" y2="272"/><line x1="850" y1="250" x2="862" y2="270"/></g>
-    <line x1="744" y1="238" x2="830" y2="238" stroke="#ff5fa2" stroke-width="3" marker-end="url(#d24-v)"/>
+    <rect x="640" y="170" width="340" height="110" rx="2" fill="#ece6d8" stroke="#0d6b78" stroke-width="3"/>
+    <circle cx="700" cy="290" r="12" fill="#f5f1e8" stroke="#0d6b78" stroke-width="3"/>
+    <circle cx="920" cy="290" r="12" fill="#f5f1e8" stroke="#0d6b78" stroke-width="3"/>
+    <g stroke="#8a8476" stroke-width="3" stroke-linecap="round" fill="none" stroke-dasharray="3 5"><circle cx="730" cy="210" r="11"/><line x1="730" y1="221" x2="730" y2="250"/><line x1="730" y1="250" x2="720" y2="272"/><line x1="730" y1="250" x2="740" y2="272"/></g>
+    <g stroke="#a3245e" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="850" cy="210" r="11"/><line x1="850" y1="221" x2="850" y2="250"/><line x1="850" y1="250" x2="840" y2="272"/><line x1="850" y1="250" x2="862" y2="270"/></g>
+    <line x1="744" y1="238" x2="830" y2="238" stroke="#a3245e" stroke-width="3" marker-end="url(#d24-v)"/>
     <text x="860" y="158" class="cv b">승객(자식) 걸음 2 m · 로컬</text>
     <!-- 화살표 -->
-    <line x1="60" y1="328" x2="632" y2="328" stroke="#35d6e6" stroke-width="4" marker-end="url(#d24-g)"/>
+    <line x1="60" y1="328" x2="632" y2="328" stroke="#0d6b78" stroke-width="4" marker-end="url(#d24-g)"/>
     <text x="346" y="356" text-anchor="middle" class="cg">기차(부모) 이동 100 m</text>
-    <line x1="150" y1="378" x2="842" y2="378" stroke="#ffc44d" stroke-width="4" marker-end="url(#d24-w)"/>
+    <line x1="150" y1="378" x2="842" y2="378" stroke="#a8701a" stroke-width="4" marker-end="url(#d24-w)"/>
     <text x="496" y="408" text-anchor="middle" class="cw b">땅에서 본 승객 이동 = 100 + 2 = 102 m · 월드</text>
   </svg>
   <div class="analogy" style="margin-top:.4em">
@@ -1215,10 +1538,8 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
         <p class="small">스케일이 필요하면 <b>빈 부모</b> 추가 → 부모에서 회전, 자식에서 스케일<br>
         또는 균등 스케일 (1, 1, 1 비율)만 사용</p>
       </div>
-      <dl class="terms" style="font-size:.66em">
-        <dt>전단<small>Shear</small></dt><dd>직사각형을 옆으로 밀어 평행사변형으로 만드는 변형</dd>
-      </dl>
       <p class="small">VR의 손 모델·UI 스케일 조정 시 자주 발생</p>
+      <p class="small muted">용어 «비균등 스케일 · 전단» 은 다음 장</p>
     </div>
   </div>
   <aside class="notes">
@@ -1228,11 +1549,35 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
 </section>
 
 <section>
+  <div class="tag trap">계층 · 3 용어 풀이</div>
+  <h2>용어 풀이 — 비균등 스케일 · 전단</h2>
+  <dl class="terms">
+    <dt>비균등 스케일<small>Non-uniform scale</small></dt>
+    <dd>
+      <p>축마다 <b>다른 배율</b>로 늘리는 것 — 사진을 가로세로 비율 무시하고 한쪽만 잡아 늘리기</p>
+      <p class="ex">Scale (1, 3, 1) = 세로만 3배 · 균등 스케일 (2, 2, 2) = 모양 그대로 크기만 2배</p>
+      <p class="why">부모가 비균등 스케일이면 회전한 자식이 찌그러짐 · 콘솔 경고도 없음</p>
+      <p class="where">Inspector Transform → Scale · 옆 <b>사슬 아이콘</b>(비율 고정)을 켜면 세 값이 함께 바뀜</p>
+    </dd>
+    <dt>전단<small>Shear</small></dt>
+    <dd>
+      <p>직사각형의 윗변을 옆으로 밀어 <b>평행사변형</b>으로 만드는 변형 — 쌓아 둔 책 더미를 옆으로 밀기</p>
+      <p class="ex">90° 였던 네 각이 37° · 143° 로 바뀜 (다음 장 도해)</p>
+      <p class="why">Transform 에는 «전단» 칸이 없음 → 부모 스케일 × 자식 회전 조합에서만 몰래 생김 → 원인 찾기 어려움</p>
+      <p class="where">빈 부모(Create Empty)를 사이에 두어 «부모에서 회전, 자식에서 스케일»로 분리</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 사슬 아이콘 = Constrained Proportions · 켜 두면 비균등 스케일 실수를 줄임
+  </aside>
+</section>
+
+<section>
   <div class="tag trap">계층 · 3 도해</div>
   <h2>고무판 늘리기 — 정사각형이 마름모가 되는 3단계</h2>
   <svg class="dg" width="1180" height="430" viewBox="0 0 1180 430" role="img" aria-label="회전한 정사각형을 세로로 늘리면 마름모로 찌그러짐">
     <defs>
-      <marker id="d23-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b8"/></marker>
+      <marker id="d23-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4a463e"/></marker>
     </defs>
     <text x="120" y="28" text-anchor="middle" class="b">① 자식 정사각형</text>
     <text x="120" y="54" text-anchor="middle" class="s dim">네 각 90°</text>
@@ -1243,29 +1588,29 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
     <text x="995" y="28" text-anchor="middle" class="cl b">해결 : 빈 부모</text>
     <text x="995" y="54" text-anchor="middle" class="s dim">늘리기 먼저, 회전은 나중</text>
     <!-- ① -->
-    <rect x="81" y="206" width="78" height="78" fill="#0e3a42" stroke="#35d6e6" stroke-width="3"/>
-    <path d="M81,268 L97,268 L97,284" fill="none" stroke="#e8ecf4" stroke-width="2"/>
+    <rect x="81" y="206" width="78" height="78" fill="#dcebec" stroke="#0d6b78" stroke-width="3"/>
+    <path d="M81,268 L97,268 L97,284" fill="none" stroke="#1b1a17" stroke-width="2"/>
     <!-- ② -->
-    <polygon points="340,190 395,245 340,300 285,245" fill="#0e3a42" stroke="#35d6e6" stroke-width="3"/>
-    <path d="M295,235 L305,245 L295,255" fill="none" stroke="#e8ecf4" stroke-width="2"/>
-    <line x1="195" y1="245" x2="255" y2="245" stroke="#9aa4b8" stroke-width="2.5" marker-end="url(#d23-d)"/>
+    <polygon points="340,190 395,245 340,300 285,245" fill="#dcebec" stroke="#0d6b78" stroke-width="3"/>
+    <path d="M295,235 L305,245 L295,255" fill="none" stroke="#1b1a17" stroke-width="2"/>
+    <line x1="195" y1="245" x2="255" y2="245" stroke="#4a463e" stroke-width="2.5" marker-end="url(#d23-d)"/>
     <!-- ③ -->
-    <g stroke="#9aa4b8" stroke-width="2.5">
+    <g stroke="#4a463e" stroke-width="2.5">
       <line x1="480" y1="228" x2="480" y2="112" marker-end="url(#d23-d)"/>
       <line x1="480" y1="262" x2="480" y2="378" marker-end="url(#d23-d)"/>
     </g>
     <text x="480" y="251" text-anchor="middle" class="s b">×3</text>
-    <polygon points="590,80 645,245 590,410 535,245" fill="#431612" stroke="#ff5a4d" stroke-width="3"/>
+    <polygon points="590,80 645,245 590,410 535,245" fill="#f6e0d6" stroke="#c2401d" stroke-width="3"/>
     <text x="590" y="132" text-anchor="middle" class="s cw b">37°</text>
     <text x="545" y="251" class="s cw b">143°</text>
     <text x="662" y="218" class="s dim">네 각 90°</text>
     <text x="662" y="244" class="s ct b">→ 37° · 143°</text>
     <text x="662" y="270" class="s ct">= 전단 (찌그러짐)</text>
-    <line x1="805" y1="20" x2="805" y2="420" stroke="#2a3040" stroke-width="2"/>
+    <line x1="805" y1="20" x2="805" y2="420" stroke="#cfc6b2" stroke-width="2"/>
     <!-- 해결 -->
     <g transform="translate(995,235) rotate(45)">
-      <rect x="-39" y="-116" width="78" height="232" fill="#21330f" stroke="#a8e05f" stroke-width="3"/>
-      <path d="M-39,-100 L-23,-100 L-23,-116" fill="none" stroke="#e8ecf4" stroke-width="2"/>
+      <rect x="-39" y="-116" width="78" height="232" fill="#e3ecd3" stroke="#4f7a16" stroke-width="3"/>
+      <path d="M-39,-100 L-23,-100 L-23,-116" fill="none" stroke="#1b1a17" stroke-width="2"/>
     </g>
     <text x="995" y="388" text-anchor="middle" class="s">자식에서 늘리고 부모에서 회전</text>
     <text x="995" y="414" text-anchor="middle" class="s cl b">네 각 90° 유지 → 기운 직사각형</text>
@@ -1287,20 +1632,70 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
 
 <section>
   <div class="tag vr">Part II · 용어 미리보기</div>
-  <h2>이번 파트에서 쓰는 말 8개</h2>
-  <dl class="terms" style="font-size:.7em">
-    <dt>HMD<small>Head-Mounted Display</small></dt><dd>머리에 쓰는 디스플레이 — Quest 3 같은 VR 헤드셋</dd>
-    <dt>트래킹<small>Tracking</small></dt><dd>센서로 머리·손의 위치와 회전을 <b>매 순간 측정</b>하는 일</dd>
-    <dt>좌표계 체인<small>Coordinate chain</small></dt><dd>월드 → 리그 → 카메라 → 눈으로 이어지는 <b>부모-자식 사슬</b></dd>
-    <dt>XR Origin (리그)<small>Rig</small></dt><dd>카메라와 손을 담은 <b>부모 오브젝트</b> — 개발자가 옮기는 대상</dd>
-    <dt>전정계<small>Vestibular system</small></dt><dd>귓속 균형 감각 기관 — 회전과 가속을 느낌</dd>
-    <dt>IMU<small>Inertial Measurement Unit</small></dt><dd>회전(자이로) + 가속(가속도계) 센서 칩 — 기계의 전정계</dd>
-    <dt>사이버 멀미<small>Cybersickness</small></dt><dd>VR 에서 생기는 어지러움·메스꺼움</dd>
-    <dt>IPD<small>Interpupillary distance</small></dt><dd>두 눈동자 사이 거리 — 성인 평균 약 63 mm</dd>
+  <h2>용어 미리보기 (1/2) — 헤드셋과 좌표</h2>
+  <dl class="terms">
+    <dt>HMD<small>Head-Mounted Display</small></dt>
+    <dd>
+      <p>머리에 쓰는 디스플레이 — 눈앞 화면 2개 + 렌즈 + 센서를 묶은 <b>VR 헤드셋</b></p>
+      <p class="ex">Meta Quest 3 · Apple Vision Pro · PC 연결형 Valve Index</p>
+      <p class="where">이 수업의 실습 기기 = Quest 3 (11주차부터 Unity 빌드를 직접 설치)</p>
+    </dd>
+    <dt>트래킹<small>Tracking</small></dt>
+    <dd>
+      <p>센서와 카메라로 머리·손의 <b>위치와 회전을 매 순간 재는 일</b> — 1초에 수십~수백 번</p>
+      <p class="ex">고개를 오른쪽으로 30° 돌리면 그 값이 다음 프레임 카메라 회전에 그대로 들어감</p>
+      <p class="where">Main Camera 의 <b>Tracked Pose Driver</b> 컴포넌트가 머리 값을 받아 Transform 을 덮어씀</p>
+    </dd>
+    <dt>좌표계 체인<small>Coordinate chain</small></dt>
+    <dd>
+      <p>월드 → 리그 → 카메라 → 눈으로 이어지는 <b>부모-자식 사슬</b> — 계층 · 2 의 행렬 곱 연쇄 그대로</p>
+      <p class="ex">리그를 앞으로 1 m 옮기면 사슬 끝의 두 눈도 함께 1 m 이동</p>
+      <p class="where">Hierarchy : XR Origin → Camera Offset → Main Camera</p>
+    </dd>
+    <dt>XR Origin<small>리그 · Rig</small></dt>
+    <dd>
+      <p>카메라와 두 손을 품은 <b>맨 위 부모 오브젝트</b> — 개발자가 옮기는 «열차»</p>
+      <p class="ex">텔레포트 = XR Origin 의 position 을 한 번에 바꾸는 것</p>
+      <p class="where">Hierarchy 우클릭 → XR → <b>XR Origin (VR)</b> · XR Interaction Toolkit 패키지 필요</p>
+    </dd>
   </dl>
   <aside class="notes">
     - Part I 의 부모-자식, 행렬 곱 연쇄가 그대로 쓰이는 파트
     - 지금은 훑기만, 각 슬라이드에서 다시 설명
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">Part II · 용어 미리보기</div>
+  <h2>용어 미리보기 (2/2) — 몸과 멀미</h2>
+  <dl class="terms">
+    <dt>전정계<small>Vestibular system</small></dt>
+    <dd>
+      <p>귀 안쪽의 <b>균형 감각 기관</b> — 눈을 감아도 «돌고 있다·기울었다·출발했다»를 느끼게 함</p>
+      <p class="ex">회전의자에서 돌다 멈추면 계속 도는 느낌 = 전정계 속 액체가 아직 출렁이는 것</p>
+      <p class="why">VR 화면이 움직이는데 전정계가 «정지» 라고 하면 둘이 어긋나 멀미</p>
+    </dd>
+    <dt>IMU<small>Inertial Measurement Unit</small></dt>
+    <dd>
+      <p>회전을 재는 <b>자이로</b> + 가속을 재는 <b>가속도계</b>를 묶은 작은 칩 — 기계의 전정계</p>
+      <p class="ex">스마트폰 화면 자동 회전 · Quest 3 머리 회전 추적의 1차 센서</p>
+      <p class="where">헤드셋·컨트롤러 내부 · Unity 입력 값 <code>deviceAngularVelocity</code> 등으로 읽힘</p>
+    </dd>
+    <dt>사이버 멀미<small>Cybersickness</small></dt>
+    <dd>
+      <p>VR·화면 속 움직임 때문에 생기는 <b>어지러움·메스꺼움·눈 피로</b> — 차멀미의 VR 판</p>
+      <p class="ex">조이스틱으로 앞으로 걷는 장면 3분 만에 속이 울렁거림</p>
+      <p class="where">설문 SSQ 로 측정 · XRI 의 Snap Turn(뚝뚝 끊어 돌기) · Tunneling Vignette(시야 가리개)로 줄임</p>
+    </dd>
+    <dt>IPD<small>Interpupillary distance</small></dt>
+    <dd>
+      <p>두 눈동자 사이 거리 — 성인 평균 약 <b>63 mm</b>, 대략 54~74 mm</p>
+      <p class="ex">IPD 60 mm 인 사람 → 왼쪽 눈 카메라 −30 mm, 오른쪽 눈 +30 mm</p>
+      <p class="where">Quest 3 아래쪽 IPD 조절 휠 · Unity 는 런타임이 자동 반영 (코드로 설정하지 않음)</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - SSQ = Simulator Sickness Questionnaire — 7·12주차 컴포트 평가에서 직접 사용
   </aside>
 </section>
 
@@ -1372,14 +1767,43 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
 </section>
 
 <section>
+  <div class="tag vr">지각 · 4 용어 풀이</div>
+  <h2>용어 풀이 — 트래킹 원점 모드 · Camera Offset · 리센터</h2>
+  <dl class="terms">
+    <dt>트래킹 원점 모드<small>Tracking Origin Mode</small></dt>
+    <dd>
+      <p>헤드셋이 재는 좌표의 <b>0 을 어디에 둘지</b> 정하는 설정 — 키를 «바닥부터» 잴지 «머리부터» 잴지</p>
+      <p class="ex">Floor : 서 있는 사람 머리 y ≈ 1.7 m · Device : 시작 순간 머리 y = 0</p>
+      <p class="why">잘못 고르면 사용자가 바닥에 파묻히거나 공중에 뜸 — 코드 한 줄 없이 생기는 사고</p>
+      <p class="where">XR Origin 컴포넌트 → <b>Tracking Origin Mode</b> (Not Specified / Device / Floor)</p>
+    </dd>
+    <dt>Camera Offset<small>카메라 높이 보정</small></dt>
+    <dd>
+      <p>XR Origin 과 Main Camera 사이에 끼운 <b>높이 조절용 중간 부모</b> — 열차 바닥과 좌석 사이 받침대</p>
+      <p class="ex">Device 모드에서 Camera Y Offset 1.1 m → 머리가 0 이 아니라 앉은키 높이에서 시작</p>
+      <p class="where">Hierarchy XR Origin 밑 <b>Camera Offset</b> 오브젝트 · XR Origin 컴포넌트 → Camera Y Offset</p>
+    </dd>
+    <dt>리센터<small>Recenter</small></dt>
+    <dd>
+      <p>지금 서 있는 자리·보는 방향을 <b>새 «원점·정면»으로 다시 정하기</b> — 나침반 영점 맞추기</p>
+      <p class="ex">의자를 돌려 앉은 뒤 콘텐츠가 옆에 보이면 → 리센터 → 다시 정면에</p>
+      <p class="where">Quest : 오른쪽 컨트롤러 <b>Meta 버튼 길게 누르기</b> · 앱 쪽 처리는 버전마다 다름</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - Camera Y Offset 은 Tracking Origin Mode 가 Device 일 때만 적용 — Floor 에서는 실제 키가 그대로 들어감
+  </aside>
+</section>
+
+<section>
   <div class="tag vr">지각 · 5</div>
   <h2>전정계 — 몸에 달린 IMU</h2>
   <img src="../../figures/out/w02-vestibular-imu.png" class="fig" style="max-height:410px" alt="내이의 전정기관과 MEMS IMU의 대응">
   <div class="cols" style="margin-top:.35em">
-    <p class="small" style="margin:0;color:#5ee7f0">
+    <p class="small" style="margin:0;color:var(--gfx)">
       <b>왼쪽 · 사람의 내이</b> : 서로 직각인 <b>반고리관 3개</b> = 회전 · <b>이석기관</b> = 중력·직선 가속
     </p>
-    <p class="small" style="margin:0;text-align:right;color:#ff7ab3">
+    <p class="small" style="margin:0;text-align:right;color:var(--vr)">
       <b>오른쪽 · MEMS IMU 칩</b> : <b>자이로스코프</b> + <b>가속도계</b> — HMD 트래킹 부품
     </p>
   </div>
@@ -1399,17 +1823,45 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
       <p><b>이석기관</b> = 젤리 위 작은 돌가루 — 버스가 출발하면 뒤로 쏠리며 «가속 중» 신호</p>
       <p class="small">한계 : 일정한 속도(등속)는 못 느낌 — 순항 중 비행기 안이 정지한 듯 느껴지는 이유</p>
     </div>
-    <dl class="terms" style="margin-top:.4em">
-      <dt>전정계<small>Vestibular</small></dt><dd>내이(귀 안쪽)의 균형 감각 기관</dd>
-      <dt>반고리관<small>Semicircular canals</small></dt><dd>회전을 감지하는 고리 3개 ↔ <b>자이로스코프</b></dd>
-      <dt>이석기관<small>Otolith organs</small></dt><dd>중력·직선 가속을 감지 ↔ <b>가속도계</b></dd>
-      <dt>IMU<small>Inertial Meas. Unit</small></dt><dd>자이로 + 가속도계를 묶은 칩 · HMD 의 회전 추적 담당</dd>
-    </dl>
+    <table style="font-size:.7em;margin-top:.4em">
+      <tr><th>몸 (전정계)</th><th>기계 (IMU)</th><th>느끼는 것</th></tr>
+      <tr><td>반고리관 3개</td><td>자이로스코프</td><td>회전</td></tr>
+      <tr><td>이석기관</td><td>가속도계</td><td>중력 · 직선 가속</td></tr>
+      <tr><td colspan="3" class="muted">용어 풀이는 다음 장</td></tr>
+    </table>
   </div>
   <aside class="notes">
     - 비유 : 컵에 물을 담고 컵만 빠르게 돌리면 물은 잠깐 제자리 — 반고리관 속 림프액이 바로 그 원리
     - 버스 출발 시 몸이 뒤로 쏠리는 느낌 = 이석기관
     - 등속을 못 느낀다는 점이 다음 슬라이드(조이스틱 이동 멀미)의 열쇠
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 6 용어 풀이</div>
+  <h2>용어 풀이 — 반고리관 · 이석기관 · 자이로와 가속도계</h2>
+  <dl class="terms">
+    <dt>반고리관<small>Semicircular canals</small></dt>
+    <dd>
+      <p>귀 안쪽, 액체가 든 <b>서로 직각인 고리 3개</b> — 머리가 돌면 액체가 늦게 따라와 «회전 중» 신호</p>
+      <p class="ex">고개를 도리도리 → 가로 고리 · 끄덕 → 세로 고리 담당 (x · y · z 세 축과 같은 구조)</p>
+      <p class="why">회전 «변화»만 느낌 → 일정하게 돌거나 멈춰 있으면 곧 신호가 사라짐</p>
+    </dd>
+    <dt>이석기관<small>Otolith organs</small></dt>
+    <dd>
+      <p>젤리 위에 얹힌 <b>작은 돌가루</b> — 기울거나 가속하면 돌가루가 쏠려 «기울었다·출발했다» 신호</p>
+      <p class="ex">버스 출발 때 뒤로 쏠림 · 엘리베이터 출발 순간 몸이 무거워짐</p>
+      <p class="why">등속(일정한 속도)은 못 느낌 → VR 조이스틱 이동의 «눈은 움직임, 몸은 정지» 어긋남</p>
+    </dd>
+    <dt>자이로 · 가속도계<small>Gyroscope · Accelerometer</small></dt>
+    <dd>
+      <p>자이로 = 초당 몇 도 도는지 · 가속도계 = 어느 쪽으로 얼마나 밀리는지(중력 포함) — 둘을 묶으면 <b>IMU</b></p>
+      <p class="ex">책상 위 휴대폰 가속도계 = 아래로 약 9.8 m/s² (중력) · 고개를 90°/s 로 돌리면 자이로 90</p>
+      <p class="where">헤드셋·컨트롤러 내부 · Unity 입력 <code>deviceAngularVelocity</code> · <code>deviceAcceleration</code> (기기마다 다름)</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - IMU 만으로는 위치가 금방 틀어짐(오차 누적) → Quest 는 헤드셋 카메라로 위치를 보정 = 인사이드아웃 트래킹
   </aside>
 </section>
 
@@ -1446,6 +1898,30 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
 </section>
 
 <section>
+  <div class="tag vr">지각 · 7 용어 풀이</div>
+  <h2>용어 풀이 — 감각 충돌 이론 · 텔레포트</h2>
+  <dl class="terms">
+    <dt>감각 충돌 이론<small>Sensory conflict theory</small></dt>
+    <dd>
+      <p>눈이 본 움직임과 몸(전정계)이 느낀 움직임이 <b>서로 다른 말</b>을 하면 메스꺼움이 생긴다는 설명</p>
+      <p class="ex">VR 에서 조이스틱으로 전진 : 눈 «앞으로 가는 중» · 귀 «가만히 서 있음» → 어긋남</p>
+      <p class="why">멀미를 줄이는 설계 = 두 감각의 어긋남 줄이기 (텔레포트 · 시야 가리개 · 고정된 기준물)</p>
+      <p class="where">가장 널리 쓰이는 설명이지만 «왜 토하게 되는가» 는 여러 가설이 경쟁 중</p>
+    </dd>
+    <dt>텔레포트<small>Teleport</small></dt>
+    <dd>
+      <p>가리킨 곳으로 <b>순간이동</b>하는 VR 이동 방식 — 이동 «과정»을 아예 보여주지 않음</p>
+      <p class="ex">컨트롤러로 바닥을 겨냥 → 포물선 끝 지점으로 화면이 바로 바뀜</p>
+      <p class="why">움직이는 장면이 없어 눈과 귀가 어긋날 틈이 없음 → 멀미가 적음</p>
+      <p class="where">XRI : <b>Teleportation Provider</b> + 바닥에 Teleportation Area / Anchor 컴포넌트</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 텔레포트의 대가 : 공간 감각(어디서 어디로 왔는지)을 잃기 쉬움 — 12주차 이동 설계에서 비교
+  </aside>
+</section>
+
+<section>
   <div class="tag vr">지각 · 8 ★</div>
   <h2>회전 중심과 눈의 위치</h2>
   <img src="../../figures/out/w02-neck-model.svg" alt="목 모델: 회전 중심과 눈의 오프셋" class="fig">
@@ -1470,6 +1946,34 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
     - (0,0,0.1) 에서 (0.1,0,0) 까지 직선 거리 = √(0.1² + 0.1²) ≈ 0.14 m
     - 목 모델(neck model) : 회전만 추적하는 3DoF 기기(옛 Oculus Go, 카드보드)가 위치 대신 쓰던 보정 방법
     - 6DoF = 회전 3 + 위치 3, 3DoF = 회전 3 만
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 9 용어 풀이</div>
+  <h2>용어 풀이 — 오프셋 · 3DoF와 6DoF · 목 모델</h2>
+  <dl class="terms">
+    <dt>오프셋<small>Offset</small></dt>
+    <dd>
+      <p>기준점에서 <b>고정된 만큼 떨어진 간격</b> — «목에서 앞으로 10 cm» 처럼 늘 같은 거리</p>
+      <p class="ex">목 → 눈 오프셋 (0, 0, 0.1) m · 고개를 90° 돌리면 오프셋도 함께 돌아 (0.1, 0, 0)</p>
+      <p class="why">오프셋을 빼먹으면 눈이 목 자리에서 제자리 회전 → 실제 몸 감각과 어긋나 세상이 미끄러져 보임</p>
+    </dd>
+    <dt>3DoF · 6DoF<small>Degrees of Freedom</small></dt>
+    <dd>
+      <p>3DoF = <b>회전만</b> 추적 (끄덕·도리도리·갸웃) · 6DoF = 회전 3 + <b>위치 3</b> (앞뒤·좌우·위아래)</p>
+      <p class="ex">3DoF : 몸을 숙여도 화면이 그대로 · 6DoF (Quest 3) : 숙이면 바닥이 가까워짐</p>
+      <p class="where">Tracked Pose Driver → Tracking Type (Rotation And Position = 6DoF · Rotation Only = 3DoF)</p>
+    </dd>
+    <dt>목 모델<small>Neck model</small></dt>
+    <dd>
+      <p>위치를 못 재는 3DoF 기기가 <b>«눈은 목 앞 몇 cm 에 있다»</b>고 가정해 위치를 흉내 내는 보정</p>
+      <p class="ex">회전 값 + 고정 오프셋 → 눈 위치 추정 (옛 Oculus Go · 카드보드)</p>
+      <p class="why">6DoF 기기에선 필요 없음 — 대신 카메라를 코드로 건드리면 실제 머리 움직임과 어긋남</p>
+    </dd>
+  </dl>
+  <aside class="notes">
+    - 다음 장 설계 원칙(카메라 직접 이동 금지)으로 연결
   </aside>
 </section>
 
@@ -1528,11 +2032,11 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
       <p class="small">무엇을 만들어야 하는지 이론으로 이해</p>
     </div>
     <div class="card lab">
-      <h4><span class="step" style="background:var(--lab-soft);color:var(--lab);border-color:#3c5220">2</span> 명세</h4>
+      <h4><span class="step">2</span> 명세</h4>
       <p class="small">정확한 <b>용어</b>로 AI에게 요구<br>용어를 모르면 요구 불가</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">3</span> 검증</h4>
+      <h4><span class="step">3</span> 검증</h4>
       <p class="small">결과가 이론적으로 맞는지 확인<br>틀렸다면 <b>어디가</b> 틀렸는지</p>
     </div>
   </div>
@@ -1552,7 +2056,7 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
     <div class="bad">
       <h4>이렇게 요청하면</h4>
       "큐브가 부드럽게 회전하게<br>스크립트를 만들어줘"
-      <div style="margin-top:.9em;color:#8a93a8">↓ AI의 응답</div>
+      <div style="margin-top:.9em;color:var(--ink-3)">↓ AI의 응답</div>
       <div style="margin-top:.5em">
         transform.eulerAngles +=<br>
         &nbsp;&nbsp;new Vector3(0, spd * dt, 0);
@@ -1564,7 +2068,7 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
       · 매 프레임 쿼터니언 → 오일러 변환<br>
       · 값이 튀고 특정 각도에서 잠김<br>
       · 회전 <b>중심</b> 미지정<br><br>
-      <span style="color:#a8e05f">→ 학생이 지적해야 할 항목</span>
+      <span class="lab-txt">→ 학생이 지적해야 할 항목</span>
     </div>
   </div>
 </section>
@@ -1658,7 +2162,7 @@ transform.InverseTransformPoint(worldPos);  // 월드 → 로컬
   </table>
 </section>
 
-<section class="divider part-i">
+<section class="divider part-i next">
   <div class="kicker">다음 주</div>
   <div class="rule"></div>
   <h1>Unity 기초와<br>첫 <em>바이브코딩</em></h1>

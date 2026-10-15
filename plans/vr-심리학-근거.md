@@ -231,7 +231,7 @@
 
 | 항목 | 수치 | 연구 | 출처 |
 |---|---|---|---|
-| 평균 추정 비율 | 모델 거리의 74% (과소추정 약 26%) | Renner, Velichkovsky & Helmert (2013) Psychological Bulletin · 논문 78편 (1993~2012) | <https://tu-dresden.de/mn/psychologie/applied-cognition/ressourcen/dateien/personal/Renner_Perception_virtual_distances_Review.pdf> |
+| 평균 추정 비율 | 모델 거리의 74% (과소추정 약 26%) | Renner, Velichkovsky & Helmert (2013) ACM Computing Surveys 46(2) · 논문 78편 (1993~2012) | <https://tu-dresden.de/mn/psychologie/applied-cognition/ressourcen/dateien/personal/Renner_Perception_virtual_distances_Review.pdf> |
 | 최근 기기 범위 | 평균 74~82% 보고 | 현대 HMD 거리 지각 검토 | <https://psych.utah.edu/_resources/documents/people/committee-docs/spring-2023/creemregehr-2022-perceiving-distance-in-virtual-reality.pdf> |
 | 측정 방법 의존성 | 측정법·이동 방식·translation gain 에 따라 추정값 변동 | Measuring egocentric distance perception in VR (PLOS ONE) | <https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0224651> |
 | 보정 가능성 | 피드백·연습으로 보정 가능 | 상기 검토 문헌 | <https://www.tandfonline.com/doi/pdf/10.1080/10447318.2023.2234117> |

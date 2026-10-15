@@ -39,26 +39,26 @@
   <aside class="notes">
     - 스타터 씬(함정 재현본) 실행 후 카메라를 천천히 좌우로 흔들며 시연
     - 먼저 질문 : "셰이더 문제 같나요? 텍스처 문제 같나요?"
-    - 학생 대부분 재질·조명 지목 → 답은 인스펙터의 숫자 두 개
-    - 답은 공개하지 않음 · 세 번째 블록에서 다시 다룸
+    - 학생 대부분 재질·조명 지목 → 실제 답은 인스펙터 Camera 컴포넌트의 숫자 두 개(near·far)
+    - 답은 지금 공개하지 않음 · Part I 깊이 블록 끝의 "도입 질문의 답" 슬라이드에서 정리
   </aside>
 </section>
 
 <section>
   <div class="tag gfx">도입</div>
-  <h2>학습 목표</h2>
-  <div class="cols3" style="margin-top:1.2em">
+  <h2>학습 목표 — 이 수업 후 할 수 있는 것</h2>
+  <div class="cols3" style="margin-top:1em">
     <div class="card gfx">
-      <h4><span class="step">1</span> 경로</h4>
-      <p>정점 하나가 픽셀이 되기까지 <b>좌표계 여섯 번 전환</b> 과정 이해</p>
+      <h4><span class="step">1</span> 경로 설명</h4>
+      <p>3D 점 하나가 화면의 픽셀이 되기까지 거치는 <b>여섯 개 좌표 공간</b>을 순서대로 말하고, 각 단계에서 무엇이 바뀌는지 한 문장으로 설명</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정</h4>
-      <p>깊이 정밀도를 좌우하는 값 : <b>far 대신 near</b> — 원리 설명</p>
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 깜빡임 진단</h4>
+      <p>카메라의 near·far 값으로 <b>특정 거리의 깊이 구분 간격을 직접 계산</b>하고, 깜빡임(z-fighting)이 생길지 판정 · near 조정으로 해결</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> VR</h4>
-      <p>HMD : <b>의도적으로 일그러뜨린 그림</b>을 두 장 렌더링하는 구조 이해</p>
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> VR 카메라 판단</h4>
+      <p>헤드셋이 <b>일부러 찌그러진 그림 두 장</b>을 그리는 이유를 설명하고, Unity에서 개발자가 바꿔도 되는 값(near·far)과 손대면 안 되는 값 구분</p>
     </div>
   </div>
 </section>
@@ -68,7 +68,23 @@
   <div class="kicker">Part I · 60분</div>
   <div class="rule"></div>
   <h1>정점 하나가<br><em>픽셀</em>이 되기까지</h1>
-  <p class="sub">모델 → 뷰 → 투영 → 클립 → NDC → 화면 · 그 사이에서 버려지는 요소들</p>
+  <p class="sub">모델 → 월드 → 뷰 → 클립 → NDC → 화면 · 그 사이에서 버려지는 요소들</p>
+</section>
+
+<section>
+  <div class="tag gfx">Part I · 용어 미리보기</div>
+  <h2>이번 파트에서 쓰는 말 여덟 개</h2>
+  <dl class="terms" style="font-size:.68em;grid-template-columns:max-content 1fr max-content 1fr;gap:.55em 1em">
+    <dt>정점<small>Vertex</small></dt><dd>3D 모델을 이루는 <b>꼭짓점</b> 하나 · 위치·색·UV 등을 담은 점</dd>
+    <dt>셰이더<small>Shader</small></dt><dd>GPU에서 도는 <b>작은 프로그램</b> · 정점용과 픽셀용 두 종류</dd>
+    <dt>래스터화<small>Rasterization</small></dt><dd>삼각형이 덮는 <b>화면 칸(픽셀)을 골라내는</b> 단계</dd>
+    <dt>프래그먼트<small>Fragment</small></dt><dd>래스터화가 만든 <b>픽셀 후보</b> 하나 · 색이 정해지기 전 상태</dd>
+    <dt>절두체<small>Frustum</small></dt><dd>카메라에 보이는 공간 · <b>꼭대기가 잘린 피라미드</b> 모양</dd>
+    <dt>near · far<small>Clip planes</small></dt><dd>절두체의 <b>앞벽·뒷벽</b>까지의 거리 · 이 밖은 그리지 않음</dd>
+    <dt>NDC<small>Normalized Device Coords</small></dt><dd>화면을 가로·세로·깊이 모두 <b>−1~+1</b> 로 맞춘 공통 좌표</dd>
+    <dt>깊이 버퍼<small>Depth buffer</small></dt><dd>픽셀마다 <b>가장 가까운 물체의 거리</b>를 적어 두는 표</dd>
+  </dl>
+  <p class="small" style="margin-top:.6em">처음 등장할 때마다 다시 풀어 설명 · 지금은 낯이 익는 정도로 충분</p>
 </section>
 
 <!-- ---------------------------------------------------- 파이프라인 -->
@@ -77,73 +93,120 @@
   <h2>2주차 행렬과 화면 출력의 연결</h2>
   <div class="cols">
     <div>
-      <p class="small">2주차 : 4×4 행렬로 물체를 <b>이동·회전·스케일</b></p>
-      <p class="small">월드에 물체 배치와 <b>화면 출력</b>은 별개의 단계</p>
+      <p class="small">2주차 : 4×4 행렬로 물체를 <b>이동·회전·크기 조절</b> → 물체가 세상 어디에 놓일지 결정</p>
+      <p class="small">하지만 "세상 어디에 있는가"와 "화면 어디에 찍히는가"는 다른 질문 → 행렬 <b>두 개를 더 곱해야</b> 화면 위치 확정</p>
     </div>
     <div>
-      <div class="key">
-        <p>오늘의 주제 : 그 행렬에 <b>추가로 곱해지는 행렬</b><br>
-        정확히 <b>두 개</b> 추가</p>
-      </div>
-      <p class="xs muted" style="margin-top:.8em">
-        뷰 행렬(view matrix)과 투영 행렬(projection matrix)<br>
-        Unity 인스펙터의 Camera 컴포넌트가 이 둘을 생성
-      </p>
+      <dl class="terms" style="margin-top:0">
+        <dt>뷰 행렬<small>View matrix</small></dt><dd>세상을 <b>카메라 기준</b>으로 다시 놓는 행렬</dd>
+        <dt>투영 행렬<small>Projection</small></dt><dd>3D 장면을 <b>평평한 화면</b>으로 눌러 담는 행렬</dd>
+        <dt>파이프라인<small>Pipeline</small></dt><dd>이 계산들을 <b>정해진 순서</b>로 처리하는 GPU의 작업 흐름</dd>
+      </dl>
+      <p class="small">Unity Camera 컴포넌트의 인스펙터 값 → 이 두 행렬을 자동 생성</p>
     </div>
   </div>
+  <div class="analogy">
+    <p><b>파이프라인 = 공장 컨베이어 벨트</b> · 정점이라는 부품이 벨트를 타고 "배치 → 카메라 기준 정렬 → 화면에 눌러 담기 → 칸 칠하기" 공정을 차례로 통과 · 앞 공정 결과가 다음 공정의 재료</p>
+    <p class="muted">비유의 한계 : 실제 GPU에는 벨트가 수천 줄 · 정점 수천 개를 동시에 처리</p>
+  </div>
+  <aside class="notes">
+    - 컨베이어 벨트 비유 : "부품(정점)이 공정을 하나씩 지나가며 모양이 바뀐다. 공정 순서는 바꿀 수 없다"
+    - 2주차에 배운 모델 행렬이 첫 공정, 오늘 배우는 뷰·투영 행렬이 그 다음 공정
+  </aside>
 </section>
 
 <section>
   <div class="tag gfx">파이프라인 · 2 ★</div>
-  <h2>좌표계 여섯 단계</h2>
+  <h2>좌표 공간 여섯 개 · 전환 다섯 번</h2>
   <img src="../../figures/out/w04-pipeline-stages.svg" class="fig" alt="모델·월드·뷰·클립·NDC·스크린 공간과 그 사이의 변환">
   <aside class="notes">
-    - 각 상자를 하나씩 짚으며 설명
+    - 각 상자를 하나씩 짚으며 설명 · 공간은 여섯 개, 그 사이 전환은 다섯 번
     - 핵심 경계선 : 앞의 네 칸 = 내 코드(정점 셰이더)가 다루는 구간
     - 뒤의 두 칸 = GPU 고정 기능 → 수정 불가
+    - 컨베이어 비유로 다시 : 앞 네 공정은 우리가 기계 설정을 바꿀 수 있는 구간, 뒤 두 공정은 공장 기본 설비
   </aside>
 </section>
 
 <section>
   <div class="tag gfx">파이프라인 · 3</div>
-  <h2>뷰 행렬 — 카메라 이동의 실제 의미</h2>
-  <div class="eq">뷰 행렬 V = (카메라의 월드 변환)<span class="cm">⁻¹</span>
-
-<span class="cm">카메라 오른쪽 1m 이동
-  = 세상 전체 왼쪽 1m 이동</span></div>
-  <div class="key" style="margin-top:.9em">
-    <p>GPU에는 카메라 개념 없음 · <b>카메라는 항상 원점에서 -Z 방향 응시</b><br>
-    실제로 움직이는 대상 : 세상</p>
+  <h2>여섯 공간을 쉬운 말로</h2>
+  <table style="font-size:.64em">
+    <tr><th>공간</th><th>"원점"은 어디인가</th><th>여기서 하는 일</th><th>담당</th></tr>
+    <tr><td class="gfx-txt"><b>모델</b> <small>Model</small></td><td>물체 자신의 중심</td><td>모델링 툴에서 만든 그대로의 좌표</td><td rowspan="4" style="vertical-align:middle">정점 셰이더<br><b>(내 코드)</b></td></tr>
+    <tr><td class="gfx-txt"><b>월드</b> <small>World</small></td><td>씬 전체의 기준점</td><td>모델 행렬로 물체를 세상에 배치</td></tr>
+    <tr><td class="gfx-txt"><b>뷰</b> <small>View</small></td><td>카메라 위치</td><td>뷰 행렬로 "카메라에서 얼마나 떨어졌나" 계산</td></tr>
+    <tr><td class="gfx-txt"><b>클립</b> <small>Clip</small></td><td>카메라 · 4칸 좌표</td><td>투영 행렬 적용 직후 · 절두체 밖 판정과 잘라내기</td></tr>
+    <tr><td style="color:var(--warn)"><b>NDC</b></td><td>화면 정중앙</td><td>w로 나눈 결과 · 모든 값이 −1~+1</td><td rowspan="2" style="vertical-align:middle">GPU 고정 기능<br>(수정 불가)</td></tr>
+    <tr><td style="color:var(--warn)"><b>스크린</b> <small>Screen</small></td><td>화면 모서리</td><td>−1~+1 을 실제 픽셀 번호로 확대</td></tr>
+  </table>
+  <div class="key" style="margin-top:.6em">
+    <p class="small">같은 점이라도 <b>어느 공간에서 재느냐</b>에 따라 좌표 숫자가 달라짐 → "좌표가 이상하다" 싶으면 먼저 어느 공간의 값인지 확인</p>
   </div>
-  <p class="small trap-txt" style="margin-top:.7em">
-    11주차에서 다시 다룸 · VR에서 카메라 Transform 직접 조작 금지의 근거
-  </p>
+</section>
+
+<section>
+  <div class="tag gfx">파이프라인 · 4</div>
+  <h2>뷰 행렬 — 카메라 이동의 실제 의미</h2>
+  <div class="cols">
+    <div>
+      <div class="math-block">\[ V = (\text{카메라의 월드 변환})^{-1} \]</div>
+      <p class="small">GPU에는 "카메라"라는 물건이 없음 → <b>카메라는 항상 원점에서 −Z 방향을 본다</b>고 가정 → 그래서 카메라를 움직이는 대신 <b>세상 전체를 반대로</b> 이동 (위 식의 <span class="t">역행렬</span><span class="gloss"> = 되돌리는 변환</span>)</p>
+    </div>
+    <div>
+      <div class="key">
+        <p class="small"><b>손계산</b> · 카메라 위치 (0, 0, 5)<br>
+        → 뷰 행렬 = 세상 전체를 (0, 0, −5) 이동<br>
+        → 월드 원점의 상자는 뷰 공간에서 \( z=-5 \)<br>
+        = "카메라 정면 5m 앞"</p>
+      </div>
+    </div>
+  </div>
+  <div class="analogy">
+    <p><b>뷰 행렬 = 고정 카메라 앞에서 무대 세트를 미는 촬영</b> · 카메라는 삼각대에 고정, 대신 세트 전체를 반대 방향으로 밀어 옮김 · 찍힌 화면은 카메라를 움직인 것과 똑같음 · 기차 창밖 풍경이 뒤로 흘러가는 느낌과 같은 원리</p>
+  </div>
+  <p class="small trap-txt">11주차 연결 : VR에서 카메라 Transform 직접 조작 금지의 근거</p>
+  <aside class="notes">
+    - 무대 세트 비유 : "영화 촬영장에서 카메라를 못 움직이게 묶어 두고, 대신 세트를 통째로 밀면 화면은 똑같이 나온다. GPU가 바로 이렇게 한다"
+    - 손계산 : 카메라를 +Z로 5 → 세상을 −Z로 5 → 원점 물체가 카메라 앞 5m
+  </aside>
 </section>
 
 <!-- ---------------------------------------------------- 카메라 -->
 <section>
   <div class="tag gfx">카메라 · 1</div>
   <h2>카메라의 가시 영역 — 절두체</h2>
-  <img src="../../figures/out/w04-frustum.svg" class="fig" alt="옆에서 본 절두체와 종횡비">
-  <div class="note">절두체(frustum) : 꼭대기를 잘라낸 피라미드 모양 · 이 영역 밖은 렌더링 대상에서 제외</div>
+  <div class="cols wide-left" style="align-items:center">
+    <img src="../../figures/out/w04-frustum.svg" class="fig" style="max-height:420px" alt="옆에서 본 절두체와 종횡비">
+    <div>
+      <p class="small"><b>절두체(frustum)</b> : 꼭대기를 잘라낸 피라미드 모양의 공간 · 카메라에 찍힐 수 있는 범위 전부</p>
+      <p class="small">이 상자 밖의 물체는 <b>렌더링 대상에서 제외</b> → 안 그리는 만큼 GPU 시간 절약</p>
+      <div class="analogy">
+        <p><b>카메라 앞에 놓인 잘린 피라미드 모양 유리 상자</b> · 상자 안에 들어온 것만 사진에 찍힘 · 상자 밖은 아무리 가까워도 촬영 안 됨</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    - 유리 상자 비유 : "카메라 렌즈에 투명한 피라미드 상자를 붙였다고 상상. 뾰족한 끝은 잘려 있어서 렌즈 바로 앞도 안 찍힌다"
+    - 잘린 꼭대기 면 = near, 바닥 면 = far → 다음 슬라이드
+  </aside>
 </section>
 
 <section>
   <div class="tag gfx">카메라 · 2</div>
   <h2>절두체를 결정하는 네 가지 값</h2>
-  <table style="font-size:.72em">
+  <table style="font-size:.68em">
     <tr><th>값</th><th>Unity</th><th>결정 요소</th></tr>
-    <tr><td class="gfx-txt"><b>시야각</b></td><td><code>fieldOfView</code></td><td>상자가 벌어지는 각도 · <b>세로</b> 기준</td></tr>
-    <tr><td class="gfx-txt"><b>종횡비</b></td><td><code>aspect</code></td><td>가로/세로 · 뷰포트 변경 시 함께 변경</td></tr>
-    <tr><td class="warn" style="color:var(--warn)"><b>근평면</b></td><td><code>nearClipPlane</code></td><td>이보다 가까우면 잘림</td></tr>
-    <tr><td class="warn" style="color:var(--warn)"><b>원평면</b></td><td><code>farClipPlane</code></td><td>이보다 멀면 잘림</td></tr>
+    <tr><td class="gfx-txt"><b>시야각</b> <small>FOV</small></td><td><code>fieldOfView</code></td><td>상자가 벌어지는 각도 · Unity는 <b>세로</b> 기준 · 크게 하면 넓게 보이지만 가장자리가 늘어남(광각 렌즈 효과)</td></tr>
+    <tr><td class="gfx-txt"><b>종횡비</b> <small>Aspect</small></td><td><code>aspect</code></td><td>가로÷세로 · 16:9 화면이면 약 1.78 · 창 크기를 바꾸면 자동 변경</td></tr>
+    <tr><td style="color:var(--warn)"><b>근평면</b> <small>near</small></td><td><code>nearClipPlane</code></td><td>상자의 앞벽 · 이보다 가까운 물체는 잘림 · <b>Unity 기본값 0.3</b></td></tr>
+    <tr><td style="color:var(--warn)"><b>원평면</b> <small>far</small></td><td><code>farClipPlane</code></td><td>상자의 뒷벽 · 이보다 먼 물체는 잘림 · <b>Unity 기본값 1000</b></td></tr>
   </table>
-  <div class="key" style="margin-top:.9em">
-    <p>넷 중 <b>두 개</b>가 도입 질문의 원인 · 어느 쪽인지는 깊이 파트에서 확인</p>
+  <div class="analogy" style="margin-top:.7em">
+    <p><b>시야각 = 줌 렌즈</b> · 광각(큰 값)은 방 전체가 담기지만 가장자리가 늘어나고, 망원(작은 값)은 좁지만 반듯함</p>
   </div>
-  <p class="xs muted" style="margin-top:.6em">
-    시야각 증가 → 더 넓은 범위 표시 · 대신 화면 가장자리 늘어남 (광각 렌즈 효과)
-  </p>
+  <div class="key">
+    <p class="small">넷 중 <b>두 개</b>(near·far)가 도입 질문의 깜빡임과 관련 · 그중 어느 쪽이 진짜 원인인지는 깊이 블록에서 계산으로 확인</p>
+  </div>
 </section>
 
 <section>
@@ -166,7 +229,7 @@
   <!--/demo-->
   <aside class="notes">
     - ① far 감소 → 뒤쪽 물체 회색 전환 시연 · "안 그리기"가 성능의 출발점
-    - ② 시야각 증가 → 옆 물체가 상자 안으로 진입
+    - ② 시야각 증가 → 옆 물체가 상자 안으로 진입 (줌 렌즈를 광각으로 돌린 것)
     - ③ 마지막에 near 를 0.1 까지 감소 → 오른쪽 아래 far/near 비율 붉게 변화
     - "이 숫자를 기억해 두세요" 만 언급 후 다음 슬라이드
   </aside>
@@ -177,22 +240,28 @@
   <h2>뷰포트 — 마지막 확대 단계</h2>
   <div class="cols">
     <div>
-      <div class="eq">x_screen = (x_ndc + 1) · W/2
-y_screen = (y_ndc + 1) · H/2</div>
-      <p class="xs muted" style="margin-top:.6em">
-        NDC에는 해상도 정보 없음 · 해상도는 마지막 단계에서 곱셈
-      </p>
+      <p class="small"><b>뷰포트(viewport)</b> : 그림이 실제로 찍힐 <b>화면 속 직사각형 영역</b> · 보통 화면 전체</p>
+      <div class="math-block" style="font-size:.95em">\[ x_{screen} = (x_{ndc}+1)\cdot\tfrac{W}{2} \]
+      \[ y_{screen} = (y_{ndc}+1)\cdot\tfrac{H}{2} \]</div>
+      <p class="small">W·H = 뷰포트의 가로·세로 픽셀 수 · NDC(−1~+1)에는 해상도 정보가 없음 → 해상도는 <b>마지막에 곱해서</b> 반영</p>
     </div>
     <div>
       <div class="key">
-        <p>같은 씬이 <b>1080p·4K에서 동일한 구도</b><br>
-        달라지는 요소는 픽셀 수뿐</p>
+        <p class="small"><b>손계산</b> · \( x_{ndc}=0.5 \), 1920 폭 화면<br>
+        \( (0.5+1)\times 960 = 1440 \) 번째 픽셀<br>
+        같은 점이 4K(3840 폭)에서는 2880 번째<br>
+        → <b>둘 다 화면 폭의 75% 지점</b> · 구도 동일</p>
       </div>
-      <p class="small" style="margin-top:.8em">
-        뷰포트를 화면 절반으로 지정 → 그 절반 안에 -1~+1 배치<br>
-        <b>VR의 좌·우 눈이 이 방식</b>으로 한 장의 렌더 타깃을 분할 사용</p>
+      <p class="small">뷰포트를 화면 왼쪽 절반으로 지정 → 그 절반 안에 −1~+1 배치 · <b>VR의 좌·우 눈</b>이 이 방식으로 한 장의 그림을 나눠 씀</p>
     </div>
   </div>
+  <div class="analogy">
+    <p><b>NDC = "가로 몇 %, 세로 몇 %"로 적은 사진 설계도 · 뷰포트 = 인화</b> · 같은 설계도를 엽서로 뽑든 포스터로 뽑든 구도는 그대로, 점의 개수만 다름</p>
+  </div>
+  <aside class="notes">
+    - 사진 인화 비유 : 설계도에는 "왼쪽에서 75% 지점에 사람" 처럼 비율만 적혀 있음 → 인화지 크기에 맞춰 실제 위치 결정
+    - VR 연결 : 한 장의 인화지를 반으로 접어 왼쪽엔 왼눈, 오른쪽엔 오른눈 그림
+  </aside>
 </section>
 
 <!-- ---------------------------------------------------- 투영 -->
@@ -204,162 +273,281 @@ y_screen = (y_ndc + 1) · H/2</div>
     <span class="hl">답으로 불충분</span><br><br>
     행렬의 어느 부분에 그 원리가 담겨 있는가?
   </div>
+  <aside class="notes">
+    - 답은 투영 · 4 손계산 슬라이드의 "질문의 답" 상자에서 정리
+  </aside>
 </section>
 
 <section>
   <div class="tag gfx">투영 · 2</div>
   <h2>원근의 원리 — 닮은꼴 삼각형</h2>
-  <div class="eq">눈에서 near 평면까지 거리 n, 물체까지 거리 -z (앞쪽은 z &lt; 0)
-
-     x'      n              n·x            n·y
-    ─── = ─────   →   x' = ─────   ,  y' = ─────
-     x     (-z)             (-z)            (-z)</div>
-  <div class="key" style="margin-top:.8em">
-    <p>원리 : 거리로 <b>나눗셈</b> · 멀수록 -z 증가 → 나눈 결과 감소</p>
+  <div class="cols">
+    <div>
+      <p class="small">눈에서 화면(near 평면)까지 거리 \( n \) · 물체까지 거리 \( -z \) <br><span class="muted">(카메라가 −Z를 보므로 앞쪽 물체는 \( z \lt 0 \))</span></p>
+      <div class="math-block">\[ \frac{x'}{x} = \frac{n}{-z} \;\Rightarrow\; x' = \frac{n\,x}{-z},\quad y' = \frac{n\,y}{-z} \]</div>
+      <div class="key">
+        <p class="small"><b>손계산</b> · \( n=1 \), 점 \( (2,\,1,\,-4) \)<br>
+        \( x' = 1\cdot 2 / 4 = 0.5 \), \( y' = 1\cdot 1/4 = 0.25 \)<br>
+        같은 점을 8m 뒤로(\( z=-8 \)) → \( x'=0.25 \) · <b>두 배 멀면 절반 크기</b></p>
+      </div>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>창문 유리에 바깥 풍경 따라 그리기</b> · 눈을 한 자리에 고정하고 유리 위에 나무 윤곽을 그리면, 멀리 있는 나무일수록 유리 위 그림이 작아짐 · 유리 = near 평면, 그림 크기 = 실제 크기 ÷ 거리</p>
+      </div>
+      <p class="small">원리 : <b>거리로 나눗셈</b> · 멀수록 \( -z \) 증가 → 나눈 결과 감소</p>
+      <p class="small trap-txt">문제 : 행렬 곱셈은 곱하고 더하기만 가능 → <b>"z로 나누기"를 직접 표현할 방법 없음</b></p>
+    </div>
   </div>
-  <p class="small trap-txt" style="margin-top:.7em">
-    문제 : <b>행렬 곱셈에는 나눗셈 연산이 없음</b>
-  </p>
+  <aside class="notes">
+    - 창문 비유 : 뒤러(Dürer)의 원근 투시 장치와 같은 원리 · 유리창에 매직으로 따라 그리기 경험을 떠올리게 함
+    - 손계산을 칠판에 : 4m 거리 → 0.5, 8m 거리 → 0.25
+    - 마지막 줄의 문제를 다음 슬라이드가 해결
+  </aside>
 </section>
 
 <section>
   <div class="tag gfx">투영 · 3 ★</div>
-  <h2>투영 행렬 — w 에 거리 저장</h2>
-  <div class="eq"><span class="cm">t = tan(시야각/2),  a = 종횡비</span>
-
-        ⎡ 1/(a·t)    0        0            0      ⎤
-   P =  ⎢   0       1/t       0            0      ⎥
-        ⎢   0        0   -(f+n)/(f-n)  -2fn/(f-n) ⎥
-        ⎣   0        0       -1            0      ⎦
-                              ↑
-                    <span class="cm">이 한 칸 → 원근 생성</span></div>
-  <div class="key" style="margin-top:.7em">
-    <p>마지막 행의 <code>-1</code> → 곱셈 결과의 <b>w 자리에 -z 저장</b><br>
-    나눗셈은 클리핑 이후 GPU가 수행 — <b>원근 나눗셈</b></p>
+  <h2>투영 행렬 — w 칸에 거리 저장</h2>
+  <div class="cols wide-left">
+    <div>
+      <div class="math-block" style="font-size:.95em">\[ P = \begin{bmatrix} \frac{1}{a\,t} & 0 & 0 & 0 \\[6pt] 0 & \frac{1}{t} & 0 & 0 \\[6pt] 0 & 0 & -\frac{f+n}{f-n} & -\frac{2fn}{f-n} \\[6pt] 0 & 0 & \color{#ff5a4d}{-1} & 0 \end{bmatrix} \]</div>
+      <p class="small muted" style="text-align:center">\( t=\tan(\text{시야각}/2) \) · \( a \) = 종횡비 · \( n, f \) = near, far</p>
+    </div>
+    <div>
+      <dl class="terms" style="margin-top:0;grid-template-columns:1fr;gap:.25em">
+        <dt>동차좌표<small>Homogeneous coords</small></dt><dd>(x, y, z) 뒤에 <b>네 번째 칸 w</b> 를 붙인 4칸 좌표 · 2주차에서는 점(w=1)과 방향(w=0) 구분용</dd>
+        <dt>원근 나눗셈<small>Perspective divide</small></dt><dd>x, y, z 를 <b>w 로 나누는</b> 단계 · GPU가 자동 수행</dd>
+      </dl>
+    </div>
   </div>
-  <div class="note">2주차 동차좌표의 w · 당시에는 점과 벡터를 구분하는 칸, 여기서는 거리를 담는 칸</div>
+  <div class="key">
+    <p class="small">마지막 행의 <b class="trap-txt">−1</b> → 곱셈 결과의 <b>w 칸에 −z(=거리)가 담김</b> → 행렬로는 못 하는 나눗셈을 <b>잠시 미뤄 두었다가</b> 클리핑 이후 GPU가 w 로 나눔</p>
+  </div>
+  <aside class="notes">
+    - 붉은 −1 한 칸이 원근의 정체 : "곱셈 결과의 넷째 칸에 −z 를 복사해 두는 장치"
+    - 행렬의 나머지 칸들은 상자 크기(시야각·종횡비)와 깊이 범위(near·far)를 맞추는 역할
+  </aside>
 </section>
 
 <section>
-  <div class="tag gfx">투영 · 4 ★</div>
+  <div class="tag gfx">투영 · 4</div>
+  <h2>손계산 — 점 하나를 끝까지 따라가기</h2>
+  <p class="small" style="margin-bottom:.3em">조건 : 시야각 90° (\( t=1 \)), 종횡비 1, \( n=1,\ f=100 \) · 뷰 공간의 점 \( (2,\,1,\,-4) \)</p>
+  <div class="math-block" style="font-size:.9em;margin:.3em 0">\[ \underbrace{(2,\ 1,\ -4,\ 1)}_{\text{뷰}} \xrightarrow{\;P\;} \underbrace{(2,\ 1,\ 2.06,\ \color{#ff5a4d}{4})}_{\text{클립}} \xrightarrow{\;\div w\;} \underbrace{(0.5,\ 0.25,\ 0.52)}_{\text{NDC}} \xrightarrow{\text{뷰포트}} \underbrace{(1440,\ 675)}_{1920\times1080} \]</div>
+  <div class="cols" style="margin-top:.4em">
+    <div class="key">
+      <p class="small"><b>투영 · 1 질문의 답</b><br>
+      먼 물체가 작아지는 원인 = 투영 행렬 마지막 행의 <b>−1</b><br>
+      거리를 w 칸에 옮겨 두고 → GPU가 <b>w 로 나눔</b><br>
+      → 멀수록 큰 수로 나뉘어 작아짐</p>
+    </div>
+    <div class="analogy" style="margin:0;font-size:.74em">
+      <p><b>w = 택배 상자에 붙인 "나중에 이 수로 나눌 것" 메모</b> · 행렬 공정에서는 나눌 수 없으니 나눌 값을 상자(w 칸)에 적어 보내고, 다음 공정(GPU)이 메모를 보고 나눔</p>
+    </div>
+  </div>
+  <aside class="notes">
+    - 앞 슬라이드 닮은꼴 손계산(0.5, 0.25)과 결과가 같다는 점 강조 → 행렬이 닮은꼴 계산을 대신하고 있음
+    - z 칸 2.06 : −(101/99)·(−4) − 200/99 ≈ 2.06 → ÷4 ≈ 0.52 (깊이 값, 깊이 블록에서 사용)
+    - y 화면 좌표 675 : (0.25+1)·540 · 화면 위쪽이 0 인지 아래쪽이 0 인지는 API마다 다름
+    - 택배 메모 비유 : "계산을 못 끝냈으니 다음 사람에게 메모로 넘긴다"
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">투영 · 5 ★</div>
   <h2>절두체에서 정육면체로의 변환</h2>
   <img src="../../figures/out/w04-projection-squash.svg" class="fig" alt="뷰 공간의 절두체가 NDC 정육면체로 눌리는 과정">
   <aside class="notes">
     - 왼쪽 세 막대가 실제로 같은 크기임을 먼저 확인
     - 오른쪽 : 깊이 눈금이 뒤로 갈수록 뭉치는 부분 짚기
-    - 이 뭉침이 z-fighting 의 원인 → 깊이 파트에서 다룬다는 점만 언급
+    - 비유 : 피라미드 모양 유리 상자를 정육면체가 되도록 위에서 눌러 찌그러뜨림 → 넓은 뒤쪽이 더 많이 눌림
+    - 이 뭉침이 z-fighting(깊이 깜빡임)의 원인 → 깊이 블록에서 다룬다는 점만 언급
   </aside>
 </section>
 
 <section>
-  <div class="tag gfx">투영 · 5</div>
+  <div class="tag gfx">투영 · 6</div>
   <h3 style="margin-bottom:.45em">투영 변환 애니메이션</h3>
   <video src="../../figures/out/w04-projection.mp4"
          poster="../../figures/out/w04-projection-poster.png"
          controls muted playsinline data-autoplay
          style="display:block;margin:.1em auto 0;max-width:100%;max-height:470px;border-radius:12px"></video>
-  <p class="xs muted" style="margin-top:.5em">
-    절두체 → 정육면체 · 먼 쪽일수록 크게 압축 · 깊이 값도 함께 압축
+  <p class="small" style="margin-top:.5em">
+    절두체 → 정육면체 · 넓은 먼 쪽일수록 크게 눌림 · <b>깊이 눈금도 함께 눌려 뒤쪽이 성기게 됨</b>
   </p>
 </section>
 
 <section>
-  <div class="tag gfx">투영 · 6</div>
+  <div class="tag gfx">투영 · 7</div>
   <h2>원근투영과 직교투영의 차이</h2>
   <div class="cols">
     <div class="card gfx">
-      <h4>원근투영</h4>
-      <p class="xs">상자 모양 : <b>절두체</b><br>
-      w = -z 로 나눗셈<br>
-      멀수록 작아짐 · 사람 눈과 동일</p>
-      <p class="xs muted">1인칭·3인칭 게임, VR</p>
+      <h4>원근투영 <small class="muted">Perspective</small></h4>
+      <p class="small">상자 모양 : <b>절두체</b><br>
+      w = −z 로 나눗셈 → 멀수록 작아짐<br>
+      사람 눈·카메라와 같은 보임새</p>
+      <p class="small muted">1인칭·3인칭 게임, VR</p>
     </div>
     <div class="card lab">
-      <h4>직교투영</h4>
-      <p class="xs">상자 모양 : <b>직육면체</b><br>
-      w = 1, 나눗셈 없음<br>
-      거리와 크기 무관</p>
-      <p class="xs muted">UI, 도면, 아이소메트릭, 그림자맵</p>
+      <h4>직교투영 <small class="muted">Orthographic</small></h4>
+      <p class="small">상자 모양 : <b>직육면체</b><br>
+      w = 1 → 나눗셈 효과 없음<br>
+      거리와 무관하게 크기 일정</p>
+      <p class="small muted">UI, 도면, 아이소메트릭, 그림자맵</p>
     </div>
   </div>
-  <div class="key" style="margin-top:1em">
-    <p>VR에서 <b>직교투영 사용 불가</b> — 두 눈의 시차 생성 불가<br>
-    10주차 : 화면 고정 UI가 VR에서 작동하지 않는 이유로 연결</p>
+  <div class="key" style="margin-top:.8em">
+    <p class="small">VR에서 <b>직교투영 사용 불가</b> → 거리에 따른 크기 변화와 두 눈 사이의 <b>시차(어긋남)</b>가 사라져 입체감 소멸<br>
+    10주차 연결 : 화면 고정 UI가 VR에서 작동하지 않는 이유</p>
   </div>
+  <aside class="notes">
+    - 직교투영 비유 : 건축 도면 · 멀리 있는 기둥도 같은 크기로 그림
+  </aside>
 </section>
 
 <!-- ---------------------------------------------------- 깊이 -->
 <section>
   <div class="tag trap">깊이 · 1</div>
   <h2>앞뒤 판정 — 깊이 버퍼</h2>
-  <div class="eq">for (모든 프래그먼트) {
-    if (이 픽셀의 깊이 &lt; 이미 기록된 깊이) {
-        색 기록
-        깊이 갱신
+  <div class="cols">
+    <div>
+      <div class="eq" style="font-size:.6em">for (모든 프래그먼트) {
+    if (이 프래그먼트의 깊이 &lt; 기록된 깊이) {
+        색 기록 · 깊이 갱신
     } else {
-        <span class="cm">폐기</span>
+        <span class="cm">폐기 — 더 가까운 것이 이미 있음</span>
     }
 }</div>
-  <p class="small" style="margin-top:.9em">
-    깊이 버퍼(depth buffer) : 화면과 같은 크기의 <b>숫자 판</b><br>
-    픽셀마다 "지금까지 본 것 중 가장 가까운 거리" 하나씩 기록</p>
-  <div class="key trap">
-    <p class="small">그리는 순서와 무관하게 같은 결과<br>
-    단, 숫자 칸의 <b>개수가 유한</b></p>
+      <p class="small" style="margin-top:.6em"><b>깊이 버퍼(depth buffer)</b> : 화면과 같은 크기의 숫자 표 · 픽셀마다 "지금까지 그린 것 중 가장 가까운 거리" 한 칸</p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>픽셀마다 붙은 "지금까지 가장 가까운 거리" 메모지</b> · 새 물체가 오면 메모지와 비교 → 더 가까우면 색을 덮어 칠하고 메모 수정, 더 멀면 버림</p>
+      </div>
+      <div class="key trap">
+        <p class="small">덕분에 <b>그리는 순서와 무관하게</b> 앞뒤가 맞음<br>
+        단, 메모지에 적을 수 있는 <b>숫자의 가짓수가 유한</b> (24비트 = 약 1677만 단계) → 아주 가까운 두 거리는 같은 숫자로 기록</p>
+      </div>
+    </div>
   </div>
+  <aside class="notes">
+    - 메모지 비유 : 화면의 200만 개 픽셀마다 포스트잇이 하나씩 붙어 있다고 상상
+    - 마지막 줄이 문제의 씨앗 : 메모지에 소수점 아래 몇 자리까지만 쓸 수 있다면?
+  </aside>
 </section>
 
 <section>
   <div class="tag trap">깊이 · 2</div>
   <h2>깊이 값의 불균등 분포</h2>
-  <div class="eq"><span class="cm">거리 d 를 NDC 깊이로 바꾸면</span>
-
-              f + n        2fn
-   z_ndc  =  ───────  -  ─────────
-              f - n      (f - n)·d
-
-<span class="cm">분모에 d — 1/d 곡선
-near 근처는 촘촘, 멀어질수록 급격히 성김</span></div>
-  <div class="key trap" style="margin-top:.8em">
-    <p>near=0.1, far=1000 → <b>깊이 값의 절반이 0.1m~0.2m 구간</b>에 배정<br>
-    나머지 999.8m 구간이 남은 절반을 분할</p>
+  <div class="cols">
+    <div>
+      <p class="small">거리 \( d \) 를 NDC 깊이(−1~+1)로 바꾸는 식</p>
+      <div class="math-block">\[ z_{ndc} = \frac{f+n}{f-n} - \frac{2fn}{(f-n)\,d} \]</div>
+      <p class="small">거리 \( d \) 가 <b>분모</b>에 있음 → \( 1/d \) 곡선 → near 근처는 숫자가 빠르게 변하고(촘촘), 멀어질수록 거의 안 변함(성김)</p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>가까운 곳엔 촘촘하고 먼 곳엔 듬성듬성한 자</b> · 눈금 개수는 정해져 있는데 대부분이 자의 앞부분에 몰림 → 먼 곳에서는 2mm 차이를 잴 눈금이 없음</p>
+      </div>
+      <div class="key trap">
+        <p class="small">near=0.1, far=1000 이면 → <b>깊이 숫자의 절반이 0.1m~0.2m 구간</b>에 배정 · 나머지 999.8m 가 남은 절반을 나눠 씀</p>
+      </div>
+    </div>
   </div>
+  <aside class="notes">
+    - 자 눈금 비유 : 30cm 자인데 앞 1cm 에 눈금 절반, 나머지 29cm 에 나머지 절반
+    - 왜 이렇게 만드나? → 원근 나눗셈(÷w)을 깊이에도 똑같이 적용하기 때문 · 가까운 물체일수록 정밀한 것이 대체로 유리하다는 장점도 있음
+  </aside>
 </section>
 
 <section>
-  <div class="tag trap">깊이 · 3 ★</div>
+  <div class="tag trap">깊이 · 3</div>
+  <h2>숫자로 보는 깊이 눈금</h2>
+  <p class="small">near=0.1, far=1000 · 깊이 버퍼에 실제 저장되는 0~1 값 (\( z_{ndc} \) 를 0~1 로 옮긴 것)</p>
+  <div class="math-block" style="font-size:.95em;margin:.3em 0">\[ z_{buf} = \frac{f}{f-n}\left(1-\frac{n}{d}\right) \]</div>
+  <table style="font-size:.66em;margin-top:.2em">
+    <tr><th>거리 d</th><th>0.2 m</th><th>1 m</th><th>10 m</th><th>100 m</th><th>1000 m</th></tr>
+    <tr><td>저장 값</td><td>0.500</td><td>0.900</td><td>0.990</td><td>0.999</td><td>1.000</td></tr>
+    <tr><td>쓰고 남은 몫</td><td>절반 소진</td><td>90% 소진</td><td>99% 소진</td><td>99.9% 소진</td><td>—</td></tr>
+  </table>
+  <div class="key trap">
+    <p class="small">10m~1000m 의 넓은 풍경 전체가 <b>0.99~1.00 사이의 1%</b> 안에서 앞뒤를 가려야 함 → 먼 곳의 바닥·그림자가 깜빡이는 직접적 이유</p>
+  </div>
+  <aside class="notes">
+    - 손계산 하나 : d=1 → (1000/999.9)·(1 − 0.1/1) ≈ 0.9
+    - "카메라 앞 1m 까지 이미 눈금의 90% 를 써 버렸다" 로 요약
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">깊이 · 4 ★</div>
   <h2>정밀도를 결정하는 값 : near</h2>
   <img src="../../figures/out/w04-depth-precision.svg" class="fig" alt="near·far 조합에 따른 거리별 깊이 분해능">
   <aside class="notes">
     - 붉은 선(near 0.01/far 1000)과 노란 선(near 0.01/far 100)의 겹침 짚기
     - 학생에게 먼저 질문 : "far 를 10분의 1로 줄였는데 왜 안 움직이죠?"
-    - 답 : 1/near - 1/far 에서 1/1000, 1/100 모두
-      1/0.01 = 100 앞에서 무의미
+    - 답 : 1/near − 1/far 에서 1/1000, 1/100 모두 1/0.01 = 100 앞에서 무의미
   </aside>
 </section>
 
 <section>
-  <div class="tag trap">깊이 · 4</div>
+  <div class="tag trap">깊이 · 5</div>
   <h2>깊이 분해능 공식</h2>
-  <div class="eq"><span class="cm">거리 d 에서 깊이 버퍼가 구분할 수 있는 최소 간격</span>
+  <div class="cols wide-right" style="align-items:center">
+    <div>
+      <div class="math-block">\[ \Delta d \approx \frac{d^2\left(\frac{1}{n}-\frac{1}{f}\right)}{2^{b}} \]</div>
+      <p class="small">\( \Delta d \) = 거리 \( d \) 에서 <b>구분 가능한 최소 간격</b> (깊이 분해능)<br>\( b \) = 깊이 버퍼 비트 수 · 보통 24 → \( 2^{24}\approx 1677\text{만} \)</p>
+    </div>
+    <div>
+      <table style="font-size:.66em;margin:0">
+        <tr><th>near / far</th><th>1/n − 1/f</th><th>100m 에서 Δd</th><th></th></tr>
+        <tr><td><code>0.01 / 10000</code></td><td>100.0</td><td>약 60 mm</td><td class="trap-txt"><b>깜빡임</b></td></tr>
+        <tr><td><code>0.01 / 100</code></td><td>99.99</td><td>약 60 mm</td><td class="trap-txt"><b>동일하게 깜빡임</b></td></tr>
+        <tr><td><code>0.3 / 10000</code></td><td>3.33</td><td>약 2 mm</td><td class="lab-txt"><b>거의 정상</b></td></tr>
+      </table>
+      <div class="key" style="margin-top:.5em">
+        <p class="small"><b>손계산</b> · near 0.01, 100m<br>
+        \( 100^2 \times 100 \div 16{,}777{,}216 \approx 0.06\,\text{m} \) = 6cm<br>
+        → 6cm 보다 가까이 붙은 두 면은 <b>같은 깊이로 기록</b></p>
+      </div>
+    </div>
+  </div>
+  <div class="key trap" style="margin-top:.5em">
+    <p class="small"><b>far 100배 감소 → 변화 없음 · near 30배 증가 → 정밀도 약 30배 향상</b> — 오늘 수업의 핵심 한 줄</p>
+  </div>
+  <aside class="notes">
+    - Δd 는 거리의 제곱에 비례 : 같은 설정이라도 10m 에서는 0.6mm, 100m 에서는 60mm
+    - 이 공식은 24비트 정수 깊이 버퍼 기준의 근사식 · 다음 슬라이드에서 왜 near 가 지배하는지 정리
+  </aside>
+</section>
 
-              d² · (1/n - 1/f)
-     Δd  ≈   ──────────────────        <span class="cm">b = 깊이 버퍼 비트 수 (보통 24)</span>
-                   2^b</div>
-  <table style="font-size:.68em;margin-top:.6em">
-    <tr><th>near / far</th><th>1/n − 1/f</th><th>100m 에서 Δd</th><th></th></tr>
-    <tr><td><code>0.01 / 10000</code></td><td>100.0</td><td>60 mm</td><td class="trap-txt"><b>깜빡임</b></td></tr>
-    <tr><td><code>0.01 / 100</code></td><td>99.99</td><td>60 mm</td><td class="trap-txt"><b>동일하게 깜빡임</b></td></tr>
-    <tr><td><code>0.3 / 10000</code></td><td>3.33</td><td>2 mm</td><td class="lab-txt"><b>정상</b></td></tr>
-  </table>
-  <div class="key trap" style="margin-top:.7em">
-    <p class="small"><b>far 100배 감소 → 변화 없음 · near 30배 증가 → 정밀도 30배 향상</b><br>
-    오늘 수업의 핵심 한 줄</p>
+<section>
+  <div class="tag trap">깊이 · 6</div>
+  <h2>왜 far 가 아니라 near 인가</h2>
+  <div class="cols">
+    <div>
+      <p class="small">공식의 괄호 \( \tfrac{1}{n}-\tfrac{1}{f} \) 를 숫자로 비교</p>
+      <table style="font-size:.7em;margin-top:.2em">
+        <tr><th></th><th>값</th><th>1/값</th></tr>
+        <tr><td>near 0.01</td><td>0.01</td><td class="trap-txt"><b>100</b></td></tr>
+        <tr><td>near 0.3</td><td>0.3</td><td class="lab-txt"><b>3.33</b></td></tr>
+        <tr><td>far 100</td><td>100</td><td>0.01</td></tr>
+        <tr><td>far 10000</td><td>10000</td><td>0.0001</td></tr>
+      </table>
+      <p class="small">far 쪽의 1/f 는 <b>어차피 0에 가까움</b> → far 를 아무리 바꿔도 괄호 값이 거의 그대로 · near 쪽의 1/n 이 괄호 값을 사실상 혼자 결정</p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>정해진 눈금 1677만 개를 나눠 주는 예산</b> · 배분 규칙이 "카메라에 가까울수록 많이"라서, near 를 작게 잡을수록 카메라 코앞 몇 cm 에 눈금을 다 써 버림 · far 를 줄이는 것은 이미 거의 빈 지갑의 끝자리를 조정하는 셈</p>
+      </div>
+      <p class="small">참고 : 최신 PC·콘솔은 깊이를 뒤집어 저장(reversed-Z)하고 32비트 실수를 써서 실제 수치가 훨씬 좋음 · 모바일·Quest는 기기·설정마다 다름 · <b>near 우선 원칙은 동일</b></p>
+    </div>
   </div>
 </section>
 
 <section>
-  <div class="tag trap">깊이 · 5 ★</div>
+  <div class="tag trap">깊이 · 7 ★</div>
   <h3 style="margin-bottom:.45em">z-fighting 함정 재현</h3>
   <div class="demo-wrap">
     <div class="demo" data-demo="zfighting">
@@ -378,25 +566,62 @@ near 근처는 촘촘, 멀어질수록 급격히 성김</span></div>
   </p>
   <!--/demo-->
   <aside class="notes">
-    - ① far 슬라이더만 10000 → 100 으로 끝까지 감소 · 깜빡임 변화 없음
-      → "far 를 줄이면 된다"는 통설 반박
+    - 용어 : z-fighting = 깊이가 거의 같은 두 면이 깊이 버퍼에서 같은 숫자로 기록돼, 프레임마다 어느 쪽이 이길지 바뀌며 깜빡이는 현상
+    - 비유 : 1cm 눈금 자로 2mm 차이 나는 두 종이의 높이를 재면 둘 다 같은 눈금 → 매번 동전 던지기로 순서를 정하는 셈
+    - ① far 슬라이더만 10000 → 100 으로 끝까지 감소 · 깜빡임 변화 없음 → "far 를 줄이면 된다"는 통설 반박
     - ② near 를 0.01 → 0.3 으로 증가 · 즉시 해결
     - ③ 왼쪽 아래 가까운 쌍 : 같은 2mm인데 정상인 이유 → Δd 는 거리의 제곱에 비례
   </aside>
 </section>
 
 <section>
-  <div class="tag lab">깊이 · 6</div>
+  <div class="tag trap">도입 질문의 답</div>
+  <h2>먼 바닥이 지직거린 이유와 해결</h2>
+  <div class="cols">
+    <div>
+      <dl class="terms" style="margin-top:0;grid-template-columns:1fr;gap:.25em">
+        <dt>z-fighting<small>Z-fighting · 깊이 다툼</small></dt>
+        <dd>거의 같은 깊이의 두 면(바닥과 그림자·스티커)이 깊이 버퍼에서 <b>같은 숫자로 기록</b> → 프레임마다 이기는 쪽이 바뀌며 깜빡임</dd>
+      </dl>
+      <div class="analogy">
+        <p><b>1cm 눈금 자로 2mm 차이 나는 두 종이 높이 재기</b> · 둘 다 같은 눈금 → 누가 위인지 매번 동전 던지기 · 카메라가 조금 움직일 때마다 결과가 바뀌어 무늬가 꿈틀거림</p>
+      </div>
+    </div>
+    <div>
+      <div class="key trap">
+        <p class="small"><b>원인</b> : 코드가 아니라 Camera 의 <b>near 값이 너무 작음</b> (예 : 0.01)<br>
+        → 깊이 눈금 대부분이 카메라 코앞에 몰림<br>
+        → 100m 지점에서는 약 6cm 보다 가까운 두 면을 구분 불가</p>
+      </div>
+      <div class="key lab">
+        <p class="small"><b>해결</b> : near 를 카메라가 실제로 다가갈 최소 거리까지 키움 (예 : 0.3)<br>
+        → 100m 지점 구분 간격 약 2mm 로 개선<br>
+        far 만 줄이는 것은 <b>효과 거의 없음</b></p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    - 도입 슬라이드의 질문을 다시 띄우고 한 문장으로 답 : "고칠 곳은 셰이더도 텍스처도 아닌 Camera 의 near 값"
+    - 학생이 자기 말로 원인을 한 번 말해 보게 함
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">깊이 · 8</div>
   <h2>해결 순서</h2>
-  <table style="font-size:.7em">
+  <table style="font-size:.66em">
     <tr><th>#</th><th>조치</th><th>효과</th></tr>
     <tr><td class="lab-txt"><b>1</b></td><td><b>near 증가</b> · 카메라가 실제로 접근 가능한 최소 거리까지</td><td>가장 큼 · 대부분 이것으로 해결</td></tr>
     <tr><td class="lab-txt"><b>2</b></td><td>겹친 면 <b>분리</b> · 바닥과 데칼을 같은 높이에 두지 않기</td><td>구조적 해결</td></tr>
-    <tr><td class="lab-txt"><b>3</b></td><td>데칼·간판에 <b>깊이 오프셋</b> 적용 (URP <code>Offset</code>, Decal)</td><td>국소적 해결</td></tr>
-    <tr><td class="lab-txt"><b>4</b></td><td>16비트 깊이 버퍼 사용 여부 확인</td><td>모바일·Quest에서 실제 발생</td></tr>
-    <tr><td class="muted"><b>5</b></td><td class="muted">far 감소</td><td class="muted">효과 거의 없음 · 컬링에는 도움</td></tr>
+    <tr><td class="lab-txt"><b>3</b></td><td>데칼·간판에 <b>깊이 오프셋</b> 적용 (셰이더 <code>Offset</code>, URP Decal)</td><td>국소적 해결</td></tr>
+    <tr><td class="lab-txt"><b>4</b></td><td>깊이 버퍼가 <b>16비트</b>로 설정돼 있지 않은지 확인 (24비트 대비 눈금 256분의 1)</td><td>모바일·Quest 프로젝트 설정에 따라 발생</td></tr>
+    <tr><td class="muted"><b>5</b></td><td>far 감소</td><td>정밀도 효과 거의 없음 · 컬링(안 그리기)에는 도움</td></tr>
   </table>
-  <div class="key lab" style="margin-top:.9em">
+  <dl class="terms" style="margin-top:.4em;font-size:.66em">
+    <dt>데칼<small>Decal</small></dt><dd>표면 위에 얇게 덧붙이는 <b>스티커형 그림</b> · 낙서, 핏자국, 도로 표시</dd>
+    <dt>깊이 오프셋<small>Depth offset</small></dt><dd>깊이 비교 때 특정 면을 <b>살짝 앞에 있는 것으로 쳐 주는</b> 설정</dd>
+  </dl>
+  <div class="key lab">
     <p class="small">순서가 중요 · 5번부터 시도 = <b>공식을 모른다는 신호</b></p>
   </div>
 </section>
@@ -406,23 +631,49 @@ near 근처는 촘촘, 멀어질수록 급격히 성김</span></div>
   <div class="tag gfx">버리기 · 1 ★</div>
   <h2>컬링과 클리핑 — 그리지 않는 최적화</h2>
   <img src="../../figures/out/w04-cull-clip.svg" class="fig" alt="프러스텀 컬링, 클리핑, 백페이스 컬링">
+  <aside class="notes">
+    - 다음 슬라이드의 사진 촬영 비유와 함께 설명
+  </aside>
 </section>
 
 <section>
   <div class="tag gfx">버리기 · 2</div>
+  <h2>버리는 방법 세 가지 — 쉬운 말로</h2>
+  <dl class="terms" style="font-size:.7em">
+    <dt>컬링<small>Culling</small></dt><dd>그릴 필요 없는 것을 <b>통째로 빼기</b> · 원래 "솎아내기"라는 뜻</dd>
+    <dt>프러스텀 컬링<small>Frustum culling</small></dt><dd>절두체(카메라 상자) <b>밖에 있는 물체</b> 전체를 그리기 전에 제외</dd>
+    <dt>클리핑<small>Clipping</small></dt><dd>상자 경계에 <b>걸친 삼각형</b>을 경계선을 따라 잘라 안쪽만 남김</dd>
+    <dt>백페이스 컬링<small>Back-face culling</small></dt><dd>카메라를 <b>등지고 있는 면</b>(물체 뒷면)을 제외 · 닫힌 물체의 뒷면은 어차피 앞면에 가려짐</dd>
+  </dl>
+  <div class="analogy">
+    <p><b>단체 사진 촬영</b> · 프레임 밖에 서 있는 사람은 아예 부르지 않음(프러스텀 컬링), 프레임 가장자리에 걸친 사람은 사진에서 잘림(클리핑) · <b>영화 세트 건물</b>은 카메라 쪽 앞면만 만들고 뒷면은 비워 둠(백페이스 컬링)</p>
+  </div>
+  <aside class="notes">
+    - 사진 비유 정리 : 부르지 않기 = 비용 0, 잘라내기 = 약간의 비용, 세트 뒷면 = 애초에 안 만듦
+    - 백페이스 컬링 함정 예고 : 평면 한 장(앞면만 있는 세트)을 뒤에서 보면 사라짐
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">버리기 · 3</div>
   <h2>단계별 제거 단위</h2>
-  <table style="font-size:.68em">
+  <table style="font-size:.64em">
     <tr><th></th><th>시점</th><th>제거 단위</th><th>판단 기준</th></tr>
     <tr><td class="gfx-txt"><b>프러스텀 컬링</b></td><td>CPU · 드로우콜 전</td><td>오브젝트 전체</td><td>바운딩 박스가 절두체 밖</td></tr>
     <tr><td style="color:var(--warn)"><b>클리핑</b></td><td>GPU · 원근 나눗셈 전</td><td>삼각형을 <b>잘라 새로 생성</b></td><td>절두체 경계에 걸침</td></tr>
     <tr><td class="lab-txt"><b>백페이스 컬링</b></td><td>GPU · 래스터화 직전</td><td>삼각형 하나</td><td>정점 감김 방향이 반대</td></tr>
-    <tr><td class="muted"><b>오클루전 컬링</b></td><td>CPU · 사전 계산</td><td>오브젝트 전체</td><td>다른 물체에 완전히 가림</td></tr>
+    <tr><td><b>오클루전 컬링</b></td><td>CPU · 미리 계산</td><td>오브젝트 전체</td><td>다른 물체에 완전히 가림</td></tr>
   </table>
-  <div class="key" style="margin-top:.9em">
-    <p class="small">3주차 <b>11.1ms 예산</b> 상기 · 절두체 축소 = 예산 절약의 가장 저렴한 방법<br>
-    <b>far 를 줄이는 실제 이유 : 정밀도보다 컬링 효과</b></p>
+  <dl class="terms" style="font-size:.62em;margin:.4em 0;grid-template-columns:max-content 1fr max-content 1fr">
+    <dt>드로우콜<small>Draw call</small></dt><dd>CPU가 GPU에게 보내는 <b>"이것 그려" 주문</b> 한 번</dd>
+    <dt>바운딩 박스<small>Bounding box</small></dt><dd>물체를 감싸는 <b>가장 작은 상자</b></dd>
+    <dt>감김 방향<small>Winding order</small></dt><dd>삼각형 세 꼭짓점이 화면에서 <b>시계/반시계</b>로 도는 방향</dd>
+    <dt>오클루전<small>Occlusion</small></dt><dd>다른 물체에 <b>가려짐</b></dd>
+  </dl>
+  <div class="key">
+    <p class="small">3주차 <b>11.1ms 예산</b> 상기 · 상자를 줄여 덜 그리기 = 가장 저렴한 절약 → <b>far 를 줄이는 실제 이유는 정밀도가 아니라 컬링</b><br>
+    흔한 당황 지점 : 백페이스 컬링을 켠 채 평면 한 장 생성 → 뒤에서 보면 사라짐</p>
   </div>
-  <div class="note">백페이스 컬링을 켠 채 평면 한 장 생성 → 뒤에서 보이지 않음 · 학생이 가장 자주 당황하는 지점</div>
 </section>
 
 <section>
@@ -430,21 +681,25 @@ near 근처는 촘촘, 멀어질수록 급격히 성김</span></div>
   <h2>래스터화 — 삼각형에서 픽셀로</h2>
   <div class="cols">
     <div>
-      <p class="small">래스터화(rasterization) : 삼각형 안의 픽셀 중심을 찾아
-      <b>프래그먼트</b> 생성</p>
-      <p class="small">정점의 값(색·법선·UV) → <b>세 꼭짓점에서 보간</b> → 각 프래그먼트로 전달</p>
+      <p class="small"><b>래스터화(rasterization)</b> : 화면에 놓인 삼각형이 <b>어느 픽셀 칸을 덮는지</b> 찾아, 칸마다 프래그먼트(픽셀 후보) 하나씩 생성</p>
+      <p class="small">정점에 붙은 값(색·법선·UV) → 세 꼭짓점 사이를 <b>보간</b>(거리에 따라 섞기) → 각 프래그먼트로 전달</p>
+      <div class="analogy">
+        <p><b>모눈종이에 삼각형 그리고 칸 칠하기</b> · 선이 지나가는 칸 중 중심이 삼각형 안에 든 칸만 칠함 · 세 꼭짓점이 빨강·초록·파랑이면 안쪽 칸은 그 사이 색으로 <b>그라데이션</b></p>
+      </div>
     </div>
     <div>
       <div class="key">
-        <p>정점 셰이더 실행 횟수 : <b>정점 수만큼</b><br>
-        프래그먼트 셰이더 실행 횟수 : <b>픽셀 수만큼</b></p>
+        <p class="small">정점 셰이더 실행 횟수 : <b>정점 수만큼</b><br>
+        프래그먼트 셰이더 실행 횟수 : <b>덮인 픽셀 수만큼</b> (물체가 겹치면 같은 픽셀을 여러 번)</p>
       </div>
-      <p class="small" style="margin-top:.8em">
-        4K 화면 = 약 800만 픽셀<br>
-        같은 조건문 하나라도 프래그먼트 셰이더와 정점 셰이더의 <b>비용 차이 큼</b></p>
+      <p class="small">4K 화면 = 약 830만 픽셀 · 정점이 수천 개인 물체도 화면을 가득 채우면 프래그먼트는 수백만 개 → 같은 조건문 하나라도 <b>프래그먼트 셰이더에 넣으면 훨씬 비쌈</b></p>
+      <p class="small muted">6주차 셰이더 · 12주차 최적화에서 이 비대칭이 핵심 주제</p>
     </div>
   </div>
-  <div class="note">6주차 셰이더 · 12주차 최적화에서 이 비대칭이 핵심 주제</div>
+  <aside class="notes">
+    - 모눈종이 비유 : 실제로 칠판에 격자와 삼각형을 그리고 칸을 칠해 보기
+    - 보간 : 꼭짓점이 빨강·파랑이면 그 가운데 칸은 보라
+  </aside>
 </section>
 
 <!-- ========================================================= PART II -->
@@ -453,6 +708,21 @@ near 근처는 촘촘, 멀어질수록 급격히 성김</span></div>
   <div class="rule"></div>
   <h1>HMD 의 <em>일그러진</em><br>렌더링</h1>
   <p class="sub">두 장의 렌더링 · 두 장은 서로 비대칭</p>
+</section>
+
+<section>
+  <div class="tag vr">Part II · 용어 미리보기</div>
+  <h2>이번 파트에서 쓰는 말 여덟 개</h2>
+  <dl class="terms" style="font-size:.66em;grid-template-columns:max-content 1fr max-content 1fr;gap:.55em 1em">
+    <dt>HMD<small>Head-Mounted Display</small></dt><dd>머리에 쓰는 화면 · VR 헤드셋</dd>
+    <dt>핀쿠션·배럴 왜곡<small>Pincushion / Barrel</small></dt><dd>상이 가장자리로 <b>늘어나는</b>(핀쿠션) / <b>오므라드는</b>(배럴) 찌그러짐</dd>
+    <dt>색수차<small>Chromatic aberration</small></dt><dd>렌즈가 빨강·초록·파랑을 <b>조금씩 다르게 꺾어</b> 가장자리에 색 번짐</dd>
+    <dt>아이박스<small>Eyebox</small></dt><dd>렌즈가 또렷한 상을 보여 주는 <b>눈동자 위치 범위</b></dd>
+    <dt>IPD<small>Interpupillary distance</small></dt><dd>두 눈동자 사이 거리 · 사람마다 다름</dd>
+    <dt>양안 시차·융합<small>Disparity / Fusion</small></dt><dd>두 눈에 비친 상의 <b>어긋남</b> / 뇌가 두 상을 <b>하나의 입체</b>로 합치는 과정</dd>
+    <dt>비대칭 절두체<small>Asymmetric frustum</small></dt><dd>좌우 폭이 <b>다른</b> 카메라 상자 · VR 각 눈에 사용</dd>
+    <dt>싱글패스 인스턴싱<small>Single-pass instanced</small></dt><dd>두 눈을 <b>한 번의 그리기 주문</b>으로 동시에 그리는 방식</dd>
+  </dl>
 </section>
 
 <section>
@@ -466,6 +736,7 @@ near 근처는 촘촘, 멀어질수록 급격히 성김</span></div>
   <aside class="notes">
     - Quest 하나로 렌즈를 통해 본 화면과 렌즈를 비켜서 본 화면의 차이를 실물 시연
     - "불량이 아닙니다. 일부러 그렇게 그린 겁니다" 로 다음 슬라이드 연결
+    - 답은 광학 · 3 슬라이드에서 정리
   </aside>
 </section>
 
@@ -474,22 +745,23 @@ near 근처는 촘촘, 멀어질수록 급격히 성김</span></div>
   <h2>HMD 렌즈의 역할</h2>
   <div class="cols">
     <div>
-      <p class="small">HMD 화면 위치 : 눈에서 <b>3~5cm</b> 앞<br>
-      사람 눈은 그 거리에 초점 조절 불가</p>
-      <p class="small">렌즈 → 화면이 <b>1.5~2m 앞에 있는 것처럼</b> 보이게 함<br>
-      눈의 수정체가 편하게 이완되는 거리</p>
+      <p class="small">HMD 화면 위치 : 눈에서 약 <b>3~5cm</b> 앞 → 사람 눈은 그렇게 가까운 곳에 <b>초점을 맞출 수 없음</b></p>
+      <p class="small">그래서 렌즈 사용 → 화면이 약 <b>1.3~2m 앞</b>에 있는 것처럼 보이게 함 (기기마다 다름) → 눈의 수정체가 편하게 풀린 상태로 볼 수 있는 거리</p>
     </div>
     <div>
       <div class="key vr">
-        <p>대가 : 렌즈가 상을 <b>바깥으로 늘림</b> —
-        핀쿠션 왜곡</p>
+        <p class="small">대가 : 이 렌즈가 상을 <b>가장자리로 갈수록 더 크게 늘림</b> — 핀쿠션 왜곡 (실패가 바늘꽂이 쿠션처럼 모서리가 뻗은 모양)</p>
       </div>
-      <p class="small" style="margin-top:.8em">
-        GPU가 <b>미리 반대 방향으로 압축</b>해 렌더링<br>
-        두 왜곡의 상쇄 → 반듯한 상</p>
+      <p class="small">해결 : GPU가 <b>미리 반대 방향(배럴, 술통 모양)으로 오므려</b> 렌더링 → 두 왜곡이 상쇄되어 반듯한 상</p>
     </div>
   </div>
-  <div class="note">렌즈가 만드는 "가상의 초점 거리" → 12주차 조절-수렴 충돌의 출발점</div>
+  <div class="analogy">
+    <p><b>HMD 렌즈 = 돋보기</b> · 눈앞 글씨는 흐리지만 돋보기를 대면 크게, 편하게 보임 · 대신 돋보기 가장자리로 갈수록 글씨가 더 늘어나 휘어 보임</p>
+  </div>
+  <p class="small muted">12주차 연결 : 렌즈가 만드는 "가상의 초점 거리" → 조절-수렴 충돌의 출발점</p>
+  <aside class="notes">
+    - 돋보기 비유 : 실제 돋보기를 신문 위에 대고 가장자리 글자가 늘어나는 모습을 보여 주면 효과적
+  </aside>
 </section>
 
 <section>
@@ -499,58 +771,75 @@ near 근처는 촘촘, 멀어질수록 급격히 성김</span></div>
   <aside class="notes">
     - 가운데 패널 = "GPU 가 실제로 그리는 그림" 강조
     - 가운데의 R·G·B 세 테두리 = 색수차 보정
-    - 설명 범위 : "렌즈는 파장마다 굴절률이 다르다" 까지
+    - 설명 범위 : "렌즈는 파장(색)마다 꺾는 정도가 다르다" 까지
   </aside>
 </section>
 
 <section>
-  <div class="tag vr">광학 · 3</div>
-  <h2>사전보정의 비용</h2>
-  <div class="cols3">
-    <div class="card vr">
-      <h4>렌더 해상도</h4>
-      <p class="xs">배럴 압축 → <b>중앙부 늘어남</b><br>
-      중앙 화질 유지를 위해 디스플레이보다 <b>1.2~1.4배 크게</b> 렌더링 필요</p>
-    </div>
-    <div class="card vr">
-      <h4>색수차 보정</h4>
-      <p class="xs">색수차(chromatic aberration) 보정을 위해
-      R·G·B 를 <b>서로 다른 배율</b>로 왜곡<br>
-      사실상 샘플링 세 번</p>
-    </div>
-    <div class="card trap">
-      <h4>후처리 한 패스</h4>
-      <p class="xs">왜곡은 <b>렌더링 완료 후</b> 전체 화면에 추가 적용<br>
-      11.1ms 예산에서 이미 차감되는 몫</p>
-    </div>
+  <div class="tag vr">광학 · 3 · 질문의 답</div>
+  <h2>왜 일부러 찌그러뜨려 그리는가</h2>
+  <div class="analogy" style="font-size:.86em">
+    <p><b>볼록 거울에 비칠 것을 알고 미리 반대로 찌그러뜨려 그린 그림</b> · 그림만 보면 이상하지만 거울에 비치면 반듯해짐 · 바닥에 길게 늘여 그려 한 지점에서 보면 입체로 보이는 거리 착시 그림과 같은 발상</p>
+    <p class="muted">비유의 한계 : 실제 렌즈는 거울과 달리 색마다 꺾는 정도도 달라 R·G·B 를 따로 보정</p>
   </div>
-  <div class="key vr" style="margin-top:1em">
-    <p class="small">개발자가 쓸 수 있는 예산 : <b>11.1ms 중 일부</b><br>
-    합성기(compositor)가 먼저 차지</p>
+  <div class="key vr">
+    <p><b>지각 · 1 질문의 답</b><br>
+    렌즈 안쪽 화면이 일그러진 이유 = <b>고장이 아니라 렌즈 왜곡을 미리 상쇄하려고 GPU가 일부러 반대로 오므린 그림</b> · 렌즈를 통과해야 비로소 반듯해짐</p>
   </div>
+  <p class="small">순서 정리 : 평범하게 렌더링 → 배럴 모양으로 오므리기(후처리) → 렌즈가 핀쿠션으로 늘림 → 눈에는 반듯한 상</p>
+  <aside class="notes">
+    - 볼록 거울 비유 : 아나모픽 아트(바닥에 늘여 그린 3D 착시 그림) 사진을 보여 주면 좋음
+    - "헤드셋 화면을 휴대폰으로 찍어 보면 이 오므린 그림이 그대로 보인다"
+  </aside>
 </section>
 
 <section>
   <div class="tag vr">광학 · 4</div>
+  <h2>사전보정의 비용</h2>
+  <div class="cols3">
+    <div class="card vr">
+      <h4>렌더 해상도</h4>
+      <p class="small">배럴로 오므리면 <b>중앙부 픽셀이 늘어남</b> → 중앙 화질을 지키려고 디스플레이보다 <b>약 1.2~1.4배 크게</b> 렌더링 (기기마다 다름)</p>
+    </div>
+    <div class="card vr">
+      <h4>색수차 보정</h4>
+      <p class="small">렌즈가 색마다 다르게 꺾음 → R·G·B 를 <b>서로 다른 배율</b>로 왜곡 · 사실상 그림을 세 번 읽음</p>
+    </div>
+    <div class="card trap">
+      <h4>후처리 한 패스</h4>
+      <p class="small">왜곡은 <b>렌더링이 끝난 뒤</b> 화면 전체에 한 번 더 적용 · 11.1ms 예산에서 먼저 빠지는 몫</p>
+    </div>
+  </div>
+  <div class="analogy" style="margin-top:.8em">
+    <p><b>색수차 = 프리즘 무지개</b> · 유리가 색마다 빛을 다르게 꺾어 흰빛이 무지개로 갈라지듯, 렌즈 가장자리에서 흰 글자 테두리가 빨강·파랑으로 번짐</p>
+  </div>
+  <div class="key vr">
+    <p class="small">이 보정은 <b>합성기(compositor)</b> — 헤드셋 운영체제가 완성된 두 장을 받아 왜곡 보정 · 마지막 순간 머리 움직임에 맞춘 그림 이동(<b>timewarp</b>)을 하는 프로그램 — 가 담당 · 개발자 몫은 11.1ms 중 그 나머지</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">광학 · 5</div>
   <h2>아이박스 — 눈동자 허용 범위</h2>
   <div class="cols wide-left">
     <div>
-      <p class="small"><b>아이박스(eyebox)</b> : 렌즈가 정상적인 상을 만드는 눈동자 위치 범위<br>
-      보통 <b>한 변 10mm 남짓</b></p>
-      <p class="small">범위 이탈 시 화면 가장자리 어두워짐(비네팅),
-      색 번짐, 초점 흐려짐</p>
+      <p class="small"><b>아이박스(eyebox)</b> : 렌즈가 정상적인 상을 만드는 <b>눈동자 위치 범위</b> · 한 변 약 10mm 안팎 (기기마다 다름)</p>
+      <p class="small">범위를 벗어나면 → 화면 가장자리 어두워짐(<span class="t">비네팅</span>), 색 번짐, 초점 흐려짐</p>
+      <div class="analogy">
+        <p><b>쌍안경 접안렌즈</b> · 눈을 정확한 자리에 대야 둥근 시야가 꽉 차고, 조금만 비켜도 가장자리가 까맣게 가려짐</p>
+      </div>
     </div>
     <div>
       <div class="key vr">
-        <p><b>"화질이 나쁘다"는 사용자의 절반 :
-        헤드셋 착용 불량</b></p>
+        <p class="small"><b>"화질이 나쁘다"는 불만의 상당수 = 헤드셋 착용 불량</b> (위치·각도·IPD 조절 미흡)</p>
       </div>
+      <p class="small">14주차 플레이테스트 : <b>착용 상태 우선 확인</b> · 아이박스를 벗어난 사람의 화질 평가 → 콘텐츠 평가로 활용 불가</p>
     </div>
   </div>
-  <p class="small" style="margin-top:.8em">
-    14주차 플레이테스트 : <b>착용 상태 우선 확인</b><br>
-    아이박스를 벗어난 사람의 평가 → 콘텐츠 평가로 활용 불가
-  </p>
+  <aside class="notes">
+    - 쌍안경 비유 : 실제로 쌍안경을 돌려 보며 눈 위치를 비키게 해 보면 즉시 이해
+    - 원래 슬라이드의 "절반"은 근거 수치가 아니므로 "상당수"로 표현
+  </aside>
 </section>
 
 <section>
@@ -558,22 +847,23 @@ near 근처는 촘촘, 멀어질수록 급격히 성김</span></div>
   <h2>IPD — 사람마다 다른 상수</h2>
   <div class="cols">
     <div>
-      <p class="small">동공간 거리(IPD) : 성인 기준 <b>58~72mm</b><br>
-      평균값 63mm 하나로 모든 사용자 대응 불가</p>
-      <p class="small">IPD 불일치 → 두 눈의 상 어긋남<br>
-      뇌가 융합을 위해 계속 부담</p>
+      <p class="small"><b>IPD(동공간 거리)</b> : 두 눈동자 중심 사이의 거리 · 성인 대부분 약 <b>53~73mm</b>, 평균 약 63mm → 평균값 하나로 모든 사용자 대응 불가</p>
+      <p class="small">IPD 가 안 맞으면 → 두 눈의 상이 어긋남 → 뇌가 하나로 합치려고(융합) 계속 애씀 → 눈 피로</p>
+      <div class="analogy">
+        <p><b>두 눈 사이가 아주 넓은 거인의 시점</b> · 가상 카메라 간격을 넓히면 사용자는 거인이 된 것처럼 느낌 → 세상이 장난감처럼 작아 보임</p>
+      </div>
     </div>
     <div>
       <div class="key vr">
-        <p>IPD 적용 위치 : <b>렌즈 간격(하드웨어)</b>과
-        <b>가상 카메라 간격(소프트웨어)</b> 양쪽<br>
+        <p class="small">IPD 적용 위치 두 곳 : <b>렌즈 간격(하드웨어)</b>과 <b>가상 카메라 간격(소프트웨어)</b><br>
         둘이 다르면 세상의 <b>크기 감각</b> 왜곡</p>
       </div>
-      <p class="xs trap-txt" style="margin-top:.7em">
-        카메라 간격 임의 확대 → 세상이 장난감처럼 작게 보임
-      </p>
+      <p class="small trap-txt">카메라 간격 임의 확대 → 세상이 장난감처럼 작게 보임 · 축소 → 세상이 거대하게 보임</p>
     </div>
   </div>
+  <aside class="notes">
+    - 거인 비유 : 실제 "미니어처 사진(틸트 시프트)" 처럼 보이는 현상 · 반대로 간격을 줄이면 개미가 된 느낌
+  </aside>
 </section>
 
 <section>
@@ -583,12 +873,33 @@ near 근처는 촘촘, 멀어질수록 급격히 성김</span></div>
   <aside class="notes">
     - 핵심 : 각 눈의 절두체는 코쪽이 좁고 귀쪽이 넓음 · 좌우 비대칭
     - Unity 의 fieldOfView 로는 이 모양 생성 불가 → 반드시 언급
-    - "그럼 누가 만드나요?" → 다음 슬라이드
+    - "그럼 누가 만드나요?" → 다음 두 슬라이드
   </aside>
 </section>
 
 <section>
   <div class="tag vr">양안 · 3</div>
+  <h2>비대칭 절두체를 쉽게</h2>
+  <div class="cols">
+    <div>
+      <p class="small">일반 카메라 상자 : 정면 기준 <b>좌우 대칭</b> → 시야각 하나(fieldOfView)로 표현 가능</p>
+      <p class="small">VR 각 눈의 상자 : 코 쪽은 <b>좁고</b>, 귀 쪽은 <b>넓음</b> (사람 눈의 시야도 코 쪽이 좁음) → 두 눈을 합친 전체 시야는 넓히고, 가운데 겹치는 구간에서 입체감 확보 → 좌우 각도가 서로 다름</p>
+      <p class="small">fieldOfView 는 숫자 <b>하나</b> → "왼쪽 40°, 오른쪽 50°" 같은 모양 표현 불가</p>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:0">
+        <p><b>창문 하나를 두 사람이 나란히 서서 보기</b> · 창문 왼쪽 앞에 선 사람은 창이 오른쪽으로 치우쳐 보이고, 오른쪽 사람은 반대 · 각자 보는 시야가 정면 기준으로 한쪽에 쏠림 → 비대칭 상자</p>
+        <p class="muted">비유의 한계 : 헤드셋은 눈마다 화면이 따로 있지만, 렌즈·화면 중심이 눈동자 정면에서 비켜 있어 같은 쏠림 발생</p>
+      </div>
+      <div class="key vr">
+        <p class="small">이 모양은 렌즈·화면 배치를 아는 <b>헤드셋(XR 런타임)만 정확히 계산 가능</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag vr">양안 · 4</div>
   <h2>투영 행렬의 주체 — XR 런타임</h2>
   <pre><code class="language-csharp" data-trim>// 하지 말 것 — 대칭 절두체를 강제로 덮어쓴다
 cam.fieldOfView = 90f;
@@ -599,29 +910,36 @@ cam.nearClipPlane = 0.1f;     // 이 두 값만 내 몫이다
 cam.farClipPlane  = 500f;
 </code></pre>
   <div class="key vr">
-    <p class="small">XR 플러그인 : <b>눈마다 다른 비대칭 projectionMatrix</b> 직접 주입<br>
-    코드로 덮어쓰면 두 눈의 상 어긋남 → 융합 실패 → <b>20분 뒤 멀미</b></p>
+    <p class="small"><b>XR 런타임</b>(헤드셋 제조사가 제공하는 구동 프로그램 · OpenXR 등) : <b>눈마다 다른 비대칭 투영 행렬</b>을 매 프레임 직접 주입<br>
+    코드로 덮어쓰면 → 두 눈의 상 어긋남 → 융합 실패 → <b>사용 시간이 길어질수록 눈 피로·멀미</b></p>
   </div>
-  <div class="note">11주차 AI 함정 #8(카메라 Transform 직접 조작)과 같은 유형의 실수</div>
+  <p class="small muted">11주차 AI 함정 #8(카메라 Transform 직접 조작)과 같은 유형의 실수</p>
 </section>
 
 <section>
-  <div class="tag vr">양안 · 4</div>
+  <div class="tag vr">양안 · 5</div>
   <h2>두 번 렌더링하는 비용</h2>
-  <table style="font-size:.68em">
+  <table style="font-size:.64em">
     <tr><th>방식</th><th>드로우콜</th><th>정점 처리</th><th>비고</th></tr>
-    <tr><td class="trap-txt"><b>멀티패스</b></td><td>×2</td><td>×2</td><td>씬 전체를 두 번 순회</td></tr>
-    <tr><td style="color:var(--warn)"><b>싱글패스</b></td><td>×1</td><td>×2</td><td>한 장의 큰 타깃을 좌우로 분할</td></tr>
-    <tr><td class="lab-txt"><b>싱글패스 인스턴싱</b></td><td>×1</td><td>×2</td><td>드로우콜 한 번으로 두 눈 동시 처리 · <b>기본값</b></td></tr>
+    <tr><td class="trap-txt"><b>멀티패스</b></td><td>×2</td><td>×2</td><td>씬 전체를 눈마다 한 번씩, 두 번 처리</td></tr>
+    <tr><td style="color:var(--warn)"><b>싱글패스</b> <small>(구형, 더블와이드)</small></td><td>×2</td><td>×2</td><td>가로 두 배 그림 한 장 · 씬 순회·컬링은 한 번</td></tr>
+    <tr><td class="lab-txt"><b>싱글패스 인스턴싱</b></td><td>×1</td><td>×2</td><td>그리기 주문 한 번으로 두 눈 동시 처리 · <b>현재 기본값</b> (Quest에서는 Multiview)</td></tr>
   </table>
-  <div class="key vr" style="margin-top:.9em">
-    <p class="small">인스턴싱 적용 후에도 <b>프래그먼트 셰이더는 두 배</b> 실행<br>
-    픽셀 수는 그대로 · 줄어드는 것은 <b>CPU 쪽 드로우콜</b></p>
+  <div class="cols" style="margin-top:.4em">
+    <div class="analogy" style="margin:0">
+      <p><b>복사기에 "2부" 주문</b> · 주문서(드로우콜)는 한 장으로 줄지만, 뽑혀 나오는 종이(픽셀)는 여전히 두 배</p>
+    </div>
+    <div class="key vr" style="margin:0">
+      <p class="small">인스턴싱 후에도 <b>프래그먼트 셰이더는 두 배</b> 실행 · 줄어드는 것은 <b>CPU 쪽 드로우콜</b></p>
+    </div>
   </div>
-  <p class="small trap-txt" style="margin-top:.7em">
-    커스텀 셰이더 직접 작성 시 인스턴싱 매크로 누락 주의 → 한쪽 눈에만 렌더링
+  <p class="small trap-txt" style="margin-top:.6em">
+    커스텀 셰이더 직접 작성 시 인스턴싱 매크로 누락 주의 → 한쪽 눈에만 렌더링 · 6주차 Shader Graph 는 자동 삽입
   </p>
-  <div class="note">6주차 Shader Graph : 이 매크로 자동 삽입 · 직접 작성한 셰이더는 수동 추가 필요</div>
+  <aside class="notes">
+    - 복사기 비유 : 주문을 두 번 넣는 것(멀티패스)과 "2부"로 한 번 넣는 것(인스턴싱)의 차이 · 종이 값은 같음
+    - 구형 더블와이드 싱글패스는 최신 Unity XR 설정에서 사라짐 · 선택지는 Multi-pass 와 Single Pass Instanced
+  </aside>
 </section>
 
 <section>
@@ -632,10 +950,10 @@ cam.farClipPlane  = 500f;
     개발자가 정하는 값은 near 와 far 뿐</b></p>
   </div>
   <p class="small" style="margin-top:1.2em">
-    시야각·종횡비·절두체의 좌우 비대칭 모두 헤드셋이 결정<br>
+    시야각·종횡비·절두체의 좌우 비대칭 → 모두 헤드셋이 결정<br>
     <b>개발자가 정하는 그 두 숫자 = 오늘의 함정</b></p>
-  <p class="small muted" style="margin-top:.7em">
-    Quest의 near 실용 범위 : 대체로 0.05~0.1 · 손을 얼굴 앞까지 가져오는 경우 고려
+  <p class="small" style="margin-top:.7em">
+    Quest의 near 실용 범위 : 대체로 <b>약 0.05~0.1</b> (프로젝트마다 다름) · 손을 얼굴 앞까지 가져와도 잘리지 않는 최소 거리 기준 → 그만큼 먼 곳 정밀도는 손해 → far 를 필요한 만큼만
   </p>
 </section>
 
@@ -669,18 +987,17 @@ cam.farClipPlane  = 500f;
       far=10000 → 1/far = 0.0001 ≈ 0<br>
       near=0.01 → 1/near = <b>100</b><br><br>
       <span style="color:#a8e05f">// near 0.01 → 0.3<br>
-      // 정밀도 30배, 시야는 그대로</span><br><br>
+      // 정밀도 약 30배, 먼 시야는 그대로</span><br><br>
       <span style="color:#a8e05f">// far/near 상한을 명세에 명시</span>
     </div>
   </div>
   <div class="key trap" style="margin-top:.8em">
-    <p class="small">위험한 이유 : <b>개발자 화면에서는 정상으로 보임</b><br>
-    카메라가 멀리 있고 움직일 때만 드러남</p>
+    <p class="small">위험한 이유 : <b>개발자 화면에서는 정상으로 보임</b> · 카메라가 멀리 있고 움직일 때만 드러남</p>
   </div>
   <aside class="notes">
     - 학생들이 이 프롬프트를 그대로 입력하도록 진행
     - 모델의 응답을 각자 확인하고 near 값을 소리내어 읽기
-    - 결과는 거의 전부 0.01 ~ 0.03
+    - 결과는 0.01 ~ 0.03 처럼 Unity 기본값(0.3)보다 훨씬 작은 값이 자주 나옴
   </aside>
 </section>
 
@@ -688,10 +1005,10 @@ cam.farClipPlane  = 500f;
   <div class="tag trap">함정 · 2</div>
   <h2>AI가 이 값을 반복하는 이유</h2>
   <ul class="small">
-    <li>학습 데이터의 튜토리얼 대부분이 <b>near=0.01, far=1000</b> 으로 시작</li>
+    <li>Unity 기본값은 near 0.3 · far 1000 → 그런데 "가까이 가면 물체가 잘려요" 해결 글에서 <b>near 를 0.01 수준으로 낮추라는 답</b>이 흔함</li>
     <li>near 를 작게 잡으면 <b>물체가 카메라를 뚫는 문제 방지</b> — 즉시 보이는 안전</li>
     <li>far 를 크게 잡으면 <b>먼 물체 사라짐 방지</b> — 역시 즉시 보이는 안전</li>
-    <li>z-fighting : <b>통계적 증상</b> · 정지 화면에서는 잘 드러나지 않음</li>
+    <li>z-fighting 은 <b>멀리서, 움직일 때만</b> 드러나는 증상 → 정지 화면·짧은 테스트에서 잘 안 보임</li>
   </ul>
   <div class="key trap" style="margin-top:.9em">
     <p>AI의 응답 경향 : <b>즉시 보이는 실패 회피</b> 우선<br>
@@ -737,7 +1054,8 @@ cam.farClipPlane  = 500f;
 <section>
   <div class="tag lab">실습 · 2</div>
   <h2>이번 주 명세 예시</h2>
-  <pre><code data-trim>[목표]
+  <div class="cols wide-left">
+  <pre style="margin-top:0"><code data-trim>[목표]
 지형 위를 따라다니는 3인칭 카메라. 시야 거리 500m.
 
 [제약]
@@ -755,16 +1073,22 @@ cam.farClipPlane  = 500f;
 [비목표]
 - 충돌 처리, 카메라 흔들림 연출, 후처리는 만들지 말 것
 </code></pre>
-  <div class="key lab">
-    <p class="small">두 검증 조건의 <b>유형 차이</b> 확인<br>
-    하나는 <b>관찰로 측정</b>, 하나는 <b>계산으로 측정</b></p>
+    <div>
+      <div class="key lab" style="margin-top:0">
+        <p class="small"><b>손계산</b> · near 0.1, far 500, 200m<br>
+        \( 200^2\times 9.998 \div 2^{24} \approx 0.024\,\text{m} \) = 24mm → <b>불합격</b><br>
+        5mm 이하가 되려면 near ≥ <b>약 0.48</b><br>
+        → 제약(0.1 이상)만 지켜서는 부족 · 검증 조건이 near 를 더 끌어올림</p>
+      </div>
+      <p class="small">두 검증 조건의 <b>유형 차이</b> : 하나는 <b>관찰로 측정</b>, 하나는 <b>계산으로 측정</b></p>
+    </div>
   </div>
 </section>
 
 <section>
   <div class="tag lab">실습 · 3</div>
   <h2>오늘의 실습 — 50분</h2>
-  <table style="font-size:.7em">
+  <table style="font-size:.66em">
     <tr><th>#</th><th>실습</th><th>확인할 개념</th></tr>
     <tr>
       <td class="lab-txt"><b>1</b></td>
@@ -792,12 +1116,12 @@ cam.farClipPlane  = 500f;
       <td>VR 의 near 실용 범위</td>
     </tr>
   </table>
-  <p class="xs muted" style="margin-top:.7em">
+  <p class="small" style="margin-top:.6em">
     1~4 필수, 5 확장 · <b>제출물 없음</b>, 수업 안에서 완료
   </p>
   <aside class="notes">
     - 2번에서 학생 두세 명이 작성한 문장 발표
-    - "far 는 분모에 있어서" 같은 부정확한 문장은 즉시 교정
+    - "far 는 분모에 있어서" 같은 부정확한 문장은 즉시 교정 → 모범 문장 : "정밀도는 1/near − 1/far 로 정해지는데, far 쪽 항은 원래 0에 가까워 줄여도 거의 안 변한다"
     - 4번 기록 → 다음 주 프롬프트 크리틱 자료
   </aside>
 </section>
@@ -806,19 +1130,19 @@ cam.farClipPlane  = 500f;
 <section>
   <div class="tag gfx">정리</div>
   <h2>한 장 요약</h2>
-  <table style="font-size:.66em">
+  <table style="font-size:.6em">
     <tr><th>개념</th><th>핵심</th></tr>
-    <tr><td>파이프라인</td><td>모델 → 뷰 → 투영 → 클립 → NDC → 화면 · 좌표계 여섯 번 전환</td></tr>
-    <tr><td>뷰 행렬</td><td>카메라 이동 = <b>세상을 반대 방향으로 이동</b></td></tr>
-    <tr><td><b class="gfx-txt">투영 행렬</b></td><td><b>w 자리에 -z 저장</b> · 나눗셈은 이후 GPU가 수행</td></tr>
-    <tr><td>원근</td><td>먼 물체의 축소 = <b>거리로 나눈 결과</b></td></tr>
-    <tr><td>NDC 깊이</td><td>1/d 곡선 · near 근처에 정밀도 집중</td></tr>
-    <tr><td><b class="trap-txt">깊이 정밀도</b></td><td><b>Δd = d²(1/n − 1/f) / 2^b</b> · 결정 요인은 <b>near</b></td></tr>
+    <tr><td>파이프라인</td><td>모델 → 월드 → 뷰 → 클립 → NDC → 화면 · 공간 여섯 개, 전환 다섯 번</td></tr>
+    <tr><td>뷰 행렬</td><td>카메라 이동 = <b>세상을 반대 방향으로 이동</b> (고정 카메라 앞에서 세트 밀기)</td></tr>
+    <tr><td><b class="gfx-txt">투영 행렬</b></td><td><b>w 칸에 −z 저장</b> · 나눗셈은 이후 GPU가 수행</td></tr>
+    <tr><td>원근</td><td>먼 물체의 축소 = <b>거리로 나눈 결과</b> · n=1, (2,1,−4) → x'=0.5</td></tr>
+    <tr><td>NDC 깊이</td><td>1/d 곡선 · near 근처에 눈금 집중 (촘촘한 앞, 듬성한 뒤)</td></tr>
+    <tr><td><b class="trap-txt">깊이 정밀도</b></td><td>\( \Delta d \approx d^2(1/n - 1/f)/2^b \) · 결정 요인은 <b>near</b></td></tr>
     <tr><td><b class="trap-txt">z-fighting</b></td><td><b>far 감소는 효과 없음 · near 증가로 해결</b></td></tr>
-    <tr><td>컬링 · 클리핑</td><td>컬링은 제거, 클리핑은 절단 · far 감소의 실제 이점</td></tr>
-    <tr><td>래스터화</td><td>정점 셰이더는 정점 수만큼, 프래그먼트 셰이더는 픽셀 수만큼 실행</td></tr>
-    <tr><td><b class="vr-txt">배럴 사전보정</b></td><td>렌즈의 늘림에 대응해 <b>GPU가 미리 압축</b> · 렌더 해상도 1.2~1.4배</td></tr>
-    <tr><td><b class="vr-txt">비대칭 절두체</b></td><td>두 눈의 절두체는 <b>코쪽이 좁음</b> · fieldOfView 로는 생성 불가</td></tr>
+    <tr><td>컬링 · 클리핑</td><td>컬링은 통째로 제거, 클리핑은 경계에서 절단 · far 감소의 실제 이점은 컬링</td></tr>
+    <tr><td>래스터화</td><td>정점 셰이더는 정점 수만큼, 프래그먼트 셰이더는 덮인 픽셀 수만큼 실행</td></tr>
+    <tr><td><b class="vr-txt">배럴 사전보정</b></td><td>렌즈의 늘림에 대비해 <b>GPU가 미리 오므림</b> · 렌더 해상도 약 1.2~1.4배</td></tr>
+    <tr><td><b class="vr-txt">비대칭 절두체</b></td><td>두 눈의 절두체는 <b>코쪽이 좁음</b> · fieldOfView 로는 생성 불가 · XR 런타임 담당</td></tr>
     <tr><td><b class="vr-txt">싱글패스 인스턴싱</b></td><td>드로우콜 한 번 · <b>프래그먼트는 여전히 두 배</b></td></tr>
   </table>
 </section>
@@ -838,6 +1162,7 @@ cam.farClipPlane  = 500f;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/math/math.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="../_shared/demos/_stage.js"></script>
 <script src="../_shared/demos/w04.js"></script>

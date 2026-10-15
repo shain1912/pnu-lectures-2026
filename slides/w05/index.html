@@ -36,28 +36,32 @@
     무엇이 달라졌는가?
   </div>
   <aside class="notes">
-    - 같은 머티리얼을 쓴 두 스크린샷 비교 (조명 설정만 교체)
+    - 같은 머티리얼을 쓴 두 스크린샷 비교 (조명 설정만 교체 · 한쪽은 하늘이 담긴 스카이박스, 다른 쪽은 단색 환경광 + 점광원 하나)
     - 질문 : "재질 파일이 같은데 왜 다른 물질로 보이나요"
-    - 답은 공개하지 않음 · Part I 중반 BRDF 에서 다시 다룸
+    - 답은 바로 공개하지 않음 · 힌트만 : "거울을 떠올려 보세요"
+    - 정답 슬라이드 : Part I 끝 «도입 질문의 답» (AI 함정 #4 직전)
   </aside>
 </section>
 
 <section>
   <div class="tag gfx">도입</div>
-  <h2>학습 목표</h2>
-  <div class="cols3" style="margin-top:1.2em">
+  <h2>이 수업 후 할 수 있는 것</h2>
+  <div class="cols3" style="margin-top:1em">
     <div class="card gfx">
-      <h4><span class="step">1</span> 원리</h4>
-      <p>화면 색 = <b>빛 · 표면 방향 · 재질</b> 세 값의 곱 — 계산 과정 추적</p>
+      <h4><span class="step">1</span> 밝기 손계산</h4>
+      <p class="small">법선·광원 방향 두 화살표의 <b>내적으로 표면 밝기 직접 계산</b> · 하이라이트가 시점 따라 움직이는 이유를 식으로 설명</p>
     </div>
     <div class="card trap">
-      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정</h4>
-      <p>실시간 그림자 남발과 <b>색공간 설정 혼동</b> 진단</p>
+      <h4><span class="step" style="background:var(--trap-soft);color:var(--trap);border-color:#6e2a24">2</span> 함정 진단</h4>
+      <p class="small">AI 가 만든 씬에서 <b>그림자 켠 광원 수 · Color Space · 텍스처 sRGB</b> 세 가지 점검 → 헤드셋 프레임 급락·색 바램의 원인 찾기</p>
     </div>
     <div class="card vr">
-      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> VR</h4>
-      <p>조명 = 장식 이상의 요소 · <b>거리 지각의 재료</b></p>
+      <h4><span class="step" style="background:var(--vr-soft);color:var(--vr);border-color:#6e2545">3</span> VR 공간 설계</h4>
+      <p class="small">접촉 그림자·바닥 무늬·크기 기준 물체 배치로 <b>«떠 보이는 물체 · 좁아 보이는 방»</b> 현상 완화</p>
     </div>
+  </div>
+  <div class="key" style="margin-top:1.1em">
+    <p>오늘의 큰 그림 : 화면 색 = <b>빛 × 표면 방향 × 재질</b> — 세 값이 곱해지고 더해지는 과정 추적</p>
   </div>
 </section>
 
@@ -69,83 +73,145 @@
   <p class="sub">광원 · 표면 법선 · 재질 계수 → 한 번의 곱셈과 덧셈</p>
 </section>
 
+<section>
+  <div class="tag gfx">Part I 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>프래그먼트<small>Fragment</small></dt><dd>화면 픽셀 하나에 대응하는 «색칠 후보» 점 — 색을 계산하는 단위</dd>
+    <dt>셰이더<small>Shader</small></dt><dd>그래픽 카드에서 정점·픽셀마다 실행되는 작은 프로그램</dd>
+    <dt>법선<small>Normal</small></dt><dd>면이 바라보는 방향을 가리키는 <b>길이 1 의 화살표</b></dd>
+    <dt>내적<small>Dot product</small></dt><dd>두 화살표가 같은 쪽을 보는 정도를 숫자 하나로 계산 — 같은 방향 1 · 직각 0 · 반대 −1 (2주차)</dd>
+    <dt>확산반사<small>Diffuse</small></dt><dd>빛이 표면에서 사방으로 고르게 흩어지는 반사 — 종이·벽처럼 <b>보는 방향과 무관</b></dd>
+    <dt>정반사<small>Specular</small></dt><dd>빛이 거울처럼 한 방향으로 튕기는 반사 — 반짝이는 하이라이트 · <b>보는 위치 따라 이동</b></dd>
+    <dt>알베도<small>Albedo</small></dt><dd>조명 효과를 뺀 표면 고유의 바탕색</dd>
+    <dt>색공간<small>Color space</small></dt><dd>색을 숫자로 적는 눈금 체계 — 사람 눈 기준(sRGB) · 실제 빛 에너지 기준(Linear)</dd>
+  </dl>
+  <aside class="notes">
+    - 지금 다 외울 필요 없음 · 슬라이드마다 다시 풀어 줌
+    - 내적은 2주차 복습 : "두 화살표가 얼마나 같은 쪽을 보나"
+  </aside>
+</section>
+
 <!-- ---------------------------------------------------- 광원 -->
 <section>
   <div class="tag gfx">조명 · 1</div>
   <h2>4주차와의 연결</h2>
   <div class="cols">
     <div>
-      <p class="small">4주차 : 정점이 <b>화면 어느 자리</b>에 찍히는지 결정</p>
+      <p class="small">4주차 : 정점이 화면 <b>어느 자리</b>에 찍히는지 결정</p>
       <p class="small">5주차 : 그 자리에 <b>어떤 색</b>이 찍히는지 결정</p>
     </div>
     <div>
       <div class="key">
-        <p>프래그먼트 셰이더가 픽셀마다 수행하는 계산<br>
+        <p class="small"><span class="t">프래그먼트 셰이더</span> : 픽셀 하나마다 실행되는 색 계산 프로그램<br>
         입력 세 가지 : <b>빛 · 표면 방향 · 재질</b></p>
       </div>
-      <p class="xs muted" style="margin-top:.8em">
-        1920×1080 한 화면 = 약 200만 회 · VR 은 두 눈분
-      </p>
     </div>
   </div>
+  <p class="small">1920×1080 화면 = 픽셀 약 207만 개 → 한 프레임마다 이 계산 <b>약 200만 회</b> · VR 은 두 눈 화면을 따로 그림 → 그 2배 이상 (Quest 3 한 눈 약 450만 픽셀)</p>
+  <div class="analogy">
+    <p><b>색칠공부</b> : 4주차 = 밑그림 선을 종이 어디에 그릴지 정하기 · 5주차 = 칸마다 무슨 색을 칠할지 정하기</p>
+    <p>비유의 한계 : 그래픽스의 «칸» = 픽셀 하나 · 색은 정해진 크레파스가 아니라 빛 방향을 따져 매 프레임 새로 계산</p>
+  </div>
+  <aside class="notes">
+    - 색칠공부 비유 : 지난주는 선 긋기, 이번 주는 색칠
+    - 다만 크레파스 색이 고정이 아니라, 빛이 어디서 오는지에 따라 칸마다 매번 다시 계산된다는 점 강조
+  </aside>
 </section>
 
 <section>
   <div class="tag gfx">조명 · 2</div>
   <h2>광원 네 종류</h2>
   <table style="font-size:.68em">
-    <tr><th>종류</th><th>방향</th><th>감쇠</th><th>실시간 그림자 비용</th><th>용도</th></tr>
-    <tr><td class="gfx-txt"><b>Directional</b></td><td>전체 동일</td><td>없음</td><td>캐스케이드 2~4장</td><td>태양 · 달</td></tr>
-    <tr><td class="gfx-txt"><b>Point</b></td><td>사방</td><td>거리에 따라</td><td class="trap-txt">큐브맵 6면</td><td>전구 · 촛불</td></tr>
-    <tr><td class="gfx-txt"><b>Spot</b></td><td>원뿔 안</td><td>거리 + 각도</td><td>맵 1장</td><td>손전등 · 무대</td></tr>
-    <tr><td class="gfx-txt"><b>Area</b></td><td>면 전체</td><td>거리에 따라</td><td class="lab-txt">베이크 전용</td><td>창문 · 형광등</td></tr>
+    <tr><th>종류</th><th>빛이 나가는 모양</th><th>일상 예</th><th>거리에 따른 감쇠</th></tr>
+    <tr><td class="gfx-txt"><b>Directional</b></td><td>모든 곳에 같은 방향으로 평행하게</td><td>태양 · 달</td><td>없음</td></tr>
+    <tr><td class="gfx-txt"><b>Point</b></td><td>한 점에서 사방으로</td><td>전구 · 촛불</td><td>있음</td></tr>
+    <tr><td class="gfx-txt"><b>Spot</b></td><td>한 점에서 원뿔 모양으로</td><td>손전등 · 무대 조명</td><td>있음 + 원뿔 가장자리로 갈수록 약해짐</td></tr>
+    <tr><td class="gfx-txt"><b>Area</b></td><td>사각형 면 전체에서</td><td>창문 · 형광등 패널</td><td>있음 · <span class="lab-txt">URP 에서는 베이크 전용</span></td></tr>
   </table>
-  <div class="key" style="margin-top:1em">
-    <p>점광원 하나 = <b>그림자맵 여섯 장</b> · 실시간 점광원 그림자가 비싼 이유</p>
-  </div>
-  <div class="note">광원 개수보다 <b>그림자를 켠 광원 개수</b>가 성능을 좌우</div>
+  <dl class="terms">
+    <dt>감쇠<small>Attenuation</small></dt><dd>광원에서 멀어질수록 빛이 약해지는 정도</dd>
+    <dt>베이크<small>Bake</small></dt><dd>조명 결과를 개발 중에 미리 계산해 그림(텍스처)으로 저장해 두는 방식 — 실행 중 계산 생략 · 뒤에서 상세</dd>
+  </dl>
+  <p class="small">광원 종류마다 실시간 그림자 비용이 크게 다름 → 다음 장</p>
 </section>
 
 <section>
   <div class="tag gfx">조명 · 3</div>
-  <h2>거리에 따른 감쇠</h2>
-  <div class="eq">밝기  ∝  1 / d²       <span class="cm">d = 광원까지 거리</span>
-
-<span class="cm">거리 2배  →  밝기 1/4
-거리 3배  →  밝기 1/9</span></div>
-  <div class="key" style="margin-top:.9em">
-    <p>구면으로 퍼지는 빛 : 같은 에너지가 <b>4πd² 넓이</b>에 분배<br>
-    Unity 의 Range 값 : 계산 생략 거리 · 물리 감쇠와 별개</p>
+  <h2>그림자가 비싼 이유 — 그림자맵</h2>
+  <dl class="terms">
+    <dt>그림자맵<small>Shadow map</small></dt><dd>광원 자리에서 장면을 찍어 <b>«광원에서 보이는 가장 가까운 물체까지의 거리»</b> 를 적어 둔 이미지</dd>
+    <dt>큐브맵<small>Cubemap</small></dt><dd>정육면체 6면 방향(위·아래·앞·뒤·좌·우)으로 찍은 이미지 6장 묶음</dd>
+    <dt>캐스케이드<small>Cascade</small></dt><dd>카메라 가까운 곳은 촘촘히, 먼 곳은 성기게 구간을 나눠 찍은 그림자맵 여러 장</dd>
+  </dl>
+  <div class="analogy">
+    <p><b>광원 자리에 선 사진사의 사진</b> : 사진에 찍힌 곳 = 빛이 닿는 곳 · 다른 물체 뒤에 숨어 안 찍힌 곳 = 그림자</p>
+    <p>비유의 한계 : 실제로는 색이 아니라 거리 숫자를 기록 · 사진 해상도가 낮으면 그림자 가장자리가 계단처럼 깨짐</p>
   </div>
-  <p class="small muted" style="margin-top:.7em">
-    Directional 광원에 감쇠가 없는 이유 : 광원이 무한히 멀다는 가정
-  </p>
+  <div class="key">
+    <p class="small">사진 1장 = 장면 전체를 광원 시점에서 한 번 더 그리기 → Spot : 1장 · Directional : 거리 구간별 2~4장 · Point : 사방으로 빛 → 6방향 각각 촬영 → <b>6장, Spot 의 6배</b><br>
+    → 성능을 좌우하는 것 = 광원 개수보다 <b>그림자를 켠 광원 개수</b></p>
+  </div>
+  <aside class="notes">
+    - 사진사 비유 : 광원 자리에 카메라를 세우고 찍는다 → 찍힌 곳은 빛이 닿고, 가려진 곳은 그림자
+    - 전구는 사방을 비추니 사진사가 위·아래·앞·뒤·좌·우 여섯 번 찍어야 함 → 비싼 이유
+    - 한계 : 실제로는 색 사진이 아니라 거리 사진(깊이)
+  </aside>
 </section>
 
 <section>
   <div class="tag gfx">조명 · 4</div>
-  <h2>환경광 — 그늘의 색을 정하는 값</h2>
+  <h2>거리에 따른 감쇠 — 역제곱 법칙</h2>
   <div class="cols">
     <div>
-      <table style="font-size:.7em">
-        <tr><th>Source</th><th>결과</th></tr>
-        <tr><td>Skybox</td><td>하늘 색이 그늘에 반영</td></tr>
-        <tr><td>Gradient</td><td>하늘·수평·바닥 3색 지정</td></tr>
-        <tr><td>Color</td><td>단색 · 가장 단순</td></tr>
-      </table>
-      <p class="xs muted" style="margin-top:.6em">Lighting 창 → Environment</p>
+      <div class="math-block">\[ E \propto \frac{1}{d^{2}} \]</div>
+      <p class="small">E : 표면에 닿는 빛의 세기 · d : 광원까지 거리</p>
+      <p class="small"><b>손계산</b> — 1 m 에서 밝기 100 일 때<br>
+      2 m : \(100 \times \tfrac{1}{4} = 25\)<br>
+      3 m : \(100 \times \tfrac{1}{9} \approx 11\)</p>
     </div>
     <div>
-      <div class="key">
-        <p class="small">환경광 = 간접광의 가장 거친 근사<br>
-        값 0 → <b>그늘이 완전한 검정</b> · 형태 판독 불가</p>
+      <div class="analogy" style="margin-top:.2em">
+        <p><b>스프레이 페인트</b> : 벽 가까이서 뿌리면 작은 원에 진하게 · 2배 멀리서 뿌리면 원의 지름 2배·넓이 4배 → 같은 양의 페인트가 퍼져 <b>농도 1/4</b></p>
       </div>
-      <p class="small trap-txt" style="margin-top:.7em">
-        실외 그늘이 푸른 이유 : 하늘 전체가 광원 역할
-      </p>
     </div>
   </div>
-  <div class="note">모바일·VR 에서 환경광 설정만으로 분위기의 절반 결정</div>
+  <div class="key">
+    <p class="small">이유 : 빛이 공 모양으로 퍼짐 → 같은 에너지가 구 표면 넓이 \(4\pi d^{2}\) 에 나뉨 → 거리 2배면 넓이 4배 · 밝기 1/4<br>
+    Directional 에 감쇠가 없는 이유 : 태양까지 약 1억 5천만 km → 방 안에서 몇 m 움직여도 거리 비율 변화 ≈ 0</p>
+  </div>
+  <p class="small muted">Unity 의 Range : 이 거리 밖은 계산 생략 · 경계 근처에서 0 으로 부드럽게 줄이는 설정 — 역제곱 곡선 자체와 별개</p>
+  <aside class="notes">
+    - 스프레이 비유 : 멀리서 뿌리면 넓게 퍼지면서 옅어짐 → 빛도 똑같이 넓이 4배에 나뉨
+    - 손계산 : 100 → 25 → 11, 거리 3배인데 밝기는 1/9 로 급격히 감소
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">조명 · 5</div>
+  <h2>환경광 — 그늘의 색을 정하는 값</h2>
+  <dl class="terms">
+    <dt>간접광<small>Indirect light</small></dt><dd>광원에서 바로 오지 않고 벽·바닥·하늘에 한 번 이상 튕겨서 오는 빛</dd>
+    <dt>환경광<small>Ambient</small></dt><dd>간접광을 <b>«모든 방향에서 고르게 오는 빛 한 덩어리»</b> 로 단순화한 값 — 가장 거친 근사</dd>
+  </dl>
+  <div class="cols">
+    <div>
+      <table style="font-size:.66em">
+        <tr><th>Source (Lighting 창 → Environment)</th><th>결과</th></tr>
+        <tr><td>Skybox</td><td>하늘 그림의 색이 그늘에 반영</td></tr>
+        <tr><td>Gradient</td><td>하늘·수평선·바닥 3색 지정</td></tr>
+        <tr><td>Color</td><td>단색 · 가장 단순</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="analogy" style="margin-top:.4em">
+        <p><b>맑은 날 건물 그늘</b> : 해가 직접 안 비쳐도 그늘 속 글씨가 읽힘 → 하늘 전체가 거대한 푸른 조명 역할 → 그래서 실외 그늘은 푸르스름</p>
+      </div>
+    </div>
+  </div>
+  <div class="key">
+    <p class="small">환경광 값 0 → 그늘이 완전한 검정 → 형태 판독 불가 · 모바일·VR 에서는 <b>환경광 설정만으로 분위기의 절반 결정</b></p>
+  </div>
 </section>
 
 <!-- ---------------------------------------------------- 확산반사 -->
@@ -156,101 +222,181 @@
   <aside class="notes">
     - 2주차 내적 슬라이드를 띄워 놓고 비교
     - 핵심 질문 : "왜 하필 코사인인가" → 빛다발 폭 ÷ 표면 폭
+    - 손전등 비유 미리 : 바닥을 비스듬히 비추면 빛이 길쭉하게 퍼지며 어두워짐
     - 90° 에서 0 이 되는 지점 짚기
   </aside>
 </section>
 
 <section>
   <div class="tag gfx">반사 · 2</div>
-  <h2>Lambert 확산반사 계산</h2>
-  <pre><code class="language-csharp" data-trim>// 표면 법선 N, 광원 방향 L (둘 다 정규화)
-float ndotl = max(0.0, dot(N, L));          // ← 2주차 내적
-float3 diffuse = albedo * lightColor * ndotl * intensity;
-</code></pre>
-  <table style="font-size:.7em;margin-top:.5em">
-    <tr><th>각도</th><th>N·L</th><th>밝기</th></tr>
-    <tr><td>정면 0°</td><td>1.00</td><td>최대</td></tr>
-    <tr><td>60°</td><td>0.50</td><td>절반</td></tr>
-    <tr><td>90° 이상</td><td class="trap-txt">음수 → 0</td><td>빛 미수광</td></tr>
-  </table>
-  <div class="key" style="margin-top:.8em">
-    <p class="small">확산반사의 특징 : <b>보는 방향과 무관</b> · 카메라를 돌려도 밝기 동일</p>
+  <h2>왜 기울면 어두워지는가</h2>
+  <div class="analogy">
+    <p><b>비스듬히 비춘 손전등</b> : 바닥을 수직으로 비추면 작고 밝은 동그라미 · 비스듬히 비추면 길쭉한 타원으로 퍼지며 어두워짐 → 같은 양의 빛이 더 넓은 바닥에 나뉘기 때문</p>
   </div>
+  <p class="small">표면이 기울어짐 → 같은 빛다발이 덮는 면적 증가 (60° 에서 2배) → 단위 면적당 빛 감소 (1/2) → 감소 비율 = <b>cos θ</b> → 이 값을 내적 한 번으로 계산</p>
+  <div class="math-block">\[ \mathbf{N}\cdot\mathbf{L} = |\mathbf{N}|\,|\mathbf{L}|\cos\theta = \cos\theta \quad (\text{두 화살표 모두 길이 } 1) \]</div>
+  <dl class="terms">
+    <dt>광원 방향 L<small>Light vector</small></dt><dd>표면에서 <b>광원 쪽</b>을 가리키는 길이 1 화살표 — 빛이 날아오는 방향의 반대</dd>
+    <dt>정규화<small>Normalize</small></dt><dd>방향은 그대로 두고 길이만 1 로 맞추는 계산 → 내적이 곧 cos θ 가 되도록</dd>
+  </dl>
+  <p class="small">확산반사의 특징 : 식에 카메라 위치가 없음 → <b>어디서 봐도 밝기 동일</b> → 종이·벽·천의 «무광» 느낌</p>
+  <aside class="notes">
+    - 손전등을 실제로 꺼내 책상을 수직/비스듬히 비춰 보이면 가장 좋음
+    - "빛의 양은 그대로인데 퍼지는 넓이가 커진다" → 넓이가 2배면 밝기 1/2 → 그 비율이 코사인
+  </aside>
 </section>
 
 <section>
   <div class="tag gfx">반사 · 3</div>
-  <h2>법선 — 조명 계산의 기준축</h2>
+  <h2>Lambert 확산반사 — 손계산</h2>
+  <pre><code class="language-csharp" data-trim>// 표면 법선 N, 광원 방향 L (둘 다 정규화)
+float ndotl = max(0.0, dot(N, L));          // ← 2주차 내적
+float3 diffuse = albedo * lightColor * ndotl * intensity;
+</code></pre>
   <div class="cols">
     <div>
-      <p class="small">면의 법선 = 세 정점의 <b>외적</b> (2주차)</p>
-      <div class="eq">N = (B−A) × (C−A)</div>
-      <p class="small" style="margin-top:.7em">정점 법선 : 인접 면 법선의 평균 → 부드러운 음영</p>
+      <p class="small"><b>바닥의 한 점</b><br>
+      N = (0, 1, 0) — 바닥이 위를 봄<br>
+      L = (0.6, 0.8, 0) — 비스듬한 위쪽 광원<br>
+      길이 확인 : \(\sqrt{0.6^2+0.8^2} = 1\)</p>
     </div>
     <div>
-      <div class="key trap">
-        <p class="small">법선은 <b>방향 벡터</b> (w = 0)<br>
-        이동 변환 적용 시 조명 붕괴 — 2주차 <code>MultiplyVector</code></p>
-      </div>
-      <p class="xs muted" style="margin-top:.7em">
-        비균등 스케일 적용 시 법선 재계산 필요<br>
-        (역전치 행렬) · 엔진이 자동 처리
-      </p>
+      <p class="small">\(\mathbf{N}\cdot\mathbf{L} = 0{\times}0.6 + 1{\times}0.8 + 0{\times}0 = 0.8\)<br>
+      albedo 빨강 (0.8, 0.2, 0.2) · 흰 광원 세기 1<br>
+      diffuse = <b>(0.64, 0.16, 0.16)</b> — 정면 대비 80% 밝기</p>
     </div>
   </div>
-  <div class="note">같은 메시라도 법선이 틀어지면 재질·조명 설정이 무의미</div>
+  <div class="key trap">
+    <p class="small">광원이 바닥 아래 : L = (0, −1, 0) → N·L = −1 → <code>max(0, …)</code> 로 0 처리<br>
+    음수 = 빛이 면의 뒤쪽에서 옴 → 이 면은 빛을 못 받음 → «음수 빛» 으로 어두워지는 오류 방지</p>
+  </div>
+  <aside class="notes">
+    - 칠판에 N, L 화살표를 그리고 같이 곱셈
+    - 0.8 이라는 숫자가 곧 "정면 대비 80%" 라는 점 강조
+  </aside>
 </section>
 
 <section>
   <div class="tag gfx">반사 · 4</div>
-  <h2>정반사 — 보는 방향에 따른 하이라이트</h2>
-  <div class="eq">H = normalize(L + V)        <span class="cm">하프벡터 : L 과 V 의 중간</span>
-
-spec = pow(max(0, dot(N, H)), shininess)</div>
-  <div class="cols" style="margin-top:.8em">
-    <div class="card">
-      <h4>shininess 낮음</h4>
-      <p class="xs">넓고 흐린 하이라이트 · 무광 표면</p>
+  <h2>법선 — 조명 계산의 기준축</h2>
+  <div class="analogy">
+    <p><b>면에 수직으로 꽂은 이쑤시개</b> : 이쑤시개가 가리키는 쪽 = 면이 바라보는 쪽 · 조명 계산은 «이 이쑤시개와 빛이 이루는 각도» 로 결정</p>
+  </div>
+  <div class="cols">
+    <div>
+      <p class="small">면 법선 = 세 꼭짓점으로 만든 두 변의 <span class="t">외적</span> (두 화살표에 동시에 수직인 화살표를 구하는 계산 · 2주차)</p>
+      <div class="math-block">\[ \mathbf{N} = (B-A)\times(C-A) \]</div>
     </div>
-    <div class="card gfx">
-      <h4>shininess 높음</h4>
-      <p class="xs">좁고 선명한 하이라이트 · 광택 표면</p>
+    <div>
+      <p class="small"><b>손계산</b> : A = (0,0,0) · B = (0,0,1) · C = (1,0,0)<br>
+      \((0,0,1)\times(1,0,0) = (0,\,1,\,0)\) → 바닥이 위를 향함<br>
+      B·C 순서를 바꾸면 (0, −1, 0) → <b>뒤집힌 면</b></p>
     </div>
   </div>
-  <div class="key" style="margin-top:.8em">
-    <p class="small">확산반사와의 차이 : <b>카메라 위치 V 가 식에 포함</b><br>
-    고개를 돌리면 하이라이트 이동 → VR 에서 재질감의 주된 단서</p>
-  </div>
+  <p class="small"><span class="t">정점 법선</span> : 한 꼭짓점을 공유하는 면들의 법선 평균 → 면 경계에서 밝기가 매끄럽게 이어짐 → 각진 다면체도 둥근 공처럼 보임</p>
 </section>
 
 <section>
   <div class="tag gfx">반사 · 5</div>
-  <h2>최종 색의 구성</h2>
-  <div class="eq">최종 색 = 환경광 + 확산반사 + 정반사
+  <h2>법선을 다룰 때의 함정</h2>
+  <dl class="terms">
+    <dt>동차좌표<small>Homogeneous coord.</small></dt><dd>(x, y, z) 에 네 번째 값 w 를 붙인 표기 — <b>w = 1 : 위치</b> (이동 적용) · <b>w = 0 : 방향</b> (이동 무시) · 2주차</dd>
+    <dt>역전치 행렬<small>Inverse transpose</small></dt><dd>늘이기·누르기 변환 후 법선을 다시 면에 수직으로 맞추는 보정 행렬</dd>
+  </dl>
+  <div class="key trap">
+    <p class="small">물체를 옆으로 옮겨도 면이 보는 방향은 그대로 → 법선에 이동을 적용하면 방향이 틀어짐 → 조명 붕괴<br>
+    → 법선 변환은 방향 전용 : Unity <code>MultiplyVector</code> (w = 0) · <code>MultiplyPoint</code> 사용 금지</p>
+  </div>
+  <div class="analogy">
+    <p><b>찰흙 공을 위에서 눌러 납작하게</b> : 꽂아 둔 이쑤시개도 같은 비율로 눌러 기울이면 더 이상 면에 수직이 아님 → 별도 보정(역전치) 필요</p>
+    <p>Unity 기본 셰이더는 자동 처리 · 커스텀 셰이더에서 법선을 직접 변환할 때만 주의</p>
+  </div>
+  <p class="small">같은 메시라도 법선이 틀어지면 재질·조명 설정이 무의미</p>
+</section>
 
-        ambient  +  albedo·(N·L)  +  specular·(N·H)<span class="cm">ⁿ</span></div>
-  <table style="font-size:.7em;margin-top:.7em">
+<section>
+  <div class="tag gfx">반사 · 6</div>
+  <h2>정반사 — 보는 방향에 따른 하이라이트</h2>
+  <div class="analogy">
+    <p><b>비 온 뒤 젖은 아스팔트의 가로등 반사</b> : 걸어가면 반짝이는 자리가 따라 움직임 → 반짝임 = 광원·표면·내 눈의 각도가 거울 반사 조건에 맞는 자리에서만 보임</p>
+  </div>
+  <dl class="terms">
+    <dt>시선 방향 V<small>View vector</small></dt><dd>표면에서 카메라(눈) 쪽을 가리키는 길이 1 화살표</dd>
+    <dt>하프벡터 H<small>Half vector</small></dt><dd>L 과 V 의 <b>정확히 가운데</b> 방향 — 면이 이 방향을 보면 빛이 거울처럼 눈으로 튕겨 옴</dd>
+    <dt>광택 지수 s<small>Shininess</small></dt><dd>하이라이트를 얼마나 좁게 모을지 정하는 거듭제곱 숫자</dd>
+  </dl>
+  <div class="math-block">\[ \mathbf{H} = \frac{\mathbf{L}+\mathbf{V}}{|\mathbf{L}+\mathbf{V}|} \qquad \text{spec} = \max(0,\ \mathbf{N}\cdot\mathbf{H})^{\,s} \]</div>
+  <aside class="notes">
+    - 젖은 길 비유 : 걸으면 가로등 반짝임이 나를 따라옴 → 정반사는 "내 눈 위치" 가 식에 들어감
+    - N·H : 면이 거울 조건(가운데 방향)을 얼마나 정확히 보고 있나
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">반사 · 7</div>
+  <h2>광택 지수가 하이라이트 크기를 정하는 원리</h2>
+  <div class="cols">
+    <div>
+      <table style="font-size:.7em">
+        <tr><th>N·H (거울 조건과 일치도)</th><th>s = 8</th><th>s = 64</th></tr>
+        <tr><td>1.00 (정확히 일치)</td><td>1.00</td><td>1.00</td></tr>
+        <tr><td>0.95</td><td>약 0.66</td><td class="trap-txt">약 0.04</td></tr>
+        <tr><td>0.90</td><td>약 0.43</td><td class="trap-txt">약 0.001</td></tr>
+      </table>
+      <p class="small">손계산 : \(0.9^{8} \approx 0.43\) · \(0.9^{64} \approx 0.001\)</p>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:.6em">
+        <h4>s 낮음</h4>
+        <p class="small">조금 벗어나도 값이 남음 → <b>넓고 흐린</b> 하이라이트 · 무광 플라스틱</p>
+      </div>
+      <div class="card gfx">
+        <h4>s 높음</h4>
+        <p class="small">조금만 벗어나도 0 → <b>좁고 선명한</b> 하이라이트 · 광택 금속·유리</p>
+      </div>
+    </div>
+  </div>
+  <div class="key">
+    <p class="small">확산반사와의 차이 : <b>카메라 위치 V 가 식에 포함</b> → 고개를 돌리면 하이라이트 이동<br>
+    → VR 에서 재질감의 주된 단서 · 머리를 움직일 때 하이라이트가 따라 움직여야 «진짜 광택» 으로 지각</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">반사 · 8</div>
+  <h2>최종 색의 구성</h2>
+  <div class="math-block">\[ C = \underbrace{C_{\text{amb}}}_{\text{환경광}} + \underbrace{\text{albedo}\cdot\max(0,\mathbf{N}\cdot\mathbf{L})}_{\text{확산반사}} + \underbrace{k_s\cdot\max(0,\mathbf{N}\cdot\mathbf{H})^{s}}_{\text{정반사}} \]</div>
+  <p class="small"><b>손계산</b> (흰 광원 세기 1 · 한 채널) : 환경광 0.1 + albedo 0.8 × N·L 0.8 + 정반사 세기 0.5 × 0.43 = 0.1 + 0.64 + 0.215 ≈ <b>0.96</b></p>
+  <table style="font-size:.7em">
     <tr><th>항</th><th>담당</th><th>빠졌을 때</th></tr>
     <tr><td>환경광</td><td>간접광 근사</td><td>그늘이 완전한 검정</td></tr>
-    <tr><td>확산반사</td><td>물체의 형태</td><td>면 구분 소멸</td></tr>
+    <tr><td>확산반사</td><td>물체의 형태</td><td>면 구분 소멸 · 납작한 실루엣</td></tr>
     <tr><td>정반사</td><td>재질감 · 광택</td><td>전부 종이처럼 보임</td></tr>
   </table>
+  <div class="key">
+    <p class="small">세 항 = 세 가지 질문 : 그늘은 얼마나 밝은가 · 이 면이 빛을 정면으로 받는가 · 이 면이 거울 조건에 맞는가<br>
+    합이 1 을 넘으면 화면에서는 흰색으로 잘림 → 밝기 조절은 광원 세기와 함께 판단</p>
+  </div>
 </section>
 
 <!-- ---------------------------------------------------- PBR -->
 <section>
   <div class="tag gfx">PBR · 1</div>
-  <h2>렌더링 방정식</h2>
-  <div class="eq">L<span class="cm">o</span>(x, ω<span class="cm">o</span>) = L<span class="cm">e</span> + ∫<span class="cm">Ω</span> f(x, ω<span class="cm">i</span>, ω<span class="cm">o</span>) · L<span class="cm">i</span>(x, ω<span class="cm">i</span>) · (N·ω<span class="cm">i</span>) dω<span class="cm">i</span>
-
-<span class="cm">나가는 빛 = 스스로 내는 빛 + 사방에서 들어온 빛의 합</span></div>
-  <div class="key" style="margin-top:.9em">
-    <p>적분 기호의 의미 : <b>반구 전체 방향에서 들어오는 빛을 모두 더함</b><br>
-    실시간 렌더링 = 이 적분의 근사 과정</p>
+  <h2>렌더링 방정식 — 모든 조명 모델의 원본</h2>
+  <div class="math-block">\[ L_o(x,\omega_o) = L_e + \int_{\Omega} f(x,\omega_i,\omega_o)\, L_i(x,\omega_i)\,(\mathbf{N}\cdot\omega_i)\, d\omega_i \]</div>
+  <dl class="terms">
+    <dt>\(L_o\) · \(L_e\)</dt><dd>눈으로 나가는 빛 · 표면이 스스로 내는 빛 (조명 기구·화면 등)</dd>
+    <dt>\(\int_{\Omega}\)</dt><dd>표면 위 <b>반구(Ω)의 모든 방향</b>에서 들어오는 빛을 빠짐없이 더하기</dd>
+    <dt>\(f\) · \(L_i\) · \(\mathbf{N}\cdot\omega_i\)</dt><dd>재질 규칙(BRDF) · 그 방향에서 들어온 빛 · Lambert 의 기울기 보정</dd>
+  </dl>
+  <div class="analogy">
+    <p><b>장보기 영수증 합계</b> : 품목(들어오는 방향)마다 수량(들어온 빛) × 단가(재질 규칙 f) × 할인율(기울기 cos) → 전부 더한 총액 = 눈으로 나가는 빛 · 적분 = 품목을 무한히 잘게 나눈 영수증</p>
   </div>
-  <p class="small muted" style="margin-top:.7em">
-    Lambert · Blinn-Phong · PBR 의 차이 : 가운데 f 를 무엇으로 두는가
-  </p>
+  <p class="small">Lambert · Blinn-Phong · PBR 의 차이 = <b>가운데 f 를 무엇으로 두는가</b> · 실시간 렌더링 = 이 합계를 몇 개 방향만 골라 근사</p>
+  <aside class="notes">
+    - 영수증 비유 : 사방에서 들어온 빛 하나하나에 재질 단가와 기울기 할인을 곱해 합산
+    - 앞에서 배운 Lambert·정반사는 이 영수증에서 "광원 방향 몇 줄만" 계산한 간이 영수증
+  </aside>
 </section>
 
 <section>
@@ -258,58 +404,134 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
   <h2>BRDF — 반사가 퍼지는 모양</h2>
   <img src="../../figures/out/w05-brdf-lobe.svg" class="fig" alt="확산·낮은 거칠기·높은 거칠기의 반사 로브 비교">
   <aside class="notes">
-    - 도입 질문의 답 : 재질 파라미터가 같아도 들어오는 빛의 분포가 다르면 로브 결과가 달라짐
+    - 왼쪽 : 사방으로 고르게 (종이) · 가운데 : 거울 방향에 몰림 (젖은 바닥) · 오른쪽 : 넓게 번짐 (무광 플라스틱)
     - 로브 넓이 = 에너지 총량 · 좁아지면 밝아지고 넓어지면 흐려짐 (에너지 보존)
+    - 다음 장 호스 노즐 비유로 연결
   </aside>
 </section>
 
 <section>
   <div class="tag gfx">PBR · 3</div>
-  <h2>PBR 파라미터</h2>
-  <table style="font-size:.68em">
-    <tr><th>이름</th><th>범위</th><th>의미</th><th>잘못 썼을 때</th></tr>
-    <tr><td class="gfx-txt"><b>Albedo</b></td><td>색</td><td>확산반사 색</td><td>조명과 무관하게 떠 보임</td></tr>
-    <tr><td class="gfx-txt"><b>Metallic</b></td><td>0 또는 1</td><td>금속 여부</td><td class="trap-txt">중간값 남용 → 재질 불명</td></tr>
-    <tr><td class="gfx-txt"><b>Smoothness</b></td><td>0 ~ 1</td><td>표면 매끈함</td><td>전부 플라스틱 질감</td></tr>
-    <tr><td class="gfx-txt"><b>Normal map</b></td><td>탄젠트 공간</td><td>법선 교란</td><td>6주차에서 상세</td></tr>
-    <tr><td class="gfx-txt"><b>Occlusion</b></td><td>0 ~ 1</td><td>틈새 그늘</td><td>입체감 저하</td></tr>
-  </table>
-  <div class="key" style="margin-top:.9em">
-    <p class="small">금속의 특징 : <b>확산반사 거의 0</b> · albedo 가 반사색 역할<br>
-    비금속 : 확산반사 존재 · 정반사는 무채색</p>
+  <h2>BRDF 와 로브 — 쉬운 말로</h2>
+  <dl class="terms">
+    <dt>BRDF<small>양방향 반사 분포 함수</small></dt><dd>재질의 <b>«반사 규칙표»</b> — 어느 방향에서 들어온 빛을 어느 방향으로 얼마나 돌려보내는지</dd>
+    <dt>로브<small>Lobe</small></dt><dd>반사된 빛이 퍼지는 모양을 그린 풍선꼴 도형 — 길게 뻗은 쪽으로 빛이 많이 나감</dd>
+    <dt>거칠기<small>Roughness</small></dt><dd>표면의 미세한 울퉁불퉁함 — 클수록 로브가 넓어짐 · Unity Smoothness = 1 − Roughness</dd>
+    <dt>에너지 보존<small>Energy conservation</small></dt><dd>표면이 받은 빛보다 더 많은 빛을 내보낼 수 없다는 원칙</dd>
+  </dl>
+  <div class="analogy">
+    <p><b>호스 노즐</b> : 나오는 물의 양은 그대로 · 노즐을 좁히면 가늘고 센 물줄기 (작고 강한 하이라이트) · 넓히면 넓고 약한 분무 (크고 흐린 하이라이트)</p>
+    <p>비유의 한계 : 실제 표면은 받은 빛 일부를 흡수 → 나가는 총량 ≤ 들어온 양</p>
   </div>
 </section>
 
 <section>
-  <div class="tag lab">PBR · 4</div>
+  <div class="tag gfx">PBR · 4</div>
+  <h2>PBR 파라미터</h2>
+  <p class="small"><span class="t">PBR</span> (Physically Based Rendering, 물리 기반 렌더링) : 실제 물질의 측정값 범위로 재질을 정하는 방식 → 조명을 바꿔도 그럴듯한 결과 유지</p>
+  <table style="font-size:.66em">
+    <tr><th>이름</th><th>범위</th><th>의미</th><th>잘못 썼을 때</th></tr>
+    <tr><td class="gfx-txt"><b>Albedo</b></td><td>색</td><td>조명을 뺀 바탕색</td><td>조명과 무관하게 떠 보임</td></tr>
+    <tr><td class="gfx-txt"><b>Metallic</b></td><td>0 또는 1</td><td>금속 여부</td><td class="trap-txt">중간값 남용 → 재질 불명</td></tr>
+    <tr><td class="gfx-txt"><b>Smoothness</b></td><td>0 ~ 1</td><td>표면 매끈함 (1 − 거칠기)</td><td>전부 플라스틱 질감</td></tr>
+    <tr><td class="gfx-txt"><b>Normal map</b></td><td>RGB = 방향</td><td>표면 요철 방향을 그림으로 저장</td><td>6주차에서 상세</td></tr>
+    <tr><td class="gfx-txt"><b>Occlusion</b></td><td>0 ~ 1</td><td>틈새·구석에 빛이 덜 드는 정도</td><td>입체감 저하</td></tr>
+  </table>
+  <div class="key">
+    <p class="small">같은 빨간 albedo 로 만드는 세 물체 : Metallic 0 · Smoothness 0.2 → <b>고무공</b> · Metallic 0 · Smoothness 0.9 → <b>당구공</b> · Metallic 1 · Smoothness 0.9 → <b>빨간 크롬 장식</b></p>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">PBR · 5</div>
+  <h2>금속과 비금속</h2>
+  <div class="analogy">
+    <p><b>금반지 vs 빨간 플라스틱 공</b> : 금반지에 비친 형광등은 금색으로 물듦 · 빨간 공의 하이라이트는 흰색 → 금속은 반사광에 자기 색을 입힘 · 비금속은 반사광이 무색</p>
+  </div>
+  <div class="cols">
+    <div class="card gfx">
+      <h4>금속 (metallic = 1)</h4>
+      <p class="small">확산반사 거의 0 → albedo 가 <b>반사광의 색</b> 역할 → 금·구리 특유의 색 입은 반사</p>
+    </div>
+    <div class="card">
+      <h4>비금속 (metallic = 0)</h4>
+      <p class="small">몸체 색 = 확산반사 (albedo) · 정반사 = 무채색, 들어온 빛의 약 4% 내외</p>
+    </div>
+  </div>
+  <div class="key trap">
+    <p class="small">metallic 0.5 같은 중간값 → 현실에 없는 «반쯤 금속» → 재질 불명<br>
+    중간값은 녹슨 경계·벗겨진 페인트 같은 <b>전이 구간</b>에만 사용</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">PBR · 6</div>
   <h2>값 설정 기준</h2>
   <ul class="small">
-    <li>albedo : sRGB 기준 <b>50 ~ 243</b> 범위 · 순수 검정·순수 흰색 회피</li>
-    <li>metallic : <b>0 또는 1</b> · 중간값은 녹슨 경계 등 전이 구간에만</li>
-    <li>smoothness : 같은 재질이라도 사용 흔적에 따라 변화 → 텍스처로 분포</li>
-    <li>금속에 어두운 albedo 지정 시 <b>빛을 거의 반사하지 않는 물질</b>로 계산</li>
+    <li>albedo : sRGB 값 <b>약 50 ~ 243</b> (비금속 기준 · Unity 권장 범위) → 숯처럼 검은 물질도 빛을 몇 % 는 반사 · 갓 내린 눈도 100% 반사는 못 함 → 0·255 는 현실에 없는 표면</li>
+    <li>metallic : <b>0 또는 1</b> · 중간값은 전이 구간에만</li>
+    <li>smoothness : 같은 재질이라도 손때·긁힘에 따라 다름 → 한 값이 아닌 텍스처로 분포</li>
+    <li>금속에 어두운 albedo → 반사광 자체가 어두움 → <b>빛을 거의 반사하지 않는 이상한 금속</b></li>
   </ul>
-  <div class="key" style="margin-top:.9em">
-    <p class="small">PBR 의 전제 : <b>물리 범위 안의 값</b> 입력<br>
-    범위를 벗어난 값 → 조명을 바꿀 때마다 결과 예측 불가</p>
+  <div class="key">
+    <p class="small">PBR 의 전제 : <b>물리 범위 안의 값</b> 입력 → 범위를 벗어난 값 → 조명을 바꿀 때마다 결과 예측 불가<br>
+    → AI 에게 재질 생성을 요청할 때 이 범위를 <b>제약 조건으로 명시</b></p>
   </div>
-  <div class="note">AI 에게 재질 생성을 요청할 때 이 범위를 제약으로 명시</div>
+  <p class="small muted">sRGB 50 이 실제 반사율 몇 % 인지 → 색공간 파트에서 손계산</p>
 </section>
 
 <!-- ---------------------------------------------------- 색공간 -->
 <section>
-  <div class="tag trap">색공간 · 1 ★</div>
+  <div class="tag trap">색공간 · 1</div>
+  <h2>같은 숫자, 두 가지 눈금</h2>
+  <dl class="terms">
+    <dt>sRGB<small>standard RGB</small></dt><dd>이미지 파일·모니터의 표준 눈금 — 사람 눈이 어두운 쪽을 더 잘 구분 → <b>어두운 쪽에 숫자를 촘촘히 배정</b></dd>
+    <dt>감마<small>Gamma</small></dt><dd>그 눈금과 실제 빛 사이의 휘어진 변환 곡선 (지수 약 2.2)</dd>
+    <dt>선형<small>Linear</small></dt><dd>숫자 2배 = 실제 빛 에너지 2배인 곧은 눈금 — 빛을 더하고 곱하는 계산의 기준</dd>
+  </dl>
+  <div class="analogy">
+    <p><b>볼륨 노브 눈금 vs 스피커의 실제 출력</b> : 노브 눈금은 «귀에 들리는 크기» 에 맞춰 나눔 → 눈금 50% ≠ 실제 소리 에너지 50% · 두 스피커 소리를 합치는 계산은 눈금이 아닌 실제 에너지끼리 해야 정확</p>
+  </div>
+  <p class="small">그래서 : 텍스처는 눈 기준(sRGB)으로 저장 → 계산 직전 선형으로 변환 → 조명 계산 → 화면 출력 때 다시 sRGB</p>
+  <aside class="notes">
+    - 볼륨 비유 : 노브 눈금은 귀 기준, 실제 에너지는 따로 → 그림 파일 숫자는 눈 기준, 빛 에너지는 따로
+    - 계산(더하기·곱하기)은 반드시 에너지 쪽에서
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">색공간 · 2 ★</div>
   <h2>저장된 숫자와 실제 빛의 양</h2>
   <img src="../../figures/out/w05-gamma-linear.svg" class="fig" alt="sRGB 저장값과 선형 빛의 양, Unity 처리 순서">
   <aside class="notes">
-    - 중간 회색 0.5 가 실제로는 0.22 라는 점에서 대부분 놀람
-    - 사람 눈의 비선형 반응 때문에 저장 포맷이 비선형
+    - 중간 회색 0.5 가 실제로는 약 0.22 라는 점에서 대부분 놀람
+    - 사람 눈의 비선형 반응 때문에 저장 포맷이 비선형 (볼륨 노브 비유 재확인)
     - 조명 계산은 물리량 영역에서만 성립
   </aside>
 </section>
 
 <section>
-  <div class="tag trap">색공간 · 2</div>
+  <div class="tag trap">색공간 · 3</div>
+  <h2>손계산 — 회색 0.5 와 두 광원</h2>
+  <div class="math-block">\[ C_{\text{linear}} \approx C_{\text{sRGB}}^{\,2.2} \qquad 0.5^{2.2} \approx 0.22 \]</div>
+  <div class="cols">
+    <div class="card lab">
+      <h4>Linear 에서 계산 (올바름)</h4>
+      <p class="small">실제 빛끼리 합산 : 0.22 + 0.22 = 0.44 (빛 2배)<br>
+      화면용 변환 : \(0.44^{1/2.2} \approx 0.7\) → 밝아지되 여유 유지</p>
+    </div>
+    <div class="card trap">
+      <h4>Gamma 에서 계산 (틀림)</h4>
+      <p class="small">눈금 숫자끼리 합산 : 0.5 + 0.5 = 1.0<br>
+      → 바로 흰색 포화 · 실제 빛 2배를 화면에서 과장</p>
+    </div>
+  </div>
+  <p class="small" style="margin-top:.8em"><b>albedo 범위 해석</b> : sRGB 50 → 50/255 ≈ 0.20 → 선형 약 0.03 (반사율 약 3%) · sRGB 243 → 0.95 → 선형 약 0.90 (반사율 약 90%)</p>
+  <p class="small muted">2.2 제곱은 근사 · 실제 sRGB 곡선은 어두운 구간이 직선인 조금 다른 식 — 결과 차이 1~2% 수준</p>
+</section>
+
+<section>
+  <div class="tag trap">색공간 · 4</div>
   <h2>색공간 설정의 영향</h2>
   <div class="cols">
     <div>
@@ -324,31 +546,31 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
     <div>
       <div class="key trap">
         <p class="small">확인 위치 : <b>Project Settings → Player → Color Space</b><br>
-        URP 템플릿 기본값 Linear · 구형 프로젝트는 Gamma 유지 가능</p>
+        URP 템플릿 기본값 Linear · 구형 프로젝트·일부 예제는 Gamma 인 경우 존재</p>
       </div>
-      <p class="xs muted" style="margin-top:.7em">
-        학기 중간에 전환 시 모든 머티리얼의 밝기 재조정 필요<br>
-        → 프로젝트 시작 시점에 결정
-      </p>
+      <div class="key">
+        <p class="small">학기 중간에 전환 → 모든 머티리얼·조명의 밝기 재조정 필요 → <b>프로젝트 시작 시점에 Linear 로 결정</b></p>
+      </div>
     </div>
   </div>
+  <p class="small">이유 : PBR 의 값 범위(albedo 50~243 등)는 선형 계산을 전제로 만든 기준 → Gamma 에서 계산하면 같은 값이 다른 밝기로 나옴</p>
 </section>
 
 <section>
-  <div class="tag trap">색공간 · 3</div>
+  <div class="tag trap">색공간 · 5</div>
   <h2>텍스처별 sRGB 설정</h2>
   <table style="font-size:.7em">
     <tr><th>텍스처</th><th>sRGB 체크</th><th>담는 내용</th></tr>
     <tr><td>Albedo · Emission</td><td class="lab-txt"><b>켬</b></td><td>사람이 보는 색</td></tr>
-    <tr><td>Normal map</td><td class="trap-txt"><b>끔</b></td><td>방향 데이터</td></tr>
+    <tr><td>Normal map</td><td class="trap-txt"><b>끔</b> (Texture Type = Normal map 으로 지정)</td><td>방향 데이터</td></tr>
     <tr><td>Metallic · Smoothness</td><td class="trap-txt"><b>끔</b></td><td>재질 수치</td></tr>
     <tr><td>Occlusion · Mask</td><td class="trap-txt"><b>끔</b></td><td>가림 비율</td></tr>
   </table>
-  <div class="key trap" style="margin-top:1em">
+  <div class="key trap">
     <p class="small">판단 기준 : <b>사람이 보는 색인가, 계산용 숫자인가</b><br>
-    숫자 맵에 sRGB 적용 → 값이 변형된 채 계산 → 재질이 미묘하게 어긋남</p>
+    예 : smoothness 맵 0.5 에 sRGB 체크 → 계산에 약 0.22 로 들어감 → 의도보다 훨씬 거친 표면</p>
   </div>
-  <div class="note">AI 생성 머티리얼에서 자주 누락되는 설정 · 임포트 직후 확인</div>
+  <p class="small">AI 생성 머티리얼에서 자주 누락되는 설정 → <b>텍스처 임포트 직후 Inspector 에서 확인</b></p>
 </section>
 
 <!-- ---------------------------------------------------- 전역조명 -->
@@ -358,18 +580,21 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
   <div class="cols">
     <div class="card gfx">
       <h4>직접광</h4>
-      <p class="xs">광원 → 표면 → 눈<br>
-      위에서 계산한 Lambert · 정반사 항</p>
+      <p class="small">광원 → 표면 → 눈<br>
+      지금까지 계산한 Lambert · 정반사 항</p>
     </div>
     <div class="card vr">
       <h4>간접광</h4>
-      <p class="xs">광원 → 빨간 벽 → 흰 바닥 → 눈<br>
-      바닥이 붉게 물드는 현상 (color bleeding)</p>
+      <p class="small">광원 → 빨간 벽 → 흰 바닥 → 눈<br>
+      <span class="t">색 번짐</span> (color bleeding) : 바닥이 벽 색으로 물듦</p>
     </div>
   </div>
-  <div class="key" style="margin-top:1em">
-    <p>실내 밝기의 대부분이 간접광 · 직접광만 계산 시 <b>무대 조명 같은 인상</b><br>
-    간접광 계산은 비싸므로 <b>미리 구워 두는 방식</b> 사용</p>
+  <div class="analogy">
+    <p><b>빨간 티셔츠와 흰 종이</b> : 햇빛 아래 빨간 옷 가까이 흰 종이를 대면 종이가 분홍빛으로 물듦 → 옷에서 튕긴 빨간 빛 = 간접광</p>
+  </div>
+  <div class="key">
+    <p class="small"><span class="t">전역조명</span> (Global Illumination, GI) : 직접광 + 여러 번 튕긴 간접광까지 계산하는 조명<br>
+    실내 밝기의 상당 부분 = 간접광 → 직접광만 계산 시 <b>무대 조명 같은 인상</b> → 간접광 계산은 비쌈 → <b>미리 구워 두는 방식(베이크)</b></p>
   </div>
 </section>
 
@@ -378,26 +603,71 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
   <h2>실시간 그림자와 베이크의 비용</h2>
   <img src="../../figures/out/w05-bake-vs-realtime.svg" class="fig" alt="실시간 그림자 3개와 베이크 구성의 프레임 예산 비교">
   <aside class="notes">
-    - 3주차 프레임 예산 11.1ms 재확인
+    - 3주차 프레임 예산 11.1ms 재확인 (90Hz → 1000 ÷ 90)
     - 그림자맵 생성은 눈과 무관하게 한 번, 메인 패스는 눈마다
     - 수치는 예시 · 실제 측정은 12주차 프로파일링에서
+    - 다음 장 도시락 비유로 베이크 설명
   </aside>
 </section>
 
 <section>
   <div class="tag lab">전역조명 · 3</div>
   <h2>베이크 구성 요소</h2>
-  <table style="font-size:.68em">
-    <tr><th>요소</th><th>대상</th><th>저장 형태</th><th>한계</th></tr>
-    <tr><td class="lab-txt"><b>라이트맵</b></td><td>움직이지 않는 물체</td><td>텍스처</td><td>물체 이동 시 어긋남</td></tr>
-    <tr><td class="lab-txt"><b>라이트 프로브</b></td><td>움직이는 물체</td><td>공간 격자 샘플</td><td>그림자 미포함</td></tr>
-    <tr><td class="lab-txt"><b>반사 프로브</b></td><td>광택 표면</td><td>큐브맵</td><td>갱신 비용</td></tr>
-  </table>
-  <div class="key lab" style="margin-top:.9em">
-    <p class="small">베이크 전제 조건 : 광원 <b>Mode = Baked</b> · 물체 <b>Static</b> 표시 · <b>Lightmap UV</b> 생성<br>
-    셋 중 하나만 빠져도 결과 미반영</p>
+  <div class="analogy">
+    <p><b>도시락</b> : 조명 계산(요리)을 개발 중에 미리 해서 텍스처(도시락통)에 담아 둠 → 실행 중에는 꺼내 쓰기만 → 빠름 · 대신 메뉴(광원 위치·물체 배치)가 바뀌면 다시 요리(재베이크)</p>
   </div>
-  <div class="note">혼합 조명 : 태양 하나만 실시간, 나머지 전부 베이크 — VR 의 기본 구성</div>
+  <table style="font-size:.64em">
+    <tr><th>요소</th><th>쉬운 뜻</th><th>대상</th><th>한계</th></tr>
+    <tr><td class="lab-txt"><b>라이트맵</b><br><small>Lightmap</small></td><td>빛과 그늘을 미리 칠해 둔 텍스처 — 벽지에 조명을 그려 넣은 것</td><td>움직이지 않는 물체</td><td>물체 이동 시 어긋남</td></tr>
+    <tr><td class="lab-txt"><b>라이트 프로브</b><br><small>Light probe</small></td><td>공간 곳곳에 놓은 측정점 — 그 자리의 방향별 밝기 저장</td><td>움직이는 물체</td><td>그림자 미포함</td></tr>
+    <tr><td class="lab-txt"><b>반사 프로브</b><br><small>Reflection probe</small></td><td>그 자리에서 사방을 찍은 큐브맵 — 광택 표면에 비칠 풍경</td><td>광택 표면</td><td>갱신 비용</td></tr>
+  </table>
+  <div class="key lab">
+    <p class="small">빨라지는 이유 : 간접광·그림자를 매 프레임 계산 → 텍스처에서 값 한 번 읽기로 대체 → 앞 도해 예시에서 13.8 ms → 9.2 ms</p>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">전역조명 · 4</div>
+  <h2>베이크 전제 조건 세 가지</h2>
+  <table style="font-size:.68em">
+    <tr><th>설정</th><th>뜻</th></tr>
+    <tr><td>광원 <b>Mode = Baked</b></td><td>이 광원을 굽기 대상으로 지정</td></tr>
+    <tr><td>물체 <b>Static</b> 표시</td><td>«이 물체는 움직이지 않음» 약속 → 라이트맵에 구워도 안전</td></tr>
+    <tr><td><b>Lightmap UV</b> 생성</td><td>UV : 3D 표면을 2D 그림에 펼쳐 붙일 좌표 (모델의 «전개도») → 라이트맵을 붙일 자리</td></tr>
+  </table>
+  <p class="small trap-txt">셋 중 하나만 빠져도 결과 미반영 · 오류 메시지 없음</p>
+  <div class="analogy">
+    <p><b>라이트 프로브 = 공간에 흩어 놓은 조도계</b> : 움직이는 캐릭터는 주변 조도계 값을 섞어 자기 밝기로 사용</p>
+    <p>비유의 한계 : 측정점 사이 값을 섞을 뿐 → 그림자 같은 날카로운 변화는 표현 불가</p>
+  </div>
+  <div class="key lab">
+    <p class="small">혼합 조명 : 태양 하나만 실시간, 나머지 전부 베이크 — <b>VR 의 기본 구성</b></p>
+  </div>
+</section>
+
+<!-- ---------------------------------------------------- 도입 질문 회수 -->
+<section>
+  <div class="tag gfx">도입 질문의 답</div>
+  <h2>같은 재질이 금속도, 장난감도 되는 이유</h2>
+  <div class="key">
+    <p>재질 = 빛을 <b>어떻게</b> 돌려보낼지의 규칙(BRDF) · 화면 색 = <b>규칙 × 들어온 빛</b><br>
+    → 규칙이 같아도 들어온 빛이 다르면 결과가 다름</p>
+  </div>
+  <ul class="small">
+    <li>매끈한 금속의 모습 대부분 = <b>주변 환경이 비친 정반사</b></li>
+    <li>사진 같은 쪽 : 하늘·창문이 담긴 스카이박스·반사 프로브 존재 → 표면에 풍경이 비침 → 금속으로 지각</li>
+    <li>장난감 쪽 : 단색 환경광 + 작은 점광원 하나 → 비칠 풍경 없음 → 하이라이트 점 하나만 남음 → 플라스틱으로 지각</li>
+    <li>추가 원인 : Gamma 색공간 → 하이라이트가 흰색으로 뭉침 → 금속 특유의 «색 입은 반사광» 소실</li>
+  </ul>
+  <div class="analogy">
+    <p><b>거울</b> : 거울 자체에는 색이 거의 없음 · 텅 빈 흰 방에 둔 거울은 그냥 흰 판 → 금속의 «금속다움» 도 비칠 주변이 있어야 드러남</p>
+  </div>
+  <aside class="notes">
+    - 도입의 두 스크린샷을 다시 띄우고 답 공개
+    - 거울 비유 : 거울을 빈 방에 두면 거울인지 흰 판인지 구분 불가 → 금속도 마찬가지
+    - 결론 : 재질 값만 고치지 말고 반사될 환경(스카이박스·반사 프로브)부터 확인
+  </aside>
 </section>
 
 <!-- ---------------------------------------------------- AI 함정 #4 -->
@@ -413,13 +683,13 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
   <h2>① 증상</h2>
   <ul class="small">
     <li>에디터 Game 뷰 : 정상 · 60fps 유지</li>
-    <li>Quest 빌드 : <b>프레임 급락</b> · 움직일 때 끊김</li>
-    <li>라이트맵 베이크 후 : 전체적으로 <b>색이 바래고 평평한 인상</b></li>
-    <li>밝은 영역이 한 덩어리 흰색으로 뭉침</li>
+    <li>Quest 빌드 (헤드셋에서 직접 실행되는 버전) : <b>프레임 급락</b> · 움직일 때 끊김</li>
+    <li>라이트맵 베이크 후 : 전체적으로 <b>색이 바래고 평평한 인상</b> · 밝은 영역이 한 덩어리 흰색으로 뭉침</li>
   </ul>
-  <div class="key trap" style="margin-top:1em">
+  <p class="small">에디터에서 멀쩡한 이유 : 에디터 = PC 그래픽카드 · 헤드셋 = 휴대폰급 칩 → 같은 설정이 헤드셋에서 몇 배 무거움</p>
+  <div class="key trap">
     <p>두 증상의 공통점 : <b>코드 오류 없음</b> · 설정 값만의 문제<br>
-    컴파일 오류·경고 미발생</p>
+    → 컴파일 오류·경고 미발생 → 에디터만 보고는 발견 어려움</p>
   </div>
   <aside class="notes">
     - 스타터 씬(함정 재현본) 실행 후 프레임 그래프 띄우기
@@ -429,44 +699,46 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
 
 <section>
   <div class="tag trap">함정 · 원인</div>
-  <h2>② 원인</h2>
-  <div class="cols">
-    <div>
-      <p class="small"><b>그림자 쪽</b></p>
-      <ul class="xs">
-        <li>광원마다 <code>shadows = Soft</code> 기본값</li>
-        <li>점광원 하나 = 그림자맵 6면</li>
-        <li>VR 은 메인 패스를 눈마다 반복</li>
-      </ul>
-    </div>
-    <div>
-      <p class="small"><b>색공간 쪽</b></p>
-      <ul class="xs">
-        <li>Color Space = Gamma 상태로 PBR 사용</li>
-        <li>텍스처 sRGB 체크 누락</li>
-        <li>조명 덧셈이 물리와 불일치 → 포화</li>
-      </ul>
-    </div>
+  <h2>② 원인 — 그림자 쪽</h2>
+  <ul class="small">
+    <li>Unity 기본값 : 새 <b>Directional</b> Light = Soft Shadows · 새 <b>Point · Spot</b> Light = 그림자 꺼짐(No Shadows) 인 경우가 많음 (버전·파이프라인마다 다름)</li>
+    <li>AI 생성 코드 : 광원마다 <code>light.shadows = LightShadows.Soft</code> 를 <b>명시</b> → 기본값이었다면 꺼져 있었을 점광원 그림자까지 켜짐</li>
+    <li>점광원 1개 = 그림자맵 6장 → 3개면 18장 → 매 프레임 장면을 광원 시점에서 최대 18번 더 그림</li>
+    <li>VR : 그림자맵은 광원 기준이라 한 번 · 화면 그리기는 두 눈 → 픽셀 계산 2배</li>
+  </ul>
+  <div class="key trap">
+    <p class="small">AI 가 이렇게 쓰는 이유 : <b>«보기 좋은» 결과</b> 우선 · 성능 제약을 요청에 넣지 않으면 고려하지 않음</p>
   </div>
-  <div class="key trap" style="margin-top:.9em">
-    <p class="small">AI 가 이 설정을 유지하는 이유 : <b>«보기 좋은» 기본값</b><br>
-    성능·색 정확도는 요구에 포함되지 않으면 미고려</p>
+  <p class="small">손계산 : Point 3개 × 6장 = 18장 + Directional 캐스케이드 최대 4장 → 그림자용 추가 그리기 최대 22회 · 태양만 실시간으로 바꾸면 최대 4회</p>
+</section>
+
+<section>
+  <div class="tag trap">함정 · 원인</div>
+  <h2>② 원인 — 색공간 쪽</h2>
+  <ul class="small">
+    <li>Color Space = Gamma 상태로 PBR 사용 → PBR 값 범위는 선형 계산 전제 → <b>조명 덧셈 과장</b> → 밝은 곳 흰색 포화 · 라이트맵 결과도 바래 보임</li>
+    <li>데이터 텍스처(smoothness·metallic·occlusion)에 sRGB 체크 → 숫자가 변형된 채 계산 → 재질이 미묘하게 어긋남</li>
+    <li>AI 는 Player Settings·텍스처 임포트 설정을 보지 못함 → 코드만 생성 · 설정 확인은 사람 몫</li>
+  </ul>
+  <div class="analogy">
+    <p><b>볼륨 눈금으로 소리 합치기</b> (색공간 비유 재사용) : 눈금 50% 두 개를 더해 «100%» 로 적는 실수 → 실제보다 훨씬 큰 소리로 기록 = Gamma 에서의 조명 덧셈</p>
   </div>
 </section>
 
 <section>
   <div class="tag trap">함정 · 진단</div>
   <h2>③ 진단 절차</h2>
-  <table style="font-size:.68em">
+  <table style="font-size:.64em">
     <tr><th>확인 대상</th><th>도구</th><th>판정 기준</th></tr>
     <tr><td>그림자 광원 수</td><td>Light 컴포넌트 일괄 확인</td><td>VR 기준 <b>0~1개</b></td></tr>
-    <tr><td>그림자 패스</td><td>Frame Debugger</td><td>Shadows.Draw 항목 수</td></tr>
+    <tr><td>그림자 패스</td><td>Frame Debugger (한 프레임을 그리는 단계를 하나씩 보여 주는 Unity 도구)</td><td>그림자 그리기 단계 수</td></tr>
     <tr><td>색공간</td><td>Project Settings</td><td>Linear 여부</td></tr>
     <tr><td>텍스처 설정</td><td>Inspector</td><td>albedo = sRGB 체크 · 데이터맵 = 해제</td></tr>
-    <tr><td>프레임타임</td><td>OVR Metrics Tool</td><td>온디바이스 11.1ms 이내</td></tr>
+    <tr><td>프레임타임</td><td>OVR Metrics Tool (헤드셋 화면에 성능 수치를 띄우는 Meta 도구)</td><td>헤드셋에서 11.1ms 이내</td></tr>
   </table>
-  <div class="key trap" style="margin-top:.8em">
-    <p class="small">에디터 수치로 판정 불가 · <b>헤드셋 실측 기준</b></p>
+  <div class="key trap">
+    <p class="small"><span class="t">프레임타임</span> : 한 장면을 그리는 데 걸린 시간 · 90Hz 헤드셋 → \(1000\,\text{ms} \div 90 \approx 11.1\,\text{ms}\) 안에 끝내야 끊김 없음<br>
+    에디터 수치로 판정 불가 → <b>헤드셋 실측 기준</b></p>
   </div>
 </section>
 
@@ -480,7 +752,7 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
       light.shadows = <b>LightShadows.Soft</b>;<br>
       <span style="color:#5f6980">// 광원 3개 모두 동일</span><br><br>
       Color Space : <b>Gamma</b><br><br>
-      <span style="color:#ff5a4d">// 그림자맵 18면<br>
+      <span style="color:#ff5a4d">// Point 3개 × 6장 = 그림자맵 18장<br>
       // 베이크 미사용</span>
     </div>
     <div class="good">
@@ -490,13 +762,12 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
       Directional 1개 : Realtime<br>
       Point · Spot : <b>Mode = Baked</b><br>
       Color Space : <b>Linear</b><br><br>
-      <span style="color:#a8e05f">// 그림자맵 1장<br>
+      <span style="color:#a8e05f">// 실시간 그림자 광원 1개 (캐스케이드 2~4장)<br>
       // 간접광은 라이트맵</span>
     </div>
   </div>
   <div class="key lab" style="margin-top:.8em">
-    <p class="small">판단 기준 : 움직이는 그림자가 <b>경험에 필요한가</b><br>
-    필요 없는 그림자 → 베이크 대상</p>
+    <p class="small">판단 기준 : 움직이는 그림자가 <b>경험에 필요한가</b> → 필요 없는 그림자 → 베이크 대상</p>
   </div>
 </section>
 
@@ -506,6 +777,21 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
   <div class="rule"></div>
   <h1>조명이 만드는 <em>공간</em></h1>
   <p class="sub">깊이 지각과 공간 인식 · LaValle 『Virtual Reality』 Ch.6</p>
+</section>
+
+<section>
+  <div class="tag vr">Part II 용어</div>
+  <h2>이번 파트 용어 미리보기</h2>
+  <dl class="terms">
+    <dt>깊이 단서<small>Depth cue</small></dt><dd>뇌가 «얼마나 먼가» 를 판단할 때 쓰는 시각 정보 하나하나</dd>
+    <dt>단안 단서<small>Monocular cue</small></dt><dd>한쪽 눈만으로도 얻는 단서 — 그림자·크기·가려짐 등 · <b>사진 한 장에도 존재</b></dd>
+    <dt>양안 시차<small>Binocular disparity</small></dt><dd>약 6.3 cm 떨어진 두 눈이 보는 장면의 미세한 차이</dd>
+    <dt>수렴<small>Vergence</small></dt><dd>가까운 것을 볼 때 두 눈이 안쪽으로 모이는 움직임</dd>
+    <dt>조절<small>Accommodation</small></dt><dd>거리에 맞춰 수정체 두께를 바꿔 초점을 맞추는 작용</dd>
+    <dt>운동 시차<small>Motion parallax</small></dt><dd>머리가 움직일 때 가까운 것은 많이, 먼 것은 적게 움직여 보이는 현상</dd>
+    <dt>시야각<small>FOV</small></dt><dd>한 번에 볼 수 있는 범위를 각도로 잰 값</dd>
+    <dt>중심와<small>Fovea</small></dt><dd>망막 한가운데 가장 선명하게 보는 작은 영역 (시야 중심 약 2°)</dd>
+  </dl>
 </section>
 
 <section>
@@ -519,22 +805,23 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
   <aside class="notes">
     - 실제로 한쪽 눈을 감고 책상 위 물체를 집어 보게 함
     - 대부분 성공 → "그럼 입체시의 역할은" 질문으로 연결
+    - 답 : 단안 단서 (그림자·크기·무늬·흐림 등) — 지각 · 5 이후에서 하나씩
   </aside>
 </section>
 
 <section>
   <div class="tag vr">지각 · 2</div>
   <h2>눈이 받는 정보의 범위</h2>
-  <table style="font-size:.68em">
+  <table style="font-size:.66em">
     <tr><th>항목</th><th>사람</th><th>Quest 3</th><th>결과</th></tr>
-    <tr><td>수평 시야</td><td>양안 약 200°</td><td>약 110°</td><td class="trap-txt">주변시 자극 축소</td></tr>
-    <tr><td>양안 겹침</td><td>약 120°</td><td>약 95°</td><td>입체 영역 축소</td></tr>
-    <tr><td>최고 해상도</td><td>중심와 약 2°</td><td>화면 전체 균일</td><td>6주차 PPD 주제</td></tr>
+    <tr><td>수평 시야</td><td>양안 약 200°</td><td>약 110°</td><td class="trap-txt">주변시(시야 가장자리) 자극 축소</td></tr>
+    <tr><td>양안 겹침</td><td>약 120°</td><td>약 95°</td><td>입체로 보이는 영역 축소</td></tr>
+    <tr><td>최고 해상도</td><td>중심와 약 2°</td><td>화면 전체 균일</td><td>6주차 PPD(각도당 픽셀 수) 주제</td></tr>
     <tr><td>초점 조절</td><td>거리에 따라 변화</td><td class="trap-txt">화면 거리에 고정</td><td>10주차 공간 UI</td></tr>
   </table>
-  <div class="key vr" style="margin-top:.9em">
-    <p>HMD 가 제공하지 못하는 단서 존재 → <b>나머지 단서로 보충 필요</b><br>
-    조명이 담당하는 단서가 그 보충분의 큰 부분</p>
+  <div class="key vr">
+    <p>HMD(머리에 쓰는 디스플레이)가 제공하지 못하는 단서 존재 → <b>나머지 단서로 보충 필요</b><br>
+    → 그 보충분의 큰 부분을 조명이 만드는 단서(음영·그림자)가 담당</p>
   </div>
   <div class="note">LaValle Ch.5 인간 시각 시스템 — 수치는 기기·개인차에 따라 상이</div>
 </section>
@@ -542,78 +829,102 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
 <section>
   <div class="tag vr">지각 · 3</div>
   <h2>깊이 단서의 분류</h2>
-  <table style="font-size:.68em">
+  <table style="font-size:.64em">
     <tr><th>분류</th><th>단서</th><th>유효 거리</th><th>VR 에서의 공급원</th></tr>
-    <tr><td class="vr-txt"><b>단안 · 정적</b></td><td>폐색 · 상대 크기 · 결 기울기 · 음영 · 그림자 · 대기 원근</td><td>전 범위</td><td>렌더링 결과 자체</td></tr>
-    <tr><td class="vr-txt"><b>단안 · 운동</b></td><td>운동 시차</td><td>중거리까지</td><td>머리 트래킹</td></tr>
-    <tr><td class="vr-txt"><b>양안</b></td><td>양안 시차 · 수렴</td><td class="trap-txt">약 10 m 이내</td><td>두 눈 렌더링</td></tr>
-    <tr><td class="vr-txt"><b>생리</b></td><td>조절 (초점 조정)</td><td>약 2 m 이내</td><td class="trap-txt">HMD 에서 고정</td></tr>
+    <tr><td class="vr-txt" style="white-space:nowrap"><b>단안 · 정적</b></td><td>폐색(가려짐) · 상대 크기 · 결 기울기(바닥 무늬가 멀수록 촘촘해짐) · 음영 · 그림자 · 대기 원근(먼 것일수록 뿌옇고 푸름)</td><td style="white-space:nowrap">전 범위</td><td style="white-space:nowrap">렌더링 결과 자체</td></tr>
+    <tr><td class="vr-txt" style="white-space:nowrap"><b>단안 · 운동</b></td><td>운동 시차</td><td style="white-space:nowrap">중거리까지</td><td>머리 트래킹</td></tr>
+    <tr><td class="vr-txt" style="white-space:nowrap"><b>양안</b></td><td>양안 시차 · 수렴</td><td class="trap-txt" style="white-space:nowrap">약 10 m 이내</td><td>두 눈 렌더링</td></tr>
+    <tr><td class="vr-txt" style="white-space:nowrap"><b>생리</b></td><td>조절 (초점 조정)</td><td>약 2 m 이내</td><td class="trap-txt">HMD 에서 고정</td></tr>
   </table>
-  <div class="key vr" style="margin-top:.9em">
-    <p>양안 시차의 담당 범위는 <b>팔 닿는 거리 주변</b><br>
-    그 바깥 공간감의 대부분을 <b>단안 단서</b>가 담당</p>
+  <div class="key vr">
+    <p>양안 시차의 담당 범위는 <b>팔 닿는 거리 주변</b> → 그 바깥 공간감의 대부분을 <b>단안 단서</b>가 담당</p>
   </div>
   <div class="note">LaValle Ch.5 인간 시각 시스템 · Ch.6 깊이 지각 — 10·12주차에서 재등장</div>
 </section>
 
 <section>
-  <div class="tag vr">지각 · 4 ★</div>
+  <div class="tag vr">지각 · 4</div>
+  <h2>양안 시차가 가까운 곳에서만 강한 이유</h2>
+  <div class="analogy">
+    <p><b>엄지 손가락 실험</b> : 팔을 뻗어 엄지를 세우고 한 눈씩 번갈아 감으면 엄지가 크게 점프 · 창밖 먼 건물은 거의 그대로 → 두 눈 영상의 차이 = 거리 정보 · 멀어질수록 차이가 사라짐</p>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="math-block">\[ \theta \approx \frac{b}{d} \]</div>
+      <p class="small">θ : 두 눈이 물체를 보는 각도 차 (라디안) · b : 두 눈 사이 약 6.3 cm · d : 물체까지 거리</p>
+    </div>
+    <div>
+      <table style="font-size:.7em">
+        <tr><th>거리 d</th><th>각도 차 θ</th></tr>
+        <tr><td>0.5 m</td><td>0.063 ÷ 0.5 ≈ 0.13 → 약 7°</td></tr>
+        <tr><td>10 m</td><td>0.063 ÷ 10 ≈ 0.006 → 약 0.4°</td></tr>
+        <tr><td>100 m</td><td class="trap-txt">약 0.04°</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="key vr">
+    <p class="small">θ 가 1/d 로 줄어듦 → 약 10 m 바깥에서는 거리 근거로 약함 (대략적 경계 · 개인차 큼)</p>
+  </div>
+  <aside class="notes">
+    - 학생 모두 엄지 실험 직접 해 보기 → 가까운 엄지는 크게, 먼 벽은 거의 안 움직임
+    - 숫자로 확인 : 0.5 m 에서 7°, 10 m 에서 0.4° — 20배 거리면 차이 1/20
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 5 ★</div>
   <h2>단안 깊이 단서 여섯 가지</h2>
   <img src="../../figures/out/w05-depth-cues.svg" class="fig" alt="폐색·상대 크기·결 기울기·음영·그림자·대기 원근">
   <aside class="notes">
     - ④ ⑤ 를 짚으며 "이 두 가지가 오늘 배운 조명의 산물" 강조
     - ① 폐색은 순서만 제공 · 거리 수치는 미제공
+    - 도입 질문(한쪽 눈) 의 답 : 이 여섯 가지는 한쪽 눈으로도 얻음
   </aside>
 </section>
 
 <section>
-  <div class="tag vr">지각 · 5</div>
+  <div class="tag vr">지각 · 6</div>
   <h2>음영 — 형태를 읽는 단서</h2>
   <div class="cols wide-left">
     <div>
       <p class="small">밝기 변화 → 곡면의 볼록·오목 판별</p>
-      <p class="small">뇌의 기본 가정 : <b>빛은 위에서 내려옴</b></p>
-      <p class="small">같은 사진을 180° 회전 → 분화구가 언덕으로 전환</p>
-      <div class="key vr" style="margin-top:.8em">
-        <p class="small">조명을 아래에서 비추면 형태 판독 실패<br>
-        공포 연출이 아래 조명을 쓰는 근거</p>
-      </div>
+      <p class="small">뇌의 기본 가정 : <b>빛은 위에서 내려옴</b> → 같은 달 분화구 사진을 180° 회전 → 분화구가 언덕으로 뒤바뀌어 보임</p>
+      <p class="small">확산반사 항 N·L 의 분포가 그대로 형태 정보 → 환경광만 적용된 물체 : <b>윤곽만 남고 입체 정보 소멸</b></p>
     </div>
     <div>
-      <p class="xs muted">
-        확산반사 항 N·L 의 분포가 그대로 형태 정보<br><br>
-        환경광만 적용된 물체 : 윤곽만 존재 · 입체 정보 소멸
-      </p>
+      <div class="key vr">
+        <p class="small">조명을 아래에서 비추면 «위에서 오는 빛» 가정이 깨짐 → 형태 판독 실패</p>
+      </div>
     </div>
+  </div>
+  <div class="analogy">
+    <p><b>캠프파이어 괴담 얼굴</b> : 턱 아래에서 손전등을 비추면 평소 그늘지던 눈두덩·코 밑이 밝아지고 이마 위가 어두워짐 → 익숙한 얼굴이 낯설고 무섭게 읽힘 → 공포 연출이 아래 조명을 쓰는 근거</p>
   </div>
 </section>
 
 <section>
-  <div class="tag vr">지각 · 6</div>
+  <div class="tag vr">지각 · 7</div>
   <h2>그림자 — 물체의 위치 정보</h2>
   <div class="cols">
     <div>
-      <p class="small"><b>접촉 그림자</b> : 물체와 바닥이 닿는 지점 표시</p>
-      <p class="small">그림자 위치만 이동 → 같은 물체가 <b>공중에 뜬 상태</b>로 지각</p>
-      <p class="xs muted">화면 속 물체 위치는 그대로 유지</p>
+      <p class="small"><span class="t">접촉 그림자</span> : 물체와 바닥이 닿는 지점 바로 아래 생기는 짙은 그림자</p>
+      <p class="small">화면 속 물체 위치는 그대로 두고 그림자 위치만 이동 → 같은 물체가 <b>공중에 뜬 상태</b>로 지각</p>
     </div>
     <div>
       <div class="key vr">
-        <p class="small">VR 에서 접촉 그림자 누락 시<br>
-        <b>손에 든 물체가 떠 보이는 현상</b> 발생<br>
-        → 상호작용 정확도 저하</p>
+        <p class="small">VR 에서 접촉 그림자 누락 → <b>손에 든 물체·바닥 물체가 떠 보임</b> → 잡기·놓기 정확도 저하</p>
       </div>
-      <p class="xs muted" style="margin-top:.7em">
-        해법 : 간이 접촉 그림자 (원판 텍스처 1장)<br>
-        실시간 그림자 없이 접지감 확보
-      </p>
+      <p class="small">해법 : 간이 접촉 그림자 (물체 밑에 흐린 원판 텍스처 1장) → 실시간 그림자 없이 접지감 확보</p>
     </div>
+  </div>
+  <div class="analogy">
+    <p><b>책상 위 컵 들어 올리기</b> : 컵이 책상에 닿아 있으면 그림자가 컵 밑에 붙어 있음 · 들어 올리면 그림자가 컵에서 떨어져 나감 → 컵과 그림자 사이 간격 = 뜬 높이</p>
   </div>
   <div class="note">12주차 Grab 인터랙션 설계에서 다시 다룸</div>
 </section>
 
 <section>
-  <div class="tag vr">지각 · 7 ★</div>
+  <div class="tag vr">지각 · 8 ★</div>
   <h3 style="margin-bottom:.45em">깊이 단서 실험실</h3>
   <div class="demo-wrap">
     <div class="demo" data-demo="depth-cues">
@@ -637,49 +948,54 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
   <aside class="notes">
     - ① 전부 끈 상태에서 학생에게 질문 : "어느 공이 가장 가까운가"
     - ② 단서를 하나씩 켜며 응답 변화 확인
-    - ③ 드래그로 시점 이동 → 운동 시차가 추가되어 즉시 판별 가능
+    - ③ 드래그로 시점 이동 → 운동 시차가 추가되어 즉시 판별 가능 (기차 창밖 비유 예고)
     - ④ 마지막에 실제 거리 공개
   </aside>
 </section>
 
 <section>
-  <div class="tag vr">지각 · 8</div>
+  <div class="tag vr">지각 · 9</div>
   <h2>운동 시차 — VR 이 자동으로 제공하는 단서</h2>
+  <div class="analogy">
+    <p><b>기차 창밖 풍경</b> : 가까운 전봇대는 휙휙 지나가고 먼 산은 천천히 움직임 → 움직이는 속도 차이만으로 거리 판단</p>
+  </div>
   <div class="cols">
     <div>
-      <p class="small">머리를 좌우로 조금 움직일 때<br>
-      가까운 물체 : 크게 이동 · 먼 물체 : 거의 정지</p>
-      <div class="eq" style="margin-top:.6em">화면 이동량 ∝ 1 / 거리</div>
+      <div class="math-block">\[ \text{화면 속 이동량} \propto \frac{1}{\text{거리}} \]</div>
+      <p class="small"><b>손계산</b> : 머리를 옆으로 10 cm 이동<br>
+      1 m 물체 : 약 5.7° 이동 · 10 m 물체 : 약 0.57° 이동 → 10배 차이</p>
     </div>
     <div>
       <div class="key vr">
-        <p class="small">모니터 게임에는 없는 단서<br>
-        VR 은 <b>머리 트래킹으로 매 프레임 공급</b></p>
+        <p class="small">모니터 게임에는 없는 단서 → VR 은 <b>머리 트래킹으로 매 프레임 공급</b></p>
       </div>
-      <p class="small trap-txt" style="margin-top:.7em">
-        조건 : 카메라가 실제 머리 위치를 따라갈 것<br>
-        카메라 직접 조작 시 이 단서 왜곡 — 11주차 함정 #8</p>
+      <p class="small trap-txt">조건 : 카메라가 실제 머리 위치를 그대로 따라갈 것 → 코드로 카메라를 직접 움직이면 이 단서 왜곡 — 11주차 함정 #8</p>
     </div>
   </div>
-</section>
-
-<section>
-  <div class="tag vr">지각 · 9</div>
-  <h2>VR 에서의 거리 지각</h2>
-  <ul class="small">
-    <li>다수 연구 보고 : 가상 환경의 거리를 <b>실제의 70~80% 수준</b>으로 판단</li>
-    <li>원인 후보 : 시야각 제한 · 렌즈 왜곡 · 단안 단서 부족 · 조절 단서 고정</li>
-    <li>결과 : 실제 치수대로 만든 공간이 <b>좁게 느껴지는 현상</b></li>
-  </ul>
-  <div class="key vr" style="margin-top:1em">
-    <p>대응 : 바닥 무늬 · 접촉 그림자 · 친숙한 크기의 물체 배치<br>
-    <b>단안 단서를 충분히 공급</b>해 판단 근거 보강</p>
-  </div>
-  <div class="note">13주차 팀 프로젝트 기획서의 «지각적 근거» 항목에 반영</div>
+  <aside class="notes">
+    - 기차 비유 : 가까운 건 빨리, 먼 건 느리게 → 뇌는 이 속도 차이를 거리로 해석
+    - 데모에서 드래그로 시점을 돌렸을 때 공 순서가 바로 보인 이유
+  </aside>
 </section>
 
 <section>
   <div class="tag vr">지각 · 10</div>
+  <h2>VR 에서의 거리 지각 — 실제보다 가깝게</h2>
+  <ul class="small">
+    <li>Renner, Velichkovsky &amp; Helmert (2013) 문헌 종합 (연구 78편, 1993~2012) : 가상 환경 속 거리를 <b>실제의 평균 약 74%</b> 로 판단 · 최근 기기 연구는 약 74~82% (기기·과제마다 다름)</li>
+    <li>손계산 : 실제 4 m 떨어진 문 → 약 3 m 로 판단 (4 × 0.74 ≈ 3)</li>
+    <li>원인 후보 : 좁은 시야각 · 렌즈 왜곡 · 단안 단서 부족 · 초점 조절 단서 고정 — 아직 하나로 확정되지 않음</li>
+    <li>결과 : 실제 치수대로 만든 공간이 <b>좁게 느껴지는 현상</b></li>
+  </ul>
+  <div class="key vr">
+    <p class="small">대응 : 바닥 무늬 · 접촉 그림자 · 친숙한 크기의 물체(문·의자) 배치 → <b>단안 단서를 충분히 공급</b>해 판단 근거 보강</p>
+  </div>
+  <p class="small">설계 선택지 : 단서를 보강해도 압축이 남을 수 있음 → 통로·방을 실측보다 조금 넓게 만드는 방안도 검토 후 헤드셋에서 확인</p>
+  <div class="note">출처 : Renner, Velichkovsky &amp; Helmert (2013) ACM Computing Surveys 46(2) · 13주차 기획서 «지각적 근거» 항목에 반영</div>
+</section>
+
+<section>
+  <div class="tag vr">지각 · 11</div>
   <h2>설계 원칙</h2>
   <div class="key vr" style="font-size:1.12em;padding:1.1em 1.3em">
     <p><b>VR 의 조명 = <span class="vr-txt">공간 정보 전달 수단</span><br>
@@ -688,11 +1004,11 @@ spec = pow(max(0, dot(N, H)), shininess)</div>
   <div class="cols" style="margin-top:1.1em">
     <div class="card trap">
       <h4>피할 구성</h4>
-      <p class="xs">환경광만 사용 · 접촉 그림자 없음 · 무늬 없는 단색 바닥</p>
+      <p class="small">환경광만 사용 · 접촉 그림자 없음 · 무늬 없는 단색 바닥 → 형태·위치·거리 단서 모두 소멸</p>
     </div>
     <div class="card lab">
       <h4>권장 구성</h4>
-      <p class="xs">베이크된 간접광 · 간이 접촉 그림자 · 바닥 무늬 · 크기 기준 물체</p>
+      <p class="small">베이크된 간접광 · 간이 접촉 그림자 · 바닥 무늬 · 크기 기준 물체 → 실시간 그림자 없이도 단서 확보</p>
     </div>
   </div>
 </section>
@@ -782,7 +1098,7 @@ void Update() {
       <td>결 기울기</td>
     </tr>
   </table>
-  <p class="xs muted" style="margin-top:.8em">
+  <p class="small" style="margin-top:.8em">
     1~4 필수, 5 확장 · <b>제출물 없음</b>, 수업 안에서 완료
   </p>
 </section>
@@ -793,7 +1109,7 @@ void Update() {
   <div class="cols">
     <div>
       <p class="small">각자의 실험실 씬에 <b>깊이 단서 스위치 5종</b> 추가</p>
-      <ul class="xs">
+      <ul class="small">
         <li>접촉 그림자 on/off</li>
         <li>바닥 무늬 on/off</li>
         <li>간접광 (베이크) on/off</li>
@@ -806,9 +1122,8 @@ void Update() {
         <p class="small">11주차에 이 씬을 그대로 VR 로 포팅<br>
         같은 스위치를 <b>헤드셋 안에서</b> 조작</p>
       </div>
-      <p class="xs muted" style="margin-top:.8em">
-        2주차 변환 체인 · 3주차 프레임 독립성 · 4주차 near 설정에<br>
-        이번 주 조명·단서가 누적
+      <p class="small" style="margin-top:.8em">
+        2주차 변환 체인 · 3주차 프레임 독립성 · 4주차 near 설정에 이번 주 조명·단서가 누적
       </p>
     </div>
   </div>
@@ -818,17 +1133,17 @@ void Update() {
 <section>
   <div class="tag gfx">정리</div>
   <h2>한 장 요약</h2>
-  <table style="font-size:.66em">
+  <table style="font-size:.62em">
     <tr><th>개념</th><th>핵심</th></tr>
-    <tr><td>광원 4종</td><td>Directional · Point · Spot · Area · 점광원 그림자 = 6면</td></tr>
-    <tr><td><b class="gfx-txt">확산반사</b></td><td><b>N·L = cos θ</b> · 2주차 내적 · 보는 방향과 무관</td></tr>
-    <tr><td>정반사</td><td>하프벡터 N·H 의 거듭제곱 · 카메라 위치가 식에 포함</td></tr>
-    <tr><td>렌더링 방정식</td><td>반구 전체에서 들어온 빛의 합 · 실시간은 근사</td></tr>
-    <tr><td><b class="gfx-txt">BRDF</b></td><td>반사 로브의 모양 · roughness = 폭, metallic = 확산 소멸</td></tr>
-    <tr><td><b class="trap-txt">색공간</b></td><td>저장 0.5 = 실제 빛 <b>0.22</b> · 조명 계산은 Linear 에서</td></tr>
+    <tr><td>광원 4종</td><td>Directional · Point · Spot · Area · 점광원 그림자 = 6방향 촬영 → 그림자맵 6장</td></tr>
+    <tr><td><b class="gfx-txt">확산반사</b></td><td><b>N·L = cos θ</b> · 2주차 내적 · 보는 방향과 무관 · 비스듬한 손전등</td></tr>
+    <tr><td>정반사</td><td>하프벡터 N·H 의 거듭제곱 · 카메라 위치가 식에 포함 · 광택 지수 클수록 좁은 하이라이트</td></tr>
+    <tr><td>렌더링 방정식</td><td>반구 전체에서 들어온 빛의 합 (영수증 합계) · 실시간은 근사</td></tr>
+    <tr><td><b class="gfx-txt">BRDF</b></td><td>재질의 반사 규칙표 · roughness = 로브 폭 · metallic = 확산 소멸 + 반사광에 색</td></tr>
+    <tr><td><b class="trap-txt">색공간</b></td><td>저장 0.5 = 실제 빛 <b>약 0.22</b> · 조명 계산은 Linear 에서</td></tr>
     <tr><td>베이크</td><td>광원 Baked + 물체 Static + Lightmap UV · 셋 모두 필요</td></tr>
-    <tr><td><b class="trap-txt">AI 함정 #4</b></td><td>그림자 기본값 Soft 유지 · Gamma 상태 PBR → 헤드셋에서만 발현</td></tr>
-    <tr><td><b class="vr-txt">깊이 단서</b></td><td>양안 시차는 약 10m 이내 · 나머지는 <b>단안 단서</b> 담당</td></tr>
+    <tr><td><b class="trap-txt">AI 함정 #4</b></td><td>AI 코드가 광원마다 Soft 그림자 명시 · Gamma 상태 PBR → 헤드셋에서만 드러남</td></tr>
+    <tr><td><b class="vr-txt">깊이 단서</b></td><td>양안 시차는 약 10 m 이내 · 나머지는 <b>단안 단서</b> 담당 · VR 거리 평균 약 74% 로 과소추정</td></tr>
     <tr><td><b class="vr-txt">조명의 역할</b></td><td>음영·그림자 = 거리 정보 · <b>조명 생략 = 공간 정보 생략</b></td></tr>
   </table>
 </section>
@@ -848,6 +1163,7 @@ void Update() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/math/math.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="../_shared/demos/_stage.js"></script>
 <script src="../_shared/demos/w05.js"></script>

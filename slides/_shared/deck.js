@@ -57,7 +57,8 @@
       minScale: 0.2,
       maxScale: 2.0,
       pdfSeparateFragments: false,
-      plugins: [RevealNotes, RevealHighlight]
+      /* 수식 : 슬라이드에 math.min.js 를 넣은 경우에만 KaTeX 사용 — \( … \) · \[ … \] */
+      plugins: [RevealNotes, RevealHighlight].concat(window.RevealMath ? [RevealMath.KaTeX] : [])
     }).then(function () {
       activate(Reveal.getCurrentSlide());
     });

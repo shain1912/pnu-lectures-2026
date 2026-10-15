@@ -32,14 +32,18 @@
 
   --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
           "Segoe UI", "Malgun Gothic", sans-serif;
-  --mono: "JetBrains Mono", "D2Coding", Consolas, monospace;
+  /* 모노 폰트에는 한글 글리프가 없음 → 한글은 Pretendard 로 글리프 단위 폴백
+     (이전 : Consolas → 시스템 굴림체로 떨어져 한글 자간이 벌어짐) */
+  --mono: "JetBrains Mono", "D2Coding", "Pretendard Variable", Pretendard, Consolas, monospace;
+  --analogy:      #ffc44d;  /* 비유 박스 */
+  --analogy-soft: #3a2d0e;
 }
 
 .reveal-viewport { background: var(--bg); }
 
 .reveal {
   font-family: var(--sans);
-  font-size: 30px;
+  font-size: 32px;
   color: var(--fg);
   font-weight: 400;
   letter-spacing: -0.01em;
@@ -109,7 +113,8 @@
   color: var(--fg-faint);
   font-family: var(--mono);
   font-size: 15px;
-  right: 18px; bottom: 12px;
+  /* 하단 화살표와 겹치지 않도록 우상단 */
+  right: 18px; top: 14px; bottom: auto;
 }
 
 /* ============================================================
@@ -141,9 +146,9 @@
 /* 상단 섹션 라벨 */
 .reveal .tag {
   display: inline-block;
-  font-family: var(--mono);
-  font-size: 0.46em;
-  letter-spacing: 0.14em;
+  font-family: var(--sans);
+  font-size: 0.5em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   padding: 0.32em 0.8em;
   border-radius: 100px;
@@ -179,17 +184,17 @@
 /* 핵심 강조 박스 */
 .reveal .key {
   border-left: 5px solid var(--gfx);
-  background: linear-gradient(90deg, rgba(53,214,230,0.10), transparent 70%);
+  background: rgba(53,214,230,0.08);
   padding: 0.75em 1.1em;
   border-radius: 0 12px 12px 0;
   margin: 0.7em 0;
 }
 .reveal .key.vr   { border-left-color: var(--vr);
-  background: linear-gradient(90deg, rgba(255,95,162,0.10), transparent 70%); }
+  background: rgba(255,95,162,0.08); }
 .reveal .key.trap { border-left-color: var(--trap);
-  background: linear-gradient(90deg, rgba(255,90,77,0.10), transparent 70%); }
+  background: rgba(255,90,77,0.08); }
 .reveal .key.lab  { border-left-color: var(--lab);
-  background: linear-gradient(90deg, rgba(168,224,95,0.10), transparent 70%); }
+  background: rgba(168,224,95,0.08); }
 .reveal .key p:last-child { margin-bottom: 0; }
 
 /* 질문 슬라이드 */
@@ -204,7 +209,7 @@
 .reveal .ask.vr .hl { color: var(--vr); }
 
 /* 표 */
-.reveal table { font-size: 0.66em; border-collapse: collapse; width: 100%; margin: 0.5em 0; }
+.reveal table { font-size: 0.72em; border-collapse: collapse; width: 100%; margin: 0.5em 0; }
 .reveal table th {
   text-align: left;
   color: var(--fg-dim);
@@ -249,9 +254,9 @@
 .reveal .note {
   position: absolute;
   bottom: 0.2em; left: 0;
-  font-size: 0.42em;
-  color: var(--fg-faint);
-  font-family: var(--mono);
+  font-size: 0.5em;
+  color: var(--fg-dim);
+  font-family: var(--sans);
 }
 
 /* 데모 컨테이너 — .demo(캔버스) 와 .demo-ui(조작부) 를 감싼다.
@@ -321,7 +326,7 @@
 }
 .reveal .cover h1 { font-size: 2.5em; line-height: 1.15; margin-bottom: 0.35em; }
 .reveal .cover .meta {
-  color: var(--fg-faint); font-size: 0.6em; font-family: var(--mono);
+  color: var(--fg-dim); font-size: 0.6em; font-family: var(--sans);
   margin-top: 2.2em; line-height: 1.9;
 }
 
@@ -336,14 +341,68 @@
 }
 
 .reveal .muted { color: var(--fg-dim); }
-.reveal .small { font-size: 0.72em; }
-.reveal .xs    { font-size: 0.58em; }
+.reveal .small { font-size: 0.8em; }
+.reveal .xs    { font-size: 0.68em; }
 .reveal .center { text-align: center; }
 .reveal .mono  { font-family: var(--mono); }
 .reveal .trap-txt { color: var(--trap); }
 .reveal .vr-txt   { color: var(--vr); }
 .reveal .lab-txt  { color: var(--lab); }
 .reveal .gfx-txt  { color: var(--gfx); }
+
+/* ============================================================
+   쉬운 설명 장치 — 비유 · 용어 · 수식
+   ============================================================ */
+
+/* 비유 박스 : 개념을 일상 경험에 대응
+   <div class="analogy"><p>…</p></div>  → 좌상단에 «비유» 라벨 자동 표시 */
+.reveal .analogy {
+  position: relative;
+  border: 1px solid #5a4618;
+  background: rgba(255,196,77,0.07);
+  border-radius: 12px;
+  padding: 1.05em 1.1em 0.7em;
+  margin: 0.9em 0 0.6em;
+  font-size: 0.8em;
+}
+.reveal .analogy::before {
+  content: "비유";
+  position: absolute; top: -0.75em; left: 0.9em;
+  background: var(--analogy); color: #1a1405;
+  font-size: 0.68em; font-weight: 700;
+  padding: 0.12em 0.7em; border-radius: 100px;
+}
+.reveal .analogy p { margin-bottom: 0.35em; line-height: 1.55; }
+.reveal .analogy b { color: var(--analogy); }
+
+/* 용어 설명 : 처음 나오는 용어를 그 자리에서 풀이
+   <dl class="terms"><dt>법선<small>Normal</small></dt><dd>면이 바라보는 방향의 화살표</dd>…</dl> */
+.reveal dl.terms {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.45em 1.1em;
+  margin: 0.7em 0;
+  font-size: 0.74em;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.8em 1.1em;
+}
+.reveal dl.terms dt { font-weight: 700; color: var(--fg); margin: 0; }
+.reveal dl.terms dt small {
+  display: block; font-size: 0.72em; font-weight: 500;
+  color: var(--fg-faint); font-family: var(--mono);
+}
+.reveal dl.terms dd { margin: 0; color: var(--fg-dim); line-height: 1.5; }
+.reveal dl.terms dd b { color: var(--fg); }
+
+/* 본문 속 용어 : 점선 밑줄 + 괄호 풀이 */
+.reveal .t { border-bottom: 1px dotted var(--fg-dim); }
+.reveal .t + .gloss { color: var(--fg-dim); font-size: 0.85em; }
+
+/* KaTeX 수식 크기 */
+.reveal .katex { font-size: 1.05em; }
+.reveal .math-block { margin: 0.6em 0; text-align: center; font-size: 1.1em; }
 
 /* 인쇄(PDF) */
 @media print {

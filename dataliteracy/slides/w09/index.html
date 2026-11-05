@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9주차 · 데이터 분석을 위한 AI 모델과 사용법 — 데이터리터러시</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme-editorial.css">
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<section class="cover has-art">
+  <div class="week">Week 09</div>
+  <h1>AI 모델,<br>골라 쓰기</h1>
+  <p style="font-size:.82em">데이터 분석을 위한 LLM과 머신러닝 모델<br>잘 맞히는 모델과 원인을 아는 일의 구분</p>
+  <div class="meta">
+    데이터리터러시의이해 SF1101084 · AI융합교육원<br>
+    조성호 · 2026학년도 2학기
+  </div>
+  <img class="art" src="../../figures/flow/d10-vibecoding.jpg" alt="학생과 로봇이 함께 분석하는 장면">
+</section>
+
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="art-col r">
+    <div class="ask" style="font-size:1.2em">
+      아이스크림 판매량과 익사 사고<br><span class="hl">r = 0.88</span><br><br>
+      판매량으로 사고 예측 가능<br>
+      그럼 판매를 금지하면<br>사고가 줄어드는가?
+    </div>
+    <img class="art" src="../../figures/flow/d10-hook.jpg" alt="차트만 보는 가게 주인과 창밖의 인파">
+  </div>
+  <aside class="notes">
+    - 손들기 : 감소 / 변화 없음 / 모름
+    - 답 공개 위치 : Part II
+    - 덧붙일 질문 : 같은 데이터를 AI 3개에 주면 결론이 같을까
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>학습 목표</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span>구분</h4>
+      <p>LLM과 분석 모델의 차이<br>모델 · 앱 · 실행 위치 구분<br>작업별 <b>등급 선택</b></p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step">2</span>사용</h4>
+      <p>명세 4칸으로 요청<br>코드 실행 근거 요구<br>회귀 · 분류 · 군집을 <b>기준선과 비교</b></p>
+    </div>
+    <div class="card trap">
+      <h4><span class="step">3</span>판단</h4>
+      <p>상관 · 예측 · 인과 구분<br>교란 후보 3개 나열<br>AI의 <b>인과 문장</b> 검출</p>
+    </div>
+  </div>
+  <div class="foot"><b>오늘의 결과물</b> · 같은 데이터로 LLM 2개·분석 모델 2개를 비교한 기록 · 코드 작성은 AI · 평가 대상은 명세와 검증</div>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>오늘 다룰 내용</h2>
+  <table class="roomy" style="font-size:.8em">
+    <tr><th style="width:18%">시간</th><th style="width:26%">블록</th><th>내용</th></tr>
+    <tr><td>10:00–10:10</td><td>도입 질문</td><td>아이스크림과 익사 사고</td></tr>
+    <tr><td>10:10–11:10</td><td><b class="gfx-txt">Part I 모델과 사용법</b></td><td>LLM 등급 · 사용 절차 · 회귀 · 분류 · 군집 · 시계열</td></tr>
+    <tr><td>11:10–11:20</td><td>휴식</td><td></td></tr>
+    <tr><td>11:20–11:50</td><td><b class="vr-txt">Part II 판단</b></td><td>상관의 네 가지 설명 · 교란 · 문장 등급 · AI 함정 #7</td></tr>
+    <tr><td>11:50–12:40</td><td><b class="lab-txt">Part III 실습</b></td><td>모델 비교 · 층화 · 기준선 대조</td></tr>
+    <tr><td>12:40–13:00</td><td>정리</td><td>모델 선택표 · 과제 브리핑</td></tr>
+  </table>
+</section>
+
+<section class="divider part-i has-art">
+  <div class="kicker">Part I · 60분</div>
+  <div class="rule"></div>
+  <h1>어떤 AI를<br><em>어떻게 쓸 것인가</em></h1>
+  <p class="sub">말로 일하는 모델과 숫자로 규칙을 찾는 모델</p>
+  <img class="art" src="../../figures/flow/d11-report.jpg" alt="로봇이 건넨 보고서를 검토하는 사람">
+</section>
+
+<section>
+  <div class="tag gfx">지도 · 1 ★</div>
+  <h2>«AI 모델»의 두 종류</h2>
+  <img src="../../figures/out/d09-two-kinds.svg" class="fig" style="max-height:450px" alt="LLM과 분석 모델의 입력과 출력 비교">
+  <div class="foot"><b>비유</b> · LLM = 무엇이든 설명하는 조수 · 분석 모델 = 한 가지만 재는 측정기 · 조수가 측정기를 조립하고 사람이 눈금 확인</div>
+</section>
+
+<section>
+  <div class="tag gfx">지도 · 2</div>
+  <h2>모델 · 앱 · 실행 위치</h2>
+  <img src="../../figures/out/d09-layers.svg" class="fig" style="max-height:455px" alt="앱, 모델, 실행 위치의 3층 구조">
+  <div class="foot"><b>이유</b> · 같은 모델도 앱에 따라 파일 접근·코드 실행 가능 여부 상이 → 보고서에 앱과 모델 이름 함께 기록</div>
+</section>
+
+<section>
+  <div class="tag gfx">LLM · 1 ★</div>
+  <h2>LLM 등급표 (2026-11-05 확인)</h2>
+  <table class="roomy" style="font-size:.7em">
+    <tr><th style="width:13%">계열</th><th>최상위</th><th>상위·균형</th><th>빠른·경량</th></tr>
+    <tr><td><b>Anthropic</b></td><td>Claude Fable 5.1</td><td>Claude Opus 5.5 · Sonnet 5.5</td><td>Claude Haiku 5.5</td></tr>
+    <tr><td><b>OpenAI</b></td><td>GPT-6 Astra</td><td>GPT-6 Sol · GPT-6.1 Terra</td><td>GPT-6 Luna</td></tr>
+    <tr><td><b>Google</b></td><td>Gemini 4 Argon</td><td>Gemini 3.8 Flash</td><td>Gemini 3.5 Flash-Lite</td></tr>
+    <tr><td><b>오픈 웨이트</b></td><td colspan="3">gpt-oss · Gemma 4 · Qwen · Llama 4 · DeepSeek V4 (모델별 라이선스 확인)</td></tr>
+    <tr><td><b>국내</b></td><td colspan="3">K-EXAONE · EXAONE 4.5 (LG) · Solar (Upstage) · HyperCLOVA X SEED (네이버)</td></tr>
+  </table>
+  <div class="foot"><b>주의</b> · 모델 이름은 수개월 단위로 변경 · 요금제별 제공 모델 상이 → 암기 대상 아님 · 수업 당일 선택 화면 기준 · 등급 개념만 기억</div>
+  <div class="note">출처 : Claude API 문서 · ChatGPT 릴리스 노트 · Google AI Studio 모델 문서 · 각 사 공개 자료</div>
+  <aside class="notes">
+    - 순위 비교 슬라이드 아님 · 같은 등급끼리도 작업마다 결과 차이
+    - 수업 직전 각 사 선택 화면 재확인
+    - GPT 등급 배치 : 릴리스 노트의 요금제 배정 기준 정리
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">LLM · 2 ★</div>
+  <h2>작업에 맞는 등급 고르기</h2>
+  <table class="roomy" style="font-size:.74em">
+    <tr><th style="width:36%">작업</th><th style="width:17%">등급</th><th>이유</th></tr>
+    <tr><td>열 이름 정리 · 문장 요약 · 후기 대량 분류</td><td class="lab-txt"><b>빠른·경량</b></td><td>단순 반복 · 속도와 비용 우선</td></tr>
+    <tr><td>분석 코드 작성 · 차트 · 표 정리</td><td class="gfx-txt"><b>상위·균형</b></td><td>대부분의 실습 기본값</td></tr>
+    <tr><td>설계 검토 · 복잡한 오류 추적 · 교란 후보 검토</td><td class="vr-txt"><b>최상위</b></td><td>긴 추론 · 오류 비용 큼</td></tr>
+    <tr><td>민감 자료를 외부로 보낼 수 없는 경우</td><td class="trap-txt"><b>로컬 (오픈 웨이트)</b></td><td>내 PC 안에서 처리 · 성능·설치 부담</td></tr>
+  </table>
+  <div class="analogy"><p><b>배달 수단</b> : 근거리는 오토바이 · 일상 짐은 승용차 · 큰 이사는 트럭 · 집 밖으로 못 나가는 짐은 집 안에서 처리</p></div>
+</section>
+
+<section>
+  <div class="tag gfx">LLM · 3</div>
+  <h2>어디서 실행할 것인가</h2>
+  <table class="roomy" style="font-size:.72em">
+    <tr><th style="width:17%">방식</th><th>예</th><th>파일·코드</th><th>잘 맞는 일</th></tr>
+    <tr><td><b class="gfx-txt">웹 앱</b></td><td>ChatGPT · Claude · Gemini</td><td>업로드 파일 · 앱 내 실행 기능</td><td>첫 탐색 · 차트 초안</td></tr>
+    <tr><td><b class="vr-txt">CLI 에이전트</b></td><td>OpenCode · Antigravity CLI · Claude Code</td><td>내 폴더 직접 수정 · 명령 실행</td><td>반복 분석 · 파일 산출 · 수업 실습</td></tr>
+    <tr><td><b class="lab-txt">로컬 모델</b></td><td>Ollama + 오픈 웨이트</td><td>데이터 외부 전송 없음 (클라우드 모델 제외)</td><td>민감 자료 · 인터넷 제한 환경</td></tr>
+  </table>
+  <div class="cols" style="margin-top:.5em">
+    <pre style="font-size:.56em;margin:0"><code class="language-bash" data-trim># CLI 에이전트 : 분석 폴더에서 실행
+cd my-analysis
+opencode
+</code></pre>
+    <pre style="font-size:.56em;margin:0"><code class="language-bash" data-trim># 로컬 모델 : 이름은 설치 화면 기준
+ollama run &lt;모델명&gt;
+</code></pre>
+  </div>
+  <div class="foot"><b>도구 고르기</b> · 무료 한도·제공 모델은 자주 변경 → 수업 당일 각 도구 안내 화면 확인</div>
+</section>
+
+<section>
+  <div class="tag trap">LLM · 4 ★</div>
+  <h2>계산은 말로 시키지 않기</h2>
+  <img src="../../figures/out/d09-compute.svg" class="fig" style="max-height:385px" alt="말로만 답하는 경우와 코드를 실행하는 경우 비교">
+  <div class="analogy"><p><b>암산과 계산기</b> : 말로 쓴 평균 = 암산 결과 · 실행 결과 = 계산기 영수증 → 영수증 없는 숫자는 미검증</p></div>
+  <aside class="notes">
+    - 시연 : 코드 실행 없는 모드와 실행 모드에 같은 CSV 평균 요청
+    - 11주 검산 연습과 연결 : p값 재계산
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">사용법 · 1 ★</div>
+  <h2>분석 요청 6단계</h2>
+  <img src="../../figures/out/d09-six-step.svg" class="fig" style="max-height:325px" alt="준비부터 검증까지 6단계">
+  <table style="font-size:.72em;margin-top:.5em">
+    <tr><th style="width:22%">③ 개요 요청</th><td><code>&gt; 파일 내용 추측 금지. 코드로 행·열 수, 열 이름, 자료형, 결측 수만 출력해줘.</code></td></tr>
+    <tr><th>⑥ 검증 요청</th><td><code>&gt; 방금 수치를 계산한 코드와 중간 집계표를 보여줘. 사용한 행 수도 표기해줘.</code></td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="tag gfx">사용법 · 2</div>
+  <h2>요청 문장 고치기</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>한 줄 요청</h4>
+      &gt; 이 데이터 분석해줘<br><br>
+      • 무엇을 판단할지 불명확<br>
+      • 결측·이상치 임의 처리<br>
+      • 그럴듯한 해설 위주
+    </div>
+    <div class="good">
+      <h4>명세 4칸</h4>
+      [목표] 기온과 판매량 관계 확인<br>
+      [제약] 원본 수정 금지 · 인과 표현 금지<br>
+      [검증] 산점도 · r · n · 실행 코드 제시<br>
+      [비목표] 원인 설명, 다음 달 예측
+    </div>
+  </div>
+  <div class="foot"><b>기억할 것</b> · 3주부터 쓴 4칸 그대로 · 모델이 바뀌어도 명세는 재사용 · 좋은 모델이 나쁜 명세를 대신 보완하지 못함</div>
+</section>
+
+<section>
+  <div class="tag gfx">사용법 · 3</div>
+  <h2>두 모델로 교차 확인</h2>
+  <div class="art-col r">
+    <table class="roomy" style="font-size:.76em">
+      <tr><th style="width:45%">결과</th><th>다음 행동</th></tr>
+      <tr><td class="ok">수치·결론 일치</td><td>핵심 수치 1개 엑셀·코드로 직접 재계산 후 채택</td></tr>
+      <tr><td class="vr-txt"><b>수치 일치 · 해석 상이</b></td><td>문장 등급 확인 · 주장 범위 축소</td></tr>
+      <tr><td class="bad">수치 불일치</td><td>코드 비교 → 결측·필터 처리 차이 추적</td></tr>
+      <tr><td class="bad">근거 코드 없음</td><td>결과 폐기 · 코드 요구 후 직접 재실행</td></tr>
+    </table>
+    <img class="art" src="../../figures/flow/d11-report.jpg" alt="보고서를 돋보기로 검토하는 사람">
+  </div>
+  <div class="analogy"><p><b>병원 2차 소견</b> : 의사 2명의 의견 일치도 참고 정보 · 최종 확인은 검사 결과 → 데이터 분석의 검사 결과 = 코드와 원자료</p></div>
+</section>
+
+<section>
+  <div class="tag trap">사용법 · 4</div>
+  <h2>올려도 되는 데이터인가 (가이드라인 기반 수업 기준)</h2>
+  <table class="roomy" style="font-size:.72em">
+    <tr><th style="width:15%">구분</th><th style="width:43%">자료 예</th><th>처리</th></tr>
+    <tr><td class="ok">가능</td><td>공공데이터 · 수업용 합성 데이터</td><td>출처·이용 조건 표기</td></tr>
+    <tr><td class="vr-txt"><b>조건부</b></td><td>수업용 설문 · 학과 자료</td><td>비식별화 · 동의 · 교수자 지침 확인 · 필요 시 로컬 모델</td></tr>
+    <tr><td class="bad">금지</td><td>타인 개인정보 · 저작권자 허가 없는 자료 · 연구용 설문·인터뷰 · 미승인 연구 자료</td><td>외부 AI 입력 금지</td></tr>
+  </table>
+  <div class="card" style="margin-top:.6em">
+    <h4>보고서에 남길 AI 사용 기록</h4>
+    <p class="xs">도구명·모델 · 사용 목적 · 활용 범위 · 검증 방법 · 팀 기여도 · 고의 누락은 부정행위 가능<br>예 : OpenCode + 모델명 · 상관 분석 코드 작성 · 코드 생성 범위 · 손계산과 소수 둘째 자리 대조</p>
+  </div>
+  <div class="note">출처 : 부산대학교 AI 윤리헌장 및 AI 활용 가이드라인 (학생용 · 연구 분야)</div>
+</section>
+
+<section class="divider part-i has-art no-1">
+  <div class="kicker">Part I · 분석 모델</div>
+  <div class="rule"></div>
+  <h1>숫자에서<br><em>규칙 찾는 모델</em></h1>
+  <p class="sub">코드는 AI 담당 · 질문과 검증은 사람 담당</p>
+  <img class="art" src="../../figures/flow/d10-design.jpg" alt="설계도와 체크리스트">
+</section>
+
+<section>
+  <div class="tag vr">분석 · 1 ★</div>
+  <h3 style="margin-bottom:.3em">질문에서 모델로</h3>
+  <img src="../../figures/out/d09-model-map.svg" class="fig" style="max-height:470px" alt="하고 싶은 일별 모델 유형과 첫 시도 모델">
+  <aside class="notes">
+    - 모델 이름보다 질문 유형 먼저 판별
+    - 학생 데이터로 한 줄씩 대입 : "내 질문은 어느 줄인가"
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">분석 · 2</div>
+  <h2>회귀 : 숫자 맞히기</h2>
+  <div class="cols wide-left" style="gap:1em;align-items:center">
+    <img src="../../figures/out/d09-regression.svg" class="fig" style="max-height:470px" alt="기온과 판매량 산점도와 회귀선">
+    <div>
+      <div class="analogy"><p><b>자 대고 선 긋기</b> : 점들 사이를 가장 잘 지나는 직선 1개</p></div>
+      <ul style="font-size:.72em;margin-top:.7em">
+        <li>결과 해석이 쉬운 첫 모델</li>
+        <li>기울기 = 1도당 변화량</li>
+        <li>관찰 범위 밖 예측 주의</li>
+        <li>기울기 ≠ 인과 효과</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><b>요청 예</b> · <code>&gt; temp_c로 ice_cream_sales 예측 선형 회귀. 앞 78주 학습, 뒤 26주 검증, MAE를 평균 기준선과 비교해줘.</code></div>
+</section>
+
+<section>
+  <div class="tag vr">분석 · 3</div>
+  <h2>분류 : 범주 맞히기</h2>
+  <img src="../../figures/out/d09-classifier.svg" class="fig" style="max-height:400px" alt="로지스틱 회귀와 결정 트리의 분류 경계">
+  <div class="foot"><b>비유</b> · 로지스틱 = 점수로 합격선 긋기 · 결정 트리 = 스무고개 «접속 4회 이상? 학식 3.5회 이상?» · <b>6주 연결</b> · 불균형 데이터는 정확도 단독 보고 금지</div>
+</section>
+
+<section>
+  <div class="tag vr">분석 · 4</div>
+  <h2>랜덤 포레스트와 변수 중요도</h2>
+  <img src="../../figures/out/d09-importance.svg" class="fig" style="max-height:365px" alt="기온 포함 여부에 따라 달라지는 변수 중요도">
+  <div class="analogy"><p><b>트리 수백 그루의 평균</b> (범주 예측은 다수결) : 혼자보다 안정적 · 중요도 = 분기에 많이 쓴 정도 · 비슷한 변수끼리 점수 분배 → <b>원인의 크기 아님</b></p></div>
+</section>
+
+<section>
+  <div class="tag vr">분석 · 5</div>
+  <h2>군집 : 정답 없이 묶기</h2>
+  <div class="cols" style="gap:1em;align-items:start">
+    <div><video class="vid" src="../../figures/out/d09-kmeans-anim.mp4" poster="../../figures/out/d09-kmeans-anim-poster.png" controls muted playsinline data-autoplay style="max-height:330px;width:100%"></video></div>
+    <div>
+      <div class="analogy"><p><b>자리 바꾸기</b> : 조장 3명을 세우고 가까운 조장 옆에 앉기 → 조의 중앙으로 조장 이동 → 반복</p></div>
+      <ul style="font-size:.72em;margin-top:.7em">
+        <li>그룹 수는 사람이 지정</li>
+        <li>실행마다 결과가 달라질 수 있어 시드 기록</li>
+        <li>그룹 이름·의미는 사람이 해석</li>
+      </ul>
+    </div>
+  </div>
+  <!-- 포스터는 PDF 대체용 -->
+</section>
+
+<section>
+  <div class="tag trap">분석 · 6</div>
+  <h2>군집 전 표준화 : 5주 z-점수의 재등장</h2>
+  <img src="../../figures/out/d09-kmeans.svg" class="fig" style="max-height:410px" alt="표준화 전후 군집 결과">
+  <div class="foot"><b>원인</b> · 거리 계산에서 만 원 단위 지출이 방문 횟수를 압도 · <b>요청 예</b> · <code>&gt; 표준화 전후 결과를 모두 보여주고 그룹별 평균표를 작성해줘.</code></div>
+</section>
+
+<section>
+  <div class="tag trap">분석 · 7</div>
+  <h2>시계열 : 미래로 시험 보기</h2>
+  <img src="../../figures/out/d09-timesplit.svg" class="fig" style="max-height:445px" alt="무작위 분리와 시간순 분리 비교">
+  <div class="foot"><b>규칙</b> · 과거로 학습 · 미래로 검증 · 기준선 = 작년 같은 시기 · AI 기본 코드의 무작위 분리 여부 확인</div>
+  <aside class="notes">시험 문제 일부를 미리 보고 공부한 구조 · 무작위 분리 오차는 분리마다 변동 (100회 평균 70.1 · 표준편차 10.9) → 숫자 비교보다 미래 정보 혼입이 문제 · 시간순 검증도 기온 실측값 사용 → 실제 예보 상황은 오차 더 클 수 있음</aside>
+</section>
+
+<section>
+  <div class="tag vr">분석 · 8</div>
+  <h2>이상 탐지와 텍스트</h2>
+  <div class="cols">
+    <div class="card trap">
+      <h4>이상 탐지</h4>
+      <p class="xs">평소와 다른 값 찾기 · 결제 오류 · 센서 고장<br>먼저 5주 IQR·도메인 규칙 → 필요 시 Isolation Forest<br><b>결과 = 점검 후보</b> · 자동 삭제 금지</p>
+      <p class="xs" style="margin-top:.5em"><code>&gt; 이상 후보 행과 이유를 목록으로 제시해줘. 원본 삭제 금지.</code></p>
+    </div>
+    <div class="card lab">
+      <h4>텍스트 (후기·설문)</h4>
+      <p class="xs">LLM 분류 : 긍정·부정·주제 라벨링<br>임베딩 : 뜻이 비슷한 글끼리 묶기<br><b>사람이 먼저 30건 라벨링</b> → AI와 일치율 확인</p>
+      <p class="xs" style="margin-top:.5em"><code>&gt; 라벨 정의를 먼저 제시. 애매한 글은 «미정»으로 분류해줘.</code></p>
+    </div>
+  </div>
+  <div class="foot"><b>LLM을 쓰지 않을 때</b> · 평균·합계처럼 규칙이 고정된 계산 → 엑셀·코드가 더 정확하고 재현 가능</div>
+</section>
+
+<section>
+  <div class="tag gfx">검증 · 1 ★</div>
+  <h3 style="margin-bottom:.25em">학습 점수만 보면 속는 이유</h3>
+  <video class="vid" src="../../figures/out/d09-overfit-anim.mp4" poster="../../figures/out/d09-overfit-anim-poster.png" controls muted playsinline data-autoplay></video>
+  <aside class="notes">
+    - 6주 과적합 복습
+    - 문제집 답 암기 비유 : 처음 보는 시험에서 점수 하락
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">검증 · 2 ★</div>
+  <h3 style="margin-bottom:.35em">과적합 실험실</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="fit-lab"></div>
+    <div class="demo-ui">
+      <label>복잡도 <input type="range" data-deg min="1" max="15" step="1" value="3"><span class="val" data-deg-v></span></label>
+      <label>학습 데이터 <input type="range" data-n min="16" max="200" step="4" value="24"><span class="val" data-n-v></span></label>
+      <button data-rerun>새 표본</button>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <!--/demo-->
+  <aside class="notes">
+    - ① 복잡도 1 → 15 : 학습 오차 대체로 감소 · 검증 오차 최저점 후 상승
+    - ② 학습 데이터 200 : 복잡한 모델의 과적합 완화
+    - ③ 새 표본 : 검증 최소 복잡도 변동
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">검증 · 3 ★</div>
+  <h2>복잡한 모델이 항상 이기지 않음</h2>
+  <img src="../../figures/out/d09-baseline.svg" class="fig" style="max-height:365px" alt="기준선, 랜덤 포레스트, 선형 회귀의 오차 비교">
+  <table style="font-size:.72em;margin-top:.5em">
+    <tr><th style="width:24%">기준선</th><th style="width:24%">학습/검증 분리</th><th style="width:26%">지표</th><th>해석</th></tr>
+    <tr><td>평균·작년 값과 비교</td><td>검증 자료 봉인 · 시계열은 시간순</td><td>MAE · 정확도 · 재현율</td><td>단순 모델부터 · 주장 범위 기록</td></tr>
+  </table>
+  <aside class="notes">이 데이터는 판매량이 기온의 직선 규칙으로 생성 → 단순 모델 유리 · 일반 법칙으로 과장 금지</aside>
+</section>
+
+<section>
+  <div class="tag gfx">검증 · 4</div>
+  <h2>실제 코드 : 10줄이면 충분</h2>
+  <pre style="font-size:.62em;margin-top:.1em"><code class="language-python" data-trim>import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error as mae
+
+df = pd.read_csv("ice_cream.csv")
+train, valid = df[df.week &lt;= 78], df[df.week &gt; 78]      # 시간순 분리
+
+base = [train.ice_cream_sales.mean()] * len(valid)      # 기준선 : 평균
+model = LinearRegression().fit(train[["temp_c"]], train.ice_cream_sales)
+pred = model.predict(valid[["temp_c"]])
+
+print(round(mae(valid.ice_cream_sales, base), 1),       # 286.6
+      round(mae(valid.ice_cream_sales, pred), 1))       # 64.7
+</code></pre>
+  <div class="foot"><b>사람의 확인</b> · 분리 기준 줄 · 기준선 존재 · 출력값 일치 · 코드 작성 능력 불필요 · 코드를 읽고 지목하는 능력 필요</div>
+</section>
+
+<section class="divider part-ii has-art">
+  <div class="kicker">Part II · 30분</div>
+  <div class="rule"></div>
+  <h1>잘 맞혀도<br><em>원인은 아님</em></h1>
+  <p class="sub">상관 · 예측 · 인과의 경계 · AI 함정 #7</p>
+  <img class="art" src="../../figures/flow/d10-hook.jpg" alt="가게 주인과 창밖 인파">
+</section>
+
+<section>
+  <div class="tag vr">판단 · 1</div>
+  <h2>함께 움직이는 세 숫자</h2>
+  <img src="../../figures/out/d09-spurious.svg" class="fig" style="max-height:455px" alt="기온, 판매량, 익사 사고의 시계열과 산점도">
+  <div class="foot"><b>데이터 규칙</b> · 판매량과 사고 모두 기온만으로 생성 · 둘 사이 직접 연결 없음 · <a href="../../data/ice_cream.csv" target="_blank">ice_cream.csv</a></div>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 2</div>
+  <h2>상관의 네 가지 설명</h2>
+  <img src="../../figures/out/d09-four-explanations.svg" class="fig" style="max-height:345px" alt="인과, 역인과, 교란, 우연의 그림">
+  <table style="font-size:.72em;margin-top:.5em">
+    <tr><th>인과</th><td>복습 시간 → 성적</td><th>역인과</th><td>병원 방문 많음 ← 원래 아픔</td></tr>
+    <tr><th>교란</th><td>기온 → 아이스크림 · 물놀이 사고</td><th>우연</th><td>변수를 많이 뒤지면 일부 우연히 일치</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 3 ★</div>
+  <h3 style="margin-bottom:.25em">기온 효과를 빼면 사라지는 관계</h3>
+  <video class="vid" src="../../figures/out/d09-stratify-anim.mp4" poster="../../figures/out/d09-stratify-anim-poster.png" controls muted playsinline data-autoplay></video>
+  <aside class="notes">
+    - 도입 질문 답 공개 지점 : 판매 금지 효과 없음 (이 데이터 생성 규칙 기준)
+    - 현실 데이터는 생성 규칙을 모름 → 실험 필요 (10주)
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 4</div>
+  <h2>층화 : 같은 조건끼리 나눠 보기</h2>
+  <img src="../../figures/out/d09-stratify.svg" class="fig" style="max-height:400px" alt="전체, 기온 구간별, 기온 효과 제거 후 상관 비교">
+  <div class="foot"><b>주의</b> · 3구간은 r 감소에 그침 · 구간 안에도 기온 차이 잔존 · <b>기온 효과 제거</b> = 기온 직선 예측 후 남은 오차(잔차)끼리의 r = 0.01</div>
+  <aside class="notes">구간별 n : 36 · 31 · 37주</aside>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 5 ★</div>
+  <h3 style="margin-bottom:.35em">교란 시뮬레이터</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="confound-sim"></div>
+    <div class="demo-ui">
+      <label>기온 영향 <input type="range" data-conf min="0" max="95" step="5" value="85"><span class="val" data-conf-v></span></label>
+      <label>직접 효과 <input type="range" data-direct min="0" max="60" step="5" value="0"><span class="val" data-direct-v></span></label>
+      <button data-strat>기온 효과 제거</button>
+      <button data-rerun>새 표본</button>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <!--/demo-->
+  <aside class="notes">
+    - ① 기온 영향 0.85 · 직접 효과 0 : 전체 r 높음 · 제거 후 r ≈ 0
+    - ② 직접 효과 0.4 : 제거 후에도 r 잔존
+    - ③ 기온 영향 0 · 직접 효과 0 : r ≈ 0
+    - 한계 : 측정 안 한 교란은 제거 불가 → 10주 무작위 배정
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 6</div>
+  <h2>심슨의 역설 : 합치면 뒤집히는 결론</h2>
+  <div class="cols wide-left" style="gap:1em;align-items:center">
+    <img src="../../figures/out/d09-simpson.svg" class="fig" style="max-height:455px" alt="튜터 A와 B의 과목별, 전체 합격률">
+    <div>
+      <p class="small"><b>과목별 합격률</b> : A가 둘 다 우세</p>
+      <p class="small"><b>전체 합격률</b> : B가 우세</p>
+      <ul style="font-size:.72em">
+        <li>A 학생 80%가 어려운 과목</li>
+        <li>B 학생 80%가 쉬운 과목</li>
+        <li>교란 = 과목 난이도</li>
+      </ul>
+      <div class="key trap"><p class="small">AI 요약이 전체 평균만 내면 결론 반전 위험</p></div>
+    </div>
+  </div>
+  <div class="note">수업용 가상 수치</div>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 7 ★</div>
+  <h2>예측과 인과는 다른 질문</h2>
+  <table class="roomy" style="font-size:.76em">
+    <tr><th style="width:18%"></th><th style="width:41%">예측 질문</th><th>인과 질문</th></tr>
+    <tr><th>문장</th><td>판매량을 보면 사고를 맞힐 수 있는가?</td><td>판매를 금지하면 사고가 줄어드는가?</td></tr>
+    <tr><th>이 데이터</th><td class="ok">가능 · 평균 찍기 1.9건 → 판매량 모델 0.8건</td><td class="bad">불가 · 사고는 기온으로 생성</td></tr>
+    <tr><th>필요 근거</th><td>검증 데이터 오차</td><td>무작위 실험 또는 그에 준하는 설계 (자연실험 등)</td></tr>
+    <tr><th>쓰임</th><td>인력 배치 · 재고 준비</td><td>정책 결정 · 제품 변경</td></tr>
+  </table>
+  <div class="key" style="margin-top:.7em"><p>예측은 «무엇이 일어날까» · 인과는 «바꾸면 어떻게 될까»</p></div>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 8 ★</div>
+  <h2>결론 문장 3등급</h2>
+  <table class="roomy" style="font-size:.76em">
+    <tr><th style="width:12%">등급</th><th style="width:40%">형식</th><th style="width:24%">필요 근거</th><th>이 데이터</th></tr>
+    <tr><td><b class="gfx-txt">기술</b></td><td>«A와 B가 함께 움직임»</td><td>상관계수 · 산점도</td><td class="ok">가능 (r = 0.88)</td></tr>
+    <tr><td><b class="vr-txt">추정</b></td><td>«C가 둘을 설명할 가능성»</td><td>교란 후보 검토 · 층화</td><td class="ok">가능 (기온)</td></tr>
+    <tr><td><b class="trap-txt">인과</b></td><td>«A가 B를 변화시킴»</td><td>무작위 실험 또는 그에 준하는 설계</td><td class="bad">불가</td></tr>
+  </table>
+  <div class="foot"><b>인과 주장 최소 조건</b> · 시간 순서 · 관련성 · 대안 설명 배제 · <b>습관</b> · 결론마다 교란 후보 3개 나열 · <b>10주 연결</b> · 무작위 배정</div>
+</section>
+
+<section class="divider trap">
+  <div class="kicker">AI 함정 #7</div>
+  <div class="rule"></div>
+  <h1>인과 문장 <em>자동 생성</em></h1>
+  <p class="sub">«해석해줘» 한마디가 만드는 «증가시킨다»</p>
+</section>
+
+<section>
+  <div class="tag trap">함정 #7 · 증상</div>
+  <h2>같은 상관, 다른 문장</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>한 줄 요청</h4>
+      &gt; 이 상관관계 해석해줘<br><br>
+      <b>가능한 응답 예</b> (수업 전 실측)<br>
+      «아이스크림 판매량 증가가 익사 사고 증가에 영향을 줍니다. 판매 규제를 고려해 볼 수 있습니다.»<br><br>
+      <span class="trap-txt">교란 후보 없음 · 인과 동사 · 처방까지 제안</span>
+    </div>
+    <div class="good">
+      <h4>명세 요청</h4>
+      &gt; r = 0.88을 기술 문장으로만 서술.<br>
+      «영향», «때문», «증가시킨다» 사용 금지.<br>
+      교란 후보 3개와 각 후보의 확인 방법을 표로.<br>
+      temp_c로 층화 후 r 재계산.<br>
+      마지막 줄 : 이 자료로 주장 불가능한 것.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">함정 #7 · 원인과 진단</div>
+  <h2>왜 생기고 어떻게 찾는가</h2>
+  <div class="cols">
+    <div class="card trap">
+      <h4>원인</h4>
+      <ul class="xs" style="margin-bottom:0">
+        <li>일상 문장의 인과 표현 습관</li>
+        <li>요청에 표현 제한 없음</li>
+        <li>«도움이 되는 조언» 쪽으로 쏠린 응답</li>
+        <li>상위 등급 모델에서도 발생 가능</li>
+      </ul>
+    </div>
+    <div class="card lab">
+      <h4>진단</h4>
+      <ul class="xs" style="margin-bottom:0">
+        <li>결론 동사에 밑줄 : 영향 · 때문 · 효과 · 증가시킴</li>
+        <li>교란 후보 3개 요구</li>
+        <li>문장 3등급 판정</li>
+        <li>변수 중요도를 원인으로 쓴 문장 검색</li>
+      </ul>
+    </div>
+  </div>
+  <div class="key trap" style="margin-top:1em"><p>더 좋은 모델로 교체 ≠ 해결 · <b>요청과 검증 절차</b>로 해결</p></div>
+</section>
+
+<section class="divider part-iii">
+  <div class="kicker">Part III · 50분</div>
+  <div class="rule"></div>
+  <h1>같은 데이터,<br><em>여러 모델로 실험</em></h1>
+  <p class="sub">LLM 2개 비교 → 층화 → 분석 모델과 기준선 대조</p>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1</div>
+  <h2>이번 주 명세</h2>
+  <pre style="font-size:.58em;margin-top:.2em"><code data-trim>[목표]
+ice_cream.csv로 판매량·사고의 관계 확인 · 판매량 예측 모델 2개 비교
+
+[제약]
+- 결론 문장에 인과 동사 금지 («영향», «때문», «효과», «증가시킨다»)
+- 원본 수정 금지 · 앞 78주 학습 · 뒤 26주 검증
+- 계산은 코드 실행으로만 · 말로 쓴 수치 금지
+
+[검증 조건]
+- r · n · 산점도 제시 · 기온 3구간별 r · 기온 직선 잔차끼리의 r 표기
+- 교란 후보 3개와 확인 방법 표
+- 평균 기준선 · 작년 같은 주 · 선형 회귀 · 랜덤 포레스트의 MAE 비교표
+- 사용한 앱 · 모델 이름 기록
+- 마지막 줄 : 이 자료로 주장할 수 없는 것 한 줄
+
+[비목표]
+- 판매 정책 제안, 그래프 꾸미기, 하이퍼파라미터 튜닝
+</code></pre>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 2</div>
+  <h2>오늘의 실습 — 50분</h2>
+  <table class="roomy" style="font-size:.76em">
+    <tr><th style="width:6%">#</th><th>활동</th><th style="width:22%">개념</th></tr>
+    <tr><td class="lab-txt"><b>1</b></td><td>«상관 해석해줘»를 LLM 2개에 입력 → 인과 표현 표시</td><td>함정 #7 · 모델 비교</td></tr>
+    <tr><td class="lab-txt"><b>2</b></td><td>명세로 재요청 · 코드 실행 근거 확인</td><td>계산 영수증</td></tr>
+    <tr><td class="lab-txt"><b>3</b></td><td>temp_c 구간으로 층화 · r 재계산</td><td>층화</td></tr>
+    <tr><td class="lab-txt"><b>4</b></td><td>기준선 · 선형 회귀 · 랜덤 포레스트 MAE 비교</td><td>기준선 · 과적합</td></tr>
+    <tr><td class="vr-txt"><b>5</b></td><td class="vr-txt">확장 : 결론 문장 3등급 판정 · 심슨 사례 탐색</td><td>주장 범위</td></tr>
+  </table>
+  <div class="foot"><b>합격 조건</b> · 상관·기준선·선형 회귀 검산값 일치 · 결론의 인과 동사 0건 · 교란 후보 3개 · <b>제출</b> · 명세 · 대화 기록 · 비교표 · AI 사용 기록</div>
+  <aside class="notes">1번에서 두 모델 모두 인과 문장을 내지 않으면 "왜 이 상관이 생겼는지 알려줘"로 재현 · 강사 사전 확인 필요</aside>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 3</div>
+  <h2>검산값 : AI 결과와 대조</h2>
+  <div class="cols">
+    <table class="roomy" style="font-size:.76em">
+      <tr><th>상관</th><th>r</th><th>n</th></tr>
+      <tr><td>판매량 × 사고 (전체)</td><td class="bad">0.88</td><td>104</td></tr>
+      <tr><td>10℃ 미만</td><td>0.45</td><td>36</td></tr>
+      <tr><td>10~20℃</td><td>0.19</td><td>31</td></tr>
+      <tr><td>20℃ 이상</td><td>0.58</td><td>37</td></tr>
+      <tr><td>기온 설명분 제거 후 (잔차)</td><td class="ok">0.01</td><td>104</td></tr>
+    </table>
+    <table class="roomy" style="font-size:.76em">
+      <tr><th>판매량 예측</th><th>MAE</th></tr>
+      <tr><td>평균 기준선</td><td>286.6</td></tr>
+      <tr><td>작년 같은 주</td><td>146.2</td></tr>
+      <tr><td>랜덤 포레스트 ※</td><td>84.8</td></tr>
+      <tr><td>선형 회귀 (기온)</td><td class="ok">64.7</td></tr>
+    </table>
+  </div>
+  <div class="foot"><b>파일</b> · <a href="../../data/ice_cream.csv" target="_blank">ice_cream.csv</a> · <b>※</b> 검산 제외 · 입력(기온·계절 sin·cos)·설정에 따라 값 변동 → 설정과 함께 보고</div>
+</section>
+
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>모델 선택 한 장</h2>
+  <table class="roomy" style="font-size:.7em">
+    <tr><th style="width:30%">상황</th><th style="width:32%">선택</th><th>필수 확인</th></tr>
+    <tr><td>표 요약·차트 초안</td><td>LLM 상위·균형 + 코드 실행</td><td>코드 · 행 수 · 축</td></tr>
+    <tr><td>후기·설문 대량 분류</td><td>LLM 빠른·경량</td><td>사람 라벨 30건과 일치율</td></tr>
+    <tr><td>숫자 예측</td><td>선형 회귀 → 필요 시 포레스트</td><td>기준선 · 검증 오차 (MAE = 평균 빗나간 개수)</td></tr>
+    <tr><td>범주 예측</td><td>로지스틱 → 결정 트리</td><td>재현율 · 불균형</td></tr>
+    <tr><td>고객·문항 묶기</td><td>표준화 + K-평균</td><td>그룹별 평균표 · 시드</td></tr>
+    <tr><td>원인 확인</td><td>모델 교체 대신 <b>실험 설계</b></td><td>10주 무작위 배정</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="tag lab">과제</div>
+  <h2>공식 과제 : 상관≠인과 사례 조사</h2>
+  <div class="cols wide-left">
+    <table class="roomy" style="font-size:.74em">
+      <tr><th>항목</th><th>작성 기준</th></tr>
+      <tr><td>사례</td><td>보도·광고의 상관 근거 1건 · 출처 링크</td></tr>
+      <tr><td>주장 판정</td><td>원문 문장의 3등급 판정</td></tr>
+      <tr><td>대안 설명</td><td>역인과·교란·우연 중 후보 3개</td></tr>
+      <tr><td>AI 비교</td><td>LLM 2개의 해석 차이 · 앱·모델 이름</td></tr>
+    </table>
+    <div class="card lab">
+      <h4>제출 시 주의</h4>
+      <p class="xs">AI가 제시한 기사·논문의 실재 확인 · 없는 출처 사용 금지 (함정 #1)<br><br>AI 사용 기록 : 도구명·목적·범위 표기</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table style="font-size:.66em">
+    <tr><th style="width:23%">개념</th><th>핵심</th></tr>
+    <tr><td><b class="gfx-txt">두 종류의 AI</b></td><td>LLM = 말·코드 생성 · 분석 모델 = 숫자에서 규칙 학습 · LLM이 분석 모델 코드 작성</td></tr>
+    <tr><td>모델·앱·위치</td><td>모델 이름은 수개월 단위 변경 · 등급으로 기억 · 앱과 모델 함께 기록</td></tr>
+    <tr><td><b class="trap-txt">계산 영수증</b></td><td>말로 쓴 수치 금지 · 코드 · 출력 · 행 수 요구 · 핵심 수치 직접 재계산</td></tr>
+    <tr><td>데이터 입력 규칙</td><td>개인정보·허가 없는 자료 금지 · AI 사용 기록 · 민감 자료는 비식별 또는 로컬</td></tr>
+    <tr><td><b class="vr-txt">분석 모델</b></td><td>회귀 · 분류 · 군집 · 시계열 · 이상 탐지 · 텍스트 → 질문 유형이 먼저</td></tr>
+    <tr><td>검증</td><td>기준선 비교 · 학습/검증 분리 · 시계열은 시간순 · 단순 모델 먼저</td></tr>
+    <tr><td><b class="vr-txt">상관의 네 설명</b></td><td>인과 · 역인과 · 교란 · 우연 · 층화 · 기온 설명분 제거 r 0.88 → 0.01</td></tr>
+    <tr><td>예측 vs 인과</td><td>잘 맞힘 ≠ 바꾸면 변함 · 변수 중요도 ≠ 원인</td></tr>
+    <tr><td><b class="trap-txt">AI 함정 #7</b></td><td>인과 문장 자동 생성 → 동사 제한 · 교란 후보 3개 · 문장 3등급</td></tr>
+  </table>
+</section>
+
+<section class="divider next part-i">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>인과를 확인하는 <em>실험</em></h1>
+  <p class="sub">측정 못 한 교란까지 나누는 방법 · 무작위 배정<br>A/B 테스트 설계</p>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="../_shared/demos/d09.js"></script>
+<script src="../_shared/deck-editorial.js"></script>
+</body>
+</html>

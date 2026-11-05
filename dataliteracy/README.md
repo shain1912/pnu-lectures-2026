@@ -17,6 +17,7 @@
 | 4 | 기술통계 기초 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w04/ | [PDF](dist/d04-기술통계기초.pdf) | [zip](dist/d04-interactive-slides.zip) |
 | 5 | z-점수와 표준화 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w05/ | [PDF](dist/d05-z점수와표준화.pdf) | [zip](dist/d05-interactive-slides.zip) |
 | 6 | 차트 선택과 시각화의 함정 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w06/ | [PDF](dist/d06-차트선택과시각화의함정.pdf) | [zip](dist/d06-interactive-slides.zip) |
+| 9 | 데이터 분석을 위한 AI 모델과 사용법 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w09/ | [PDF](dist/d09-데이터분석을위한AI모델과사용법.pdf) | [zip](dist/d09-interactive-slides.zip) |
 | 10 | 가설·실험군/대조군·무작위 배정 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w10/ | [PDF](dist/d10-가설실험군대조군무작위배정.pdf) | [zip](dist/d10-interactive-slides.zip) |
 | 11 | A/B 결과·통계적 유의성·p값 | https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w11/ | [PDF](dist/d11-AB결과통계적유의성p값.pdf) | [zip](dist/d11-interactive-slides.zip) |
 
@@ -36,7 +37,7 @@
 | 경로 | 내용 |
 |---|---|
 | `slides/wNN/index.html` | 주차별 슬라이드 원본 |
-| `slides/_shared/` | 테마 CSS · reveal 초기화 · 데모 (`d03.js` 결측 대치, `d04.js` 대표값, `d05.js` 표준화, `d06.js` 차트 조작, `d10.js` 배정 비교, `d11.js` 유의성 시뮬레이터) · 10주부터 `theme-editorial.css` |
+| `slides/_shared/` | 테마 CSS · reveal 초기화 · 데모 (`d03.js` 결측 대치, `d04.js` 대표값, `d05.js` 표준화, `d06.js` 차트 조작, `d09.js` 과적합·교란, `d10.js` 배정 비교, `d11.js` 유의성 시뮬레이터) · 10주부터 `theme-editorial.css` |
 | `figures/dNN_figures.py` | matplotlib 도해 생성 스크립트 |
 | `figures/anim/` | manim 애니메이션 소스 · `render.py` 로 렌더 |
 | `figures/flow/` | Google Flow 삽화 (10주부터 · 16:9 JPG) |
@@ -58,6 +59,10 @@ SLIDE_PORT=8766 node slides/build.mjs 02 03 04
 .venv/Scripts/python.exe dataliteracy/figures/d10_figures.py
 .venv/Scripts/python.exe dataliteracy/figures/d11_figures.py
 .venv/Scripts/python.exe dataliteracy/figures/anim/render.py
+
+# 9주
+.venv/Scripts/python.exe dataliteracy/figures/d09_figures.py
+.venv/Scripts/python.exe dataliteracy/figures/anim/render_d09.py
 ```
 
 ## AI 함정 시리즈
@@ -69,6 +74,7 @@ SLIDE_PORT=8766 node slides/build.mjs 02 03 04
 | 4 | #3 | 평균 하나로 끝낸 요약 |
 | 5 | #4 | 분포 확인 없는 이상치 제거 |
 | 6 | #5 | 기본값 그대로의 차트 |
+| 9 | #7 | 인과 문장 자동 생성 |
 | 10 | #8 | 무작위 배정 없는 A/B |
 | 11 | #9 | p<0.05 단정 |
 

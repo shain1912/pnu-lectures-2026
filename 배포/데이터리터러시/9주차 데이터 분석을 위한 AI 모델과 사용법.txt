@@ -1,0 +1,6 @@
+9주차 데이터 분석을 위한 AI 모델과 사용법
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w09/
+PDF          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d09-데이터분석을위한AI모델과사용법.pdf
+zip          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d09-interactive-slides.zip
+원본         : dataliteracy/slides/w09/index.html

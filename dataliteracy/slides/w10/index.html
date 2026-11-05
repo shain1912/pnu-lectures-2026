@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10주차 · 가설·실험군/대조군·무작위 배정 — 데이터리터러시</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme-editorial.css">
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<section class="cover has-art">
+  <div class="week">Week 10</div>
+  <h1>A/B 테스트<br>설계하기</h1>
+  <p style="font-size:.82em">가설 · 실험군과 대조군 · 무작위 배정<br>비전공자를 위한 바이브코딩 실습</p>
+  <div class="meta">
+    데이터리터러시의이해 SF1101084 · AI융합교육원<br>
+    조성호 · 2026학년도 2학기
+  </div>
+  <img class="art" src="../../figures/flow/d10-cover.jpg" alt="똑같은 가게 두 곳으로 갈라지는 사람들과 공중의 동전">
+</section>
+
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="art-col r">
+    <div>
+      <div class="ask" style="font-size:1.28em">
+        새 버튼 도입 후<br><span class="hl">클릭 2배</span><br><br>
+        버튼 효과로 볼 수 있는가?
+      </div>
+    </div>
+    <img class="art" src="../../figures/flow/d10-hook.jpg" alt="차트를 보는 가게 주인과 창밖으로 지나가는 축제 인파">
+  </div>
+  <aside class="notes">
+    - 답 공개 안 함 · 손들기로 예 / 아니오 / 모르겠음 집계
+    - 그림 힌트 : 창밖 인파를 가게 주인이 못 보는 장면
+    - 답 공개 위치 : Part I «전후 비교의 한계»
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>학습 목표</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span>설계</h4>
+      <p>가설 · 실험군/대조군 · <b>무작위 배정</b>의 역할 설명<br>A/B 구성요소 6종으로 설계서 작성</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step">2</span>판단</h4>
+      <p>전후 비교·자원자 비교의 <b>한계</b> 판별<br>설계 점검표로 실험 합격 여부 판정</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step">3</span>바이브코딩</h4>
+      <p>AI 에이전트로 <b>A/B 페이지</b> 제작<br>새로고침 · 배정 비율 · 로그로 AI 결과 검증</p>
+    </div>
+  </div>
+  <div class="foot"><b>오늘의 결과물</b> · 학식 쿠폰 A/B 페이지 + 일상 속 A/B 설계서 · 코드 작성은 AI · 평가 대상은 명세와 검증</div>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>오늘 다룰 내용</h2>
+  <table class="roomy" style="font-size:0.78em">
+    <tr><th style="width:18%">시간</th><th style="width:26%">블록</th><th>내용</th></tr>
+    <tr><td>10:00–10:10</td><td>도입 질문</td><td>새 버튼과 클릭 2배</td></tr>
+    <tr><td>10:10–11:10</td><td><b class="gfx-txt">Part I 개념</b></td><td>전후 비교 한계 · 가설 · 무작위 배정 · 6요소 · 표본 크기</td></tr>
+    <tr><td>11:10–11:20</td><td>휴식</td><td></td></tr>
+    <tr><td>11:20–11:50</td><td><b class="vr-txt">Part II 판단</b></td><td>설계 점검표 · 사례 판정 · 지표 고르기 · AI 함정 #8</td></tr>
+    <tr><td>11:50–12:40</td><td><b class="lab-txt">Part III 실습</b></td><td>명세 → AI 생성 → 관찰 → 수정</td></tr>
+    <tr><td>12:40–13:00</td><td>정리</td><td>한 장 요약 · 과제 브리핑</td></tr>
+  </table>
+  <div class="foot"><b>이어지는 흐름</b> · 9주 «상관≠인과» → 10주 인과 확인 실험 설계 → 11주 실험 결과 해석</div>
+</section>
+
+<section class="divider part-i has-art">
+  <div class="kicker">Part I · 60분</div>
+  <div class="rule"></div>
+  <h1>비교를<br><em>공정하게</em></h1>
+  <p class="sub">전후 비교로 알 수 없는 것<br>대조군과 무작위 배정의 역할</p>
+  <img class="art" src="../../figures/flow/d10-twins.jpg" alt="메뉴판 색만 다른 쌍둥이 노점">
+</section>
+
+<section>
+  <div class="tag gfx">개념 · 1 ★</div>
+  <h2>전후 비교의 한계</h2>
+  <img src="../../figures/out/d10-before-after.svg" class="fig" style="max-height:455px" alt="왼쪽 전후 비교 그래프와 오른쪽 대조군 포함 그래프">
+  <div class="foot"><b>도입 질문 답</b> · 판단 불가 · 같은 시기의 시험 종료 · 방학 · 축제 · 광고가 함께 작용 → 비교 대상 필요</div>
+  <aside class="notes">
+    - 왼쪽 먼저 공개 · "버튼 덕분인가" 재질문
+    - 오른쪽 공개 : 대조군도 함께 상승 · 상승 대부분이 시기 효과
+    - 9주 교란변수 연결 : 시기가 버튼 교체와 클릭률에 동시에 관련
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">개념 · 2</div>
+  <h2>A/B 테스트 : 같은 시기 · 같은 조건 · 한 가지만 다르게</h2>
+  <div class="art-col l">
+    <img class="art" src="../../figures/flow/d10-twins.jpg" alt="메뉴판 색만 다른 쌍둥이 노점">
+    <div>
+      <div class="analogy">
+        <p><b>쌍둥이 분식집</b> : 맛·위치·날씨·손님 동일 · 메뉴판 색만 상이</p>
+        <p>매출 차이의 원인 후보 = 메뉴판 하나</p>
+      </div>
+      <ul style="font-size:0.82em;margin-top:.7em">
+        <li>A = 기존안 · B = 변경안</li>
+        <li>같은 기간에 동시 운영 → 시기 효과 제거</li>
+        <li>사람을 난수로 나눔 → 사람 차이 쏠림 방지 (완전 일치는 아님)</li>
+        <li>남는 차이 = 변경 효과 + 우연</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><b>남은 문제</b> · 차이 중 우연의 몫 구분 → 11주 주제</div>
+</section>
+
+<section>
+  <div class="tag gfx">개념 · 3</div>
+  <h2>실험 용어 4개</h2>
+  <dl class="terms">
+    <dt>처치<small>Treatment</small></dt>
+    <dd><p>실험에서 일부러 바꾼 것 하나</p><p class="ex">버튼 문구를 «쿠폰 받기» → «오늘 점심 500원 아끼기»로 변경</p></dd>
+    <dt>실험군<small>Treatment group</small></dt>
+    <dd><p>처치를 받은 집단 (B안)</p><p class="ex">새 문구 화면을 본 학생들</p></dd>
+    <dt>대조군<small>Control group</small></dt>
+    <dd><p>처치를 받지 않은 비교 기준 집단 (A안)</p><p class="why">없으면 «어차피 일어났을 변화»와 효과 구분 불가</p></dd>
+    <dt>지표<small>Metric</small></dt>
+    <dd><p>성공 여부를 재는 숫자</p><p class="ex">클릭률 = 클릭한 학생 수 / 화면을 본 학생 수</p><p class="where">앱 로그 · 설문 · 매출 기록</p></dd>
+  </dl>
+</section>
+
+<section>
+  <div class="tag gfx">개념 · 4</div>
+  <h2>일상 속 A/B 예시</h2>
+  <table class="roomy" style="font-size:0.78em">
+    <tr><th>상황</th><th>A (기존)</th><th>B (변경)</th><th>지표</th><th>배정 단위</th></tr>
+    <tr><td><b>학습법</b></td><td>평소대로 복습</td><td>공부 후 퀴즈 10문제</td><td>2주 뒤 시험 점수</td><td>학생</td></tr>
+    <tr><td><b>알림 문구</b></td><td>«강의자료 등록»</td><td>«오늘 자료 5분 요약»</td><td>24시간 내 열람률</td><td>수강생</td></tr>
+    <tr><td><b>진열 위치</b></td><td>음료 안쪽 냉장고</td><td>음료 계산대 옆</td><td>매장당 음료 판매량</td><td>매장·요일</td></tr>
+    <tr><td><b>가격 표시</b></td><td>«4,500원»</td><td>«4,500원 · 쿠폰 시 3,900원»</td><td>주문 전환율</td><td>방문자</td></tr>
+    <tr><td><b>모집 포스터</b></td><td>활동 소개 중심</td><td>선배 후기 중심</td><td>QR 스캔 후 신청률</td><td>건물별 게시판</td></tr>
+    <tr><td><b>유튜브 썸네일</b></td><td>얼굴 + 제목</td><td>결과 장면 + 제목</td><td>노출 대비 클릭률</td><td>시청자</td></tr>
+  </table>
+  <div class="foot"><b>공통 구조</b> · 바꾼 것 하나 · 측정 숫자 하나 · 누구에게 어느 안을 보여 줄지 사전 결정</div>
+</section>
+
+<section>
+  <div class="tag gfx">개념 · 5</div>
+  <h2>왜 실무에서 실험하는가</h2>
+  <div class="cols3" style="margin-top:.6em">
+    <div class="stat gfx"><span class="n">+12%</span><span class="l"><b>Bing 광고 제목</b> (2012)<br>제목 줄 길이 변경 하나로 매출 12% 증가<br>미국 내 연 1억 달러 이상 규모</span></div>
+    <div class="stat lab"><span class="n">+40.6%</span><span class="l"><b>오바마 캠프 가입 화면</b> (2008)<br>사진·버튼 조합 변경 · 가입률 8.26% → 11.6% (원문 표기 +40.6%)<br>추가 기부 약 6천만 달러는 캠프 측 추정</span></div>
+    <div class="stat trap"><span class="n">10~20%</span><span class="l"><b>Google·Bing 실험 성공률</b><br>긍정 결과를 낸 실험 비율<br>대부분의 아이디어 효과 없음 또는 역효과</span></div>
+  </div>
+  <div class="key" style="margin-top:1.1em"><p>전문가 직감도 자주 빗나감 → <b>의견</b>을 <b>증거</b>로 바꾸는 절차가 A/B 테스트</p></div>
+  <div class="note">출처 : Kohavi &amp; Thomke, Harvard Business Review 2017 · Siroker, Optimizely 2010</div>
+  <aside class="notes">
+    - Bing : 아이디어가 6개월 넘게 낮은 우선순위로 방치된 사례로 소개
+    - 오바마 : 가입 화면 실험 · 6천만 달러는 추정치임을 명시
+    - 감마 자료의 «오바마 이메일 40%» «MS 8천만 달러» 표기는 원문과 차이 → 이 덱은 원문 기준
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">가설 · 1</div>
+  <h2>가설 : 데이터 수집 전에 쓰는 두 문장</h2>
+  <img src="../../figures/out/d10-hypothesis.svg" class="fig" style="max-height:415px" alt="귀무가설과 대립가설, 선언 후 수집 후 판단 순서">
+  <div class="analogy" style="margin-top:.9em"><p><b>재판의 무죄 추정</b> : 일단 «차이 없음»으로 출발 · 증거가 충분할 때만 뒤집기</p></div>
+  <aside class="notes">
+    - 11주 p값 해석의 전제이므로 귀무가설 개념만 확실히
+    - 수집 후 가설 작성 = 결과 보고 답안 고치기
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">가설 · 2</div>
+  <h2>가설 문장 고치기</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>측정 불가</h4>
+      «새 디자인이 더 좋을 것»<br><br>
+      «쿠폰 문구를 바꾸면 효과가 있을 것»<br><br>
+      «퀴즈 공부법이 도움이 될 것»
+    </div>
+    <div class="good">
+      <h4>측정 가능</h4>
+      «B 화면의 가입 완료율이 A와 다를 것»<br><br>
+      «B 문구의 14일 클릭률이 A와 다를 것 (찾을 효과 +2점)»<br><br>
+      «퀴즈 집단의 2주 뒤 시험 평균이 대조군과 다를 것»
+    </div>
+  </div>
+  <table class="roomy" style="font-size:0.92em">
+    <tr><th>빈칸 공식</th><td><b>[대상]</b>에게 <b>[처치]</b>를 적용하면 <b>[기간]</b> 동안 <b>[지표]</b>가 <b>[기준]</b>과 비교해 <b>[방향·크기]</b>로 변화</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="tag gfx">배정 · 1 ★</div>
+  <h3 style="margin-bottom:.3em">집단을 나누는 세 가지 방법</h3>
+  <img src="../../figures/out/d10-assignment.svg" class="fig" style="max-height:490px" alt="자원자, 사후 비교, 무작위 배정의 숨은 특성 비율 비교">
+  <aside class="notes">
+    - 숨은 특성 = 설문·로그에 없는 동기·성향
+    - 왜 나쁜지보다 처치 전부터 집단이 다르다는 사실에 집중
+    - 비율은 데모와 같은 모형의 기댓값
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">배정 · 2</div>
+  <h2>자원자 비교의 함정</h2>
+  <div class="art-col l">
+    <img class="art" src="../../figures/flow/d10-volunteer.jpg" alt="새 학습 공간으로 달려가는 일부 학생과 뒤에 남은 학생">
+    <div>
+      <p style="font-size:.84em;margin-bottom:.4em"><b>«새 공부법 신청자의 성적이 더 높음»</b></p>
+      <ul style="font-size:0.80em">
+        <li>신청자 = 원래 의욕 높은 학생</li>
+        <li>공부법 없이도 성적이 높았을 가능성</li>
+        <li>효과와 의욕이 한 덩어리 → 분리 불가</li>
+      </ul>
+      <table style="font-size:0.72em;margin-top:.6em">
+        <tr><th>같은 구조</th><th>섞여 있는 것</th></tr>
+        <tr><td>프리미엄 가입자 재구매율</td><td>원래 충성 고객</td></tr>
+        <tr><td>영양제 복용자 건강 수치</td><td>건강 관심 · 생활 습관</td></tr>
+        <tr><td>과외 수강생 성적</td><td>가정 환경 · 학습 동기</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">배정 · 3</div>
+  <h2>방식별 추정 효과 : 실제 효과는 같음</h2>
+  <img src="../../figures/out/d10-volunteer-bias.svg" class="fig" style="max-height:440px" alt="자원자 모집 8.5점, 사후 비교 6점, 무작위 배정 2점">
+  <div class="foot"><b>모형</b> · 동기 높은 사람은 클릭률 10점 더 높음 · 처치의 실제 효과 +2점 · 자원자 모집은 효과를 4배 넘게 과대 추정</div>
+</section>
+
+<section>
+  <div class="tag gfx">배정 · 4 ★</div>
+  <h3 style="margin-bottom:.25em">동전 던지기가 숨은 특성까지 나누는 장면</h3>
+  <video class="vid" src="../../figures/out/d10-random-balance.mp4" poster="../../figures/out/d10-random-balance-poster.png" controls muted playsinline data-autoplay></video>
+  <aside class="notes">
+    - 마지막 장면 54% vs 46% 주목 : 48명이면 약간의 불균형 발생 → 표본 크기 슬라이드 연결
+    - 영상 시드는 평균에 가까운 1회로 선택 · 재생마다 다른 실험 아님
+    - 재생 후 "측정 안 한 특성은 어떻게 맞추는가" 질문
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">배정 · 5</div>
+  <h2>무작위 배정의 효과</h2>
+  <div class="art-col r">
+    <div>
+      <div class="analogy">
+        <p><b>제비뽑기 모둠 편성</b> : 키·성적·성격을 몰라도 인원이 많으면 양쪽 모둠이 비슷</p>
+      </div>
+      <ul style="font-size:0.82em;margin-top:.7em">
+        <li><b>알려진 교란</b> 균형 : 학년 · 기기 · 이용 빈도</li>
+        <li><b>숨은 교란</b> 균형 : 동기 · 기분 · 친구 영향</li>
+        <li>처치가 유일한 체계적 차이 → 인과 주장 가능</li>
+        <li>9주 문장 등급 «A가 B를 변화시킴»의 근거</li>
+      </ul>
+    </div>
+    <img class="art" src="../../figures/flow/d10-coinflip.jpg" alt="동전 아래에서 두 문으로 나뉘는 학생들">
+  </div>
+  <div class="foot"><b>주의</b> · 사람이 «대충 번갈아» 정한 배정은 무작위 아님 · 난수와 시드 기록 필요</div>
+</section>
+
+<section>
+  <div class="tag gfx">배정 · 6</div>
+  <h2>손으로 확인 : 12명 배정</h2>
+  <div class="cols wide-left">
+    <table style="font-size:0.72em">
+      <tr><th>학생</th><th>주당 공부시간</th><th>자원자 방식</th><th>제비뽑기</th></tr>
+      <tr><td>가 · 나 · 다</td><td>12 · 11 · 10</td><td class="bad">실험 · 실험 · 실험</td><td>대조 · 실험 · 대조</td></tr>
+      <tr><td>라 · 마 · 바</td><td>9 · 8 · 7</td><td class="bad">실험 · 실험 · 대조</td><td>실험 · 대조 · 대조</td></tr>
+      <tr><td>사 · 아 · 자</td><td>6 · 5 · 4</td><td class="bad">실험 · 대조 · 대조</td><td>대조 · 실험 · 실험</td></tr>
+      <tr><td>차 · 카 · 타</td><td>3 · 2 · 1</td><td class="bad">대조 · 대조 · 대조</td><td>실험 · 대조 · 실험</td></tr>
+    </table>
+    <div>
+      <div class="stat trap"><span class="n" style="font-size:1.3em">9.3 vs 3.7시간</span><span class="l">자원자 방식 : 실험군 평균 vs 대조군 평균</span></div>
+      <div class="stat lab" style="margin-top:.9em"><span class="n" style="font-size:1.3em">5.5 vs 7.5시간</span><span class="l">제비뽑기 : 실험군 평균 vs 대조군 평균</span></div>
+    </div>
+  </div>
+  <div class="foot"><b>계산</b> · 자원자 실험군 (12+11+10+9+8+6)÷6 = 9.3 · 제비뽑기 실험군 (11+9+5+4+3+1)÷6 = 5.5 · 12명이면 차이 일부 잔존 · 뽑을 때마다 변동</div>
+  <aside class="notes">
+    - 칠판에서 평균 직접 계산
+    - 제비뽑기 실험군 : 나11 라9 아5 자4 차3 타1 = 33 ÷ 6 = 5.5 / 대조군 : 가12 다10 마8 바7 사6 카2 = 45 ÷ 6 = 7.5
+    - 소표본의 잔여 차이 → 표본 크기 슬라이드 연결
+    - 자원자 실험군 : 12·11·10·9·8·6 = 56 ÷ 6 = 9.3 / 대조군 : 7·5·4·3·2·1 = 22 ÷ 6 = 3.7
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">배정 · 7 ★</div>
+  <h3 style="margin-bottom:.35em">배정 방식 비교기</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="assign-compare"></div>
+    <div class="demo-ui">
+      <button data-mode="volunteer">자원자</button>
+      <button data-mode="post">사후</button>
+      <button data-mode="random">무작위</button>
+      <label>표본 전체 <input type="range" data-n min="40" max="10000" step="40" value="800"><span class="val" data-n-v></span></label>
+      <label>숨은 교란 <input type="range" data-conf min="0" max="30" step="1" value="10"><span class="val" data-conf-v></span></label>
+      <button data-rerun>다시 실험</button>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <!--/demo-->
+  <aside class="notes">
+    - ① 자원자 + 표본 800 : 추정값이 +8점대에 몰림
+    - ② 표본을 10,000으로 : 점은 좁아지지만 위치는 그대로 → 표본을 늘려도 편향은 미해결
+    - ③ 무작위 + 표본 40 : 평균은 +2 근처 · 흩어짐 큼 → 표본 크기 슬라이드 연결
+    - ④ 숨은 교란 0 : 세 방식 동일 → 교란이 편향의 원인임을 확인
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">배정 · 8</div>
+  <h2>배정 단위 : 누구를 한 칸으로 볼 것인가</h2>
+  <img src="../../figures/out/d10-unit.svg" class="fig" style="max-height:430px" alt="페이지뷰, 학생, 반 단위 배정 비교">
+  <div class="foot"><b>기준</b> · 처치 경험이 섞이지 않는 가장 작은 단위 · 배정 단위와 분석 단위 일치 · 친구 사이 정보 전파 시 반·건물 단위 검토</div>
+</section>
+
+<section>
+  <div class="tag gfx">6요소 · 1 ★</div>
+  <h2>A/B 구성요소 6종 : 학식 쿠폰 앱 설계서</h2>
+  <table class="roomy" style="font-size:0.78em">
+    <tr><th style="width:7%">#</th><th style="width:16%">요소</th><th style="width:37%">질문</th><th>학식 쿠폰 앱 예</th></tr>
+    <tr><td>1</td><td><b>대상</b></td><td>누구에게 실험하는가</td><td>쿠폰 화면에 접속한 재학생</td></tr>
+    <tr><td>2</td><td><b>배정 단위</b></td><td>무엇을 한 칸으로 나누는가</td><td>학생 1명 · 첫 접속 때 고정</td></tr>
+    <tr><td>3</td><td><b>처치</b></td><td>무엇을 바꾸는가</td><td>A «쿠폰 받기» · B «오늘 점심 500원 아끼기»</td></tr>
+    <tr><td>4</td><td><b>지표</b></td><td>무엇으로 판단하는가</td><td>주 지표 클릭률 · 보조 지표 앱 종료율</td></tr>
+    <tr><td>5</td><td><b>기간</b></td><td>언제부터 언제까지인가</td><td>14일 · 요일 효과를 고려해 7일 단위</td></tr>
+    <tr><td>6</td><td><b>표본 크기</b></td><td>몇 명이 필요한가</td><td>집단당 3,841명 이상 (기준 10% · 찾을 효과 +2점)</td></tr>
+  </table>
+  <div class="key" style="margin-top:.8em"><p class="small">6개 중 하나라도 빠지면 설계서 미완성 · AI 요청에도 6개 전부 포함</p></div>
+</section>
+
+<section>
+  <div class="tag gfx">표본 · 1 ★</div>
+  <h2>작은 차이일수록 필요한 사람 급증</h2>
+  <img src="../../figures/out/d10-sample-size.svg" class="fig" style="max-height:410px" alt="찾으려는 효과가 작을수록 커지는 필요 표본 막대">
+  <div class="foot"><b>비유</b> · 시끄러운 교실의 작은 목소리 → 더 오래 들어야 구분 · +10점 → +2점 : 효과 5분의 1, 표본 약 19배<br><b>용어</b> · 점 = %포인트 · 유의수준 5% = 효과 없을 때 «유의» 오판 비율 · 검정력 80% = 진짜 효과를 10번 중 8번 포착</div>
+  <aside class="notes">
+    - 이론 근사 : 효과가 1/k이면 표본 k² 배 (5분의 1 → 약 25배)
+    - 정확 계산은 기준 비율 변화 때문에 약 19배 · 계획서의 25배는 근사치
+    - 기본 설정 : 양측 5% · 검정력 80%
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">표본 · 2</div>
+  <h2>표본에서 기간으로</h2>
+  <div class="cols wide-right">
+    <div>
+      <div class="stat gfx"><span class="n">600명</span><span class="l">하루 신규 방문 학생 (재방문 제외)</span></div>
+      <div class="stat vr" style="margin-top:.8em"><span class="n">7,682명</span><span class="l">필요 인원 = 3,841 × 2</span></div>
+      <div class="stat lab" style="margin-top:.8em"><span class="n">14일</span><span class="l">13일 필요 → 7일 단위 올림</span></div>
+    </div>
+    <div>
+      <table style="font-size:0.78em">
+        <tr><th>찾을 효과</th><th>군당 인원</th><th>하루 600명 기준 기간</th><th>판단</th></tr>
+        <tr><td>+5점</td><td>686</td><td>3일 → 7일</td><td>가능</td></tr>
+        <tr><td><b>+2점</b></td><td><b>3,841</b></td><td><b>13일 → 14일</b></td><td class="ok">이번 설계</td></tr>
+        <tr><td>+1점</td><td>14,751</td><td>50일</td><td>학기 일정 확인</td></tr>
+        <tr><td>+0.5점</td><td>57,763</td><td>193일</td><td class="bad">현실성 없음</td></tr>
+      </table>
+      <ul style="font-size:0.76em;margin-top:.7em">
+        <li>요일별 이용 패턴 차이 → 최소 1주 단위</li>
+        <li>찾을 효과 = 이 정도면 바꿀 가치가 있는 최소 크기</li>
+        <li>계산은 AI · 입력값 3개 제공은 사람</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">설계 · 1</div>
+  <h2>사전 등록 : 시험 전 채점표 봉인</h2>
+  <div class="art-col l">
+    <img class="art" src="../../figures/flow/d10-design.jpg" alt="설계도 위 돋보기와 체크리스트">
+    <div>
+      <p style="font-size:.78em;margin-bottom:.4em"><b>데이터를 보기 전에 기록할 것</b></p>
+      <table style="font-size:0.74em">
+        <tr><td><b>주 지표</b></td><td>클릭률 1개</td></tr>
+        <tr><td><b>분석 방법</b></td><td>두 비율 차이 검정 · 양측 5%</td></tr>
+        <tr><td><b>기간·표본</b></td><td>14일 · 집단당 3,841명 이상</td></tr>
+        <tr><td><b>실질 기준</b></td><td>+2점 (바꿀 가치가 있는 최소 효과)</td></tr>
+        <tr><td><b>중단 규칙</b></td><td>오류·부작용 발생 시만 중단</td></tr>
+      </table>
+      <div class="analogy" style="margin-top:1.1em"><p><b>시험 전에 채점 기준 공개</b> · 답안 보고 기준을 바꾸는 일 차단</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">설계 · 2</div>
+  <h2>실험 윤리 : 동의 · 위험 · 철회</h2>
+  <div class="art-col r">
+    <div>
+      <table style="font-size:0.76em">
+        <tr><th>질문</th><th>확인 내용</th></tr>
+        <tr><td><b>동의</b></td><td>참여 사실 안내 · 수집 항목 고지</td></tr>
+        <tr><td><b>위험</b></td><td>B안이 손해·불쾌감을 줄 가능성</td></tr>
+        <tr><td><b>철회</b></td><td>언제든 그만둘 방법</td></tr>
+        <tr><td><b>공정</b></td><td>가격 차별·건강·성적 불이익 여부</td></tr>
+      </table>
+      <div class="card trap" style="margin-top:.8em">
+        <h4>2014 페이스북 감정 실험 논란</h4>
+        <p class="xs">약 69만 명 뉴스피드의 감정 게시물 노출 비율 조정 · 동의·이탈 기회 문제 제기<br>PNAS 게재 후 학술지가 «우려 표명»</p>
+      </div>
+    </div>
+    <img class="art" src="../../figures/flow/d10-ethics.jpg" alt="동의서를 든 사람과 열린 출구">
+  </div>
+  <div class="note">출처 : Kramer et al., PNAS 2014 · PNAS Editorial Expression of Concern 2014</div>
+</section>
+
+<section class="divider part-ii">
+  <div class="kicker">Part II · 30분</div>
+  <div class="rule"></div>
+  <h1>이 실험,<br><em>믿어도 되는가</em></h1>
+  <p class="sub">설계 점검표 · 사례 판정 · 지표 고르기 · AI 함정 #8</p>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 1 ★</div>
+  <h2>설계 점검표 5문</h2>
+  <table class="roomy" style="font-size:0.82em">
+    <tr><th style="width:22%">항목</th><th style="width:39%">합격</th><th>불합격 예</th></tr>
+    <tr><td><b>배정 절차</b></td><td>난수 · 시드 또는 코드 기록</td><td class="bad">먼저 온 순서 · 담당자 임의 지정</td></tr>
+    <tr><td><b>단위 일관</b></td><td>배정·측정·분석 단위 동일</td><td class="bad">학생 배정 후 클릭 수 단위 분석</td></tr>
+    <tr><td><b>지표 사전 정의</b></td><td>계산식까지 문장화</td><td class="bad">결과 후 유리한 지표 선택</td></tr>
+    <tr><td><b>기간 고정</b></td><td>시작일·종료일·요일 포함</td><td class="bad">좋은 결과가 나온 날 종료</td></tr>
+    <tr><td><b>중단 규칙</b></td><td>중단 조건 사전 명시</td><td class="bad">"유의해지면 중단"</td></tr>
+  </table>
+  <div class="foot"><b>판정</b> · 5개 모두 합격 시 실험 시작 · 표본 크기와 윤리는 설계서에서 별도 확인</div>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 2</div>
+  <h2>사례 판정 : 어디가 문제인가</h2>
+  <table class="roomy" style="font-size:0.78em">
+    <tr><th style="width:6%">#</th><th style="width:56%">사례</th><th>불합격 항목</th></tr>
+    <tr><td>1</td><td>«오전에 온 손님은 A 메뉴판, 오후 손님은 B 메뉴판»</td><td class="vr-txt"><b>배정</b> · 시간대와 처치 혼합</td></tr>
+    <tr><td>2</td><td>«수업 A반은 새 교재, B반은 기존 교재 · 교수 다름»</td><td class="vr-txt"><b>배정·조건</b> · 교수 차이 혼입</td></tr>
+    <tr><td>3</td><td>«클릭, 결제, 체류 중 좋아진 지표로 보고»</td><td class="vr-txt"><b>지표</b> · 사후 선택</td></tr>
+    <tr><td>4</td><td>«3일째 B가 앞서기에 전체 적용»</td><td class="vr-txt"><b>기간·중단</b> · 조기 종료</td></tr>
+    <tr><td>5</td><td>«앱 켤 때마다 버튼이 랜덤, 학생별 클릭률 분석»</td><td class="vr-txt"><b>단위</b> · 같은 학생이 A·B 경험</td></tr>
+    <tr><td>6</td><td>«새 앱 설치 희망자 200명과 미설치자 200명 비교»</td><td class="vr-txt"><b>배정</b> · 자원자 비교</td></tr>
+  </table>
+  <aside class="notes">
+    - 답 열 가린 상태로 2인 1조 토론 3분 후 공개
+    - 2번은 교수 1명이 두 반 모두 담당해도 반 차이 존재 → 반 단위 표본 부족
+  </aside>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 3</div>
+  <h2>무엇을 지표로 삼을 것인가</h2>
+  <div class="cols">
+    <div class="card trap">
+      <h4>허무 지표 (Vanity)</h4>
+      <p class="xs">숫자가 커도 다음 행동이 불분명<br>예 : 누적 앱 실행 횟수 · 한 명의 재접속 100번도 합산</p>
+    </div>
+    <div class="card lab">
+      <h4>실행 가능 지표 (Actionable)</h4>
+      <p class="xs">숫자를 보면 고칠 곳이 결정<br>예 : 쿠폰 화면 → 사용 완료 전환율 10% → 화면 문구 수정</p>
+    </div>
+  </div>
+  <table class="roomy" style="font-size:0.86em">
+    <tr><th>역할</th><th>뜻</th><th>학식 쿠폰 앱</th></tr>
+    <tr><td><b class="gfx-txt">주 지표</b></td><td>성패를 가르는 숫자 1개</td><td>버튼 클릭률</td></tr>
+    <tr><td><b class="vr-txt">보조 지표</b></td><td>원인 이해용</td><td>쿠폰 실제 사용률 · 체류 시간</td></tr>
+    <tr><td><b class="trap-txt">가드레일</b></td><td>나빠지면 안 되는 숫자</td><td>앱 종료율 · 결제 취소율</td></tr>
+  </table>
+  <div class="foot"><b>실무 예</b> · 클릭률 상승 + 결제 취소 급증 = 낚시성 문구 신호 → 도입 보류</div>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 4</div>
+  <h2>A/B 테스트가 맞지 않는 경우</h2>
+  <table class="roomy" style="font-size:0.82em">
+    <tr><th style="width:30%">상황</th><th style="width:30%">문제</th><th>대안</th></tr>
+    <tr><td>방문자 하루 30명</td><td>표본 부족 · 수개월 소요</td><td>큰 변화만 시험 · 사용자 인터뷰 병행</td></tr>
+    <tr><td>한 지역만 시행한 정책</td><td>사람별 무작위 배정 불가</td><td>시행 전후 + 비슷한 지역 비교 (이중차분)</td></tr>
+    <tr><td>건강·안전 위험</td><td>윤리 문제</td><td>관찰 자료 분석 · 전문 심의</td></tr>
+    <tr><td>로고·브랜드 전면 교체</td><td>장기 효과 · 되돌리기 곤란</td><td>정성 조사 · 단계적 도입</td></tr>
+    <tr><td>친구 추천 기능</td><td>사용자끼리 영향 · 단위 오염</td><td>지역·학교 단위 배정</td></tr>
+  </table>
+  <div class="key" style="margin-top:.8em"><p class="small">실험 불가 시 인과 주장 등급 하향 → «A가 B를 설명할 가능성» (9주 문장 등급)</p></div>
+</section>
+
+<section class="divider trap">
+  <div class="kicker">AI 함정 #8</div>
+  <div class="rule"></div>
+  <h1>무작위 배정 없는 <em>A/B</em></h1>
+  <p class="sub">«A/B 테스트 설계해줘» 한 줄이 놓치는 것들</p>
+</section>
+
+<section>
+  <div class="tag trap">함정 #8 · 증상</div>
+  <h2>한 줄 요청과 명세 요청</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>한 줄 요청</h4>
+      &gt; 쿠폰 앱 A/B 테스트 설계해줘<br><br>
+      <b>흔한 응답</b><br>
+      • 버튼을 바꾼 뒤 지난달과 비교<br>
+      • 또는 신규·기존 사용자로 나눠 비교<br>
+      • «클릭률이 오르면 성공»<br>
+      • 배정 방법·기간·표본 크기 언급 없음
+    </div>
+    <div class="good">
+      <h4>명세 요청</h4>
+      &gt; 쿠폰 앱 A/B 설계서 작성.<br>
+      6요소(대상·단위·처치·지표·기간·표본)를 표로.<br>
+      배정은 학생 단위 난수 · 고정 방법을 코드로 제시.<br>
+      기준 10%, 찾을 효과 +2점, 하루 600명으로 표본·기간 계산.<br>
+      전후 비교·자원자 비교 금지. 빠진 정보는 질문.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">함정 #8 · 원인과 진단</div>
+  <h2>왜 생기고 어떻게 찾는가</h2>
+  <div class="cols">
+    <div class="card trap">
+      <h4>원인</h4>
+      <ul class="xs" style="margin-bottom:0">
+        <li>요청에 배정 절차·단위·기간·지표 없음</li>
+        <li>AI는 쉽게 얻을 수 있는 데이터 쪽으로 제안</li>
+        <li>문장은 그럴듯 · 설계 요건 검사 없음</li>
+      </ul>
+    </div>
+    <div class="card lab">
+      <h4>진단 순서</h4>
+      <ul class="xs" style="margin-bottom:0">
+        <li>구성요소 6종 체크 · 빠진 칸 표시</li>
+        <li>배정 코드의 난수 호출 위치 확인</li>
+        <li>실제 배정 비율 50:50 근접 여부</li>
+        <li>사전 특성표로 두 집단 비교</li>
+      </ul>
+    </div>
+  </div>
+  <div class="key trap" style="margin-top:1em"><p>AI 답변의 <b>말투</b>가 아니라 <b>배정 절차</b>로 판정</p></div>
+</section>
+
+<section>
+  <div class="tag trap">함정 #8 · 코드</div>
+  <h2>AI 코드에서 가장 자주 보는 배정 오류</h2>
+  <div class="cols" style="gap:1em">
+    <div>
+      <p class="xs trap-txt" style="margin-bottom:.1em"><b>문제 : 새로고침마다 버전 변경</b></p>
+      <pre style="font-size:.6em;margin-top:.2em"><code class="language-javascript" data-trim>// 화면을 열 때마다 동전 던지기
+const variant =
+  Math.random() &lt; 0.5 ? "A" : "B";
+
+showButton(variant);
+log({ variant, event: "view" });
+</code></pre>
+      <p class="xs muted">같은 학생이 A·B 모두 경험<br>방문자가 아닌 페이지뷰가 집계 단위로 변질</p>
+    </div>
+    <div>
+      <p class="xs lab-txt" style="margin-bottom:.1em"><b>수정 : 첫 방문에만 결정 · 저장값 재사용</b></p>
+      <pre style="font-size:.6em;margin-top:.2em"><code class="language-javascript" data-trim>let visitor = load("ab_visitor");
+
+if (!visitor) {            // 처음 온 사람만
+  visitor = {
+    id: newId(),
+    variant: Math.random() &lt; 0.5 ? "A" : "B"
+  };
+  save("ab_visitor", visitor);
+}
+showButton(visitor.variant);
+log({ id: visitor.id, variant: visitor.variant,
+      event: "view" });
+</code></pre>
+    </div>
+  </div>
+  <div class="foot"><b>사람의 검증</b> · 새로고침 10번 → 버튼 문구 고정 여부 확인 · <b>한계</b> · 브라우저 저장 = 기기별 고정 · 실서비스는 로그인 ID 기준</div>
+</section>
+
+<section class="divider part-iii has-art">
+  <div class="kicker">Part III · 50분</div>
+  <div class="rule"></div>
+  <h1>바이브코딩으로<br><em>A/B 페이지 제작</em></h1>
+  <p class="sub">코드 작성은 AI · 명세와 검증은 사람</p>
+  <img class="art" src="../../figures/flow/d10-vibecoding.jpg" alt="학생과 로봇이 버튼 색이 다른 두 웹페이지를 만드는 장면">
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1</div>
+  <h2>바이브코딩 작업 순환</h2>
+  <img src="../../figures/out/d10-vibe-loop.svg" class="fig" style="max-height:485px" alt="명세, 생성, 관찰, 수정의 순환">
+  <div class="foot"><b>도구</b> · OpenCode · Antigravity CLI 등 AI 코딩 에이전트 · 실행 결과는 브라우저에서 직접 확인</div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 2</div>
+  <h2>이번 주 명세</h2>
+  <pre style="font-size:.6em;margin-top:.2em"><code data-trim>[목표]
+학식 쿠폰 A/B 페이지 1개 제작 · 방문자별 버전 고정 · 클릭 로그 CSV 저장
+
+[제약]
+- A 문구 «쿠폰 받기» · B 문구 «오늘 점심 500원 아끼기»
+- 배정은 난수 · 방문자당 첫 접속 때 1회만 결정 · 브라우저에 저장
+- 실제 개인정보 입력칸 금지 · 방문자 번호는 임의 생성
+
+[검증 조건]
+- 새로고침 10회에도 같은 버전 유지
+- «새 방문자» 버튼 → 새 번호와 새 배정
+- 가상 방문자 1,000명 생성 시 A·B 비율 45~55%
+- CSV 열 : id, variant, clicked, time · 방문자 1명당 1행
+
+[비목표]
+- 로그인, 서버 저장, 디자인 꾸미기, 유의성 검정(11주)
+</code></pre>
+  <div class="foot"><b>샘플</b> · 완성 예시 <a href="../../data/ab-sample/index.html" target="_blank">data/ab-sample</a> · 실습 후 비교용</div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 3</div>
+  <h2>오늘의 실습 — 50분</h2>
+  <table class="roomy" style="font-size:0.82em">
+    <tr><th style="width:6%">#</th><th>활동</th><th style="width:22%">개념</th></tr>
+    <tr><td class="lab-txt"><b>1</b></td><td>«A/B 테스트 설계해줘» 요청 → 빠진 항목 목록화</td><td>함정 #8</td></tr>
+    <tr><td class="lab-txt"><b>2</b></td><td>구성요소 6종 명세로 재요청 → 결과 비교</td><td>설계 요건</td></tr>
+    <tr><td class="lab-txt"><b>3</b></td><td>위 명세로 페이지 제작 → 난수 배정·균형 확인</td><td>무작위 배정</td></tr>
+    <tr><td class="lab-txt"><b>4</b></td><td>찾을 효과 +1 · +2 · +5점의 표본과 기간 비교</td><td>표본 크기</td></tr>
+    <tr><td class="vr-txt"><b>5</b></td><td class="vr-txt">확장 : 중단 규칙·기간 사전 확정 문서 작성</td><td>사전 등록</td></tr>
+  </table>
+  <div class="foot"><b>합격 조건</b> · 새로고침 10회 고정 · 배정 비율 45~55% · CSV 행 수 = 방문자 수 · <b>제출</b> · 명세 · AI 대화 · 검증 화면</div>
+  <aside class="notes">
+    - 3번에서 새로고침 오류를 낸 AI 코드가 있으면 전체 공유
+    - 에이전트 설치 문제는 샘플 페이지로 대체 진행 후 수업 후 해결
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 4</div>
+  <h2>배정 점검 : 코드를 몰라도 가능한 검증</h2>
+  <img src="../../figures/out/d10-balance.svg" class="fig" style="max-height:430px" alt="정상 배정과 고장 신호 비교, 처치 전 특성 균형">
+  <div class="foot"><b>확인할 파일</b> · <a href="../../data/ab_result.csv" target="_blank">ab_result.csv</a> 8,400명 · 50:50에서 크게 벗어나면 결과 해석 전에 배정·로그부터 점검 (SRM : 표본 비율 불일치)</div>
+</section>
+
+<section>
+  <div class="tag lab">과제</div>
+  <h2>공식 과제 : 일상 속 A/B 테스트 설계</h2>
+  <div class="cols wide-left">
+    <div>
+      <table style="font-size:0.76em">
+        <tr><th>설계서 항목</th><th>작성 기준</th></tr>
+        <tr><td>질문·가설</td><td>H₀ · H₁ 문장</td></tr>
+        <tr><td>구성요소 6종</td><td>표로 작성 · 칸 비움 금지</td></tr>
+        <tr><td>배정 방법</td><td>난수 도구 · 고정 방법</td></tr>
+        <tr><td>사전 등록</td><td>주 지표 1개 · 중단 규칙</td></tr>
+        <tr><td>윤리 점검</td><td>동의 · 위험 · 철회</td></tr>
+      </table>
+    </div>
+    <div class="card lab">
+      <h4>예시 주제</h4>
+      <p class="xs">동아리 모집 포스터 · 과제 알림 문구 · 카페 메뉴판 · 공부 시간대 · 쇼츠 썸네일</p>
+      <h4 style="margin-top:.5em">채점</h4>
+      <p class="xs">명세 구체성 · 배정 타당성 · 표본 계산 근거 · AI 사용 기록</p>
+    </div>
+  </div>
+  <div class="foot"><b>실행 여부</b> · 실제 실험 진행 불필요 · 11주에 모의 결과로 해석 연습</div>
+</section>
+
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table class="roomy" style="font-size:0.70em">
+    <tr><th style="width:24%">개념</th><th>핵심</th></tr>
+    <tr><td>전후 비교</td><td>시기 효과와 처치 효과 구분 불가 → 동시 대조군 필요</td></tr>
+    <tr><td><b class="gfx-txt">가설</b></td><td>H₀ 차이 없음 · H₁ 차이 있음 · 데이터 수집 전 선언</td></tr>
+    <tr><td><b class="gfx-txt">실험군·대조군</b></td><td>처치 외 조건 동일 · 같은 기간 동시 운영</td></tr>
+    <tr><td><b class="gfx-txt">무작위 배정</b></td><td>알려진 교란 + 숨은 교란 동시 균형 · 자원자·사후 비교는 과대 추정 위험</td></tr>
+    <tr><td>배정 단위</td><td>처치 경험이 섞이지 않는 단위 · 앱 실험은 대개 사람 1명 고정</td></tr>
+    <tr><td><b class="vr-txt">구성요소 6종</b></td><td>대상 · 단위 · 처치 · 지표 · 기간 · 표본 크기</td></tr>
+    <tr><td>표본 크기</td><td>효과 절반 → 표본 약 4배 · 기준 10% · +2점 = 집단당 3,841명</td></tr>
+    <tr><td>사전 등록·윤리</td><td>주 지표·방법·중단 규칙 사전 기록 · 동의 · 위험 · 철회</td></tr>
+    <tr><td><b class="trap-txt">AI 함정 #8</b></td><td>사후 비교 제안 · 새로고침마다 랜덤 → 6종 명세 · 고정 배정 · 비율 점검</td></tr>
+  </table>
+</section>
+
+<section class="divider next part-i">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>A/B 결과와 <em>p값</em></h1>
+  <p class="sub">B가 앞선 결과 · 진짜 효과인가 우연인가<br>학식 쿠폰 실험 결과표로 해석 연습</p>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="../_shared/demos/d10.js"></script>
+<script src="../_shared/deck-editorial.js"></script>
+</body>
+</html>

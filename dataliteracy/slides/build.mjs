@@ -71,7 +71,7 @@ for (const w of weeks) {
     /<div class="demo-wrap">[\s\S]*?<!--\/demo-->/g,
     `<div class="card gfx" style="text-align:center;padding:2.2em 1em">
        <h4 style="margin-bottom:.4em">인터랙티브 데모</h4>
-       <p class="xs muted" style="margin:0">이 자리에는 직접 조작하는 3D 데모<br><br>
+       <p class="xs muted" style="margin:0">이 자리에는 직접 조작하는 데모<br><br>
        HTML 슬라이드를 브라우저로 열어 확인</p>
      </div>`
   );
@@ -80,22 +80,24 @@ for (const w of weeks) {
   writeFileSync(printPath, html, "utf8");
   console.log(`  ✓ slides/w${wk}/_print.html  (데모 ${demoBlocks}개 치환)`);
 
-  const out = path.join(ROOT, "dist", `w${wk}-${title}.pdf`);
+  // 배포 파일명 : d10-가설실험군대조군무작위배정.pdf (주차 머리말·구분 기호 제거)
+  const short = title.replace(/^\d+주차\s*·\s*/, "").replace(/[\s·/]/g, "");
+  const out = path.join(ROOT, "dist", `d${wk}-${short}.pdf`);
   // Chrome 153 헤드리스 --print-to-pdf 는 reveal 인쇄 레이아웃 전에 출력 → 빈 1쪽
   // Playwright 로 .pdf-page 생성까지 대기 후 출력
   const pages = execFileSync(
-    "py",
+    process.env.PY || "py",
     [path.join(ROOT, "..", "tools", "print_pdf.py"), `http://localhost:${PORT}/slides/w${wk}/_print.html?print-pdf`, out],
     { encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] }
   ).trim();
-  console.log(`  ✓ dist/w${wk}-${title}.pdf  (${pages}쪽)`);
+  console.log(`  ✓ dist/d${wk}-${short}.pdf  (${pages}쪽)`);
 
   // ---------------------------------------------------------------- 배포 묶음
   // 원본 HTML(치환 전)이 참조하는 에셋만 골라 상대 경로 그대로 담는다.
   // 경로를 다시 쓰지 않으므로 링크가 깨질 여지가 없다.
   const raw = readFileSync(src, "utf8");
   const refs = [...new Set(
-    [...raw.matchAll(/(?:\.\.\/)+([a-zA-Z0-9_/.-]+\.(?:svg|png|jpg|mp4|css|js))/g)]
+    [...raw.matchAll(/(?:\.\.\/)+([a-zA-Z0-9_/.-]+\.(?:svg|png|jpg|mp4|css|js|csv|html))/g)]
       .map((m) => m[0])
   )];
 
@@ -117,7 +119,7 @@ for (const w of weeks) {
 
   writeFileSync(path.join(stage, "index.html"),
     `<!doctype html><html lang="ko"><head><meta charset="utf-8">
-<title>${wk}주차 슬라이드 — 컴퓨터그래픽스</title>
+<title>${wk}주차 슬라이드 — 데이터리터러시</title>
 <meta http-equiv="refresh" content="0; url=slides/w${wk}/index.html">
 <style>body{background:#0b0d12;color:#e8ecf4;font-family:system-ui,sans-serif;
 padding:4em;line-height:1.8}a{color:#35d6e6}</style></head><body>
@@ -127,28 +129,28 @@ padding:4em;line-height:1.8}a{color:#35d6e6}</style></head><body>
 
   writeFileSync(path.join(stage, "READ-ME.txt"),
     "﻿" +
-    `컴퓨터그래픽스 (VF3500076) · ${wk}주차 인터랙티브 슬라이드\n` +
+    `데이터리터러시의이해 (SF1101084) · ${wk}주차 인터랙티브 슬라이드\n` +
     `조성호 · 2026학년도 2학기\n\n` +
     `[여는 법]\n이 폴더의  index.html  더블클릭 (Chrome / Edge 권장)\n\n` +
     `[PDF 와의 차이]\n` +
-    `직접 조작하는 3D 데모와 애니메이션 포함\n` +
+    `직접 조작하는 데모와 애니메이션 포함\n` +
     `PDF 에서는 안내 카드로만 표시되는 부분\n\n` +
     `[조작]\n` +
     `  방향키 / 스페이스    다음·이전 슬라이드\n` +
     `  ESC                 전체 슬라이드 한눈에 보기\n` +
     `  S                   발표자 노트\n` +
-    `  3D 화면 마우스 드래그 시 시점 회전\n\n` +
-    `[주의]\n인터넷 연결 필요 (폰트와 3D 라이브러리를 온라인에서 불러옴)\n\n` +
+    `  데모 슬라이더 마우스 조작\n\n` +
+    `[주의]\n인터넷 연결 필요 (폰트와 슬라이드 라이브러리를 온라인에서 불러옴)\n\n` +
     `[문의]\nseongho.cho@kodekorea.kr\n`, "utf8");
 
-  const zip = path.join(ROOT, "dist", `w${wk}-interactive-slides.zip`);
+  const zip = path.join(ROOT, "dist", `d${wk}-interactive-slides.zip`);
   // 내부 경로는 ASCII 로만 둔다 — Compress-Archive 가 한글 경로를
   // 시스템 코드페이지로 써서 다른 PC 에서 폴더명이 깨지는 것을 막는다.
   execFileSync("powershell", ["-NoProfile", "-Command",
     `Compress-Archive -Path '${stage}' -DestinationPath '${zip}' -Force`],
     { stdio: ["ignore", "ignore", "inherit"] });
   rmSync(path.join(ROOT, "build_tmp"), { recursive: true, force: true });
-  console.log(`  ✓ dist/w${wk}-interactive-slides.zip  (에셋 ${refs.length - missing}개)`);
+  console.log(`  ✓ dist/d${wk}-interactive-slides.zip  (에셋 ${refs.length - missing}개)`);
 }
 
 console.log("\n완료.");

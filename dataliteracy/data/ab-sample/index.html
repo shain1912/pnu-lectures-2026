@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>학식 쿠폰 A/B 샘플 — 데이터리터러시 10주</title>
+<style>
+  :root { --paper:#f5f1e8; --ink:#1b1a17; --ink2:#4a463e; --hair:#cfc6b2; --teal:#0d6b78; --red:#c2401d; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:Pretendard,"Malgun Gothic",sans-serif; line-height:1.6; }
+  main { max-width:560px; margin:0 auto; padding:28px 16px 48px; }
+  h1 { font-family:"Noto Serif KR",serif; font-size:26px; margin:0 0 6px; }
+  .card { background:#fbf8f1; border-top:3px solid var(--ink); box-shadow:inset 0 0 0 1px var(--hair); padding:18px; margin:18px 0; }
+  button { font:inherit; font-weight:700; cursor:pointer; }
+  #cta { width:100%; padding:16px; background:var(--teal); color:#fff; border:0; font-size:19px; }
+  .tool { padding:7px 12px; background:var(--paper); border:1px solid var(--ink); margin:0 6px 6px 0; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  td,th { border-bottom:1px solid var(--hair); padding:6px 4px; text-align:left; }
+  small { color:var(--ink2); }
+  code { background:#ece6d8; padding:1px 5px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>오늘의 학식 쿠폰</h1>
+  <small>교육용 샘플 · 입력 정보 없음 · 기록은 이 브라우저 안에만 저장</small>
+
+  <div class="card">
+    <p>오늘 점심 메뉴 : 돈까스 · 비빔밥 · 우동</p>
+    <button id="cta"></button>
+  </div>
+
+  <div class="card">
+    <b>실험 확인용</b>
+    <p>내 번호 <code id="vid"></code> · 내 버전 <code id="var"></code></p>
+    <p><small>새로고침 후 버전 유지 여부 확인 · 다른 사람 역할은 «새 방문자» 사용</small></p>
+    <button class="tool" id="newv">새 방문자</button>
+    <button class="tool" id="sim">가상 방문자 1,000명</button>
+    <button class="tool" id="csv">CSV 저장</button>
+    <button class="tool" id="reset">기록 지우기</button>
+    <table id="tb"></table>
+  </div>
+</main>
+<script>
+/* 핵심 3개 : ① 방문자별 고정 배정 ② 노출·클릭 로그 ③ CSV 내보내기 */
+const COPY = { A: "쿠폰 받기", B: "오늘 점심 500원 아끼기" };
+
+function load(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch (e) { return fallback; }
+}
+function save(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+}
+
+/* ① 고정 배정 : 처음 온 사람만 동전 던지기 · 이후 저장값 재사용 */
+function getVisitor(force) {
+  let v = force ? null : load("ab_visitor", null);
+  if (!v) {
+    v = {
+      id: "V" + Math.floor(Math.random() * 1e8).toString().padStart(8, "0"),
+      variant: Math.random() < 0.5 ? "A" : "B"
+    };
+    save("ab_visitor", v);
+  }
+  return v;
+}
+
+/* ② 로그 : 방문자 1명당 1행 · 클릭 시 clicked=1 */
+function logView(v) {
+  const log = load("ab_log", []);
+  if (!log.some(r => r.id === v.id)) {
+    log.push({ id: v.id, variant: v.variant, clicked: 0, time: new Date().toISOString() });
+    save("ab_log", log);
+  }
+}
+function logClick(v) {
+  const log = load("ab_log", []);
+  const row = log.find(r => r.id === v.id);
+  if (row) { row.clicked = 1; save("ab_log", log); }
+}
+
+function render() {
+  const v = getVisitor();
+  logView(v);
+  document.getElementById("cta").textContent = COPY[v.variant];
+  document.getElementById("vid").textContent = v.id;
+  document.getElementById("var").textContent = v.variant;
+  const log = load("ab_log", []);
+  let html = "<tr><th>버전</th><th>방문자</th><th>클릭</th><th>클릭률</th></tr>";
+  ["A", "B"].forEach(x => {
+    const rows = log.filter(r => r.variant === x);
+    const c = rows.filter(r => r.clicked).length;
+    html += `<tr><td>${x}</td><td>${rows.length}</td><td>${c}</td><td>${rows.length ? (c / rows.length * 100).toFixed(1) : "-"}%</td></tr>`;
+  });
+  document.getElementById("tb").innerHTML = html;
+}
+
+document.getElementById("cta").addEventListener("click", () => { logClick(getVisitor()); render(); });
+document.getElementById("newv").addEventListener("click", () => { getVisitor(true); render(); });
+document.getElementById("sim").addEventListener("click", () => {
+  const log = load("ab_log", []);
+  for (let i = 0; i < 1000; i++) {
+    const variant = Math.random() < 0.5 ? "A" : "B";
+    const p = variant === "A" ? 0.10 : 0.12;   /* 합성 규칙 */
+    log.push({ id: "SIM" + Date.now() + "_" + i, variant, clicked: Math.random() < p ? 1 : 0, time: new Date().toISOString() });
+  }
+  save("ab_log", log); render();
+});
+document.getElementById("csv").addEventListener("click", () => {
+  const log = load("ab_log", []);
+  const text = "id,variant,clicked,time\n" + log.map(r => [r.id, r.variant, r.clicked, r.time].join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿" + text], { type: "text/csv" }));
+  a.download = "ab_log.csv"; a.click();
+});
+document.getElementById("reset").addEventListener("click", () => {
+  save("ab_log", []); getVisitor(true); render();
+});
+render();
+</script>
+</body>
+</html>

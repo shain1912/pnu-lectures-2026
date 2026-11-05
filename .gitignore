@@ -15,3 +15,6 @@ dataliteracy/slides/*/_print.html
 graphics.pdf
 vr.pdf
 graphics 참조.pdf
+
+# Flow 원본 PNG (배포본은 figures/flow/*.jpg)
+dataliteracy/figures/flow/raw/

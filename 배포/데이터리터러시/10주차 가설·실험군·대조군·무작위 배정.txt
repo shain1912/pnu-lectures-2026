@@ -1,0 +1,6 @@
+10주차 가설·실험군·대조군·무작위 배정
+----------------------------------------------
+배포 주소    : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/slides/w10/
+PDF          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d10-가설실험군대조군무작위배정.pdf
+zip          : https://shain1912.github.io/pnu-lectures-2026/dataliteracy/dist/d10-interactive-slides.zip
+원본         : dataliteracy/slides/w10/index.html

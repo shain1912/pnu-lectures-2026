@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11주차 · A/B 결과·통계적 유의성·p값 — 데이터리터러시</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/monokai.min.css">
+<link rel="stylesheet" href="../_shared/theme-editorial.css">
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<section class="cover has-art">
+  <div class="week">Week 11</div>
+  <h1>A/B 결과<br>읽는 법</h1>
+  <p style="font-size:.82em">표본 변동 · p값 · 효과 크기 · 신뢰구간<br>비전공자를 위한 결과 해석과 AI 검증</p>
+  <div class="meta">
+    데이터리터러시의이해 SF1101084 · AI융합교육원<br>
+    조성호 · 2026학년도 2학기
+  </div>
+  <img class="art" src="../../figures/flow/d11-cover.jpg" alt="돋보기 아래의 저울과 주변의 동전, 주사위">
+</section>
+
+<section>
+  <div class="tag trap">도입 질문</div>
+  <div class="ask" style="font-size:1.5em;max-width:24em">
+    A/B 테스트 결과 <span class="hl">p = 0.03</span><br><br>
+    효과가 확실한가?<br>
+    효과가 없을 확률이 3%인가?
+  </div>
+  <aside class="notes">
+    - 답 공개 안 함 · 예 / 아니오 손들기
+    - 공개 위치 : «흔한 오해 3종» 슬라이드
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">도입</div>
+  <h2>학습 목표</h2>
+  <div class="cols3" style="margin-top:1em">
+    <div class="card gfx">
+      <h4><span class="step">1</span>해석</h4>
+      <p>표본 변동 · p값의 <b>정확한 뜻</b><br>오해 3종 구분<br>효과 크기와 신뢰구간 읽기</p>
+    </div>
+    <div class="card vr">
+      <h4><span class="step">2</span>판단</h4>
+      <p>다중 비교 · 중간 확인의 위험<br><b>보고 4종</b>으로 주장 범위 결정<br>도입 · 보류 · 재실험 판단</p>
+    </div>
+    <div class="card lab">
+      <h4><span class="step">3</span>검증</h4>
+      <p>«유의미합니다» 단정 AI 답변 재요청<br><b>손계산</b>으로 결과 대조<br>효과 0 데이터로 거짓 양성 체험</p>
+    </div>
+  </div>
+  <div class="foot"><b>수학 수준</b> · 고등학교 평균과 비율 · 5주 z-점수까지만 사용 · 나머지 계산은 AI 담당 · 사람은 검산과 해석</div>
+</section>
+
+<section class="divider part-i has-art">
+  <div class="kicker">Part I · 60분</div>
+  <div class="rule"></div>
+  <h1>차이가 보일 때<br><em>먼저 의심할 것</em></h1>
+  <p class="sub">표본 변동 → p값 → 효과 크기 → 신뢰구간 → 반복의 함정</p>
+  <img class="art" src="../../figures/flow/d11-dice.jpg" alt="같은 주사위를 굴리는 두 사람과 다른 결과">
+</section>
+
+<section>
+  <div class="tag gfx">결과 · 1</div>
+  <h2>10주 학식 쿠폰 실험 결과 도착</h2>
+  <table class="roomy" style="font-size:0.92em">
+    <tr><th>버전</th><th>문구</th><th>배정 인원</th><th>클릭</th><th>클릭률</th></tr>
+    <tr><td><b class="gfx-txt">A</b></td><td>«쿠폰 받기»</td><td>4,205명</td><td>422명</td><td><b>10.04%</b></td></tr>
+    <tr><td><b class="vr-txt">B</b></td><td>«오늘 점심 500원 아끼기»</td><td>4,195명</td><td>486명</td><td><b>11.59%</b></td></tr>
+  </table>
+  <div class="cols3" style="margin-top:1em">
+    <div class="stat vr"><span class="n">+1.55점</span><span class="l">차이 (%포인트)</span></div>
+    <div class="stat trap"><span class="n">?</span><span class="l">진짜 효과인가 · 이번 표본의 우연인가</span></div>
+    <div class="stat"><span class="n">?</span><span class="l">도입할 만한 크기인가</span></div>
+  </div>
+  <div class="foot"><b>데이터</b> · <a href="../../data/ab_result.csv" target="_blank">ab_result.csv</a> · 14일 · 8,400명 · 교육용 합성 데이터 · 실제 집단 특성 해석 금지</div>
+  <aside class="notes">%(퍼센트)와 %포인트 구분 : 10.04%→11.59% = 1.55%포인트 · 상대 증가율로는 약 15%</aside>
+</section>
+
+<section>
+  <div class="tag gfx">표본 변동 · 1</div>
+  <h2>같은 조건을 반복해도 결과는 변동</h2>
+  <div class="art-col l">
+    <img class="art" src="../../figures/flow/d11-dice.jpg" alt="같은 주사위를 굴리는 두 사람">
+    <div>
+      <div class="analogy"><p><b>주사위</b> : 같은 주사위 60번 → 6이 나온 횟수 사람마다 상이 · 주사위 차이 아님</p></div>
+      <p style="font-size:.7em;margin:.7em 0 .3em"><b>A/A 실험</b> : 똑같은 버튼 2개 비교 (집단당 500명)</p>
+      <table style="font-size:0.76em">
+        <tr><th>회차</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
+        <tr><th>차이</th><td>+1.0</td><td>−0.2</td><td class="bad">+2.2</td><td>−1.0</td><td>+1.0</td><td>−0.8</td><td class="bad">−2.6</td><td class="bad">−3.0</td></tr>
+      </table>
+      <p class="small muted" style="margin-top:.5em">효과 0 인데도 3점 차이 발생</p>
+    </div>
+  </div>
+  <div class="foot"><b>핵심</b> · 차이의 크기만으로 판단 불가 → «우연으로 어느 정도까지 가능한가»와 비교 필요</div>
+</section>
+
+<section>
+  <div class="tag gfx">표본 변동 · 2 ★</div>
+  <h2>표본이 클수록 우연의 폭 감소</h2>
+  <img src="../../figures/out/d11-sampling-variation.svg" class="fig" style="max-height:440px" alt="표본 100명, 1000명, 4200명에서의 A/A 차이 분포">
+  <div class="foot"><b>점선</b> · 관측 차이 +1.55점 · 집단 100명이면 우연으로 흔한 차이 · 집단 4,200명이면 우연의 폭 바깥</div>
+  <aside class="notes">표본 크기 공식 대신 그림만으로 설명 · 표본 4배 → 폭 절반 (10주 효과 절반 → 표본 4배와 같은 관계)</aside>
+</section>
+
+<section>
+  <div class="tag gfx">p값 · 1</div>
+  <h2>p값 비유 : 콜라 맞히기</h2>
+  <div class="cols wide-right">
+    <div>
+      <p style="font-size:.78em;margin-bottom:.35em"><b>친구의 주장</b> : «콜라 두 브랜드 구분 가능»</p>
+      <ul style="font-size:0.79em">
+        <li>8잔 중 4잔씩 무작위 제공 · 친구도 4잔씩임을 인지</li>
+        <li>친구가 8잔 전부 정답</li>
+      </ul>
+      <p style="font-size:.78em;margin:.5em 0 .35em"><b>반대 입장에서 계산</b></p>
+      <ul style="font-size:0.79em">
+        <li>가정 : 친구는 구분 못 함 = 찍기</li>
+        <li>4잔 고르는 경우의 수 = 70가지</li>
+        <li>전부 정답 = 1가지 → <b class="trap-txt">1.4%</b></li>
+      </ul>
+      <div class="key trap" style="margin-top:.7em"><p class="small">찍기로는 드문 결과 → «찍기» 가정 의심</p></div>
+    </div>
+    <img src="../../figures/out/d11-cola.svg" class="fig" style="max-height:490px" alt="찍을 때 맞히는 잔 수별 경우의 수">
+  </div>
+  <div class="note">원형 : R. A. Fisher의 «차 맛보기 실험» · 1.4% = 이 실험의 p값</div>
+</section>
+
+<section>
+  <div class="tag gfx">p값 · 2 ★</div>
+  <h2>p값의 정의</h2>
+  <div class="art-col l">
+    <img class="art" src="../../figures/flow/d11-court.jpg" alt="법정의 판사봉과 저울, 증거 서류">
+    <div>
+      <div class="key" style="margin-top:0"><p><b>차이가 없다고 가정했을 때</b><br>지금만큼 또는 더 큰 차이가 나올 확률</p></div>
+      <table style="font-size:0.74em;margin-top:.6em">
+        <tr><th>재판</th><th>A/B 테스트</th></tr>
+        <tr><td>무죄 추정</td><td>귀무가설 : 차이 없음</td></tr>
+        <tr><td>증거 수집</td><td>실험 데이터</td></tr>
+        <tr><td>무죄라면 이런 증거가 나올 확률</td><td>p값</td></tr>
+        <tr><td>유죄 판결</td><td>귀무가설 기각 (유의)</td></tr>
+        <tr><td>증거 불충분 ≠ 결백 입증</td><td>유의하지 않음 ≠ 효과 없음</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag gfx">p값 · 3 ★</div>
+  <h3 style="margin-bottom:.25em">효과 0 세계를 직접 만들어 본 결과</h3>
+  <video class="vid" src="../../figures/out/d11-null-distribution.mp4" poster="../../figures/out/d11-null-distribution-poster.png" controls muted playsinline data-autoplay></video>
+  <aside class="notes">
+    - 점 하나 = 똑같은 버튼 2개로 진행한 실험 1회
+    - 시뮬레이션 400회 중 바깥 9개 = 2.25% · 수식값 2.2%와 근접 · 시드는 평균에 가까운 1회로 선택
+    - p값 = 우연의 세계에서 현재 결과의 위치
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">p값 · 4</div>
+  <h2>수식으로 그린 같은 그림</h2>
+  <img src="../../figures/out/d11-pvalue-definition.svg" class="fig" style="max-height:475px" alt="차이 없음 분포에서 관측값 바깥 면적이 p값임을 나타낸 그림">
+  <div class="foot"><b>양측 검정</b> · B가 나쁠 가능성도 함께 고려 → 오른쪽 꼬리와 왼쪽 꼬리 합산</div>
+</section>
+
+<section>
+  <div class="tag gfx">p값 · 5</div>
+  <h2>손계산 : 5주 z-점수의 응용</h2>
+  <div class="cols wide-left">
+    <table style="font-size:0.76em">
+      <tr><th style="width:8%">#</th><th style="width:30%">단계</th><th>계산</th></tr>
+      <tr><td>1</td><td>전체 클릭률</td><td>(422+486) / 8,400 = 10.81%</td></tr>
+      <tr><td>2</td><td>우연의 크기 (표준오차)</td><td>√[0.1081 × 0.8919 × (1/4205 + 1/4195)]<br>= 0.678점</td></tr>
+      <tr><td>3</td><td>z값</td><td>1.55 ÷ 0.678 = <b>2.29</b></td></tr>
+      <tr><td>4</td><td>p값 (양측)</td><td>z 표 또는 AI 계산 → <b class="trap-txt">0.022</b></td></tr>
+    </table>
+    <div class="card gfx">
+      <h4>5주와 같은 구조</h4>
+      <p class="xs">z-점수 =<br>(값 − 평균) ÷ 표준편차<br><br>A/B z값 =<br>(관측 차이 − 0) ÷ 표준오차<br><br>«우연의 눈금 몇 칸 떨어졌는가»</p>
+    </div>
+  </div>
+  <div class="foot"><b>암기 대상 아님</b> · 공식은 AI 담당 · 사람의 역할은 입력값(n·클릭 수) 확인과 결과 검산</div>
+</section>
+
+<section>
+  <div class="tag trap">p값 · 6 ★</div>
+  <h2>흔한 오해 3종 : 전부 오답</h2>
+  <table class="roomy" style="font-size:0.86em">
+    <tr><th style="width:39%">오해</th><th>실제</th></tr>
+    <tr><td class="bad">«p = 0.03 → 효과가 없을 확률 3%»</td><td>«효과 없음»을 참으로 가정하고 계산한 값<br>가설이 참일 확률 계산 아님</td></tr>
+    <tr><td class="bad">«p가 작을수록 효과가 큼»</td><td>표본이 크면 작은 효과도 p 작음<br>효과 크기는 별도 확인</td></tr>
+    <tr><td class="bad">«p = 0.03 → 다시 하면 97% 재현»</td><td>재현 확률 아님<br>재현은 추가 실험으로 확인</td></tr>
+  </table>
+  <div class="key trap" style="margin-top:.9em"><p><b>도입 질문 답</b> : 확실성 보증 아님 · «차이 없음» 가정 아래 드문 결과일 뿐</p></div>
+  <div class="note">근거 : ASA Statement on p-values (Wasserstein &amp; Lazar, 2016) · Haller &amp; Krauss, 2002</div>
+</section>
+
+<section>
+  <div class="tag gfx">p값 · 7</div>
+  <h2>0.05 : 자연법칙이 아닌 관행</h2>
+  <div class="cols">
+    <div>
+      <table style="font-size:0.78em">
+        <tr><th>결과</th><th>기계적 판정</th><th>실제 증거 차이</th></tr>
+        <tr><td>p = 0.049</td><td class="ok">유의</td><td rowspan="2" style="vertical-align:middle">거의 동일</td></tr>
+        <tr><td>p = 0.051</td><td class="bad">비유의</td></tr>
+      </table>
+      <table style="font-size:0.78em;margin-top:.8em">
+        <tr><th>분야</th><th>흔한 기준</th></tr>
+        <tr><td>사회과학·제품 실험</td><td>0.05</td></tr>
+        <tr><td>유전체 전장 분석</td><td>5 × 10⁻⁸</td></tr>
+        <tr><td>입자 물리학 발견</td><td>5σ (약 3 × 10⁻⁷)</td></tr>
+      </table>
+    </div>
+    <div>
+      <table style="font-size:0.78em">
+        <tr><th></th><th>불 없음</th><th>불 있음</th></tr>
+        <tr><th>경보 울림</th><td class="bad">1종 오류<br>거짓 양성 (α)</td><td class="ok">정상 탐지<br>검정력 (1−β)</td></tr>
+        <tr><th>경보 조용</th><td class="ok">정상</td><td class="bad">2종 오류<br>거짓 음성 (β)</td></tr>
+      </table>
+      <div class="analogy" style="margin-top:1.1em"><p><b>화재경보기</b> : 민감하게 설정 → 오작동 증가 · 둔하게 설정 → 화재 놓침</p></div>
+    </div>
+  </div>
+  <div class="foot"><b>실무 기본값</b> · α 5% · 검정력 80% · 실패 비용에 따라 조정 · 값은 실험 전에 고정</div>
+</section>
+
+<section>
+  <div class="tag gfx">크기 · 1 ★</div>
+  <h2>유의함과 중요함은 별개</h2>
+  <div class="art-col r">
+    <div>
+      <p style="font-size:.78em"><b>집단 100만 명 실험</b></p>
+      <table style="font-size:0.78em">
+        <tr><td>A 클릭률</td><td>10.0%</td></tr>
+        <tr><td>B 클릭률</td><td>10.1%</td></tr>
+        <tr><td>차이</td><td><b>+0.1점</b></td></tr>
+        <tr><td>p값</td><td class="ok">0.019 (유의)</td></tr>
+      </table>
+      <div class="analogy" style="margin-top:1em"><p><b>거대한 현미경</b> : 개미도 선명하게 포착 · 개미 크기와 무관</p></div>
+    </div>
+    <img class="art" src="../../figures/flow/d11-microscope.jpg" alt="개미 한 마리를 관찰하는 거대한 현미경과 사람들">
+  </div>
+  <div class="foot"><b>실무 질문</b> · 이 차이가 개발·운영 비용보다 큰가 · 사용자에게 체감되는가</div>
+</section>
+
+<section>
+  <div class="tag gfx">크기 · 2</div>
+  <h3 style="margin-bottom:.4em">결과의 네 가지 조합</h3>
+  <img src="../../figures/out/d11-effect-vs-significance.svg" class="fig" style="max-height:490px" alt="유의 여부와 실질 효과 크기 조합별 판단">
+</section>
+
+<section>
+  <div class="tag gfx">구간 · 1</div>
+  <h2>신뢰구간 : 한 점이 아닌 범위로 말하기</h2>
+  <div class="art-col r">
+    <div>
+      <div class="analogy"><p><b>그물 낚시</b> : 작살 한 번(점 추정)보다 그물(구간)의 포착 가능성 큼 · 그물이 넓을수록 불확실성 큼</p></div>
+      <div class="eq" style="margin-top:.8em;font-size:.68em">효과 = +1.55점
+95% 신뢰구간 = +0.22 ~ +2.88점</div>
+      <ul style="font-size:0.78em;margin-top:.7em">
+        <li><b>0 미포함</b> → p &lt; 0.05 와 같은 판단</li>
+        <li><b>폭</b> → 추정의 정밀도</li>
+        <li><b>하한·상한</b> → 데이터와 잘 맞는 효과 범위 · 구간 밖일 가능성도 남음</li>
+      </ul>
+    </div>
+    <img class="art" src="../../figures/flow/d11-net.jpg" alt="그물 안의 물고기">
+  </div>
+  <div class="foot"><b>쉬운 문장</b> · «클릭률 차이는 대략 +0.2점에서 +2.9점 사이로 추정»</div>
+</section>
+
+<section>
+  <div class="tag gfx">구간 · 2 ★</div>
+  <h3 style="margin-bottom:.25em">«95%»의 뜻 : 같은 방법을 20번 반복</h3>
+  <video class="vid" src="../../figures/out/d11-ci-stack.mp4" poster="../../figures/out/d11-ci-stack-poster.png" controls muted playsinline data-autoplay></video>
+  <aside class="notes">
+    - 시뮬레이션 설정 : A 10% · B 12% · 집단당 4,200명 · 시드는 평균에 가까운 1회로 선택
+    - 구간 하나가 참값을 포함할 확률 95%가 아니라, 방법이 장기적으로 95% 성공
+    - 고등학생 수준 설명 : 그물 100번 던지면 약 95번 포획
+  </aside>
+</section>
+
+<section>
+  <div class="tag gfx">구간 · 3 ★</div>
+  <h2>표본과 효과에 따라 달라지는 구간</h2>
+  <img src="../../figures/out/d11-confidence-interval.svg" class="fig" style="max-height:475px" alt="다섯 사례의 신뢰구간 비교">
+  <div class="foot"><b>읽는 순서</b> · ① 0을 포함하는가 ② 실질 기준선과 어떤 관계인가 ③ 폭이 판단에 충분히 좁은가</div>
+</section>
+
+<section>
+  <div class="tag trap">반복 · 1</div>
+  <h2>다중 비교 : 많이 쏘면 언젠가 명중</h2>
+  <div class="art-col l">
+    <img class="art" src="../../figures/flow/d11-darts.jpg" alt="과녁 20개와 대부분 빗나간 다트, 우연히 명중한 한 개">
+    <div>
+      <div class="analogy"><p><b>과녁 20개에 다트 투척</b> : 맞힌 과녁 하나만 보여 주면 명사수처럼 보임</p></div>
+      <table style="font-size:0.78em;margin-top:.8em">
+        <tr><th>검정 지표 수</th><th>우연 유의 기대</th><th>1개 이상 발생 (지표 독립 시)</th></tr>
+        <tr><td>1개</td><td>0.05개</td><td>5%</td></tr>
+        <tr><td>5개</td><td>0.25개</td><td>23%</td></tr>
+        <tr><td><b>20개</b></td><td><b>1개</b></td><td class="bad">64%</td></tr>
+      </table>
+      <p class="small muted" style="margin-top:.5em">간단 보정 (본페로니) : 0.05 ÷ 지표 수 → 20개면 기준 0.0025</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">반복 · 2</div>
+  <h3 style="margin-bottom:.3em">효과가 0이어도 지표를 늘리면 무언가는 «유의»</h3>
+  <img src="../../figures/out/d11-multiple-comparison.svg" class="fig" style="max-height:490px" alt="지표 20개의 p값 막대와 지표 수에 따른 거짓 양성 곡선">
+  <aside class="notes">
+    - 왼쪽 시드 고정 시뮬레이션 · 20개 중 1개 유의
+    - 실무 장면 : "전체는 차이 없는데 20대 여성 모바일에서 유의합니다" → 집단 쪼개기도 다중 비교
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">반복 · 3 ★</div>
+  <h2>중간 확인 : 이기는 순간 휘슬 불기</h2>
+  <div class="art-col r">
+    <div>
+      <div class="analogy"><p><b>축구 경기</b> : 우리 팀이 앞설 때마다 경기 종료 가능 → 약팀도 승률 상승</p></div>
+      <ul style="font-size:0.80em;margin-top:.8em">
+        <li>실험 중 p값은 오르내림이 자연스러운 현상</li>
+        <li>0.05 아래로 들어온 순간 종료 → 거짓 양성 누적</li>
+        <li>학식 쿠폰 p값 : 8일 차 0.035 → 10일 차 0.052 → 14일 차 0.022</li>
+      </ul>
+      <p class="small trap-txt" style="margin-top:.6em"><b>대시보드 시청은 가능 · 그 값으로 종료 결정 금지</b></p>
+    </div>
+    <img class="art" src="../../figures/flow/d11-referee.jpg" alt="경기 초반에 휘슬을 부는 심판과 환호하는 한 팀">
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">반복 · 4 ★</div>
+  <h3 style="margin-bottom:.25em">효과 0 실험 40개를 매일 들여다보면</h3>
+  <video class="vid" src="../../figures/out/d11-peeking-anim.mp4" poster="../../figures/out/d11-peeking-anim-poster.png" controls muted playsinline data-autoplay></video>
+  <aside class="notes">
+    - 이 영상 : 40개 중 9개 중간 종료 · 끝에만 확인하면 2개 · 시드는 평균에 가까운 1회로 선택
+    - 빨간 선 터치 = "유의" 착각 후 종료
+  </aside>
+</section>
+
+<section>
+  <div class="tag trap">반복 · 5</div>
+  <h2>확인 횟수별 거짓 양성</h2>
+  <img src="../../figures/out/d11-peeking.svg" class="fig" style="max-height:470px" alt="중간 확인 횟수에 따라 증가하는 거짓 양성 비율">
+  <div class="foot"><b>처방</b> · 기간·표본 사전 고정 · 중단은 오류·부작용 때만 · 중간 판단이 꼭 필요하면 순차 검정 등 전문 방법 사용</div>
+</section>
+
+<section>
+  <div class="tag trap">반복 · 6</div>
+  <h2>3주 연결 : 결측을 평균으로 채우면 쉬워지는 «유의»</h2>
+  <img src="../../figures/out/d11-imputation.svg" class="fig" style="max-height:415px" alt="평균 대치 후 표준편차 감소와 p값 하락">
+  <div class="foot"><b>원인</b> · 평균값 복제 → 표본 수 증가처럼 보임 + 표준편차 감소 → 우연의 눈금 축소 → p값 하락 · 새 정보 추가 없음</div>
+</section>
+
+<section>
+  <div class="tag gfx">시뮬레이터 ★</div>
+  <h3 style="margin-bottom:.35em">유의성 시뮬레이터</h3>
+  <div class="demo-wrap">
+    <div class="demo" data-demo="sig-sim"></div>
+    <div class="demo-alert" data-alert></div>
+    <div class="demo-ui">
+      <label>실제 효과 <input type="range" data-eff min="0" max="5" step="0.5" value="0"><span class="val" data-eff-v></span></label>
+      <label>집단당 표본 <input type="range" data-n min="0" max="8" step="1" value="5"><span class="val" data-n-v></span></label>
+      <label>중간 확인 <input type="range" data-peek min="1" max="50" step="1" value="1"><span class="val" data-peek-v></span></label>
+      <button data-rerun>다시 실험</button>
+      <span data-out style="flex:1 1 100%"></span>
+    </div>
+  </div>
+  <!--/demo-->
+  <aside class="notes">
+    - ① 효과 0 · 확인 1회 : 약 5% · 평평한 p값 분포
+    - ② 효과 0 · 확인 14~50회 : 22~32% 근처로 상승
+    - ③ 효과 +2 · 표본 4,200 · 확인 1회 : 검정력 80%대
+    - ④ 효과 +2 · 표본 500 : 검정력 낮음 + 유의한 실험만의 효과 과대 추정
+  </aside>
+</section>
+
+<section class="divider part-ii has-art">
+  <div class="kicker">Part II · 30분</div>
+  <div class="rule"></div>
+  <h1>결과를<br><em>보고하고 결정하기</em></h1>
+  <p class="sub">보고 4종 · 판단 문장 · 도입 결정표</p>
+  <img class="art" src="../../figures/flow/d11-report.jpg" alt="로봇이 건넨 보고서를 돋보기로 검토하는 사람">
+</section>
+
+<section>
+  <div class="tag vr">판단 · 1 ★</div>
+  <h2>보고 4종</h2>
+  <table class="roomy" style="font-size:0.86em">
+    <tr><th style="width:24%">항목</th><th style="width:36%">왜 필요한가</th><th>학식 쿠폰 앱</th></tr>
+    <tr><td><b>효과 크기</b></td><td>실제로 얼마나 다른가</td><td>+1.55점 (10.04% → 11.59%)</td></tr>
+    <tr><td><b>신뢰구간</b></td><td>얼마나 불확실한가</td><td>95% CI +0.22 ~ +2.88점</td></tr>
+    <tr><td><b>n</b></td><td>근거의 크기</td><td>A 4,205명 · B 4,195명</td></tr>
+    <tr><td><b>검정 횟수</b></td><td>우연 유의 가능성</td><td>주 지표 1개 · 기간 종료 후 1회</td></tr>
+  </table>
+  <div class="key" style="margin-top:.9em"><p>p = 0.022 는 위 네 줄의 <b>보조 정보</b> · 단독 보고 금지</p></div>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 2</div>
+  <h2>판단 문장 고치기</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>단정</h4>
+      «p&lt;0.05 이므로 B가 확실히 더 좋습니다.»<br><br>
+      «유의하지 않으므로 효과가 없습니다.»<br><br>
+      «차이가 우연일 확률은 2.2%입니다.»
+    </div>
+    <div class="good">
+      <h4>주장 범위 명시</h4>
+      «14일 · 8,400명 실험에서 B의 클릭률이 1.55점 높게 관측 (95% CI +0.22~+2.88).»<br><br>
+      «이번 표본으로는 차이를 확인하지 못함. 효과 없음 입증은 아님.»<br><br>
+      «차이 관측 · 실질적 의미는 별도 판단.»
+    </div>
+  </div>
+  <div class="foot"><b>9주 문장 등급 연결</b> · 무작위 실험이면 인과 표현 가능 · 대상과 기간 범위 안에서만 · 다른 앱·다른 학기로 일반화 금지</div>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 3</div>
+  <h2>확증 결과와 탐색 결과</h2>
+  <div class="cols">
+    <div class="card gfx">
+      <h4>확증 결과</h4>
+      <p class="xs">사전 등록한 주 지표 1개<br>기간 종료 후 1회 검정<br>보고 문구 : «확증 분석»</p>
+      <p class="xs" style="margin-top:.5em"><b>예</b> : 클릭률 차이 +1.55점</p>
+    </div>
+    <div class="card vr">
+      <h4>탐색 결과</h4>
+      <p class="xs">실험 후 찾아낸 지표·세부 집단<br>유의해도 다음 실험의 가설로만 사용<br>보고 문구 : «탐색 분석 · 재검증 필요»</p>
+      <p class="xs" style="margin-top:.5em"><b>예</b> : «4학년 모바일에서 효과 큼»</p>
+    </div>
+  </div>
+  <div class="analogy" style="margin-top:1.3em"><p><b>모의고사 복습</b> : 틀린 유형 발견(탐색) → 다음 시험에서 확인(확증) · 복습 중 발견을 실력 향상의 증거로 제출 불가</p></div>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 4 ★</div>
+  <h2>도입 결정표</h2>
+  <table class="roomy" style="font-size:0.78em">
+    <tr><th style="width:27%">신뢰구간 위치</th><th style="width:27%">예 (실질 기준 +2점)</th><th style="width:20%">결정</th><th>다음 행동</th></tr>
+    <tr><td>전부 실질 기준 위</td><td>+2.1 ~ +3.9</td><td class="ok">도입</td><td>단계적 배포 · 지표 모니터링</td></tr>
+    <tr><td>0 위 · 실질 기준 걸침</td><td><b>+0.22 ~ +2.88</b></td><td class="vr-txt"><b>비용 따라 결정</b></td><td>저비용이면 도입 · 고비용이면 재실험</td></tr>
+    <tr><td>0 위 · 실질 기준 아래</td><td>+0.02 ~ +0.18</td><td>보류</td><td>더 큰 변화 탐색</td></tr>
+    <tr><td>0 걸침 · 폭 넓음</td><td>−5.8 ~ +11.8</td><td class="bad">판단 불가</td><td>표본 재계산 후 새 실험</td></tr>
+    <tr><td>0 걸침 · 폭 좁음</td><td>−0.2 ~ +0.3</td><td>중단</td><td>다음 아이디어</td></tr>
+    <tr><td>전부 0 아래</td><td>−2.6 ~ −0.1</td><td class="bad">폐기</td><td>원인 탐색</td></tr>
+  </table>
+  <div class="foot"><b>함께 확인</b> · 가드레일 (앱 종료율 A 29.9% · B 30.4%) · 배정 비율 · 로그 누락 · 실질 기준은 사전 등록 대상</div>
+</section>
+
+<section>
+  <div class="tag vr">판단 · 5</div>
+  <h2>검산 연습 : 이 보고서를 믿어도 되는가</h2>
+  <div class="cols">
+    <div class="card trap">
+      <h4>받은 보고서 (AI 또는 교재)</h4>
+      <p class="xs">A : 1,000명 중 50명 구매 (5.0%)<br>B : 1,000명 중 58명 구매 (5.8%)<br><br>«p = 0.04 · 우연일 확률 4% 미만<br>16% 상승 · <b>도입 결정</b>»</p>
+    </div>
+    <div class="card lab">
+      <h4>직접 계산</h4>
+      <p class="xs">표준오차 1.01점 · z = 0.79<br><b class="trap-txt">p = 0.43</b> · 95% CI −1.18 ~ +2.78점<br><br><b>판단 불가</b> · 표본 부족<br>5% → 6% 검출 필요 표본 집단당 약 8,158명</p>
+    </div>
+  </div>
+  <div class="key trap" style="margin-top:.9em"><p>p값 숫자도 해석 문장도 오류 · AI가 쓴 p값은 원자료로 재계산 필수</p></div>
+  <aside class="notes">
+    - 출처 : 감마 «AI로 끝내는 데이터 분석» A/B 3/3장 예시를 재계산
+    - 감마 2/3장 «각 그룹 3,840명 · 8일»도 조건(5%→6%)과 불일치 : 약 8,158명 · 약 17일
+    - 감마 자료 수정 권장
+  </aside>
+</section>
+
+<section class="divider trap">
+  <div class="kicker">AI 함정 #9</div>
+  <div class="rule"></div>
+  <h1>p&lt;0.05 <em>단정</em></h1>
+  <p class="sub">«유의미한 차이가 있습니다» 한 줄의 위험</p>
+</section>
+
+<section>
+  <div class="tag trap">함정 #9 · 증상</div>
+  <h2>질문이 답을 결정</h2>
+  <div class="vs">
+    <div class="bad">
+      <h4>단문 요청</h4>
+      &gt; 이 A/B 결과 유의미해?<br><br>
+      <b>흔한 응답</b><br>
+      «p값이 0.022로 0.05보다 작으므로 통계적으로 유의미한 차이가 있습니다. B안을 적용하는 것이 좋습니다.»<br><br>
+      <span class="trap-txt">효과 크기 · 신뢰구간 · 검정 횟수 · 가드레일 누락</span>
+    </div>
+    <div class="good">
+      <h4>명세 요청</h4>
+      &gt; ab_result.csv의 A/B 결과 분석.<br>
+      사전 등록 주 지표는 clicked 1개.<br>
+      두 비율 차이 · 95% CI · n · z · 양측 p · 계산식을 표로.<br>
+      left_app는 가드레일로 별도 표기.<br>
+      «유의미» 대신 실제 차이와 범위로 서술.<br>
+      중간 확인 여부를 나에게 질문.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag trap">함정 #9 · 원인과 진단</div>
+  <h2>왜 생기고 어떻게 찾는가</h2>
+  <div class="cols">
+    <div class="card trap">
+      <h4>원인</h4>
+      <ul class="xs" style="margin-bottom:0">
+        <li>예·아니오형 질문 → 이분법 답변</li>
+        <li>보고 항목 미지정</li>
+        <li>실험 이력(검정 횟수·중간 확인)을 AI가 모름</li>
+        <li>계산 없이 문장만 생성한 수치 가능</li>
+      </ul>
+    </div>
+    <div class="card lab">
+      <h4>진단 체크</h4>
+      <ul class="xs" style="margin-bottom:0">
+        <li>효과 크기·신뢰구간·n·검정 횟수 존재?</li>
+        <li>사용한 코드와 중간 집계표 존재?</li>
+        <li>손계산 또는 다른 도구 결과와 일치?</li>
+        <li>중간 확인·지표 선택 이력 기재?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="key trap" style="margin-top:1em"><p>AI에 맡길 일 = 계산 · 사람이 맡을 일 = <b>실험 이력 제공과 결론의 범위 결정</b></p></div>
+</section>
+
+<section class="divider part-iii has-art">
+  <div class="kicker">Part III · 50분</div>
+  <div class="rule"></div>
+  <h1>결과 해석<br><em>실습</em></h1>
+  <p class="sub">모의 결과 검정 → 단정 재현 → 재요청 → 거짓 양성 체험</p>
+  <img class="art" src="../../figures/flow/d11-report.jpg" alt="보고서를 검토하는 사람">
+</section>
+
+<section>
+  <div class="tag lab">실습 · 1</div>
+  <h2>이번 주 명세</h2>
+  <pre style="font-size:.6em;margin-top:.2em"><code data-trim>[목표]
+ab_result.csv의 A/B 결과를 보고 4종으로 정리하고 주장 가능 범위를 한 문단으로 작성
+
+[제약]
+- 주 지표 clicked 1개만 확증 분석 · 나머지 지표와 세부 집단은 탐색 결과로 표기
+- «유의미합니다» «확실합니다» 표현 금지 · 실제 차이와 범위로 서술
+- 분석 코드와 중간 집계표 함께 제출
+
+[검증 조건]
+- 배정 인원 · 클릭 수를 원본에서 다시 집계해 표기
+- 차이 · 95% 신뢰구간 · z · 양측 p · 검정 횟수 표기
+- 내 손계산 결과와 소수 둘째 자리까지 대조
+- left_app를 가드레일로 별도 비교
+- 마지막 줄 : 이 실험으로 주장할 수 없는 것 한 줄
+
+[비목표]
+- 그래프 꾸미기, 예측 모델, 인과 메커니즘 추측
+</code></pre>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 2</div>
+  <h2>오늘의 실습 — 50분</h2>
+  <table class="roomy" style="font-size:0.82em">
+    <tr><th style="width:6%">#</th><th>활동</th><th style="width:22%">개념</th></tr>
+    <tr><td class="lab-txt"><b>1</b></td><td><a href="../../data/ab_result.csv" target="_blank">ab_result.csv</a>로 검정 요청 · 손계산 대조</td><td>기본 절차</td></tr>
+    <tr><td class="lab-txt"><b>2</b></td><td>«유의미한가?» 단문 요청 → 결과 저장</td><td>함정 #9</td></tr>
+    <tr><td class="lab-txt"><b>3</b></td><td>보고 4종 명세로 재요청 → 2번과 비교</td><td>보고 항목</td></tr>
+    <tr><td class="lab-txt"><b>4</b></td><td><a href="../../data/ab_null.csv" target="_blank">ab_null.csv</a> 분석 · 효과 0 실험 1,000회 시뮬레이션</td><td>거짓 양성</td></tr>
+    <tr><td class="vr-txt"><b>5</b></td><td class="vr-txt">확장 : 일별 누적 p값 그래프 · 첫 유의 시점 찾기</td><td>조기 종료</td></tr>
+  </table>
+  <div class="foot"><b>합격 조건</b> · 검산값 일치 · 4번 유의 비율 약 5% 설명 · 단정 표현 0건 · <b>제출</b> · 명세 · 코드 · 대화 기록 · 보고 문단</div>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 3</div>
+  <h2>검산값 : AI 결과와 대조</h2>
+  <table class="roomy" style="font-size:0.92em">
+    <tr><th>파일</th><th>A</th><th>B</th><th>차이</th><th>95% CI</th><th>z</th><th>p (양측)</th></tr>
+    <tr><td><b>ab_result.csv</b></td><td>422 / 4,205</td><td>486 / 4,195</td><td>+1.55점</td><td>+0.22 ~ +2.88</td><td>2.29</td><td class="ok">0.022</td></tr>
+    <tr><td><b>ab_null.csv</b></td><td>433 / 4,177</td><td>380 / 4,223</td><td>−1.37점</td><td>−2.63 ~ −0.10</td><td>−2.12</td><td class="bad">0.034</td></tr>
+  </table>
+  <div class="key trap" style="margin-top:1em">
+    <p><b>ab_null.csv : A·B 모두 10%로 생성한 파일인데 «유의»</b><br>
+    실제 효과 0 · 거짓 양성 실물 · 효과 0 실험의 약 5%에서 발생</p>
+  </div>
+  <div class="foot"><b>생성 규칙</b> · <code>data/make_ab.py</code> · 시드 고정 · 교육용 합성 데이터 · 5번 확장 : ab_null도 1~3일 차 p &lt; 0.05 → 조기 종료였다면 잘못된 결론</div>
+  <aside class="notes">
+    - 시뮬레이션 기준 : 집단당 4,200명 A/A 20,000회 중 4.9% 유의
+    - 4번 후 질문 : 현실에서는 실제 효과가 0인지 알 수 없음 → 재현 실험 필요
+  </aside>
+</section>
+
+<section>
+  <div class="tag lab">실습 · 4</div>
+  <h2>실무용 한 쪽 보고서</h2>
+  <div class="cols wide-left">
+    <div class="card lab">
+      <h4 style="font-size:1.15em">B 문구 클릭률 +1.55점 · 저비용 변경으로 도입 권고</h4>
+      <p class="xs"><b>실험</b> : 학식 쿠폰 화면 · 14일 · 재학생 8,400명 무작위 배정 (주 지표 사전 등록)</p>
+      <p class="xs"><b>결과</b> : A 10.04% → B 11.59% · 95% CI +0.22 ~ +2.88점 · 검정 1회</p>
+      <p class="xs"><b>부작용</b> : 앱 종료율 A 29.9% · B 30.4% · 차이 +0.48점 (95% CI −1.49 ~ +2.44) · 악화 미확인, 배제 불가</p>
+      <p class="xs"><b>판단</b> : 효과 방향 양호 · 실질 기준 +2점 달성 여부 불확실 · 문구 변경 비용 거의 없음</p>
+      <p class="xs"><b>다음</b> : 90% 배포 · 10% A 유지 2주 · 클릭 후 실제 쿠폰 사용률 추가 확인</p>
+      <p class="xs" style="margin-bottom:0"><b>한계</b> : 이번 학기 · 이 앱 사용자 범위 · 점심 외 시간대 일반화 불가</p>
+    </div>
+    <div>
+      <p class="small"><b>제목 쓰는 법</b></p>
+      <table style="font-size:0.70em">
+        <tr><td class="bad">A/B 테스트 결과 보고</td></tr>
+        <tr><td class="ok">B 문구 +1.55점 · 저비용 도입 권고</td></tr>
+      </table>
+      <p class="small" style="margin-top:.8em"><b>AI 활용 범위</b></p>
+      <ul class="xs">
+        <li>초안 문장 다듬기</li>
+        <li>표 형식 정리</li>
+        <li>수치·결론은 사람이 최종 확인</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag lab">과제</div>
+  <h2>공식 과제 : 결과 해석 연습</h2>
+  <table class="roomy" style="font-size:0.82em">
+    <tr><th>결과표</th><th>A</th><th>B</th><th>추가 정보</th><th>서술할 것</th></tr>
+    <tr><td><b>1</b></td><td>100 / 1,000</td><td>130 / 1,000</td><td>주 지표 · 종료 후 1회</td><td>유의 여부 · 구간 폭 · 결정</td></tr>
+    <tr><td><b>2</b></td><td>10 / 100</td><td>13 / 100</td><td>같은 비율 · 표본만 작음</td><td>1번과 달라지는 판단</td></tr>
+    <tr><td><b>3</b></td><td>100,000 / 1,000,000</td><td>101,000 / 1,000,000</td><td>구현 비용 큼</td><td>유의성과 실질 효과</td></tr>
+    <tr><td><b>4</b></td><td>지표 20개</td><td>1개만 p=0.03</td><td>사후 선택</td><td>다중 비교와 문구</td></tr>
+    <tr><td><b>5</b></td><td>3일 차 p=0.04</td><td>14일 차 p=0.21</td><td>3일 차에 보고 예정</td><td>중간 확인 문제</td></tr>
+  </table>
+  <div class="foot"><b>제출</b> · 표별 주장 가능 범위 3문장 이내 · AI 사용 기록 · 1~3번 계산은 코드와 손계산 대조</div>
+</section>
+
+<section>
+  <div class="tag gfx">정리</div>
+  <h3 style="margin-bottom:.45em">10~11주 전체 절차</h3>
+  <img src="../../figures/out/d11-ab-flow.svg" class="fig" style="max-height:490px" alt="실험 전후 8단계 흐름">
+</section>
+
+<section>
+  <div class="tag gfx">정리</div>
+  <h2>한 장 요약</h2>
+  <table class="roomy" style="font-size:0.70em">
+    <tr><th style="width:23%">개념</th><th>핵심</th></tr>
+    <tr><td>표본 변동</td><td>효과 0에서도 차이 발생 · 표본이 클수록 우연의 폭 감소</td></tr>
+    <tr><td><b class="gfx-txt">p값</b></td><td>차이 없음을 가정할 때 지금 이상의 차이가 나올 확률</td></tr>
+    <tr><td><b class="trap-txt">오해 3종</b></td><td>효과 없을 확률 아님 · 효과 크기 아님 · 재현 확률 아님</td></tr>
+    <tr><td>0.05</td><td>관행적 기준 · 사전 고정 · 0.049와 0.051의 증거 차이 미미</td></tr>
+    <tr><td><b class="gfx-txt">효과 크기 · 신뢰구간</b></td><td>유의 여부보다 크기와 범위 · 표본 100만 명의 +0.1점 사례</td></tr>
+    <tr><td><b class="trap-txt">다중 비교</b></td><td>지표 20개 → 우연 유의 기대 1개 · 1개 이상 발생 64%</td></tr>
+    <tr><td><b class="trap-txt">중간 확인</b></td><td>매일 확인 후 종료 → 거짓 양성 약 22% · 기간 사전 고정</td></tr>
+    <tr><td><b class="vr-txt">보고 4종</b></td><td>효과 크기 · 신뢰구간 · n · 검정 횟수 · 확증/탐색 구분</td></tr>
+    <tr><td>AI 함정 #9</td><td>p&lt;0.05 단정 → 보고 항목 지정 · 코드 요구 · 원자료 재계산</td></tr>
+  </table>
+</section>
+
+<section class="divider next part-i">
+  <div class="kicker">다음 주</div>
+  <div class="rule"></div>
+  <h1>데이터 기반 의사결정과 <em>윤리</em></h1>
+  <p class="sub">실험 결과를 쓰는 책임 · 지표의 왜곡 · 개인정보<br>AI 함정 #10 개인정보 그대로 출력</p>
+</section>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="../_shared/demos/d11.js"></script>
+<script src="../_shared/deck-editorial.js"></script>
+</body>
+</html>

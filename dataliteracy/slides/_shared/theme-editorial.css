@@ -572,6 +572,10 @@
 .reveal section.cover.has-art > p, .reveal section.cover.has-art .meta { max-width: 21em; }
 .reveal section.divider.has-art .sub { max-width: 17em; }
 .reveal section.divider.has-art::after { display: none; }
+/* PDF : reveal 의 세로 중앙 정렬(top)이 하단 고정 삽화를 페이지 밖으로 밀어냄 → 화면과 같은 위치로 고정 */
+@media print {
+  .reveal .slides section.divider.has-art { top: 0 !important; height: 100% !important; padding-top: 90px !important; box-sizing: border-box; }
+}
 
 /* 애니메이션 */
 .reveal video.vid {

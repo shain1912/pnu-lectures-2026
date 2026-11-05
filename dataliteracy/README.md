@@ -40,7 +40,7 @@
 | `slides/_shared/` | 테마 CSS · reveal 초기화 · 데모 (`d03.js` 결측 대치, `d04.js` 대표값, `d05.js` 표준화, `d06.js` 차트 조작, `d09.js` 과적합·교란, `d10.js` 배정 비교, `d11.js` 유의성 시뮬레이터) · 10주부터 `theme-editorial.css` |
 | `figures/dNN_figures.py` | matplotlib 도해 생성 스크립트 |
 | `figures/anim/` | manim 애니메이션 소스 · `render.py` 로 렌더 |
-| `figures/flow/` | Google Flow 삽화 (10주부터 · 16:9 JPG) |
+| `figures/flow/` | Google Flow 삽화 (9주부터 · 16:9 JPG) |
 | `figures/out/` | 도해·애니메이션 결과 (SVG · PNG · MP4) |
 | `data/` | A/B 합성 로그 생성기(`make_ab.py`) · 결과 CSV · 수치 근거(`numbers_d10_d11.py`) · `ab-sample/` 완성 예시 페이지 |
 | `dist/` | 인쇄용 PDF · 오프라인 zip |

@@ -20,7 +20,7 @@
     데이터리터러시의이해 SF1101084 · AI융합교육원<br>
     조성호 · 2026학년도 2학기
   </div>
-  <img class="art" src="../../figures/flow/d10-vibecoding.jpg" alt="학생과 로봇이 함께 분석하는 장면">
+  <img class="art" src="../../figures/flow/d09-cover.jpg" alt="로봇 조수와 측정 도구 사이에서 고르는 학생">
 </section>
 
 <section>
@@ -31,7 +31,7 @@
       판매량으로 사고 예측 가능<br>
       그럼 판매를 금지하면<br>사고가 줄어드는가?
     </div>
-    <img class="art" src="../../figures/flow/d10-hook.jpg" alt="차트만 보는 가게 주인과 창밖의 인파">
+    <img class="art" src="../../figures/flow/d09-hook.jpg" alt="해변의 아이스크림 수레에 줄을 치는 담당자와 그대로 물놀이하는 사람들">
   </div>
   <aside class="notes">
     - 손들기 : 감소 / 변화 없음 / 모름
@@ -79,7 +79,7 @@
   <div class="rule"></div>
   <h1>어떤 AI를<br><em>어떻게 쓸 것인가</em></h1>
   <p class="sub">말로 일하는 모델과 숫자로 규칙을 찾는 모델</p>
-  <img class="art" src="../../figures/flow/d11-report.jpg" alt="로봇이 건넨 보고서를 검토하는 사람">
+  <img class="art" src="../../figures/flow/d09-lineup.jpg" alt="크기순으로 선 로봇들을 살펴보는 사람">
 </section>
 
 <section>
@@ -126,7 +126,10 @@
     <tr><td>설계 검토 · 복잡한 오류 추적 · 교란 후보 검토</td><td class="vr-txt"><b>최상위</b></td><td>긴 추론 · 오류 비용 큼</td></tr>
     <tr><td>민감 자료를 외부로 보낼 수 없는 경우</td><td class="trap-txt"><b>로컬 (오픈 웨이트)</b></td><td>내 PC 안에서 처리 · 성능·설치 부담</td></tr>
   </table>
-  <div class="analogy"><p><b>배달 수단</b> : 근거리는 오토바이 · 일상 짐은 승용차 · 큰 이사는 트럭 · 집 밖으로 못 나가는 짐은 집 안에서 처리</p></div>
+  <div class="art-col l" style="margin-top:.35em">
+    <img class="art" src="../../figures/flow/d09-delivery.jpg" style="max-height:255px;object-fit:contain" alt="오토바이, 승용차, 트럭과 집 안에 보관한 상자">
+    <div class="analogy" style="margin:0"><p><b>배달 수단</b> : 근거리는 오토바이 · 일상 짐은 승용차 · 큰 이사는 트럭 · 집 밖으로 못 나가는 짐은 집 안에서 처리</p></div>
+  </div>
 </section>
 
 <section>
@@ -153,8 +156,11 @@ ollama run &lt;모델명&gt;
 <section>
   <div class="tag trap">LLM · 4 ★</div>
   <h2>계산은 말로 시키지 않기</h2>
-  <img src="../../figures/out/d09-compute.svg" class="fig" style="max-height:385px" alt="말로만 답하는 경우와 코드를 실행하는 경우 비교">
-  <div class="analogy"><p><b>암산과 계산기</b> : 말로 쓴 평균 = 암산 결과 · 실행 결과 = 계산기 영수증 → 영수증 없는 숫자는 미검증</p></div>
+  <img src="../../figures/out/d09-compute.svg" class="fig" style="max-height:355px" alt="말로만 답하는 경우와 코드를 실행하는 경우 비교">
+  <div class="art-col l" style="margin-top:.2em">
+    <img class="art" src="../../figures/flow/d09-receipt.jpg" style="max-height:165px;object-fit:contain" alt="말풍선만 내는 로봇과 영수증을 출력하는 계산기">
+    <div class="analogy" style="margin:0"><p><b>암산과 계산기</b> : 말로 쓴 평균 = 암산 결과 · 실행 결과 = 계산기 영수증 → 영수증 없는 숫자는 미검증</p></div>
+  </div>
   <aside class="notes">
     - 시연 : 코드 실행 없는 모드와 실행 모드에 같은 CSV 평균 요청
     - 11주 검산 연습과 연결 : p값 재계산
@@ -204,7 +210,7 @@ ollama run &lt;모델명&gt;
       <tr><td class="bad">수치 불일치</td><td>코드 비교 → 결측·필터 처리 차이 추적</td></tr>
       <tr><td class="bad">근거 코드 없음</td><td>결과 폐기 · 코드 요구 후 직접 재실행</td></tr>
     </table>
-    <img class="art" src="../../figures/flow/d11-report.jpg" alt="보고서를 돋보기로 검토하는 사람">
+    <img class="art" src="../../figures/flow/d09-second-opinion.jpg" alt="같은 엑스레이를 보는 의사 2명과 검사 도구">
   </div>
   <div class="analogy"><p><b>병원 2차 소견</b> : 의사 2명의 의견 일치도 참고 정보 · 최종 확인은 검사 결과 → 데이터 분석의 검사 결과 = 코드와 원자료</p></div>
 </section>
@@ -230,7 +236,7 @@ ollama run &lt;모델명&gt;
   <div class="rule"></div>
   <h1>숫자에서<br><em>규칙 찾는 모델</em></h1>
   <p class="sub">코드는 AI 담당 · 질문과 검증은 사람 담당</p>
-  <img class="art" src="../../figures/flow/d10-design.jpg" alt="설계도와 체크리스트">
+  <img class="art" src="../../figures/flow/d09-bench.jpg" alt="자, 구슬 분류 쟁반, 돋보기가 놓인 분석 작업대">
 </section>
 
 <section>
@@ -271,8 +277,11 @@ ollama run &lt;모델명&gt;
 <section>
   <div class="tag vr">분석 · 4</div>
   <h2>랜덤 포레스트와 변수 중요도</h2>
-  <img src="../../figures/out/d09-importance.svg" class="fig" style="max-height:365px" alt="기온 포함 여부에 따라 달라지는 변수 중요도">
-  <div class="analogy"><p><b>트리 수백 그루의 평균</b> (범주 예측은 다수결) : 혼자보다 안정적 · 중요도 = 분기에 많이 쓴 정도 · 비슷한 변수끼리 점수 분배 → <b>원인의 크기 아님</b></p></div>
+  <img src="../../figures/out/d09-importance.svg" class="fig" style="max-height:345px" alt="기온 포함 여부에 따라 달라지는 변수 중요도">
+  <div class="art-col l" style="margin-top:.2em">
+    <img class="art" src="../../figures/flow/d09-forest.jpg" style="max-height:175px;object-fit:contain" alt="작은 나무들의 쪽지가 한 상자로 모이는 장면">
+    <div class="analogy" style="margin:0"><p><b>트리 수백 그루의 평균</b> (범주 예측은 다수결) : 혼자보다 안정적 · 중요도 = 분기에 많이 쓴 정도 · 비슷한 변수끼리 점수 분배 → <b>원인의 크기 아님</b></p></div>
+  </div>
 </section>
 
 <section>
@@ -391,7 +400,7 @@ print(round(mae(valid.ice_cream_sales, base), 1),       # 286.6
   <div class="rule"></div>
   <h1>잘 맞혀도<br><em>원인은 아님</em></h1>
   <p class="sub">상관 · 예측 · 인과의 경계 · AI 함정 #7</p>
-  <img class="art" src="../../figures/flow/d10-hook.jpg" alt="가게 주인과 창밖 인파">
+  <img class="art" src="../../figures/flow/d09-sun.jpg" alt="태양 빛이 아이스크림 수레와 물놀이 인파에 함께 내리쬐는 장면">
 </section>
 
 <section>
@@ -495,11 +504,12 @@ print(round(mae(valid.ice_cream_sales, base), 1),       # 286.6
   <div class="foot"><b>인과 주장 최소 조건</b> · 시간 순서 · 관련성 · 대안 설명 배제 · <b>습관</b> · 결론마다 교란 후보 3개 나열 · <b>10주 연결</b> · 무작위 배정</div>
 </section>
 
-<section class="divider trap">
+<section class="divider trap has-art">
   <div class="kicker">AI 함정 #7</div>
   <div class="rule"></div>
   <h1>인과 문장 <em>자동 생성</em></h1>
   <p class="sub">«해석해줘» 한마디가 만드는 «증가시킨다»</p>
+  <img class="art" src="../../figures/flow/d09-trap.jpg" alt="인과 화살표가 그려진 긴 종이를 쏟아내는 로봇과 멈춰 세우는 사람">
 </section>
 
 <section>
@@ -550,11 +560,12 @@ print(round(mae(valid.ice_cream_sales, base), 1),       # 286.6
   <div class="key trap" style="margin-top:1em"><p>더 좋은 모델로 교체 ≠ 해결 · <b>요청과 검증 절차</b>로 해결</p></div>
 </section>
 
-<section class="divider part-iii">
+<section class="divider part-iii has-art">
   <div class="kicker">Part III · 50분</div>
   <div class="rule"></div>
   <h1>같은 데이터,<br><em>여러 모델로 실험</em></h1>
-  <p class="sub">LLM 2개 비교 → 층화 → 분석 모델과 기준선 대조</p>
+  <p class="sub">LLM 2개 비교 → 층화<br>→ 분석 모델과 기준선 대조</p>
+  <img class="art" src="../../figures/flow/d09-experiment.jpg" alt="같은 표를 함께 다루는 로봇과 측정 도구, 기록하는 학생">
 </section>
 
 <section>

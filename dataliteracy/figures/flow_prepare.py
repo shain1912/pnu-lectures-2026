@@ -4,9 +4,11 @@
 - 배경색을 지면색(#f5f1e8)에 맞춤 → PDF·화면 모두 네모 경계 제거
 - 가장자리 페이드
 
-실행 : .venv/Scripts/python.exe dataliteracy/figures/flow_prepare.py
+실행 : .venv/Scripts/python.exe dataliteracy/figures/flow_prepare.py [이름 접두어...]
+예   : ... flow_prepare.py d09  → d09-*.png 만 처리
 """
 import pathlib
+import sys
 import numpy as np
 from PIL import Image
 
@@ -18,7 +20,8 @@ CROP = 64
 def prepare(src):
     im = Image.open(src).convert("RGB")
     W, H = im.size
-    im = im.crop((0, 0, W - CROP, H - CROP)).resize((1240, round(1240 * (H - CROP) / (W - CROP))), Image.LANCZOS)
+    crop = round(CROP * W / 1376)  # 표식 크기는 해상도에 비례 (1K 원본 기준 64px)
+    im = im.crop((0, 0, W - crop, H - crop)).resize((1240, round(1240 * (H - crop) / (W - crop))), Image.LANCZOS)
     a = np.asarray(im, dtype=float)
     h, w, _ = a.shape
     border = np.concatenate([a[:24].reshape(-1, 3), a[-24:].reshape(-1, 3), a[:, :24].reshape(-1, 3), a[:, -24:].reshape(-1, 3)])
@@ -37,6 +40,9 @@ def prepare(src):
     Image.fromarray(a.astype("uint8")).save(HERE / (src.stem + ".jpg"), quality=88, optimize=True, subsampling=0)
 
 
+prefixes = tuple(sys.argv[1:])
 for f in sorted((HERE / "raw").glob("*.png")):
+    if prefixes and not f.stem.startswith(prefixes):
+        continue
     prepare(f)
     print(f.stem)
